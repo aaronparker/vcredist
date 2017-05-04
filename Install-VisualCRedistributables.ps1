@@ -64,7 +64,7 @@
         By default the script will only download the Redistributables. Add -Install:$True to install each of the Redistributables as well.
 
     .EXAMPLE
-        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install:$True
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install
 
         Description:
         Downloads and installs the Visual C++ Redistributables listed in VisualCRedistributables.xml.
@@ -93,7 +93,7 @@ PARAM (
     [string]$Path = ".\",
 
     [Parameter(Mandatory=$False, HelpMessage="Enable the installation of the Redistributables after download.")]
-    [bool]$Install = $False,
+    [switch]$Install,
 
     [Parameter(Mandatory=$False, HelpMessage="Create Applications in ConfigMgr.")]
     [switch]$CreateCMApp,
