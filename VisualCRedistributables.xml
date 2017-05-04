@@ -3,28 +3,28 @@
 <Redistributables xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/aaronparker/appinstall-scripts/master/Install-VisualCRedistributables/VisualCRedistributables.xsd'>
     <Platform Architecture="x64" Release="2005" Install="/Q">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
+            <Name>Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26347</URL>
 			<ProductCode>{ad8a2fa1-06e7-4b0d-927d-6e54b3d31028}</ProductCode>
             <Download>https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update</Name>
+            <Name>Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=14431</URL>
 			<ProductCode>{6ce5bae9-d3ca-4b99-891a-1dc6c118a5fc}</ProductCode>
             <Download>https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 SP1 Redistributable Package (x64)</Name>
+            <Name>Visual C++ 2005 SP1 Redistributable Package</Name>
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=18471</URL>
 			<ProductCode>{071c9b48-7c32-4621-a0ac-3f809523288f}</ProductCode>
             <Download>https://download.microsoft.com/download/d/4/1/d41aca8a-faa5-49a7-a5f2-ea0aa4587da0/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 Redistributable Package (x64)</Name>
+            <Name>Visual C++ 2005 Redistributable Package</Name>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=21254</URL>
             <ShortName>RTM</ShortName>
 			<ProductCode>{6E8E85E8-CE4B-4FF5-91F7-04999C9FAE6A}</ProductCode>
@@ -33,28 +33,28 @@
     </Platform>
     <Platform Architecture="x86" Release="2005" Install="/Q">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
+            <Name>Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26347</URL>
 			<ProductCode>{710f4c1c-cc18-4c49-8cbf-51240c89a1a2}</ProductCode>
             <Download>https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update</Name>
+            <Name>Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=14431</URL>
 			<ProductCode>{837b34e3-7c30-493c-8f6a-2b0f04e2912c}</ProductCode>
             <Download>https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 SP1 Redistributable Package (x86)</Name>
+            <Name>Visual C++ 2005 SP1 Redistributable Package</Name>
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=5638</URL>
 			<ProductCode>{7299052b-02a4-4627-81f2-1818da5d550d}</ProductCode>
             <Download>https://download.microsoft.com/download/e/1/c/e1c773de-73ba-494a-a5ba-f24906ecf088/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2005 Redistributable Package (x86)</Name>
+            <Name>Visual C++ 2005 Redistributable Package</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=3387</URL>
 			<ProductCode>{A49F249F-0C91-497F-86DF-B2585E8E76B7}</ProductCode>
@@ -63,42 +63,42 @@
     </Platform>
     <Platform Architecture="x64" Release="2008" Install="/Q">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Redistributable Package (x64)</Name>
+            <Name>Visual C++ 2008 Redistributable Package</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=15336</URL>
 			<ProductCode>{350AA351-21FA-3270-8B7A-835434E766AD}</ProductCode>
             <Download>https://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Feature Pack Redistributable Package (x64)</Name>
+            <Name>Visual C++ 2008 Feature Pack Redistributable Package</Name>
             <ShortName>FP</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=16771</URL>
 			<ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
             <Download>https://download.microsoft.com/download/1/9/0/190da410-d595-4342-ba2f-2422e78bc84d/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Redistributable Package ATL Security Update</Name>
+            <Name>Visual C++ 2008 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10430</URL>
 			<ProductCode>{BBBE35B2-9349-3C48-BD3D-F574B17C7924}</ProductCode>
             <Download>https://download.microsoft.com/download/A/5/3/A53B40CA-F75C-4678-852A-3C15EA82F186/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 SP1 Redistributable Package (x64)</Name>
+            <Name>Visual C++ 2008 SP1 Redistributable Package</Name>
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=2092</URL>
 			<ProductCode>{8220EEFE-38CD-377E-8595-13398D740ACE}</ProductCode>
             <Download>https://download.microsoft.com/download/2/d/6/2d61c766-107b-409d-8fba-c39e61ca08e8/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update</Name>
+            <Name>Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update</Name>
             <ShortName>SP1ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=11895</URL>
 			<ProductCode>{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}</ProductCode>
             <Download>https://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update</Name>
+            <Name>Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>SP1MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26368</URL>
 			<ProductCode>{5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}</ProductCode>
@@ -107,42 +107,42 @@
     </Platform>
     <Platform Architecture="x86" Release="2008" Install="/Q">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Redistributable Package (x86)</Name>
+            <Name>Visual C++ 2008 Redistributable Package</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=29</URL>
 			<ProductCode>{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}</ProductCode>
             <Download>https://download.microsoft.com/download/1/1/1/1116b75a-9ec3-481a-a3c8-1777b5381140/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Feature Pack Redistributable Package (x86)</Name>
+            <Name>Visual C++ 2008 Feature Pack Redistributable Package</Name>
             <ShortName>FP</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10015</URL>
 			<ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}</ProductCode>
             <Download>https://download.microsoft.com/download/d/1/0/d10d210e-e0ad-4010-b547-bc5e395ef691/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Redistributable Package ATL Security Update</Name>
+            <Name>Visual C++ 2008 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10430</URL>
 			<ProductCode>{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}</ProductCode>
             <Download>https://download.microsoft.com/download/A/5/3/A53B40CA-F75C-4678-852A-3C15EA82F186/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 SP1 Redistributable Package (x86)</Name>
+            <Name>Visual C++ 2008 SP1 Redistributable Package</Name>
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=5582</URL>
 			<ProductCode>{9A25302D-30C0-39D9-BD6F-21E6EC160475}</ProductCode>
             <Download>https://download.microsoft.com/download/d/d/9/dd9a82d0-52ef-40db-8dab-795376989c03/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update</Name>
+            <Name>Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update</Name>
             <ShortName>SP1ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=11895</URL>
 			<ProductCode>{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}</ProductCode>
             <Download>https://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
-            <Name>Microsoft Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update</Name>
+            <Name>Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>SP1MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26368</URL>
 			<ProductCode>{9BE518E6-ECC6-35A9-88E4-87755C07200F}</ProductCode>
@@ -151,7 +151,7 @@
     </Platform>
     <Platform Architecture="x64" Release="2010" Install="/passive /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update</Name>
+            <Name>Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26999</URL>
 			<ProductCode>{1D8E6291-B0D5-35EC-8441-6616F567A0F7}</ProductCode>
@@ -160,7 +160,7 @@
     </Platform>
     <Platform Architecture="x86" Release="2010" Install="/passive /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update</Name>
+            <Name>Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26999</URL>
 			<ProductCode>{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}</ProductCode>
@@ -219,7 +219,7 @@
     </Platform>
     <Platform Architecture="x64" Release="2015" Install="/install /passive /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2015 Redistributable Update 3</Name>
+            <Name>Visual C++ 2015 Redistributable Update 3</Name>
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
 			<ProductCode>{EF1EC6A9-17DE-3DA9-B040-686A1E8A8B04}</ProductCode>
@@ -228,7 +228,7 @@
     </Platform>
     <Platform Architecture="x86" Release="2015" Install="/install /passive /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2015 Redistributable Update 3</Name>
+            <Name>Visual C++ 2015 Redistributable Update 3</Name>
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
 			<ProductCode>{69BCE4AC-9572-3271-A2FB-9423BDA36A43}</ProductCode>
@@ -237,7 +237,7 @@
     </Platform>
     <Platform Architecture="x64" Release="2017" Install="/install /passive /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ Redistributable for Visual Studio 2017</Name>
+            <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
 			<ProductCode>{E512788E-C50B-3858-A4B9-73AD5F3F9E93}</ProductCode>
@@ -246,7 +246,7 @@
     </Platform>
     <Platform Architecture="x86" Release="2017" Install="/install /passive /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ Redistributable for Visual Studio 2017</Name>
+            <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
 			<ProductCode>{68306422-7C57-373F-8860-D26CE4BA2A15}</ProductCode>
