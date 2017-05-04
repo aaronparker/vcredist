@@ -180,12 +180,12 @@ PROCESS {
                 }
                 try
                 {
-                $app = New-CMApplication -Name ("DEV_" + $redistributable.Name + "_$plat") -ErrorVariable CMError
+                $app = New-CMApplication -Name ($redistributable.Name + "_$plat") -ErrorVariable CMError -Publisher "Microsoft"
 
-                Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
-                    -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
-                    -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn" `
-                    -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError
+                    Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
+                        -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
+                        -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn" `
+                        -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError
                 }
                 catch
                 {
