@@ -78,3 +78,7 @@ Visual C++ Redistributables 2005 to 2015 installed:
 Visual C++ Redistributables 2005 to 2017 (including 2015) installed:
 
 ![Visual C++ Redistributables 2005-2017](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/2005-2017.PNG "Visual C++ Redistributables 2005-2017")
+
+Visual C++ Applications created in Configuration Manager:
+
+![Visual C++ Configuration Manager](https://raw.githubusercontent.com/techdecline/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.PNG)
