@@ -15,7 +15,7 @@
                     <Name></Name>
                     <ShortName></ShortName>
                     <URL></URL>
-                    <ProductCode>
+                    <ProductCode></ProductCode>
                     <Download></Download>
             </Platform>
             <Platform Architecture="x86" Release="" Install="">
@@ -23,7 +23,7 @@
                     <Name></Name>
                     <ShortName></ShortName>
                     <URL></URL>
-                    <ProductCode>
+                    <ProductCode></ProductCode>
                     <Download></Download>
                 </Redistributable>
             </Platform>

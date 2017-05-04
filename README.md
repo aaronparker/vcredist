@@ -15,6 +15,7 @@ The basic structure of the XML file should be as follows (an XSD schema is inclu
     <Name></Name>
     <ShortName></ShortName>
     <URL></URL>
+    <ProductCode></ProductCode>
     <Download></Download>
     </Platform>
     <Platform Architecture="x86" Release="" Install="">
@@ -22,6 +23,7 @@ The basic structure of the XML file should be as follows (an XSD schema is inclu
     <Name></Name>
     <ShortName></ShortName>
     <URL></URL>
+    <ProductCode></ProductCode>
     <Download></Download>
     </Redistributable>
     </Platform>
@@ -58,7 +60,7 @@ By default the script will only download the Redistributables. This allows you t
 
 Example: download (to the current folder) and install the Visual C++ Redistributables listed in VisualCRedistributables.xml.
 
-    .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install:$True
+    .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install
 
 The Redistributables will installed in the order specified in the XML file.
 
@@ -72,3 +74,17 @@ Visual C++ Redistributables 2005 to 2015 installed:
 Visual C++ Redistributables 2005 to 2017 (including 2015) installed:
 
 ![Visual C++ Redistributables 2005-2017](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/2005-2017.PNG "Visual C++ Redistributables 2005-2017")
+
+## Configuration Manager 
+Support for downloading the Redistributables and creating applications in System Center Configuration Manager is also supported.
+
+### CreateCMApp
+Switch Parameter to create ConfigMgr apps from downloaded redistributables.
+
+### SMSSiteCode
+Specify SMS Site Code for ConfigMgr app creation.
+
+Example: Download Visual C++ Redistributables listed in VisualCRedistributables.xml and create ConfigMgr Applications for the selected Site.
+
+    .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -CreateCMApp -SMSSiteCode S01 -Download \\server1.contoso.com\Sources\Apps\VSRedist
+
