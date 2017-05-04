@@ -14,24 +14,15 @@
                     <xs:element type="xs:string" name="Name"/>
                     <xs:element type="xs:string" name="ShortName"/>
                     <xs:element type="xs:string" name="URL"/>
-					<xs:element type="xs:string" name="ProductCode"/>
+                    <xs:element type="xs:string" name="ProductCode"/>
                     <xs:element type="xs:string" name="Download"/>
                   </xs:choice>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
-            <xs:attribute type="xs:string" name="Architecture" use="required"/>
-                <!-- <xs:restriction base="xs:string">
-                  <xs:enumeration value="x86"/>
-                  <xs:enumeration value="x64"/>
-                </xs:restriction>
-            </xs:attribute> -->
-            <xs:attribute type="xs:short" name="Release" use="required"/>
-                <!-- <xs:restriction base="xs:integer">
-                  <xs:pattern value="[2][0][0-2][0-9]"/>
-                </xs:restriction>
-            </xs:attribute> -->
-            <xs:attribute type="xs:string" name="Install" use="required"/>
+            <xs:attribute type="xs:string" name="Architecture" use="optional"/>
+            <xs:attribute type="xs:short" name="Release" use="optional"/>
+            <xs:attribute type="xs:string" name="Install" use="optional"/>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
