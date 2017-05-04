@@ -14,6 +14,7 @@
                     <xs:element type="xs:string" name="Name"/>
                     <xs:element type="xs:string" name="ShortName"/>
                     <xs:element type="xs:string" name="URL"/>
+					<xs:element type="xs:string" name="ProductCode"/>
                     <xs:element type="xs:string" name="Download"/>
                   </xs:choice>
                 </xs:complexType>
