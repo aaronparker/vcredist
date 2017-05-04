@@ -15,6 +15,7 @@
                     <Name></Name>
                     <ShortName></ShortName>
                     <URL></URL>
+                    <ProductCode>
                     <Download></Download>
             </Platform>
             <Platform Architecture="x86" Release="" Install="">
@@ -22,6 +23,7 @@
                     <Name></Name>
                     <ShortName></ShortName>
                     <URL></URL>
+                    <ProductCode>
                     <Download></Download>
                 </Redistributable>
             </Platform>
@@ -48,12 +50,6 @@
     .PARAMETER Path
         Specify a target folder to download the Redistributables to, otherwise use the current folder.
 
-    .PARAMETER CreateCMApp
-        Switch Parameter to create ConfigMgr apps from downloaded redistributables.
-
-    .Parameter SMSSiteCode
-        Specify SMS Site Code for ConfigMgr app creation.
-
     .EXAMPLE
         .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path C:\Redist
 
@@ -68,6 +64,12 @@
 
         Description:
         Downloads and installs the Visual C++ Redistributables listed in VisualCRedistributables.xml.
+
+    .PARAMETER CreateCMApp
+        Switch Parameter to create ConfigMgr apps from downloaded redistributables.
+
+    .Parameter SMSSiteCode
+        Specify SMS Site Code for ConfigMgr app creation.
 
     .EXAMPLE
         .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -CreateCMApp -SMSSiteCode S01 -Download \\server1.contoso.com\Sources\Apps\VSRedist
@@ -92,14 +94,14 @@ PARAM (
     [ValidateScript({ Test-Path $_ -PathType 'Container' })]
     [string]$Path = ".\",
 
-    [Parameter(Mandatory=$False, HelpMessage="Enable the installation of the Redistributables after download.")]
+    [Parameter(ParameterSetName='Install', Mandatory=$False, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
 
-    [Parameter(Mandatory=$False, HelpMessage="Create Applications in ConfigMgr.")]
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$False, HelpMessage="Create Applications in ConfigMgr.")]
     [switch]$CreateCMApp,
 
-    [Parameter(Mandatory=$False, HelpMessage="Specify ConfigMgr Site Code.")]
-    [String]$SMSSiteCode
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$False, HelpMessage="Specify ConfigMgr Site Code.")]
+    [string]$SMSSiteCode
 )
 
 BEGIN {
@@ -108,26 +110,24 @@ BEGIN {
 
     # Get script elevation status
     # [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+
+    If ($CreateCMApp) {
+        Try {
+            Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
+        }
+        Catch {
+            Return "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
+        }
+    }
 }
 
 PROCESS {
 
-    if ($CreateCMApp)
-    {
-        try {
-            Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
-        }
-        catch
-        {
-            return "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed"
-        }
-    }
-
     # Read the specifed XML document
-    $xmlContent = ( Select-Xml -Path $Xml -XPath "/Redistributables/Platform" ).Node
+    $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
 
     # Loop through each setting in the XML structure to set the registry value
-    ForEach ( $platform in $xmlContent ) {
+    ForEach ($platform in $xmlContent) {
 
         # Create variables from the content to simplify references below
         $plat = $platform | Select-Object -ExpandProperty Architecture
@@ -167,31 +167,25 @@ PROCESS {
                 }
             }
 
-            If ($CreateCMApp)
-            {
+            If ($CreateCMApp) {
                 Push-Location -StackName FileSystem
-                try
-                {
+                Try {
                     Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
                 }
-                catch
-                {
+                Catch {
                     $ConnectionError
                 }
-                try
-                {
-                $app = New-CMApplication -Name ("DEV_" + $redistributable.Name + "_$plat") -ErrorVariable CMError
+                Try {
+                    $app = New-CMApplication -Name ("DEV_" + $redistributable.Name + "_$plat") -ErrorVariable CMError
 
-                Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
-                    -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
-                    -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn" `
-                    -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError
+                    Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
+                        -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
+                        -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn" `
+                        -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError
                 }
-                catch
-                {
+                Catch {
                     $CMError
                 }
-
                 Pop-Location -StackName FileSystem
             }
         }
