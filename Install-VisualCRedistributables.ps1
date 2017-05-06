@@ -86,11 +86,12 @@
 
 [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low")]
 PARAM (
-    [Parameter(Mandatory=$True, HelpMessage="The path to the XML document describing the Redistributables.")]
+    [Parameter(Position=0, Mandatory=$True,
+    HelpMessage="The path to the XML document describing the Redistributables.")]
     [ValidateScript({ Test-Path $_ -PathType 'Leaf' })]
     [string]$Xml,
 
-    [Parameter(Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
+    [Parameter(Position=1, Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
     [ValidateScript({ Test-Path $_ -PathType 'Container' })]
     [string]$Path = ".\",
 
@@ -114,7 +115,7 @@ BEGIN {
     # Load the Configuration Manager module
     If ($CreateCMApp) {
         If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
-        If (!(Test-Path $Path) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
+        If (!(Test-Path $Path)) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
 
         Try {
             If (Test-Path env:SMS_ADMIN_UI_PATH) {
