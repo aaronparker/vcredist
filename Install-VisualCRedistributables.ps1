@@ -32,7 +32,7 @@
     .NOTES
         Name: Install-VisualCRedistributables.ps1
         Author: Aaron Parker
-        Version: 1.1
+        Version: 1.0.2
         DateUpdated: 2017-05-02
 
     .LINK
@@ -111,9 +111,15 @@ BEGIN {
     # Get script elevation status
     # [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 
+    # Load the Configuration Manager module
     If ($CreateCMApp) {
+        If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
+        If (!(Test-Path $Path) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
+
         Try {
-            Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
+            If (Test-Path env:SMS_ADMIN_UI_PATH) {
+                Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
+            }
         }
         Catch {
             Return "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
@@ -167,6 +173,7 @@ PROCESS {
                 }
             }
 
+            # Create an application for the redistributable in ConfigMgr
             If ($CreateCMApp) {
                 Push-Location -StackName FileSystem
                 Try {
@@ -176,12 +183,15 @@ PROCESS {
                     $ConnectionError
                 }
                 Try {
-                    $app = New-CMApplication -Name ("DEV_" + $redistributable.Name + "_$plat") -ErrorVariable CMError
 
-                    Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
-                        -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
-                        -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn" `
-                        -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError
+                    $app = New-CMApplication -Name ("DEV_" + $redistributable.Name + "_$plat") -ErrorVariable CMError
+                    If ($pscmdlet.ShouldProcess($app, "Creating ConfigMgr application")) {
+
+                        Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
+                            -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
+                            -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn-" `
+                            -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError
+                    }
                 }
                 Catch {
                     $CMError
