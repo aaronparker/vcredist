@@ -32,8 +32,6 @@
     .NOTES
         Name: Install-VisualCRedistributables.ps1
         Author: Aaron Parker
-        Version: 1.0.2
-        DateUpdated: 2017-05-02
 
     .LINK
         http://stealthpuppy.com
@@ -81,27 +79,30 @@
     02/05/2017: Added <ShortName> to the XML and updated script to use ShortName instead of Name as the target folder
     03/05/2017: Changed -File to -Xml
     02/05/2017: Added functionality to create ConfigMgr Applications
-
 #>
 
-[CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low")]
+[CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low", DefaultParameterSetName='Base')]
 PARAM (
-    [Parameter(Position=0, Mandatory=$True,
-    HelpMessage="The path to the XML document describing the Redistributables.")]
-    [ValidateScript({ Test-Path $_ -PathType 'Leaf' })]
+    [Parameter(ParameterSetName='Base', Mandatory=$True, HelpMessage="The path to the XML document describing the Redistributables.")]
+    [Parameter(ParameterSetName='Install')]
+    [Parameter(ParameterSetName='ConfigMgr')]
+    [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
     [string]$Xml,
 
-    [Parameter(Position=1, Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
-    [ValidateScript({ Test-Path $_ -PathType 'Container' })]
+    [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
+    [Parameter(ParameterSetName='Install')]
+    [Parameter(ParameterSetName='ConfigMgr')]
+    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
-    [Parameter(ParameterSetName='Install', Mandatory=$False, HelpMessage="Enable the installation of the Redistributables after download.")]
+    [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
 
-    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$False, HelpMessage="Create Applications in ConfigMgr.")]
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Create Applications in ConfigMgr.")]
     [switch]$CreateCMApp,
 
-    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$False, HelpMessage="Specify ConfigMgr Site Code.")]
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Specify ConfigMgr Site Code.")]
+    [ValidateScript({ If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
     [string]$SMSSiteCode
 )
 
