@@ -118,13 +118,15 @@ BEGIN {
         If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
         If (!(Test-Path $Path)) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
 
-        Try {
-            If (Test-Path env:SMS_ADMIN_UI_PATH) {
+        If (Test-Path env:SMS_ADMIN_UI_PATH) {
+            Try {            
                 Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
             }
-        }
-        Catch {
-            Return "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
+            Catch {
+                Throw "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
+            }
+        } Else {
+            Throw "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console installed?"
         }
     }
 }
@@ -179,16 +181,17 @@ PROCESS {
             If ($CreateCMApp) {
                 Push-Location -StackName FileSystem
                 Try {
-                    Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
+                    If ($pscmdlet.ShouldProcess($SMSSiteCode + ":", "Set location")) {
+                        Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
+                    }
                 }
                 Catch {
                     $ConnectionError
                 }
                 Try {
 
-                    $app = New-CMApplication -Name ("DEV_" + $redistributable.Name + "_$plat") -ErrorVariable CMError
-                    If ($pscmdlet.ShouldProcess($app, "Creating ConfigMgr application")) {
-
+                    If ($pscmdlet.ShouldProcess($redistributable.Name + " $plat", "Creating ConfigMgr application")) {
+                        $app = New-CMApplication -Name ($redistributable.Name + " $plat") -ErrorVariable CMError
                         Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
                             -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
                             -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn-" `
