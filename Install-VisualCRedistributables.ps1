@@ -118,6 +118,8 @@ BEGIN {
         If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
         If (!(Test-Path $Path)) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
 
+        # If the ConfigMgr console is installed, load the PowerShell module
+        # Requires PowerShell module to be installed
         If (Test-Path env:SMS_ADMIN_UI_PATH) {
             Try {            
                 Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
@@ -126,7 +128,7 @@ BEGIN {
                 Throw "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
             }
         } Else {
-            Throw "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console installed?"
+            Throw "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
         }
     }
 }
@@ -179,9 +181,13 @@ PROCESS {
 
             # Create an application for the redistributable in ConfigMgr
             If ($CreateCMApp) {
+                
+                # Ensure the current folder is saved
                 Push-Location -StackName FileSystem
                 Try {
                     If ($pscmdlet.ShouldProcess($SMSSiteCode + ":", "Set location")) {
+                        
+                        # Set location to the PSDrive for the ConfigMgr site
                         Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
                     }
                 }
@@ -190,6 +196,7 @@ PROCESS {
                 }
                 Try {
 
+                    # Create the ConfigMgr application with properties from the XML file
                     If ($pscmdlet.ShouldProcess($redistributable.Name + " $plat", "Creating ConfigMgr application")) {
                         $app = New-CMApplication -Name ($redistributable.Name + " $plat") -ErrorVariable CMError
                         Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
@@ -201,6 +208,8 @@ PROCESS {
                 Catch {
                     $CMError
                 }
+
+                # Go back to the original folder
                 Pop-Location -StackName FileSystem
             }
         }
