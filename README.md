@@ -35,9 +35,8 @@ The properties of each redistributable are defined in each <Redistributable> nod
 - Name - the name of the redistributable as displayed on the download page. Not used in the script, but useful for reading the XML file.
 - ShortName - the redistributable will be downloaded to Release\Architecture\ShortName
 - URL - this is the URL to the page at microsoft.com/downloads. Not used in the script, but useful for referencing the download as needed
+- ProductCode - this is the MSI Product Code for the specified VC++ App that will be used to import the package into Configuration Manager
 - Download - this is the URL to the installer so that the script can download each redistributable
-
-In the future, I may add the MSI product code to each redistributable to enable the script to check whether a redistributable is already installed instead of installing it. This may also be useful for defining the redistributables as applications in Configuration Manager (but you should be adding the redistributables to your reference images anyway.
 
 ## Parameters
 ### Xml
@@ -63,6 +62,12 @@ Example: download (to the current folder) and install the Visual C++ Redistribut
     .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install
 
 The Redistributables will installed in the order specified in the XML file.
+
+### CreateCMApp
+This Switch Parameter allows for automatic creation of Application Containers in Configuration Manager with a single Deployment Type containing the downloaded EXE file.
+
+### SMSSiteCode
+Specify the Configuration Manager SIte you would like the application packages to. If this parameter is in use you will need to select a UNC Path for the download. Otherwise the Deployment Type Creation will fail.
 
 ## Results
 Here is an example of the end result with the Redistributables installed. Note that 2015 and 2017 are the same major version (14.x), so once 2017 is installed, 2015 will not be displayed in the programs list.
