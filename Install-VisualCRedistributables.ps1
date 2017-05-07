@@ -55,7 +55,7 @@
         Downloads the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
 
     .PARAMETER Install
-        By default the script will only download the Redistributables. Add -Install:$True to install each of the Redistributables as well.
+        By default the script will only download the Redistributables. Add -Install to install each of the Redistributables as well.
 
     .EXAMPLE
         .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install
@@ -67,18 +67,13 @@
         Switch Parameter to create ConfigMgr apps from downloaded redistributables.
 
     .Parameter SMSSiteCode
-        Specify SMS Site Code for ConfigMgr app creation.
+        Specify the Site Code for ConfigMgr app creation.
 
     .EXAMPLE
-        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -CreateCMApp -SMSSiteCode S01 -Download \\server1.contoso.com\Sources\Apps\VSRedist
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path \\server1.contoso.com\Sources\Apps\VSRedist -CreateCMApp -SMSSiteCode S01
 
         Description:
         Downloads Visual C++ Redistributables listed in VisualCRedistributables.xml and creates ConfigMgr Applications for the selected Site.
-
-    .CHANGELOG
-    02/05/2017: Added <ShortName> to the XML and updated script to use ShortName instead of Name as the target folder
-    03/05/2017: Changed -File to -Xml
-    02/05/2017: Added functionality to create ConfigMgr Applications
 #>
 
 [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low", DefaultParameterSetName='Base')]
@@ -115,6 +110,8 @@ BEGIN {
 
     # Load the Configuration Manager module
     If ($CreateCMApp) {
+        
+        # If import apps into ConfigMgr, the download location will have to be a UNC path
         If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
         If (!(Test-Path $Path)) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
 
@@ -165,7 +162,7 @@ PROCESS {
 
             # Download the Redistributable to the target path. Skip if it exists
             If (!(Test-Path -Path "$target\$filename" -PathType 'Leaf')) {
-                If ($pscmdlet.ShouldProcess("$uri", "Download")) {
+                If ($pscmdlet.ShouldProcess($uri, "Download")) {
                     Invoke-WebRequest -Uri $uri -OutFile "$target\$filename"
                 }
             } Else {
