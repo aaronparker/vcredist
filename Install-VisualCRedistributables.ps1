@@ -90,6 +90,18 @@ PARAM (
     [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
+    [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the version of the Redistributables to install.")]
+    [Parameter(ParameterSetName='Install')]
+    [Parameter(ParameterSetName='ConfigMgr')]
+    [ValidateSet("2005","2008","2010","2012","2013","2015","2017")]
+    [string[]]$Platform,
+
+    [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the processor architecture/s to install.")]
+    [Parameter(ParameterSetName='Install')]
+    [Parameter(ParameterSetName='ConfigMgr')]
+    [ValidateSet("x86","x64")]
+    [string[]]$Archicture,
+
     [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
 
@@ -102,9 +114,6 @@ PARAM (
 )
 
 BEGIN {
-    # Variables
-    # $build = [Environment]::OSVersion.Version
-
     # Get script elevation status
     # [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 
@@ -135,6 +144,20 @@ PROCESS {
     # Read the specifed XML document
     $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
 
+    # If Platform and Architecture are specified, filter the XML content
+    [xml]$xmlDocument = Get-Content -Path $Xml
+    $xmlContent = @()
+    If ($PSBoundParameters.ContainsKey('Platform')) {
+        ForEach ($plat in $Platform) {
+            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$plat]" -Xml $xmlDocument).Node
+        }
+    }
+    If ($PSBoundParameters.ContainsKey('Architecture')) {
+        ForEach ($arch in $Architecture) {
+            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$arch]" -Xml $xmlDocument).Node
+        }
+    }
+
     # Loop through each setting in the XML structure to set the registry value
     ForEach ($platform in $xmlContent) {
 
@@ -145,7 +168,7 @@ PROCESS {
 
         # Step through each redistributable defined in the XML
         ForEach ($redistributable in $platform.Redistributable) {
-
+            
             # Create variables from the content to simplify references below
             $uri = $redistributable.Download
             $filename = $uri.Substring($uri.LastIndexOf("/") + 1)
