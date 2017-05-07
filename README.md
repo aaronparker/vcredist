@@ -86,5 +86,8 @@ Specify SMS Site Code for ConfigMgr app creation.
 
 Example: Download Visual C++ Redistributables listed in VisualCRedistributables.xml and create ConfigMgr Applications for the selected Site.
 
-    .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -CreateCMApp -SMSSiteCode S01 -Download \\server1.contoso.com\Sources\Apps\VSRedist
+    .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path \\server1.contoso.com\Sources\Apps\VSRedist -CreateCMApp -SMSSiteCode S01
 
+This will look similar to the following in Configuration Manager:
+
+![Visual C++ Redistributables in Configuration Manager](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.PNG)
