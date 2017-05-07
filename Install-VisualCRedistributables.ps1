@@ -15,6 +15,7 @@
                     <Name></Name>
                     <ShortName></ShortName>
                     <URL></URL>
+                    <ProductCode></ProductCode>
                     <Download></Download>
             </Platform>
             <Platform Architecture="x86" Release="" Install="">
@@ -22,6 +23,7 @@
                     <Name></Name>
                     <ShortName></ShortName>
                     <URL></URL>
+                    <ProductCode></ProductCode>
                     <Download></Download>
                 </Redistributable>
             </Platform>
@@ -30,8 +32,6 @@
     .NOTES
         Name: Install-VisualCRedistributables.ps1
         Author: Aaron Parker
-        Version: 1.1
-        DateUpdated: 2017-05-02
 
     .LINK
         http://stealthpuppy.com
@@ -48,12 +48,6 @@
     .PARAMETER Path
         Specify a target folder to download the Redistributables to, otherwise use the current folder.
 
-    .PARAMETER CreateCMApp
-        Switch Parameter to create ConfigMgr apps from downloaded redistributables.
-
-    .Parameter SMSSiteCode
-        Specify SMS Site Code for ConfigMgr app creation.
-
     .EXAMPLE
         .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path C:\Redist
 
@@ -61,7 +55,7 @@
         Downloads the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
 
     .PARAMETER Install
-        By default the script will only download the Redistributables. Add -Install:$True to install each of the Redistributables as well.
+        By default the script will only download the Redistributables. Add -Install to install each of the Redistributables as well.
 
     .EXAMPLE
         .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Install
@@ -69,37 +63,42 @@
         Description:
         Downloads and installs the Visual C++ Redistributables listed in VisualCRedistributables.xml.
 
+    .PARAMETER CreateCMApp
+        Switch Parameter to create ConfigMgr apps from downloaded redistributables.
+
+    .Parameter SMSSiteCode
+        Specify the Site Code for ConfigMgr app creation.
+
     .EXAMPLE
-        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -CreateCMApp -SMSSiteCode S01 -Download \\server1.contoso.com\Sources\Apps\VSRedist
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path \\server1.contoso.com\Sources\Apps\VSRedist -CreateCMApp -SMSSiteCode S01
 
         Description:
         Downloads Visual C++ Redistributables listed in VisualCRedistributables.xml and creates ConfigMgr Applications for the selected Site.
-
-    .CHANGELOG
-    02/05/2017: Added <ShortName> to the XML and updated script to use ShortName instead of Name as the target folder
-    03/05/2017: Changed -File to -Xml
-    02/05/2017: Added functionality to create ConfigMgr Applications
-
 #>
 
-[CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low")]
+[CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low", DefaultParameterSetName='Base')]
 PARAM (
-    [Parameter(Mandatory=$True, HelpMessage="The path to the XML document describing the Redistributables.")]
-    [ValidateScript({ Test-Path $_ -PathType 'Leaf' })]
+    [Parameter(ParameterSetName='Base', Mandatory=$True, HelpMessage="The path to the XML document describing the Redistributables.")]
+    [Parameter(ParameterSetName='Install')]
+    [Parameter(ParameterSetName='ConfigMgr')]
+    [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
     [string]$Xml,
 
-    [Parameter(Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
-    [ValidateScript({ Test-Path $_ -PathType 'Container' })]
+    [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
+    [Parameter(ParameterSetName='Install')]
+    [Parameter(ParameterSetName='ConfigMgr')]
+    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
-    [Parameter(Mandatory=$False, HelpMessage="Enable the installation of the Redistributables after download.")]
+    [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
 
-    [Parameter(Mandatory=$False, HelpMessage="Create Applications in ConfigMgr.")]
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Create Applications in ConfigMgr.")]
     [switch]$CreateCMApp,
 
-    [Parameter(Mandatory=$False, HelpMessage="Specify ConfigMgr Site Code.")]
-    [String]$SMSSiteCode
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Specify ConfigMgr Site Code.")]
+    [ValidateScript({ If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
+    [string]$SMSSiteCode
 )
 
 BEGIN {
@@ -108,26 +107,36 @@ BEGIN {
 
     # Get script elevation status
     # [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+
+    # Load the Configuration Manager module
+    If ($CreateCMApp) {
+        
+        # If import apps into ConfigMgr, the download location will have to be a UNC path
+        If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
+        If (!(Test-Path $Path)) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
+
+        # If the ConfigMgr console is installed, load the PowerShell module
+        # Requires PowerShell module to be installed
+        If (Test-Path env:SMS_ADMIN_UI_PATH) {
+            Try {            
+                Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
+            }
+            Catch {
+                Throw "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
+            }
+        } Else {
+            Throw "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
+        }
+    }
 }
 
 PROCESS {
 
-    if ($CreateCMApp)
-    {
-        try {
-            Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
-        }
-        catch
-        {
-            return "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed"
-        }
-    }
-
     # Read the specifed XML document
-    $xmlContent = ( Select-Xml -Path $Xml -XPath "/Redistributables/Platform" ).Node
+    $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
 
     # Loop through each setting in the XML structure to set the registry value
-    ForEach ( $platform in $xmlContent ) {
+    ForEach ($platform in $xmlContent) {
 
         # Create variables from the content to simplify references below
         $plat = $platform | Select-Object -ExpandProperty Architecture
@@ -153,7 +162,7 @@ PROCESS {
 
             # Download the Redistributable to the target path. Skip if it exists
             If (!(Test-Path -Path "$target\$filename" -PathType 'Leaf')) {
-                If ($pscmdlet.ShouldProcess("$uri", "Download")) {
+                If ($pscmdlet.ShouldProcess($uri, "Download")) {
                     Invoke-WebRequest -Uri $uri -OutFile "$target\$filename"
                 }
             } Else {
@@ -167,32 +176,40 @@ PROCESS {
                 }
             }
 
-            If ($CreateCMApp)
-            {
+            # Create an application for the redistributable in ConfigMgr
+            If ($CreateCMApp) {
+                
+                # Ensure the current folder is saved
                 Push-Location -StackName FileSystem
-                try
-                {
-                    Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
+                Try {
+                    If ($pscmdlet.ShouldProcess($SMSSiteCode + ":", "Set location")) {
+                        
+                        # Set location to the PSDrive for the ConfigMgr site
+                        Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
+                    }
                 }
-                catch
-                {
+                Catch {
                     $ConnectionError
                 }
-                try
-                {
-                    $app = New-CMApplication -Name ($redistributable.Name + "_$plat") -ErrorVariable CMError -Publisher "Microsoft"
+                Try {
 
-                    $dt = Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
-                        -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
-                        -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn" `
-                        -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError `
-                        -Comment "Generated by Install-VisualCRedistributables.ps1"
+                    # Create the ConfigMgr application with properties from the XML file
+                    If ($pscmdlet.ShouldProcess($redistributable.Name + " $plat", "Creating ConfigMgr application")) {
+                        $app = New-CMApplication -Name ($redistributable.Name + " $plat") -ErrorVariable CMError -Publisher "Microsoft"
+                        
+                        $dt = Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
+                            -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
+                            -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn-" `
+                            -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError `
+                            -Comment "Generated by Install-VisualCRedistributables.ps1"
+                    }
+
                 }
-                catch
-                {
+                Catch {
                     $CMError
                 }
 
+                # Go back to the original folder
                 Pop-Location -StackName FileSystem
             }
         }
