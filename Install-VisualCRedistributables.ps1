@@ -147,14 +147,21 @@ PROCESS {
     # If Platform and Architecture are specified, filter the XML content
     [xml]$xmlDocument = Get-Content -Path $Xml
     $xmlContent = @()
-    If ($PSBoundParameters.ContainsKey('Platform')) {
+    If ($PSBoundParameters.ContainsKey('Platform') -and (!($PSBoundParameters.ContainsKey('Architecture')) {
         ForEach ($plat in $Platform) {
             $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$plat]" -Xml $xmlDocument).Node
         }
     }
-    If ($PSBoundParameters.ContainsKey('Architecture')) {
+    If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Platform')) {
         ForEach ($arch in $Architecture) {
-            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$arch]" -Xml $xmlDocument).Node
+            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture=$arch]" -Xml $xmlDocument).Node
+        }
+    }
+    If ($PSBoundParameters.ContainsKey('Architecture') and $PSBoundParameters.ContainsKey('Platform')) {
+        ForEach ($plat in $Platform) {
+            ForEach ($arch in $Architecture) {
+                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$arch] -and [@Architecture=$arch]" -Xml $xmlDocument).Node
+            }
         }
     }
 
