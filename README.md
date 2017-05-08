@@ -39,6 +39,8 @@ The properties of each redistributable are defined in each <Redistributable> nod
 - Download - this is the URL to the installer so that the script can download each redistributable
 
 ## Parameters
+The script supports the -WhatIf and -Verbose parameters for testing and verbose output when using the parameter actions below.
+
 There are 3 parameter sets that control the following actions:
 1. Download only
 2. Download and Install the redistributable to the current machine
@@ -47,14 +49,14 @@ There are 3 parameter sets that control the following actions:
 ### Download
 
 #### Xml
-The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
+The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format. If the redistributable exists in the target location, it will be skipped and not re-downloaded.
 
 Example: download the Visual C++ Redistributables listed in VisualCRedistributables.xml to the current folder.
 
     .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml"
 
 #### Path
-Specify a target folder to download the Redistributables to, otherwise use the current folder.
+Specify a target folder to download the Redistributables to, otherwise use the current folder will be used.
 
 Example: download the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
 
