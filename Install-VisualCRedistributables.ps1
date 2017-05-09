@@ -81,43 +81,54 @@ PARAM (
     [Parameter(ParameterSetName='Base', Mandatory=$True, HelpMessage="The path to the XML document describing the Redistributables.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
+    [Parameter(ParameterSetName='MDT')]
     [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
     [string]$Xml,
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
+    [Parameter(ParameterSetName='MDT')]
     [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the version of the Redistributables to install.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
+    [Parameter(ParameterSetName='MDT')]
     [ValidateSet("2005","2008","2010","2012","2013","2015","2017")]
     [string[]]$Platform,
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the processor architecture/s to install.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
+    [Parameter(ParameterSetName='MDT')]
     [ValidateSet("x86","x64")]
     [string[]]$Archicture,
 
     [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
 
-    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Create Applications in ConfigMgr.")]
+    [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Create Redistributable applications in ConfigMgr.")]
     [switch]$CreateCMApp,
 
     [Parameter(ParameterSetName='ConfigMgr', Mandatory=$True, HelpMessage="Specify ConfigMgr Site Code.")]
     [ValidateScript({ If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
-    [string]$SMSSiteCode
+    [string]$SMSSiteCode,
+
+    [Parameter(ParameterSetName='MDT', Mandatory=$True, HelpMessage="Create Redistributable applications in the Microsoft Deployment Toolkit.")]
+    [switch]$CreateMDTApp,
+
+    [Parameter(ParameterSetName='MDT', Mandatory=$True, HelpMessage="The path to the MDT deployment share root.")]
+    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+    [string]$MDTPath
 )
 
 BEGIN {
     # Get script elevation status
     # [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 
-    # Load the Configuration Manager module
+    ##### If CreateCMApp parameter specified, load the Configuration Manager module
     If ($CreateCMApp) {
         
         # If import apps into ConfigMgr, the download location will have to be a UNC path
@@ -137,38 +148,84 @@ BEGIN {
             Throw "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
         }
     }
+
+    ##### If CreateMDTApp parameter specified, load the MDT module
+    If ($CreateMDTApp) {
+        $mdtDrive = "DS001"
+        $PSScriptPath = $MyInvocation.MyCommand.Definition
+        $tempFolder = "$env:Temp\Install-VisualCRedistributables"
+        $publisher = "Microsoft"
+        $shortName = "Visual C++ Redistributables"
+        
+        # If we can find the MDT PowerShell module, import it. Requires MDT console to be installed
+        $mdtModule = "$((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4").Install_Dir)bin\MicrosoftDeploymentToolkit.psd1"
+        If (Test-Path -Path $mdtModule) {
+            Try {            
+                Import-Module -Name $mdtModule
+            }
+            Catch {
+                Throw "Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."
+            }
+        } Else {
+            Throw "Cannot find the MDT PowerShell module. Is the MDT console installed?"
+        }
+
+        # Copy the script and XML file to a temporary folder for importing
+        
+        New-Item "$tempFolder" -Type Directory
+        Copy-Item $MyInvocation.MyCommand.Definition $tempFolder
+        Copy-Item $Xml $tempFolder
+        
+        # Create the PSDrive for MDT
+        New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MDTPath
+
+        # Copy the ps1 and xml file to a temp location and create a single MDT application for the Redistributables
+        Import-MDTApplication -path "$mdtDrive:\Applications" -enable "True" `
+        -Name "$publisher $shortName" `
+        -ShortName $shortName `
+        -Version "" -Publisher $publisher -Language "en-US" `
+        -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install" `
+        -WorkingDirectory ".\Applications\$publisher $shortName" `
+        -ApplicationSourcePath $tempFolder `
+        -DestinationFolder "$publisher $shortName"
+
+        # Update Path to point to the MDT application location
+        # Script will the download the redistributables there for install at deployment time
+        $Path = "$MDTPath\Applications\$publisher $shortName"
+    }
 }
 
 PROCESS {
 
     # Read the specifed XML document
-    $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
+    # $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
 
-    # If Platform and Architecture are specified, filter the XML content
+    ##### If Platform and Architecture are specified, filter the XML content
     [xml]$xmlDocument = Get-Content -Path $Xml
     $xmlContent = @()
     If ($PSBoundParameters.ContainsKey('Platform') -and (!($PSBoundParameters.ContainsKey('Architecture')) {
         ForEach ($plat in $Platform) {
-            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$plat]" -Xml $xmlDocument).Node
+            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$plat']" -Xml $xmlDocument).Node
         }
     }
     If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Platform')) {
         ForEach ($arch in $Architecture) {
-            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture=$arch]" -Xml $xmlDocument).Node
+            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node
         }
     }
     If ($PSBoundParameters.ContainsKey('Architecture') and $PSBoundParameters.ContainsKey('Platform')) {
         ForEach ($plat in $Platform) {
             ForEach ($arch in $Architecture) {
-                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release=$arch] -and [@Architecture=$arch]" -Xml $xmlDocument).Node
+                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$plat'][@Architecture='$arch']" -Xml $xmlDocument).Node
             }
         }
     }
 
-    # Loop through each setting in the XML structure to set the registry value
+
+    ##### Loop through each setting in the XML structure to process each redistributable
     ForEach ($platform in $xmlContent) {
 
-        # Create variables from the content to simplify references below
+        # Create variables from the Platform content to simplify references below
         $plat = $platform | Select-Object -ExpandProperty Architecture
         $rel = $platform | Select-Object -ExpandProperty Release
         $arg = $platform | Select-Object -ExpandProperty Install
@@ -176,7 +233,7 @@ PROCESS {
         # Step through each redistributable defined in the XML
         ForEach ($redistributable in $platform.Redistributable) {
             
-            # Create variables from the content to simplify references below
+            # Create variables from the Redistributable content to simplify references below
             $uri = $redistributable.Download
             $filename = $uri.Substring($uri.LastIndexOf("/") + 1)
             $target= "$((Get-Item $Path).FullName)\$rel\$plat\$($redistributable.ShortName)"
@@ -190,7 +247,8 @@ PROCESS {
                 Write-Verbose "Folder '$($redistributable.ShortName)' exists. Skipping."
             }
 
-            # Download the Redistributable to the target path. Skip if it exists
+
+            ##### Download the Redistributable to the target path. Skip if it exists
             If (!(Test-Path -Path "$target\$filename" -PathType 'Leaf')) {
                 If ($pscmdlet.ShouldProcess($uri, "Download")) {
                     Invoke-WebRequest -Uri $uri -OutFile "$target\$filename"
@@ -206,7 +264,8 @@ PROCESS {
                 }
             }
 
-            # Create an application for the redistributable in ConfigMgr
+
+            ##### Create an application for the redistributable in ConfigMgr
             If ($CreateCMApp) {
                 
                 # Ensure the current folder is saved
