@@ -88,16 +88,28 @@
         Downloads and installs the Visual C++ Redistributables listed in VisualCRedistributables.xml.
 
     .PARAMETER CreateCMApp
-        Switch Parameter to create ConfigMgr apps from downloaded redistributables.
+        Switch parameter to create ConfigMgr apps from downloaded redistributables.
 
     .Parameter SMSSiteCode
         Specify the Site Code for ConfigMgr app creation.
 
     .EXAMPLE
-        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path \\server1.contoso.com\Sources\Apps\VSRedist -CreateCMApp -SMSSiteCode S01
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path \\server1\Sources\Apps\VSRedist -CreateCMApp -SMSSiteCode S01
 
         Description:
         Downloads Visual C++ Redistributables listed in VisualCRedistributables.xml and creates ConfigMgr Applications for the selected Site.
+
+    .PARAMETER CreateMDTApp
+        Switch parameter to create a single MDT apps for the downloaded redistributables.
+
+    .Parameter MDTPath
+        Specify the root path to the MDT deployment share.
+
+    .EXAMPLE
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -CreateMDTApp -MDTPath \\server1\deploymentshare
+
+        Description:
+        Downloads Visual C++ Redistributables listed in VisualCRedistributables.xml and creates a single MDT application in the deployment share \\server1\deploymentshare.
 #>
 
 # Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive
@@ -213,7 +225,7 @@ BEGIN {
         -ShortName $shortName `
         -Version "" -Publisher $publisher -Language "en-US" `
         -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized `
-        -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release $Release -Architecture $Architecture" `
+        -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release ($Release -join ",") -Architecture ($Architecture -join ",")" `
         -WorkingDirectory ".\Applications\$publisher $shortName" `
         -ApplicationSourcePath $tempFolder `
         -DestinationFolder "$publisher $shortName"
