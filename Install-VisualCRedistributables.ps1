@@ -3,11 +3,16 @@
         Installs and/or downloads the Visual C++ Redistributables listed in an external XML file.
 
     .DESCRIPTION
-        This script will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents release and processor architecture.
+        This script will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents release and processor architecture. If the redistributable exists in the specified path, it will not be re-downloaded.
 
-        This can be run to download and optionally install the Visual C++ Redistributables as specified in the external XML file passed to the script.
+        In addition the script can optionally perform one of 3 tasks:
+         1. Install the redistributables on the local machine
+         2. Create a single application in MDT to install the redistributables
+         3. Create an application for each redistributable in ConfigMgr.
+        
+        You can filter on redistributable releases and processor architectures with the -Release and -Architecture parameters.
 
-        The basic structure of the XML file should be:
+        A complete XML file listing the redistributables is included. The basic structure of the XML file should be:
 
         <Redistributables>
             <Platform Architecture="x64" Release="" Install="">
@@ -32,6 +37,7 @@
     .NOTES
         Name: Install-VisualCRedistributables.ps1
         Author: Aaron Parker
+        Twitter: @stealthpuppy
 
     .LINK
         http://stealthpuppy.com
@@ -53,6 +59,24 @@
 
         Description:
         Downloads the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
+
+    .PARAMETER Release
+        Specifies the release (or version) of the redistributables to download or install.
+
+    .EXAMPLE
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Release "2012","2013",2017"
+
+        Description:
+        Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in VisualCRedistributables.xml
+
+    .PARAMETER Architecture
+        Specifies the processor architecture to download or install.
+
+    .EXAMPLE
+        .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Architecture "x64"
+
+        Description:
+        Downloads only the 64-bit versions of the Visual C++ Redistributables listed in VisualCRedistributables.xml.
 
     .PARAMETER Install
         By default the script will only download the Redistributables. Add -Install to install each of the Redistributables as well.
@@ -89,7 +113,6 @@ PARAM (
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
-    [Parameter(ParameterSetName='MDT')]
     [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
@@ -98,7 +121,7 @@ PARAM (
     [Parameter(ParameterSetName='ConfigMgr')]
     [Parameter(ParameterSetName='MDT')]
     [ValidateSet("2005","2008","2010","2012","2013","2015","2017")]
-    [string[]]$Platform,
+    [string[]]$Release,
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the processor architecture/s to install.")]
     [Parameter(ParameterSetName='Install')]
@@ -179,6 +202,7 @@ BEGIN {
         
         # Create the PSDrive for MDT
         If (Test-Path "$($mdtDrive):") {
+            Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
             Remove-PSDrive -Name $mdtDrive -Force
         }
         New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MDTPath
@@ -189,7 +213,7 @@ BEGIN {
         -ShortName $shortName `
         -Version "" -Publisher $publisher -Language "en-US" `
         -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized `
-        -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Platform $Platform -Architecture $Architecture" `
+        -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release $Release -Architecture $Architecture" `
         -WorkingDirectory ".\Applications\$publisher $shortName" `
         -ApplicationSourcePath $tempFolder `
         -DestinationFolder "$publisher $shortName"
@@ -208,28 +232,48 @@ PROCESS {
 
     # Read the specifed XML document
     # $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
+    Try {
+        If ($pscmdlet.ShouldProcess($Xml, "Reading")) {
+            [xml]$xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError
+        }
+    }
+    Catch {
+        Throw "Unable to read $Xml. $xmlReadError"
+    }
 
-    ##### If Platform and Architecture are specified, filter the XML content
-    [xml]$xmlDocument = Get-Content -Path $Xml
-    $xmlContent = @()
-    If ($PSBoundParameters.ContainsKey('Platform') -and (!($PSBoundParameters.ContainsKey('Architecture')))) {
-        ForEach ($plat in $Platform) {
-            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$plat']" -Xml $xmlDocument).Node
-        }
-    }
-    If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Platform')))) {
-        ForEach ($arch in $Architecture) {
-            $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node
-        }
-    }
-    If ($PSBoundParameters.ContainsKey('Architecture') -and $PSBoundParameters.ContainsKey('Platform')) {
-        ForEach ($plat in $Platform) {
-            ForEach ($arch in $Architecture) {
-                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$plat'][@Architecture='$arch']" -Xml $xmlDocument).Node
+    ##### If -Release and -Architecture are specified, filter the XML content
+    If ($PSBoundParameters.ContainsKey('Release') -or $PSBoundParameters.ContainsKey('Architecture')) {
+        Write-Verbose "Filtering for specific releases and/or processor architecutre."
+        
+        # Create an array that we'll add the filtered XML content to
+        $xmlContent = @()
+
+        # If -Release alone is specified, filder on platform
+        If ($PSBoundParameters.ContainsKey('Release') -and (!($PSBoundParameters.ContainsKey('Architecture')))) {
+            ForEach ($rel in $Release) {
+                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel']" -Xml $xmlDocument).Node
             }
         }
+        # If -Architecture alone is specified, filder on architecture
+        If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Release')))) {
+            ForEach ($arch in $Architecture) {
+                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node
+            }
+        }
+        # If -Architecture and -Release are specified, filter on both
+        If ($PSBoundParameters.ContainsKey('Architecture') -and $PSBoundParameters.ContainsKey('Release')) {
+            ForEach ($rel in $Release) {
+                ForEach ($arch in $Architecture) {
+                    $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel'][@Architecture='$arch']" -Xml $xmlDocument).Node
+                }
+            }
+        }
+    } Else {
+        
+        # Pass the XML document contents to $xmlContent, so that we don't need to provide
+        # different logic if  -Platform and -Architectures are not supplied
+        $xmlContent = $xmlDocument
     }
-
 
     ##### Loop through each setting in the XML structure to process each redistributable
     ForEach ($platform in $xmlContent) {
@@ -299,7 +343,7 @@ PROCESS {
                             -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
                             -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn-" `
                             -LogonRequirementType WhetherOrNotUserLoggedOn -InstallationBehaviorType InstallForSystem -ErrorVariable CMError `
-                            -Comment "Generated by Install-VisualCRedistributables.ps1"
+                            -Comment "Generated by $($MyInvocation.MyCommand.Name)"
                     }
 
                 }
