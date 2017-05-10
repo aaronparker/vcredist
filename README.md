@@ -39,22 +39,33 @@ The properties of each redistributable are defined in each <Redistributable> nod
 - Download - this is the URL to the installer so that the script can download each redistributable
 
 ## Parameters
-### Xml
-The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
+The script supports the -WhatIf and -Verbose parameters for testing and verbose output when using the parameter actions below.
+
+There are 3 parameter sets that control the following actions:
+1. Download only
+2. Download and Install the redistributable to the current machine
+3. Download and create ConfigMgr applications for the redistributables
+
+### Download
+
+#### Xml
+The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format. If the redistributable exists in the target location, it will be skipped and not re-downloaded.
 
 Example: download the Visual C++ Redistributables listed in VisualCRedistributables.xml to the current folder.
 
     .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml"
 
-### Path
-Specify a target folder to download the Redistributables to, otherwise use the current folder.
+#### Path
+Specify a target folder to download the Redistributables to, otherwise use the current folder will be used.
 
 Example: download the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
 
     .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path C:\Redist
 
-
 ### Install
+To install the redistributables add the -Install parameter.
+
+#### Install
 By default the script will only download the Redistributables. This allows you to download the Redistributables for seperate deployment (e.g. in a reference image). Add -Install to install each of the Redistributables as well.
 
 Example: download (to the current folder) and install the Visual C++ Redistributables listed in VisualCRedistributables.xml.
@@ -63,13 +74,7 @@ Example: download (to the current folder) and install the Visual C++ Redistribut
 
 The Redistributables will installed in the order specified in the XML file.
 
-### CreateCMApp
-This Switch Parameter allows for automatic creation of Application Containers in Configuration Manager with a single Deployment Type containing the downloaded EXE file.
-
-### SMSSiteCode
-Specify the Configuration Manager SIte you would like the application packages to. If this parameter is in use you will need to select a UNC Path for the download. Otherwise the Deployment Type Creation will fail.
-
-## Results
+#### Results
 Here is an example of the end result with the Redistributables installed. Note that 2015 and 2017 are the same major version (14.x), so once 2017 is installed, 2015 will not be displayed in the programs list.
 
 Visual C++ Redistributables 2005 to 2015 installed:
@@ -80,19 +85,38 @@ Visual C++ Redistributables 2005 to 2017 (including 2015) installed:
 
 ![Visual C++ Redistributables 2005-2017](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/2005-2017.PNG "Visual C++ Redistributables 2005-2017")
 
-## Configuration Manager 
+### Microsoft Deployment Toolkit
+The script can create an application in an MDT share that can be used to install the Redistributables at deployment time. Useful when creating reference images.
+
+#### CreateMDTApp
+If specified, the script will create a single application for the Redistributables in an MDT deployment share. This makes a copy of the script and the XML file plus downloads the Redistributables into the target application folder.
+
+#### MDTPath
+The root path to the target MDT deployment share. This can be a local path or a UNC path.
+
+#### Results
+The MDT application should be a single application that installs all of the Redistributables or only those specified when running the script to create the application. The command line for the application is updated to reflect what was used to create the application.
+
+![Visual C++ Redistributables in MDT](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/development/images/VCRedist_MDT-App.PNG)
+
+The application folder will include the script, the XML file and folders for each of the Redistributables specified.
+
+![The application folder in the MDT deployment share](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/development/images/VCRedist_MDT-Folder.PNG)
+
+### Configuration Manager 
 Support for downloading the Redistributables and creating applications in System Center Configuration Manager is also supported.
 
-### CreateCMApp
-Switch Parameter to create ConfigMgr apps from downloaded redistributables.
+#### CreateCMApp
+If specified enables automatic creation of Application Containers in Configuration Manager with a single Deployment Type containing the downloaded EXE file. The script must be run from a machine with the Configuration Manager console and the ConfigMgr PowerShell module installed.
 
-### SMSSiteCode
-Specify SMS Site Code for ConfigMgr app creation.
+#### SMSSiteCode
+Specify SMS Site Code for the ConfigMgr app creation.
 
 Example: Download Visual C++ Redistributables listed in VisualCRedistributables.xml and create ConfigMgr Applications for the selected Site.
 
     .\Install-VisualCRedistributables.ps1 -Xml ".\VisualCRedistributables.xml" -Path \\server1.contoso.com\Sources\Apps\VSRedist -CreateCMApp -SMSSiteCode S01
 
-This will look similar to the following in Configuration Manager:
+#### Results
+This will look similar to the following in the Configuration Manager console:
 
 ![Visual C++ Redistributables in Configuration Manager](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.PNG)

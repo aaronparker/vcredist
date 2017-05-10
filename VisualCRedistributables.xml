@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads -->
-<Redistributables xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/aaronparker/appinstall-scripts/master/Install-VisualCRedistributables/VisualCRedistributables.xsd'>
+<Redistributables>
     <Platform Architecture="x64" Release="2005" Install="/Q">
         <Redistributable>
             <Name>Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
