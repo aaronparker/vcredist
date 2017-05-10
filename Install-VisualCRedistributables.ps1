@@ -125,7 +125,7 @@ PARAM (
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
-    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+#    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the version of the Redistributables to install.")]
@@ -163,6 +163,10 @@ PARAM (
 BEGIN {
     # Get script elevation status
     # [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+
+    # Test $Path and throw an error if we can't find it
+    # Have an issue with ValidateScript when we change $Path when creating an MDT application
+    If (!(Test-Path $Path -PathType 'Container')) { Throw "Cannot find path $Path." }
 
     ##### If CreateCMApp parameter specified, load the Configuration Manager module
     If ($CreateCMApp) {
@@ -206,48 +210,60 @@ BEGIN {
             Throw "Cannot find the MDT PowerShell module. Is the MDT console installed?"
         }
 
-        # Copy the script and XML file to a temporary folder for importing
-        Write-Verbose "Creating folder: $tempFolder"
-        New-Item "$tempFolder" -Type Directory | Out-Null
-        Copy-Item $MyInvocation.MyCommand.Definition $tempFolder
-        Copy-Item $Xml $tempFolder
+        If ($pscmdlet.ShouldProcess("Script and XML for import.", "Copy")) {
+            # Copy the script and XML file to a temporary folder for importing
+            Write-Verbose "Creating folder: $tempFolder"
+            New-Item "$tempFolder" -Type Directory | Out-Null
+            Copy-Item $MyInvocation.MyCommand.Definition $tempFolder
+            Copy-Item $Xml $tempFolder
+        }
         
         # Create the PSDrive for MDT
-        If (Test-Path "$($mdtDrive):") {
-            Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
-            Remove-PSDrive -Name $mdtDrive -Force
+        If ($pscmdlet.ShouldProcess("Mapping PSDrive to MDT deployment share $MDTPath", "Mapping")) {
+            If (Test-Path "$($mdtDrive):") {
+                Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
+                Remove-PSDrive -Name $mdtDrive -Force
+            }
+            New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MDTPath
         }
-        New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MDTPath
 
-        # Import as an application into MDT
-        Import-MDTApplication -path "$($mdtDrive):\Applications" -enable "True" `
-        -Name "$publisher $shortName" `
-        -ShortName $shortName `
-        -Version "" -Publisher $publisher -Language "en-US" `
-        -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized `
-        -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release ($Release -join ",") -Architecture ($Architecture -join ",")" `
-        -WorkingDirectory ".\Applications\$publisher $shortName" `
-        -ApplicationSourcePath $tempFolder `
-        -DestinationFolder "$publisher $shortName"
+        If ($pscmdlet.ShouldProcess("$shortName in $MDTPath", "Import MDT app")) {
+            # Convert arrays to strings to pass to the MDT command line
+            $cRelease = [system.String]::Join(",", $Release)
+            $cArchitecture = [system.String]::Join(",", $Architecture)
+
+            # Import as an application into MDT
+            Import-MDTApplication -path "$($mdtDrive):\Applications" -enable "True" `
+            -Name "$publisher $shortName" `
+            -ShortName $shortName `
+            -Version "" -Publisher $publisher -Language "en-US" `
+            -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized `
+            -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release $cRelease -Architecture $cArchitecture" `
+            -WorkingDirectory ".\Applications\$publisher $shortName" `
+            -ApplicationSourcePath $tempFolder `
+            -DestinationFolder "$publisher $shortName"
+        }
 
         # Remove the temporary folder
-        Remove-Item "$tempFolder" -Recurse -Force
+        If ($pscmdlet.ShouldProcess($tempFolder, "Remove")) {
+            Remove-Item "$tempFolder" -Recurse -Force
+        }
 
         # Update Path to point to the MDT application location
         # Script will then download the redistributables there for install at deployment time
+        Remove-Variable Path
         $Path = "$MDTPath\Applications\$publisher $shortName"
-        If (!(Test-Path $Path)) { New-Item -Path $Path -Type 'Directory' -Force | Out-Null }
+        If ($pscmdlet.ShouldProcess($Path, "Create")) {
+            If (!(Test-Path $Path)) { New-Item -Path $Path -Type 'Directory' -Force | Out-Null }
+        }
     }
 }
 
 PROCESS {
 
     # Read the specifed XML document
-    # $xmlContent = (Select-Xml -Path $Xml -XPath "/Redistributables/Platform").Node
     Try {
-        If ($pscmdlet.ShouldProcess($Xml, "Reading")) {
-            [xml]$xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError
-        }
+        [xml]$xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError
     }
     Catch {
         Throw "Unable to read $Xml. $xmlReadError"
@@ -255,36 +271,36 @@ PROCESS {
 
     ##### If -Release and -Architecture are specified, filter the XML content
     If ($PSBoundParameters.ContainsKey('Release') -or $PSBoundParameters.ContainsKey('Architecture')) {
-        Write-Verbose "Filtering for specific releases and/or processor architecutre."
-        
-        # Create an array that we'll add the filtered XML content to
-        $xmlContent = @()
 
-        # If -Release alone is specified, filder on platform
-        If ($PSBoundParameters.ContainsKey('Release') -and (!($PSBoundParameters.ContainsKey('Architecture')))) {
-            ForEach ($rel in $Release) {
-                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel']" -Xml $xmlDocument).Node
-            }
-        }
-        # If -Architecture alone is specified, filder on architecture
-        If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Release')))) {
-            ForEach ($arch in $Architecture) {
-                $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node
-            }
-        }
-        # If -Architecture and -Release are specified, filter on both
-        If ($PSBoundParameters.ContainsKey('Architecture') -and $PSBoundParameters.ContainsKey('Release')) {
-            ForEach ($rel in $Release) {
-                ForEach ($arch in $Architecture) {
-                    $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel'][@Architecture='$arch']" -Xml $xmlDocument).Node
+            # Create an array that we'll add the filtered XML content to
+            $xmlContent = @()
+
+            # If -Release alone is specified, filder on platform
+            If ($PSBoundParameters.ContainsKey('Release') -and (!($PSBoundParameters.ContainsKey('Architecture')))) {
+                ForEach ($rel in $Release) {
+                    $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel']" -Xml $xmlDocument).Node
                 }
             }
-        }
+            # If -Architecture alone is specified, filder on architecture
+            If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Release')))) {
+                ForEach ($arch in $Architecture) {
+                    $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node
+                }
+            }
+            # If -Architecture and -Release are specified, filter on both
+            If ($PSBoundParameters.ContainsKey('Architecture') -and $PSBoundParameters.ContainsKey('Release')) {
+                ForEach ($rel in $Release) {
+                    ForEach ($arch in $Architecture) {
+                        $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel'][@Architecture='$arch']" -Xml $xmlDocument).Node
+                    }
+                }
+            }
     } Else {
         
         # Pass the XML document contents to $xmlContent, so that we don't need to provide
-        # different logic if  -Platform and -Architectures are not supplied
-        $xmlContent = $xmlDocument
+        # different logic if -Platform and -Architectures are not supplied
+        $xmlContent = @()
+        $xmlContent += (Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument).Node
     }
 
     ##### Loop through each setting in the XML structure to process each redistributable
@@ -301,8 +317,12 @@ PROCESS {
             # Create variables from the Redistributable content to simplify references below
             $uri = $redistributable.Download
             $filename = $uri.Substring($uri.LastIndexOf("/") + 1)
-            $target= "$((Get-Item $Path).FullName)\$rel\$plat\$($redistributable.ShortName)"
-
+            If ([bool]([System.Uri]$Path).IsUnc) { 
+                $target= "$Path\$rel\$plat\$($redistributable.ShortName)"
+            } Else {
+                $target= "$((Get-Item $Path).FullName)\$rel\$plat\$($redistributable.ShortName)"
+            }
+            
             # Create the folder to store the downloaded file. Skip if it exists
             If (!(Test-Path -Path $target)) {
                 If ($pscmdlet.ShouldProcess($target, "Create")) {
