@@ -85,6 +85,24 @@ Visual C++ Redistributables 2005 to 2017 (including 2015) installed:
 
 ![Visual C++ Redistributables 2005-2017](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/2005-2017.PNG "Visual C++ Redistributables 2005-2017")
 
+### Microsoft Deployment Toolkit
+The script can create an application in an MDT share that can be used to install the Redistributables at deployment time. Useful when creating reference images.
+
+#### CreateMDTApp
+If specified, the script will create a single application for the Redistributables in an MDT deployment share. This makes a copy of the script and the XML file plus downloads the Redistributables into the target application folder.
+
+#### MDTPath
+The root path to the target MDT deployment share. This can be a local path or a UNC path.
+
+#### Results
+The MDT application should be a single application that installs all of the Redistributables or only those specified when running the script to create the application. The command line for the application is updated to reflect what was used to create the application.
+
+![Visual C++ Redistributables in MDT](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/development/images/VCRedist_MDT-App.PNG)
+
+The application folder will include the script, the XML file and folders for each of the Redistributables specified.
+
+![The application folder in the MDT deployment share](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/development/images/VCRedist_MDT-Folder.PNG)
+
 ### Configuration Manager 
 Support for downloading the Redistributables and creating applications in System Center Configuration Manager is also supported.
 
