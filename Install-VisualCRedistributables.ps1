@@ -76,6 +76,7 @@
         Downloads Visual C++ Redistributables listed in VisualCRedistributables.xml and creates ConfigMgr Applications for the selected Site.
 #>
 
+# Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive
 [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "Low", DefaultParameterSetName='Base')]
 PARAM (
     [Parameter(ParameterSetName='Base', Mandatory=$True, HelpMessage="The path to the XML document describing the Redistributables.")]
@@ -171,7 +172,6 @@ BEGIN {
         }
 
         # Copy the script and XML file to a temporary folder for importing
-        
         New-Item "$tempFolder" -Type Directory
         Copy-Item $MyInvocation.MyCommand.Definition $tempFolder
         Copy-Item $Xml $tempFolder
@@ -179,7 +179,7 @@ BEGIN {
         # Create the PSDrive for MDT
         New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MDTPath
 
-        # Copy the ps1 and xml file to a temp location and create a single MDT application for the Redistributables
+        # Import as an application into MDT
         Import-MDTApplication -path "$mdtDrive:\Applications" -enable "True" `
         -Name "$publisher $shortName" `
         -ShortName $shortName `
@@ -190,7 +190,7 @@ BEGIN {
         -DestinationFolder "$publisher $shortName"
 
         # Update Path to point to the MDT application location
-        # Script will the download the redistributables there for install at deployment time
+        # Script will then download the redistributables there for install at deployment time
         $Path = "$MDTPath\Applications\$publisher $shortName"
     }
 }
