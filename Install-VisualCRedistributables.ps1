@@ -105,7 +105,7 @@ PARAM (
     [Parameter(ParameterSetName='ConfigMgr')]
     [Parameter(ParameterSetName='MDT')]
     [ValidateSet("x86","x64")]
-    [string[]]$Archicture,
+    [string[]]$Architecture,
 
     [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
@@ -172,26 +172,35 @@ BEGIN {
         }
 
         # Copy the script and XML file to a temporary folder for importing
-        New-Item "$tempFolder" -Type Directory
+        Write-Verbose "Creating folder: $tempFolder"
+        New-Item "$tempFolder" -Type Directory | Out-Null
         Copy-Item $MyInvocation.MyCommand.Definition $tempFolder
         Copy-Item $Xml $tempFolder
         
         # Create the PSDrive for MDT
+        If (Test-Path "$($mdtDrive):") {
+            Remove-PSDrive -Name $mdtDrive -Force
+        }
         New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MDTPath
 
         # Import as an application into MDT
-        Import-MDTApplication -path "$mdtDrive:\Applications" -enable "True" `
+        Import-MDTApplication -path "$($mdtDrive):\Applications" -enable "True" `
         -Name "$publisher $shortName" `
         -ShortName $shortName `
         -Version "" -Publisher $publisher -Language "en-US" `
-        -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install" `
+        -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized `
+        -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Platform $Platform -Architecture $Architecture" `
         -WorkingDirectory ".\Applications\$publisher $shortName" `
         -ApplicationSourcePath $tempFolder `
         -DestinationFolder "$publisher $shortName"
 
+        # Remove the temporary folder
+        Remove-Item "$tempFolder" -Recurse -Force
+
         # Update Path to point to the MDT application location
         # Script will then download the redistributables there for install at deployment time
         $Path = "$MDTPath\Applications\$publisher $shortName"
+        If (!(Test-Path $Path)) { New-Item -Path $Path -Type 'Directory' -Force | Out-Null }
     }
 }
 
@@ -203,17 +212,17 @@ PROCESS {
     ##### If Platform and Architecture are specified, filter the XML content
     [xml]$xmlDocument = Get-Content -Path $Xml
     $xmlContent = @()
-    If ($PSBoundParameters.ContainsKey('Platform') -and (!($PSBoundParameters.ContainsKey('Architecture')) {
+    If ($PSBoundParameters.ContainsKey('Platform') -and (!($PSBoundParameters.ContainsKey('Architecture')))) {
         ForEach ($plat in $Platform) {
             $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$plat']" -Xml $xmlDocument).Node
         }
     }
-    If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Platform')) {
+    If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Platform')))) {
         ForEach ($arch in $Architecture) {
             $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node
         }
     }
-    If ($PSBoundParameters.ContainsKey('Architecture') and $PSBoundParameters.ContainsKey('Platform')) {
+    If ($PSBoundParameters.ContainsKey('Architecture') -and $PSBoundParameters.ContainsKey('Platform')) {
         ForEach ($plat in $Platform) {
             ForEach ($arch in $Architecture) {
                 $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$plat'][@Architecture='$arch']" -Xml $xmlDocument).Node
@@ -241,7 +250,7 @@ PROCESS {
             # Create the folder to store the downloaded file. Skip if it exists
             If (!(Test-Path -Path $target)) {
                 If ($pscmdlet.ShouldProcess($target, "Create")) {
-                    New-Item -Path $target -Type Directory -Force
+                    New-Item -Path $target -Type Directory -Force | Out-Null
                 }
             } Else {
                 Write-Verbose "Folder '$($redistributable.ShortName)' exists. Skipping."
