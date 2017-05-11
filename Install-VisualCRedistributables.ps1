@@ -133,14 +133,14 @@ PARAM (
     [Parameter(ParameterSetName='ConfigMgr')]
     [Parameter(ParameterSetName='MDT')]
     [ValidateSet("2005","2008","2010","2012","2013","2015","2017")]
-    [string[]]$Release,
+    [string[]]$Release = "2005","2008","2010","2012","2013","2015","2017",
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the processor architecture/s to install.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
     [Parameter(ParameterSetName='MDT')]
     [ValidateSet("x86","x64")]
-    [string[]]$Architecture,
+    [string[]]$Architecture = "x86","x64",
 
     [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
@@ -236,8 +236,7 @@ BEGIN {
             -Name "$publisher $shortName" `
             -ShortName $shortName `
             -Version "" -Publisher $publisher -Language "en-US" `
-            -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized `
-            -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release $cRelease -Architecture $cArchitecture" `
+            -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release $cRelease -Architecture $cArchitecture" `
             -WorkingDirectory ".\Applications\$publisher $shortName" `
             -ApplicationSourcePath $tempFolder `
             -DestinationFolder "$publisher $shortName"
