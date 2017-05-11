@@ -120,3 +120,15 @@ Example: Download Visual C++ Redistributables listed in VisualCRedistributables.
 This will look similar to the following in the Configuration Manager console:
 
 ![Visual C++ Redistributables in Configuration Manager](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.PNG)
+
+# Known Issues
+## Installation or Temporary File in the Root of C
+The Visual C++ Redistributables 2005 and 2008 leave installer files or DLLs in the root of the system drive after installation.
+
+This is documented in the following articles:
+
+https://support.microsoft.com/en-us/help/927665/the-msdia80.dll-file-is-installed-in-the-root-folder-of-the-boot-drive-when-you-install-the-visual-c-2005-redistributable-package-by-using-the-vcredist-x64.exe-file-or-the-vcredist-ia64.exe-file
+
+https://support.microsoft.com/en-us/help/950683/vcredist-from-vc-2008-installs-temporary-files-in-root-directory
+
+This can be fixed by installing 2005 ATL update or later and 2008 SP1 or later.
