@@ -125,22 +125,20 @@ PARAM (
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify a target path to download the Redistributables to.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
-#    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+    [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
     [string]$Path = ".\",
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the version of the Redistributables to install.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
-    [Parameter(ParameterSetName='MDT')]
-    [ValidateSet("2005","2008","2010","2012","2013","2015","2017")]
-    [string[]]$Release = "2005","2008","2010","2012","2013","2015","2017",
+    [ValidateSet('2005','2008','2010','2012','2013','2015','2017')]
+    [string[]]$Release = @("2008","2010","2012","2013","2015","2017"),
 
     [Parameter(ParameterSetName='Base', Mandatory=$False, HelpMessage="Specify the processor architecture/s to install.")]
     [Parameter(ParameterSetName='Install')]
     [Parameter(ParameterSetName='ConfigMgr')]
-    [Parameter(ParameterSetName='MDT')]
-    [ValidateSet("x86","x64")]
-    [string[]]$Architecture = "x86","x64",
+    [ValidateSet('x86','x64')]
+    [string[]]$Architecture = @("x86","x64"),
 
     [Parameter(ParameterSetName='Install', Mandatory=$True, HelpMessage="Enable the installation of the Redistributables after download.")]
     [switch]$Install,
@@ -166,7 +164,7 @@ BEGIN {
 
     # Test $Path and throw an error if we can't find it
     # Have an issue with ValidateScript when we change $Path when creating an MDT application
-    If (!(Test-Path $Path -PathType 'Container')) { Throw "Cannot find path $Path." }
+    # If (!(Test-Path $Path -PathType 'Container')) { Throw "Cannot find path $Path." }
 
     ##### If CreateCMApp parameter specified, load the Configuration Manager module
     If ($CreateCMApp) {
@@ -227,19 +225,28 @@ BEGIN {
         }
 
         If ($pscmdlet.ShouldProcess("$shortName in $MDTPath", "Import MDT app")) {
-            # Convert arrays to strings to pass to the MDT command line
-            $cRelease = [system.String]::Join(",", $Release)
-            $cArchitecture = [system.String]::Join(",", $Architecture)
 
-            # Import as an application into MDT
-            Import-MDTApplication -path "$($mdtDrive):\Applications" -enable "True" `
-            -Name "$publisher $shortName" `
-            -ShortName $shortName `
-            -Version "" -Publisher $publisher -Language "en-US" `
-            -CommandLine "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\VisualCRedistributables.xml' -Install -Release $cRelease -Architecture $cArchitecture" `
-            -WorkingDirectory ".\Applications\$publisher $shortName" `
-            -ApplicationSourcePath $tempFolder `
-            -DestinationFolder "$publisher $shortName"
+            If (!(Test-Path("$($mdtDrive):.\Applications\$publisher $shortName"))) {
+
+                # Convert arrays to strings to pass to the MDT command line
+                $cRelease = [system.String]::Join(",", $Release)
+                $cArchitecture = [system.String]::Join(",", $Architecture)
+
+                $filename = $xml.Substring($xml.LastIndexOf("\") + 1)
+                $CommandLine = "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\$filename' -Install" 
+
+                # Import as an application into MDT
+                Import-MDTApplication -path "$($mdtDrive):\Applications" -enable "True" `
+                -Name "$publisher $shortName" `
+                -ShortName $shortName `
+                -Version "" -Publisher $publisher -Language "en-US" `
+                -CommandLine $CommandLine `
+                -WorkingDirectory ".\Applications\$publisher $shortName" `
+                -ApplicationSourcePath $tempFolder `
+                -DestinationFolder "$publisher $shortName"
+            } Else {
+                Throw "Application: '$publisher $shortName' already exists in the specified MDT deployment share."
+            }
         }
 
         # Remove the temporary folder
@@ -273,13 +280,13 @@ PROCESS {
             # Create an array that we'll add the filtered XML content to
             $xmlContent = @()
 
-            # If -Release alone is specified, filder on platform
+            # If -Release alone is specified, filter on platform
             If ($PSBoundParameters.ContainsKey('Release') -and (!($PSBoundParameters.ContainsKey('Architecture')))) {
                 ForEach ($rel in $Release) {
                     $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Release='$rel']" -Xml $xmlDocument).Node
                 }
             }
-            # If -Architecture alone is specified, filder on architecture
+            # If -Architecture alone is specified, filter on architecture
             If ($PSBoundParameters.ContainsKey('Architecture') -and (!($PSBoundParameters.ContainsKey('Release')))) {
                 ForEach ($arch in $Architecture) {
                     $xmlContent += (Select-Xml -XPath "/Redistributables/Platform[@Architecture='$arch']" -Xml $xmlDocument).Node

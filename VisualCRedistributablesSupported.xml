@@ -65,7 +65,6 @@
         </Redistributable>
     </Platform>
     <Platform Architecture="x86" Release="2013" Install="/install /passive /norestart">
-        </Redistributable>
         <Redistributable>
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
