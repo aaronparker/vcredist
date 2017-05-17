@@ -122,6 +122,12 @@ This will look similar to the following in the Configuration Manager console:
 ![Visual C++ Redistributables in Configuration Manager](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.PNG)
 
 # Known Issues
+
+## -Release and -Architecture won't work with -CreateMDTApp
+When the MDT application calls the script from powershell.exe using the -Release and -Architecture parameters at install time, the script fails parameter validation.
+
+This does not happen if the script is called from from a running  PowerShell session. Until this issue is fixed, support for these parameters when creating an MDT application has been removed.
+
 ## Installation or Temporary File in the Root of C
 The Visual C++ Redistributables 2005 and 2008 leave installer files or DLLs in the root of the system drive after installation.
 
@@ -131,4 +137,4 @@ https://support.microsoft.com/en-us/help/927665/the-msdia80.dll-file-is-installe
 
 https://support.microsoft.com/en-us/help/950683/vcredist-from-vc-2008-installs-temporary-files-in-root-directory
 
-This can be fixed by installing 2005 ATL update or later and 2008 SP1 or later.
+This can be fixed by installing 2005 ATL update or later and 2008 SP1 or later. Redistributable listed in VisualCRedistributablesSupported.xml should not exhibit this behaviour.
