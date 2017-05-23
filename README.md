@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/3g1d272ar5i47j40?svg=true)](https://ci.appveyor.com/project/aaronparker/install-visualcredistributables)
+
 # Install-VisualCRedistributables.ps1
 Deploying the Microsoft Visual C++ Redistributables in any complex desktop environment kinda sucks because there are so many versions that might be required. I got tired of updating my MDT deployment share with the redistributables manually, so wrote a script to automate the process.
 
