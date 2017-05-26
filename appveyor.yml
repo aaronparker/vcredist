@@ -3,7 +3,6 @@ pull_requests:
   do_not_increment_build_number: true
 image: Visual Studio 2017
 build: off
-  verbosity: minimal
 install:
   - cinst pester
 test_script:
