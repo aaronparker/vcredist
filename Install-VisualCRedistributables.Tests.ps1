@@ -1,6 +1,6 @@
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
-. "$here\$sut" -Xml .\VisualCRedistributablesSupported.xml -WhatIf
+. "$here\bin\$sut" -Xml .\bin\VisualCRedistributablesSupported.xml -WhatIf
  
 Describe "Install-VisualCRedistributables" {
     Mock Invoke-WebRequest {return @{FullName = "A_File.TXT"}}
@@ -9,7 +9,7 @@ Describe "Install-VisualCRedistributables" {
 #    }
     Context 'Download' {
         It 'Verifies file name for x86' {
-            $filename | should be 'vc_redist.x86.exe' or 'vc_redist.x64.exe'
+            $filename | should be 'vc_redist.x86.exe'
         }
     }
 }
