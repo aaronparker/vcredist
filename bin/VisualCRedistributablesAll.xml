@@ -198,7 +198,7 @@
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
             <ProductCode>{5740BD44-B58D-321A-AFC0-6D3D4556DD6C}</ProductCode>
-            <Download>http://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
+            <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
     <Platform Architecture="x86" Release="2013" Install="/install /passive /norestart">
@@ -214,7 +214,7 @@
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
             <ProductCode>{7DAD0258-515C-3DD4-8964-BD714199E0F7}</ProductCode>
-            <Download>http://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
+            <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
     <Platform Architecture="x64" Release="2015" Install="/install /passive /norestart">
