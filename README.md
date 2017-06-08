@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/3g1d272ar5i47j40?svg=true)](https://ci.appveyor.com/project/aaronparker/install-visualcredistributables)
-
 # Install-VisualCRedistributables.ps1
 Deploying the Microsoft Visual C++ Redistributables in any complex desktop environment kinda sucks because there are so many versions that might be required. I got tired of updating my MDT deployment share with the redistributables manually, so wrote a script to automate the process.
 
@@ -8,6 +6,8 @@ This script will download the Visual C++ Redistributables listed in an external 
 *NOTE:* some validation of the Redistributables listed in the XML file is required, as not all may need to be installed in your environment.
 
 This can be run to download and optionally install the Visual C++ (2005 - 2017) Redistributables as specified in the external XML file passed to the script.
+
+You can find Install-VisualCRedistributables.ps1 and the XML files in the \bin folder.
 
 The basic structure of the XML file should be as follows (an XSD schema is included in the repository):
 
