@@ -9,7 +9,7 @@
          1. Install the redistributables on the local machine
          2. Create a single application in MDT to install the redistributables
          3. Create an application for each redistributable in ConfigMgr.
-        
+
         You can filter on redistributable releases and processor architectures with the -Release and -Architecture parameters.
 
         A complete XML file listing the redistributables is included. The basic structure of the XML file should be:
@@ -168,7 +168,7 @@ BEGIN {
 
     ##### If CreateCMApp parameter specified, load the Configuration Manager module
     If ($CreateCMApp) {
-        
+
         # If import apps into ConfigMgr, the download location will have to be a UNC path
         If (!([bool]([System.Uri]$Path).IsUnc)) { Throw "$Path must be a valid UNC path." }
         If (!(Test-Path $Path)) { Throw "Unable to confirm $Path exists. Please check that $Path is valid." }
@@ -176,7 +176,7 @@ BEGIN {
         # If the ConfigMgr console is installed, load the PowerShell module
         # Requires PowerShell module to be installed
         If (Test-Path env:SMS_ADMIN_UI_PATH) {
-            Try {            
+            Try {
                 Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" # Import the ConfigurationManager.psd1 module
             }
             Catch {
@@ -193,11 +193,11 @@ BEGIN {
         $tempFolder = "$env:Temp\Install-VisualCRedistributables"
         $publisher = "Microsoft"
         $shortName = "Visual C++ Redistributables"
-        
+
         # If we can find the MDT PowerShell module, import it. Requires MDT console to be installed
         $mdtModule = "$((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4").Install_Dir)bin\MicrosoftDeploymentToolkit.psd1"
         If (Test-Path -Path $mdtModule) {
-            Try {            
+            Try {
                 Import-Module -Name $mdtModule
             }
             Catch {
@@ -214,7 +214,7 @@ BEGIN {
             Copy-Item $MyInvocation.MyCommand.Definition $tempFolder
             Copy-Item $Xml $tempFolder
         }
-        
+
         # Create the PSDrive for MDT
         If ($pscmdlet.ShouldProcess("Mapping PSDrive to MDT deployment share $MDTPath", "Mapping")) {
             If (Test-Path "$($mdtDrive):") {
@@ -233,7 +233,7 @@ BEGIN {
                 $cArchitecture = [system.String]::Join(",", $Architecture)
 
                 $filename = $xml.Substring($xml.LastIndexOf("\") + 1)
-                $CommandLine = "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\$filename' -Install" 
+                $CommandLine = "powershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Minimized -File .\$($MyInvocation.MyCommand.Name) -Xml '.\$filename' -Install"
 
                 # Import as an application into MDT
                 Import-MDTApplication -path "$($mdtDrive):\Applications" -enable "True" `
@@ -301,7 +301,7 @@ PROCESS {
                 }
             }
     } Else {
-        
+
         # Pass the XML document contents to $xmlContent, so that we don't need to provide
         # different logic if -Platform and -Architectures are not supplied
         $xmlContent = @()
@@ -318,16 +318,16 @@ PROCESS {
 
         # Step through each redistributable defined in the XML
         ForEach ($redistributable in $platform.Redistributable) {
-            
+
             # Create variables from the Redistributable content to simplify references below
             $uri = $redistributable.Download
             $filename = $uri.Substring($uri.LastIndexOf("/") + 1)
-            If ([bool]([System.Uri]$Path).IsUnc) { 
+            If ([bool]([System.Uri]$Path).IsUnc) {
                 $target= "$Path\$rel\$plat\$($redistributable.ShortName)"
             } Else {
                 $target= "$((Get-Item $Path).FullName)\$rel\$plat\$($redistributable.ShortName)"
             }
-            
+
             # Create the folder to store the downloaded file. Skip if it exists
             If (!(Test-Path -Path $target)) {
                 If ($pscmdlet.ShouldProcess($target, "Create")) {
@@ -357,12 +357,12 @@ PROCESS {
 
             ##### Create an application for the redistributable in ConfigMgr
             If ($CreateCMApp) {
-                
+
                 # Ensure the current folder is saved
                 Push-Location -StackName FileSystem
                 Try {
                     If ($pscmdlet.ShouldProcess($SMSSiteCode + ":", "Set location")) {
-                        
+
                         # Set location to the PSDrive for the ConfigMgr site
                         Set-Location ($SMSSiteCode + ":") -ErrorVariable ConnectionError
                     }
@@ -374,8 +374,8 @@ PROCESS {
 
                     # Create the ConfigMgr application with properties from the XML file
                     If ($pscmdlet.ShouldProcess($redistributable.Name + " $plat", "Creating ConfigMgr application")) {
-                        $app = New-CMApplication -Name ($redistributable.Name + " $plat") -ErrorVariable CMError -Publisher "Microsoft"
-                        
+                        $app = New-CMApplication -Name ($redistributable.Name + " $plat") -ErrorVariable CMError -Publisher "Microsoft" -AutoInstall $true
+
                         Add-CMScriptDeploymentType -InputObject $app -InstallCommand "$filename $arg" -ContentLocation $target `
                         -ProductCode $redistributable.ProductCode -DeploymentTypeName ("SCRIPT_" + $redistributable.Name) `
                         -UserInteractionMode Hidden -UninstallCommand "msiexec /x $($redistributable.ProductCode) /qn-" `
