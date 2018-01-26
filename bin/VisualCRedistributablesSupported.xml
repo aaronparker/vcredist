@@ -97,7 +97,7 @@
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
             <ProductCode>{E512788E-C50B-3858-A4B9-73AD5F3F9E93}</ProductCode>
-            <Download>https://download.microsoft.com/download/3/b/f/3bf6e759-c555-4595-8973-86b7b4312927/vc_redist.x64.exe</Download>
+            <Download>https://download.visualstudio.microsoft.com/download/pr/100349091/2cd2dba5748dc95950a5c42c2d2d78e4/VC_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
     <Platform Architecture="x86" Release="2017" Install="/install /passive /norestart">
@@ -106,7 +106,7 @@
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
             <ProductCode>{68306422-7C57-373F-8860-D26CE4BA2A15}</ProductCode>
-            <Download>https://download.microsoft.com/download/1/f/e/1febbdb2-aded-4e14-9063-39fb17e88444/vc_redist.x86.exe</Download>
+            <Download>https://download.visualstudio.microsoft.com/download/pr/100349138/88b50ce70017bf10f2d56d60fcba6ab1/VC_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
 </Redistributables>
