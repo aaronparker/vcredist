@@ -5,8 +5,7 @@ Function Get-VcXml {
         Creates and array of Visual C++ Redistributables listed in an external XML file.
 
     .DESCRIPTION
-        This script will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents release and processor architecture.
-        If the redistributable exists in the specified path, it will not be re-downloaded.
+        This script read the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
 
         A complete XML file listing the redistributables is included. The basic structure of the XML file should be:
 
@@ -39,7 +38,7 @@ Function Get-VcXml {
         Twitter: @stealthpuppy
 
     .LINK
-        http://stealthpuppy.com
+        https://stealthpuppy.com
 
     .PARAMETER Xml
         The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
@@ -79,12 +78,12 @@ Function Get-VcXml {
                 Write-Verbose "Adding to array with $($redistributable.Name)"
                 $item = New-Object PSObject
                 $item | Add-Member -Type NoteProperty -Name 'Name' -Value $redistributable.Name
-                $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
-                $item | Add-Member -Type NoteProperty -Name 'URL' -Value $redistributable.URL
                 $item | Add-Member -Type NoteProperty -Name 'ProductCode' -Value $redistributable.ProductCode
+                $item | Add-Member -Type NoteProperty -Name 'URL' -Value $redistributable.URL
                 $item | Add-Member -Type NoteProperty -Name 'Download' -Value $redistributable.Download
                 $item | Add-Member -Type NoteProperty -Name 'Release' -Value $platform.Release
                 $item | Add-Member -Type NoteProperty -Name 'Architecture' -Value $platform.Architecture
+                $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
                 $Output += $item
             }
         }
