@@ -84,6 +84,7 @@ Function Get-VcXml {
                 $item | Add-Member -Type NoteProperty -Name 'Release' -Value $platform.Release
                 $item | Add-Member -Type NoteProperty -Name 'Architecture' -Value $platform.Architecture
                 $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
+                $item | Add-Member -Type NoteProperty -Name 'Install' -Value $platform.Install
                 $Output += $item
             }
         }

@@ -62,7 +62,7 @@ Function Get-VcRedist {
 #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     PARAM (
-        [Parameter(Mandatory = $True, HelpMessage = ".")]
+        [Parameter(Mandatory = $True, HelpMessage = ".", Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False)]
         [array]$VcXml,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify a target path to download the Redistributables to.")]
@@ -78,7 +78,6 @@ Function Get-VcRedist {
         [string[]]$Architecture = @("x86", "x64")
     )
     BEGIN {
-
     }
     PROCESS {
 
@@ -94,10 +93,10 @@ Function Get-VcRedist {
 
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcXml) {
-            Write-Verbose "Downloading: $($Vc.Name) $($Vc.Release) $($Vc.Architecture)"
+            Write-Verbose "Downloading: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Create the folder to store the downloaded file. Skip if it exists
-            $Target = "$(Get-Item -Path $Path).FullName\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+            $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
             If (Test-Path -Path $Target) {
                 Write-Verbose "Folder '$Target' exists. Skipping."
             }
@@ -107,18 +106,21 @@ Function Get-VcRedist {
                 }
             }
 
-            # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
             # If the target Redistributable is already downloaded, skip it.
+            # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
             If (Test-Path -Path "$Target\$(Split-Path -Path $Vc.Download -Leaf)" -PathType Leaf) {
                 Write-Verbose "Redistributable exists. Skipping."
             }
             Else {
-                If ($pscmdlet.ShouldProcess($Vc.Download, "Download")) {
-                    If (Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue) {
+                If (Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue) {
+                    If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
                         Start-BitsTransfer -Source $Vc.Download -Destination "$Target\$(Split-Path -Path $Vc.Download -Leaf)" `
-                            -Priority High -TransferPolicy Always -ErrorAction Continue -ErrorVariable $ErrorBits -Verbose
+                            -Priority High -TransferPolicy Always -ErrorAction Continue -ErrorVariable $ErrorBits -Verbose `
+                            -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
                     }
-                    Else {
+                }
+                Else {
+                    If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
                         Invoke-WebRequest -Uri $Vc.Download -OutFile "$Target\$(Split-Path -Path $Vc.Download -Leaf)"
                     }
                 }
@@ -126,6 +128,7 @@ Function Get-VcRedist {
         }
     }
     END {
-
+        # Return the $VcXml array on the pipeline so that we can act on what was downloaded
+        $VcXml
     }
 }
