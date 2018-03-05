@@ -58,7 +58,7 @@
     # NestedModules = @()
     
     # Functions to export from this module
-    FunctionsToExport     = @('New-VcArray')
+    FunctionsToExport     = @('Get-VcXml')
     
     # Cmdlets to export from this module
     CmdletsToExport       = @()
