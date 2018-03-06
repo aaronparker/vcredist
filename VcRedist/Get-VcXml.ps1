@@ -5,7 +5,7 @@ Function Get-VcXml {
         Creates and array of Visual C++ Redistributables listed in an external XML file.
 
     .DESCRIPTION
-        This script read the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
+        This function read the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
 
         A complete XML file listing the redistributables is included. The basic structure of the XML file should be:
 
@@ -44,7 +44,7 @@ Function Get-VcXml {
         The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
 
     .EXAMPLE
-        .\Get-VcXml -Xml ".\VisualCRedistributablesSupported.xml"
+        Get-VcXml -Xml ".\VisualCRedistributablesSupported.xml"
 
         Description:
         Build an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
