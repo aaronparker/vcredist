@@ -1,5 +1,5 @@
 # Requires -Version 3
-Function Get-VcXml {
+Function Get-VcList {
     <#
     .SYNOPSIS
         Creates and array of Visual C++ Redistributables listed in an external XML file.
@@ -44,10 +44,16 @@ Function Get-VcXml {
         The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
 
     .EXAMPLE
-        Get-VcXml -Xml ".\VisualCRedistributablesSupported.xml"
+        Get-VcList
 
         Description:
-        Build an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
+        Return an array of the Visual C++ Redistributables from the embedded manifest
+
+    .EXAMPLE
+        Get-VcList -Xml ".\VisualCRedistributablesSupported.xml"
+
+        Description:
+        Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
 #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     Param (

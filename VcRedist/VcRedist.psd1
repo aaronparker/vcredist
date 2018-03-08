@@ -58,7 +58,7 @@
     # NestedModules = @()
     
     # Functions to export from this module
-    FunctionsToExport     = @('Get-VcXml', 'Get-VcRedist', 'Export-VcXml')
+    FunctionsToExport     = @('Get-VcList', 'Get-VcRedist', 'Export-VcXml')
     
     # Cmdlets to export from this module
     CmdletsToExport       = @()

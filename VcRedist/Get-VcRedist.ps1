@@ -16,7 +16,7 @@ Function Get-VcRedist {
     .LINK
         https://stealthpuppy.com
 
-    .PARAMETER VcXml
+    .PARAMETER VcList
         Sepcifies the array that lists the Visual C++ Redistributables to download
 
     .EXAMPLE
@@ -47,23 +47,21 @@ Function Get-VcRedist {
         Specifies the processor architecture to download or install.
 
     .EXAMPLE
-        Get-VcRedist -VcXml $VcRedists -Architecture "x64"
+        Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
 
         Description:
         Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
 
-        $Vc.Name
-        $Vc.ProductCode
-        $Vc.URL
-        $Vc.Download
-        $Vc.Release
-        $Vc.Architecture
-        $Vc.ShortName
+    .EXAMPLE
+        Get-VcRedist -VcList $VcRedists -Architecture "x64"
+
+        Description:
+        Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
 #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     PARAM (
         [Parameter(Mandatory = $True, HelpMessage = ".", Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False)]
-        [array]$VcXml,
+        [array]$VcList,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify a target path to download the Redistributables to.")]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
@@ -84,15 +82,15 @@ Function Get-VcRedist {
         # Filter release and architecture if specified
         If ($PSBoundParameters.ContainsKey('Release')) {
             Write-Verbose "Filtering releases for platform."
-            $VcXml = $VcXml | Where-Object { $_.Release -eq $Release }
+            $VcList = $VcList | Where-Object { $_.Release -eq $Release }
         }
         If ($PSBoundParameters.ContainsKey('Architecture')) {
             Write-Verbose "Filtering releases for architecture."
-            $VcXml = $VcXml | Where-Object { $_.Architecture -eq $Architecture }
+            $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
         }
 
         # Loop through each Redistributable and download to the target path
-        ForEach ($Vc in $VcXml) {
+        ForEach ($Vc in $VcList) {
             Write-Verbose "Downloading: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Create the folder to store the downloaded file. Skip if it exists
@@ -128,7 +126,7 @@ Function Get-VcRedist {
         }
     }
     END {
-        # Return the $VcXml array on the pipeline so that we can act on what was downloaded
-        $VcXml
+        # Return the $VcList array on the pipeline so that we can act on what was downloaded
+        $VcList
     }
 }
