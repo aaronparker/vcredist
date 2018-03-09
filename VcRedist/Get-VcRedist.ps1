@@ -76,6 +76,7 @@ Function Get-VcRedist {
         [string[]]$Architecture = @("x86", "x64")
     )
     BEGIN {
+        $Output = @()
     }
     PROCESS {
 
@@ -92,6 +93,7 @@ Function Get-VcRedist {
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcList) {
             Write-Verbose "Downloading: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+            $Output += $Vc
 
             # Create the folder to store the downloaded file. Skip if it exists
             $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
@@ -113,7 +115,7 @@ Function Get-VcRedist {
                 If (Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue) {
                     If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
                         Start-BitsTransfer -Source $Vc.Download -Destination "$Target\$(Split-Path -Path $Vc.Download -Leaf)" `
-                            -Priority High -TransferPolicy Always -ErrorAction Continue -ErrorVariable $ErrorBits -Verbose `
+                            -Priority High -ErrorAction Continue -ErrorVariable $ErrorBits `
                             -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
                     }
                 }
@@ -127,6 +129,6 @@ Function Get-VcRedist {
     }
     END {
         # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        $VcList
+        $Output
     }
 }
