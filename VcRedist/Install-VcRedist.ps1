@@ -40,12 +40,13 @@ Function Install-VcRedist {
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param (
-        [Parameter(Mandatory = $True, HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
+                HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
+        [ValidateNotNull()]
         [string]$VcList,
 
         [Parameter(Mandatory = $True, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript({If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string]$Path,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
@@ -76,7 +77,8 @@ Function Install-VcRedist {
         ForEach ($Vc in $VcList) {
             If (Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
                 Write-Verbose "Skipping: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
-            } Else {
+            }
+            Else {
                 Write-Verbose "Installing: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
                 $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
                 $Filename = Split-Path -Path $Vc.Download -Leaf -PathType Leaf
@@ -84,7 +86,8 @@ Function Install-VcRedist {
                     If ($pscmdlet.ShouldProcess("'$Target\$Filename $Vc.Install'", "Installing")) {
                         Start-Process -FilePath "$Target\$Filename" -ArgumentList $Vc.Install -Wait
                     }
-                } Else {
+                }
+                Else {
                     Write-Error "Cannot find "$Target\$Filename""
                 }
             }
