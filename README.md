@@ -4,7 +4,7 @@ A module for downloading and installing the Microsoft Visual C++ Redistributable
 
 ## Module
 
-This repository contains a folder named VcRedist. The folder needs to be installed into one of your PowerShell Module Paths. To see the full list of available PowerShell Module paths, use $env:PSModulePath.split(';') in a PowerShell console.
+This repository contains a folder named VcRedist. The folder needs to be installed into one of your PowerShell Module Paths. To see the full list of available PowerShell Module paths, use `$env:PSModulePath.split(';')` in a PowerShell console.
 
 Common PowerShell module paths include:
 

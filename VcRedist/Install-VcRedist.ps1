@@ -43,7 +43,7 @@ Function Install-VcRedist {
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
-        [string]$VcList,
+        [array]$VcList,
 
         [Parameter(Mandatory = $True, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript({If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
@@ -75,15 +75,16 @@ Function Install-VcRedist {
 
         # Loop through each Redistributable and install
         ForEach ($Vc in $VcList) {
-            If (Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
-                Write-Verbose "Skipping: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+            $UninstallPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+            If (Get-ChildItem -Path $UninstallPath | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
+                Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
             }
             Else {
-                Write-Verbose "Installing: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+                Write-Verbose "Install: [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
                 $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                $Filename = Split-Path -Path $Vc.Download -Leaf -PathType Leaf
+                $Filename = Split-Path -Path $Vc.Download -Leaf
                 If (Test-Path -Path "$Target\$Filename") {
-                    If ($pscmdlet.ShouldProcess("'$Target\$Filename $Vc.Install'", "Installing")) {
+                    If ($pscmdlet.ShouldProcess("'$Target\$Filename $($Vc.Install)'", "Install")) {
                         Start-Process -FilePath "$Target\$Filename" -ArgumentList $Vc.Install -Wait
                     }
                 }
