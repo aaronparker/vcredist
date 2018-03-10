@@ -34,7 +34,7 @@ Function Export-VcXml {
 #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     Param (
-        [Parameter(Mandatory = $True, HelpMessage = "Path to the XML file the content will be exported to.")]
+        [Parameter(Mandatory = $True, HelpMessage = "Path to the XML file content will be exported to.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [string]$Path,

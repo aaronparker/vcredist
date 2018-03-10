@@ -1,4 +1,4 @@
-Function New-VcPackage {
+Function Import-VcCmApp {
     <#
     .SYNOPSIS
         Installs and/or downloads the Visual C++ Redistributables listed in an external XML file.

@@ -5,7 +5,7 @@ Function Get-VcList {
         Creates and array of Visual C++ Redistributables listed in an external XML file.
 
     .DESCRIPTION
-        This function read the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
+        This function reads the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
 
         A complete XML file listing the redistributables is included. The basic structure of the XML file should be:
 
@@ -43,6 +43,10 @@ Function Get-VcList {
     .PARAMETER Xml
         The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
 
+    .PARAMETER Export
+        Defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
+        Defaults to exporting the Supported Redistributables.
+
     .EXAMPLE
         Get-VcList
 
@@ -60,9 +64,20 @@ Function Get-VcList {
         [Parameter(Mandatory = $False, HelpMessage = "Path to the XML document describing the Redistributables.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
-        [string]$Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesSupported.xml"
+        [string]$Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesSupported.xml",
+
+        [Parameter(Mandatory = $False)]
+        [ValidateSet('All', 'Supported')]
+        [string]$Export = "Supported"
     )
     Begin {
+        Switch ($Export) {
+            "All" {
+                $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesAll.xml"
+                Write-Warning "This array includes unsupported Visual C++ Redistributables."
+            }
+        }
+
         # The array that will be returned
         $Output = @()
     }

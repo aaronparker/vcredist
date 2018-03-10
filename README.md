@@ -68,8 +68,32 @@ The properties of each redistributable are defined in each `<Redistributable>` n
 * ProductCode - this is the MSI Product Code for the specified VC++ App that will be used to import the package into Configuration Manager
 * Download - this is the URL to the installer so that the script can download each redistributable
 
+## Functions
+
+This module includes the following functions:
+
+### Get-VcList
+
+This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions. Running `Get-VcList` will return the supported list of Visual C++ Redistributables. The function can read an external XML file that defines a custom list of Visual C++ Redistributables.
+
+### Export-VcXml
+
+Run `Export-VcXml` to export the internal Visual C++ Redistributables manifest to an external XML file. Use `-Path` to define the path to the external XML file that the manifest will be saved to. By default `Export-VcXml` will export only the supported Visual C++ Redistributables.
+
+### Get-VcRedist
+
+To download the Visual C++ Redistributables to a local folder, use `Get-VcRedist`. This will read the array of Visual C++ Redistributables returned from `Get-VcList` and download each one to a local folder specified in `-Path`. Visual C++ Redistributables can be filtered for release and processor architecture.
+
+### Install-VcRedist
+
+To install the Visual C++ Redistributables on the local machine, use `Install-VcRedist`. This function again accepts the array of Visual C++ Redistributables passed from `Get-VcList` and installs the Visual C++ Redistributables downloaded to a local path with `Get-VcRedist`. Visual C++ Redistributables can be filtered for release and processor architecture.
+
+### Import-VcMdtApp
+
+To install the Visual C++ Redistributables as a part of a reference image or for use with a deployment solution based on the Microsoft Deployment Toolkit, `Import-VcMdtApp` will import each of the Visual C++ Redistributables as a seperate application that includes silent command lines, platform support and the UninstallKey for detecting whether the Visual C++ Redistributable is already installed. Visual C++ Redistributables can be filtered for release and processor architecture.
+
 ## To Do
 
-* Finalise function to import Visual C++ Redistributables into ConfigMgr
+* Finalise function to import Visual C++ Redistributables into ConfigMgr (Import-VcCmApp)
 * Additional testing
-* Documentation update
+* Documentation updates
