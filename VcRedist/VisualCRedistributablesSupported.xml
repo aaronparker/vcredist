@@ -42,7 +42,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
-            <ProductCode>{37B8F9C7-03FB-3253-8781-2517C99D7C00}</ProductCode>
+            <ProductCode>{ca67548a-5ebe-413a-b50c-4b9ceb6d66c6}</ProductCode>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -51,7 +51,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
-            <ProductCode>{B175520C-86A2-35A7-8619-86DC379688B9}</ProductCode>
+            <ProductCode>{33d1fd90-4274-48a1-9bc1-97e33d9c2d6f}</ProductCode>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -60,7 +60,7 @@
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{5740BD44-B58D-321A-AFC0-6D3D4556DD6C}</ProductCode>
+            <ProductCode>{ef6b00ec-13e1-4c25-9064-b2f383cb8412}</ProductCode>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -69,7 +69,7 @@
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{7DAD0258-515C-3DD4-8964-BD714199E0F7}</ProductCode>
+            <ProductCode>{61087a79-ac85-455c-934d-1fa22cc64f36}</ProductCode>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -96,7 +96,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{E512788E-C50B-3858-A4B9-73AD5F3F9E93}</ProductCode>
+            <ProductCode>{e2ee15e2-a480-4bc5-bfb7-e9803d1d9823}</ProductCode>
             <Download>https://download.visualstudio.microsoft.com/download/pr/100349091/2cd2dba5748dc95950a5c42c2d2d78e4/VC_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -105,7 +105,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{68306422-7C57-373F-8860-D26CE4BA2A15}</ProductCode>
+            <ProductCode>{56e11d69-7cc9-40a5-a4f9-8f6190c4d84d}</ProductCode>
             <Download>https://download.visualstudio.microsoft.com/download/pr/100349138/88b50ce70017bf10f2d56d60fcba6ab1/VC_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
