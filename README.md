@@ -148,7 +148,7 @@ Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\share\R
 
 ## Tested On
 
-Tested on Windows 10 and Windows Server 2016 with PowerShell 5.1. Uses Start-BitsTransfer and uses the MDT Workbench - therefore the module does not currently support PowerShell Core.
+Tested on Windows 10 and Windows Server 2016 with PowerShell 5.1. Install-VcRedist and Import-VcMdtApp require Windows and the MDT Workbench. Get-VcList, Export-VcXml and Get-VcRedist do work on PowerShell Core; however, most testing is completed on Windows PowerShell.
 
 ## To Do
 
