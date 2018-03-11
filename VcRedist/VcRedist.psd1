@@ -84,7 +84,7 @@
         PSData = @{
     
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags       = 'Visual C++', 'Visual C++ Redistributables'
+            Tags       = 'Redistributables', "VisualC"
     
             # A URL to the license for this module.
             LicenseUri = 'https://github.com/aaronparker/Install-VisualCRedistributables/blob/master/LICENSE'
