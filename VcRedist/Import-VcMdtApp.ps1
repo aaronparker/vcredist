@@ -40,6 +40,7 @@ Function Import-VcMdtApp {
     #>
     # Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive
     [CmdletBinding(SupportsShouldProcess = $True)]
+    [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
@@ -139,7 +140,9 @@ Function Import-VcMdtApp {
     }
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        $Output = Get-ChildItem -Path "$($MdtDrive):\Applications" | Where-Object { $_.Name -like "*Visual C++*" }
+        $Output = Get-ChildItem -Path "$($MdtDrive):\Applications" | Where-Object { $_.Name -like "*Visual C++*" } | `
+        ForEach-Object { Get-ItemProperty -Path "$($MdtDrive):\Applications\$($_.Name)" } | `
+        Select-Object PSChildName, Source, CommandLine, Version, Language, SupportedPlatform, UninstallKey, Reboot
         $Output
     }
 }

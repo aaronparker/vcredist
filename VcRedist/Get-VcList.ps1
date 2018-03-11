@@ -60,6 +60,7 @@ Function Get-VcList {
         Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
 #>
     [CmdletBinding(SupportsShouldProcess = $False)]
+    [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $False, Position = 0, HelpMessage = "Path to the XML document describing the Redistributables.")]
         [ValidateNotNull()]

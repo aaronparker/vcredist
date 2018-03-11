@@ -33,6 +33,7 @@ Function Export-VcXml {
         Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.xml.
 #>
     [CmdletBinding(SupportsShouldProcess = $False)]
+    [OutputType([String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, HelpMessage = "Path to the XML file content will be exported to.")]
         [ValidateNotNull()]

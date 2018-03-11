@@ -39,6 +39,7 @@ Function Install-VcRedist {
         Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
+    [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
