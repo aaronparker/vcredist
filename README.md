@@ -139,7 +139,7 @@ ShortName    : SP1MFC
 Install      : /Q
 ```
 
-This array can be passed to other function to perform various tasks. For example, to download the 32-bit 2010, 2012, 2013 and 2017 Redistributables, use the following command:
+This array can be passed to other functions to perform various tasks. For example, to download the 32-bit 2010, 2012, 2013 and 2017 Redistributables, use the following command:
 
 ```powershell
 Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Release 2010, 2012, 2013, 2017 -Architecture x86

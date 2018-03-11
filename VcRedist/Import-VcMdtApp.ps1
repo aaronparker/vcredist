@@ -4,8 +4,7 @@ Function Import-VcMdtApp {
         Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share.
 
     .DESCRIPTION
-        Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes setting `
-        whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
+        Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
 
         Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into MDT.
 
