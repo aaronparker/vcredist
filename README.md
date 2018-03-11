@@ -27,11 +27,9 @@ Once installation is complete, you can validate that the module exists by runnin
 
 Deploying the Microsoft Visual C++ Redistributables in any complex desktop environment kinda sucks because there are so many versions that might be required. I got tired of updating my MDT deployment share with the redistributables manually, so wrote a module to automate the process.
 
-This module will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents major release, processor architecture and update release (e.g. SP1, MFC, ATL etc.). The script defines the available redistributables and can be updated with each release with no changes made to the script.
+This module will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents major release, processor architecture and update release (e.g. SP1, MFC, ATL etc.). The module allows you to download, install or import Visual C++ Redistributables into the Microsoft Deployment Toolkit or System Center Configuration Manager.
 
-*NOTE:* some validation of the Redistributables listed in the XML file is required, as not all may need to be installed in your environment.
-
-This can be run to download and optionally install the Visual C++ (2005 - 2017) Redistributables as specified in the external XML file passed to the module.
+*NOTE:* Validation of the Redistributables listed in the XML file is required, as not all may need to be installed in your environment.
 
 The basic structure of the XML file should be as follows (an XSD schema is included in the repository):
 
@@ -92,8 +90,55 @@ To install the Visual C++ Redistributables on the local machine, use `Install-Vc
 
 To install the Visual C++ Redistributables as a part of a reference image or for use with a deployment solution based on the Microsoft Deployment Toolkit, `Import-VcMdtApp` will import each of the Visual C++ Redistributables as a seperate application that includes silent command lines, platform support and the UninstallKey for detecting whether the Visual C++ Redistributable is already installed. Visual C++ Redistributables can be filtered for release and processor architecture.
 
+## Examples
+
+To retrieve the list of Visual C++ Redistributables from the embedded manifest, run `Get-VsList`.
+
+```
+PS C:\> Get-VcList
+
+
+Name         : Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update
+ProductCode  : {5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}
+URL          : https://www.microsoft.com/en-us/download/details.aspx?id=26368
+Download     : https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe
+Release      : 2008
+Architecture : x64
+ShortName    : SP1MFC
+Install      : /Q
+
+Name         : Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update
+ProductCode  : {9BE518E6-ECC6-35A9-88E4-87755C07200F}
+URL          : https://www.microsoft.com/en-us/download/details.aspx?id=26368
+Download     : https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe
+Release      : 2008
+Architecture : x86
+ShortName    : SP1MFC
+Install      : /Q
+```
+
+This array can be passed to other function to perform various tasks. For example, to download the 32-bit 2010, 2012, 2013 and 2017 Redistributables, use the following command:
+
+```
+Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Release 2010, 2012, 2013, 2017 -Architecture x86
+```
+
+To install the Visual C++ Redistributables that have been downloaded to C:\Temp\VcRedist, run:
+
+```
+Get-VcList | Install-VcRedist -Path C:\Temp\VcRedist
+```
+
+The module can import the Visual C++ Redistributables into an MDT deployment share. First, download the Visual C++ Redistributables installers locally, then import them into the share with `Import-VcMdtApp`:
+
+```
+$VcList = Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
+Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\share\Reference
+```
+
 ## To Do
 
 * Finalise function to import Visual C++ Redistributables into ConfigMgr (Import-VcCmApp)
 * Additional testing
 * Documentation updates
+* Add Pester tests
