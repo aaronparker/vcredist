@@ -21,7 +21,9 @@ Common PowerShell module paths include:
 
 Once installation is complete, you can validate that the module exists by running `Get-Module -ListAvailable VcRedist`. To use the module, load it with:
 
-    Import-Module VcRedist
+```powershell
+Import-Module VcRedist
+```
 
 ### PowerShell Gallery
 
@@ -41,6 +43,7 @@ This module will download the Visual C++ Redistributables listed in an external 
 
 The basic structure of the XML file should be as follows (an XSD schema is included in the repository):
 
+```xml
     <Redistributables>
         <Platform Architecture="x64" Release="" Install="">
             <Redistributable>
@@ -63,6 +66,7 @@ The basic structure of the XML file should be as follows (an XSD schema is inclu
             </Redistributable>
         </Platform>
     </Redistributables>
+```
 
 Each major version of the redistributables is grouped by `<Platform>` that defines the major release, processor architecture and install arguments passed to the installer.
 
