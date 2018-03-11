@@ -78,7 +78,7 @@
             <Name>Visual C++ 2015 Redistributable Update 3</Name>
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
-            <ProductCode>{EF1EC6A9-17DE-3DA9-B040-686A1E8A8B04}</ProductCode>
+            <ProductCode>{d992c12e-cab2-426f-bde3-fb8c53950b0d}</ProductCode>
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -87,7 +87,7 @@
             <Name>Visual C++ 2015 Redistributable Update 3</Name>
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
-            <ProductCode>{69BCE4AC-9572-3271-A2FB-9423BDA36A43}</ProductCode>
+            <ProductCode>{e2803110-78b3-4664-a479-3611a381656a}</ProductCode>
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
