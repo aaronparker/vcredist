@@ -65,7 +65,7 @@ Function Get-VcRedist {
         [ValidateNotNull()]
         [array]$VcList,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify a target path to download the Redistributables to.")]
+        [Parameter(Mandatory = $False, Position = 1, HelpMessage = "Specify a target path to download the Redistributables to.")]
         [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string]$Path,
 

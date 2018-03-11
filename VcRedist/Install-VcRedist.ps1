@@ -4,7 +4,7 @@ Function Install-VcRedist {
         Installs the Visual C++ Redistributables.
 
     .DESCRIPTION
-        Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded with Get-VcRedist.
+        Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
 
     .NOTES
         Name: Install-VcRedist
@@ -45,7 +45,7 @@ Function Install-VcRedist {
         [ValidateNotNull()]
         [array]$VcList,
 
-        [Parameter(Mandatory = $True, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript({If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string]$Path,
 
@@ -95,6 +95,9 @@ Function Install-VcRedist {
         }
     }
     End {
-
+        # Get the imported Visual C++ Redistributables applications to return on the pipeline
+        $Output = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | `
+        Get-ItemProperty | Where-Object {$_.DisplayName -like "Microsoft Visual C*"} | Select-Object Publisher, DisplayName, DisplayVersion
+        $Output
     }
 }

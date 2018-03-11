@@ -36,8 +36,7 @@ Function Import-VcMdtApp {
         Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -MDTShare \\server\deployment
 
         Description:
-        Retrieves the list of Visual C++ Redistributables, downloaded them C:\Temp\VcRedist and imports each Redistributable into `
-        the MDT dpeloyment share at \\server\deployment.
+        Retrieves the list of Visual C++ Redistributables, downloaded them C:\Temp\VcRedist and imports each Redistributable into the MDT dpeloyment share at \\server\deployment.
     #>
     # Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive
     [CmdletBinding(SupportsShouldProcess = $True)]
@@ -47,7 +46,7 @@ Function Import-VcMdtApp {
         [ValidateNotNull()]
         [array]$VcList,
 
-        [Parameter(Mandatory = $True, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string]$Path,
 
@@ -72,7 +71,7 @@ Function Import-VcMdtApp {
         $mdtModule = "$((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4" -ErrorAction SilentlyContinue).Install_Dir)bin\MicrosoftDeploymentToolkit.psd1"
         If (Test-Path -Path $mdtModule) {
             Try {            
-                Import-Module -Name $mdtModule
+                Import-Module -Name $mdtModule -ErrorAction SilentlyContinue
             }
             Catch {
                 Throw "Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."
@@ -95,7 +94,6 @@ Function Import-VcMdtApp {
         }
     }
     Process {
-
         # Filter release and architecture if specified
         If ($PSBoundParameters.ContainsKey('Release')) {
             Write-Verbose "Filtering releases for platform."
@@ -140,5 +138,8 @@ Function Import-VcMdtApp {
         }
     }
     End {
+        # Get the imported Visual C++ Redistributables applications to return on the pipeline
+        $Output = Get-ChildItem -Path "$($MdtDrive):\Applications" | Where-Object { $_.Name -like "*Visual C++*" }
+        $Output
     }
 }

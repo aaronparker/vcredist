@@ -61,7 +61,7 @@ Function Get-VcList {
 #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     Param (
-        [Parameter(Mandatory = $False, HelpMessage = "Path to the XML document describing the Redistributables.")]
+        [Parameter(Mandatory = $False, Position = 0, HelpMessage = "Path to the XML document describing the Redistributables.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
         [string]$Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesSupported.xml",

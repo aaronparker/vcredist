@@ -6,7 +6,7 @@ Function Export-VcXml {
 
     .DESCRIPTION
         Reads the Visual C++ Redistributables XML manifests included in the VcRedist module and exports the XML to an external file.
-        The XML file can then be edited and read with other functions such as Get-VcXml.
+        This enables editing of the XML manifest for custom scenarios.
 
     .OUTPUTS
         System.String
@@ -23,7 +23,7 @@ Function Export-VcXml {
         Path to the XML file the content will be exported to.
 
     .PARAMETER Export
-        Defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
+        Switch parameter that defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
         Defaults to exporting the Supported Redistributables.
 
     .EXAMPLE
@@ -34,7 +34,7 @@ Function Export-VcXml {
 #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     Param (
-        [Parameter(Mandatory = $True, HelpMessage = "Path to the XML file content will be exported to.")]
+        [Parameter(Mandatory = $True, Position = 0, HelpMessage = "Path to the XML file content will be exported to.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [string]$Path,
