@@ -23,6 +23,14 @@ Once installation is complete, you can validate that the module exists by runnin
 
     Import-Module VcRedist
 
+### PowerShell Gallery
+
+The VcRedist module is published to the PowerShell Gallery and can be found here: [VcRedist](https://www.powershellgallery.com/packages/VcRedist/). The module can be installed from the gallery with:
+
+```powershell
+Install-Module -Name VcRedist
+```
+
 ## Usage
 
 Deploying the Microsoft Visual C++ Redistributables in any complex desktop environment kinda sucks because there are so many versions that might be required. I got tired of updating my MDT deployment share with the redistributables manually, so wrote a module to automate the process.
