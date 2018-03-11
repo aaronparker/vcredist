@@ -146,6 +146,10 @@ $VcList = Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
 Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\share\Reference
 ```
 
+## Tested On
+
+Tested on Windows 10 and Windows Server 2016 with PowerShell 5.1. Uses Start-BitsTransfer and uses the MDT Workbench - therefore the module does not currently support PowerShell Core.
+
 ## To Do
 
 * Finalise function to import Visual C++ Redistributables into ConfigMgr (Import-VcCmApp)
