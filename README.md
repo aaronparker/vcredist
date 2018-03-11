@@ -86,15 +86,25 @@ To download the Visual C++ Redistributables to a local folder, use `Get-VcRedist
 
 To install the Visual C++ Redistributables on the local machine, use `Install-VcRedist`. This function again accepts the array of Visual C++ Redistributables passed from `Get-VcList` and installs the Visual C++ Redistributables downloaded to a local path with `Get-VcRedist`. Visual C++ Redistributables can be filtered for release and processor architecture.
 
+![Microsoft Visual C++ Redistributables installed on the local PC](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VisualCPrograms.PNG)
+
 ### Import-VcMdtApp
 
 To install the Visual C++ Redistributables as a part of a reference image or for use with a deployment solution based on the Microsoft Deployment Toolkit, `Import-VcMdtApp` will import each of the Visual C++ Redistributables as a seperate application that includes silent command lines, platform support and the UninstallKey for detecting whether the Visual C++ Redistributable is already installed. Visual C++ Redistributables can be filtered for release and processor architecture.
+
+Each Redistributables will be imported into the deployment share with application properties for a successful deployment.
+
+![Microsoft Visual C++ Redistributables applications imported into an MDT share](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/MdtVisualCApplications.png)
+
+The folder structure in the deployment share, will look thus:
+
+![Visual C++ Redistributables in the deployment share Application folder](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/MdtVisualCApplicationsFolder.PNG)
 
 ## Examples
 
 To retrieve the list of Visual C++ Redistributables from the embedded manifest, run `Get-VsList`.
 
-```
+```powershell
 PS C:\> Get-VcList
 
 
@@ -119,19 +129,19 @@ Install      : /Q
 
 This array can be passed to other function to perform various tasks. For example, to download the 32-bit 2010, 2012, 2013 and 2017 Redistributables, use the following command:
 
-```
+```powershell
 Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Release 2010, 2012, 2013, 2017 -Architecture x86
 ```
 
 To install the Visual C++ Redistributables that have been downloaded to C:\Temp\VcRedist, run:
 
-```
+```powershell
 Get-VcList | Install-VcRedist -Path C:\Temp\VcRedist
 ```
 
 The module can import the Visual C++ Redistributables into an MDT deployment share. First, download the Visual C++ Redistributables installers locally, then import them into the share with `Import-VcMdtApp`:
 
-```
+```powershell
 $VcList = Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
 Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\share\Reference
 ```
