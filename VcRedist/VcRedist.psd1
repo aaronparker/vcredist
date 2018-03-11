@@ -93,7 +93,7 @@
             ProjectUri = 'https://github.com/aaronparker/Install-VisualCRedistributables/'
     
             # A URL to an icon representing this module.
-            IconUri    = 'https://stealthpuppy.com/wp-content/uploads/2015/03/noun_17977_cc.png'
+            IconUri    = 'https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VisualStudioLogo256.png'
     
             # Repository location
             RepositorySourceLocation = "https://github.com/aaronparker/Install-VisualCRedistributables/"
