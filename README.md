@@ -116,7 +116,7 @@ The folder structure in the deployment share, will look thus:
 
 To install the Visual C++ Redistributables with System Center Configuration Manager, `Import-VcCmApp` will import each of the Visual C++ Redistributables as a seperate application that includes the application and a single deployment type. Visual C++ Redistributables can be filtered for release and processor architecture.
 
-![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.png)
+![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.PNG)
 
 ## Examples
 
