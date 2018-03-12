@@ -4,7 +4,7 @@
     RootModule            = 'VcRedist.psm1'
     
     # Version number of this module.
-    ModuleVersion         = '1.3.0.0'
+    ModuleVersion         = '1.3.1.0'
     
     # ID used to uniquely identify this module
     GUID                  = '9139778c-9a1a-4faf-aa88-5ac6fd3b3e48'
@@ -58,7 +58,7 @@
     # NestedModules = @()
     
     # Functions to export from this module
-    FunctionsToExport     = @('Get-VcList', 'Get-VcRedist', 'Export-VcXml', 'Install-VcRedist', 'Import-VcMdtApp')
+    FunctionsToExport     = @('Get-VcList', 'Get-VcRedist', 'Export-VcXml', 'Install-VcRedist', 'Import-VcMdtApp', 'Import-VcCmApp')
     
     # Cmdlets to export from this module
     CmdletsToExport       = @()
