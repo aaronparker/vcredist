@@ -19,7 +19,7 @@
     Copyright             = '(c) 2018 stealthpuppy. All rights reserved.'
     
     # Description of the functionality provided by this module
-    Description           = 'A module for downloading and installing the Microsoft Visual C++ Redistributables. The module can also import the Redistributables into the Microsoft Deployment Toolkit.'
+    Description           = 'A module for downloading and installing the Microsoft Visual C++ Redistributables. Also imports into the Microsoft Deployment Toolkit and System Center Configuration Manger.'
     
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion     = '3.0'
