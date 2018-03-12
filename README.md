@@ -112,6 +112,12 @@ The folder structure in the deployment share, will look thus:
 
 ![Visual C++ Redistributables in the deployment share Application folder](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/MdtVisualCApplicationsFolder.PNG)
 
+### Import-VcCMApp
+
+To install the Visual C++ Redistributables with System Center Configuration Manager, `Import-VcCmApp` will import each of the Visual C++ Redistributables as a seperate application that includes the application and a single deployment type. Visual C++ Redistributables can be filtered for release and processor architecture.
+
+![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VCredist_ConfigMgr.png)
+
 ## Examples
 
 To retrieve the list of Visual C++ Redistributables from the embedded manifest, run `Get-VsList`.
@@ -142,20 +148,27 @@ Install      : /Q
 This array can be passed to other functions to perform various tasks. For example, to download the 32-bit 2010, 2012, 2013 and 2017 Redistributables, use the following command:
 
 ```powershell
-Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Release 2010, 2012, 2013, 2017 -Architecture x86
+Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist" -Release 2010, 2012, 2013, 2017 -Architecture x86
 ```
 
 To install the Visual C++ Redistributables that have been downloaded to C:\Temp\VcRedist, run:
 
 ```powershell
-Get-VcList | Install-VcRedist -Path C:\Temp\VcRedist
+Get-VcList | Install-VcRedist -Path "C:\Temp\VcRedist"
 ```
 
 The module can import the Visual C++ Redistributables into an MDT deployment share. First, download the Visual C++ Redistributables installers locally, then import them into the share with `Import-VcMdtApp`:
 
 ```powershell
-$VcList = Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
-Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\share\Reference
+$VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
+Import-VcMdtApp -VcList $VcList -Path "C:\Temp\VcRedist" -MdtPath "\\server\share\Reference"
+```
+
+The module can be used to import the Visual C++ Redistributables as applications with a single deployment type into ConfigMgr. This includes copying the downloaded installers to a network path.
+
+```powershell
+$VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
+Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 ```
 
 ## Tested On
