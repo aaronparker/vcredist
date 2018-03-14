@@ -12,8 +12,8 @@ Describe 'Get-VcList' {
     }
     Context "Return external manifest" {
         It "Given valid parameter -Xml 'All', it returns supported Visual C++ Redistributables" {
-            $VcList = Get-VcList -Xml 
-            $VcList.Count | Should -Be 32
+            $VcList = Get-VcList -Xml "C:\projects\install-visualcredistributables\VcRedist\VisualCRedistributablesSupported.xml"
+            $VcList.Count | Should -Be 12
         }
     }
 }
