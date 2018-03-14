@@ -1,12 +1,19 @@
 # Pester tests
 Describe 'Get-VcList' {
-    It "Given no parameters, it returns supported Visual C++ Redistributables" {
-        $VcList = Get-VcList
-        $VcList.Count | Should -Be 12
+    Context "Return built-in manifest" {
+        It "Given no parameters, it returns supported Visual C++ Redistributables" {
+            $VcList = Get-VcList
+            $VcList.Count | Should -Be 12
+        }
+        It "Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" {
+            $VcList = Get-VcList -Export All
+            $VcList.Count | Should -Be 32
+        }
     }
-    
-    It "Given valid parameter -Export 'All', it returns supported Visual C++ Redistributables" {
-        $VcList = Get-VcList -Export All
-        $VcList.Count | Should -Be 32
+    Context "Return external manifest" {
+        It "Given valid parameter -Xml 'All', it returns supported Visual C++ Redistributables" {
+            $VcList = Get-VcList -Xml 
+            $VcList.Count | Should -Be 32
+        }
     }
 }
