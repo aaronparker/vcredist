@@ -177,7 +177,6 @@ Tested on Windows 10 and Windows Server 2016 with PowerShell 5.1. Install-VcRedi
 
 ## To Do
 
-* Finalise function to import Visual C++ Redistributables into ConfigMgr (Import-VcCmApp)
 * Additional testing
 * Documentation updates
 * Add Pester tests
