@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/ijnl2agu5ey3l1u7/branch/development?svg=true)](https://ci.appveyor.com/project/aaronparker/install-visualcredistributables/branch/development)
+[![Build status](https://ci.appveyor.com/api/projects/status/ijnl2agu5ey3l1u7?svg=true)](https://ci.appveyor.com/project/aaronparker/install-visualcredistributables)
 
 # Install-VisualCRedistributables
 
