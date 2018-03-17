@@ -17,7 +17,7 @@ Function Get-VcRedist {
         Twitter: @stealthpuppy
 
     .LINK
-        https://stealthpuppy.com
+        https://github.com/aaronparker/Install-VisualCRedistributables
 
     .PARAMETER VcList
         Sepcifies the array that lists the Visual C++ Redistributables to download

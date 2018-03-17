@@ -17,7 +17,7 @@ Function Export-VcXml {
         Twitter: @stealthpuppy
 
     .LINK
-        https://stealthpuppy.com
+        https://github.com/aaronparker/Install-VisualCRedistributables
 
     .PARAMETER Path
         Path to the XML file the content will be exported to.

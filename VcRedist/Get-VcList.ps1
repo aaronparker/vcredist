@@ -18,7 +18,7 @@ Function Get-VcList {
         Twitter: @stealthpuppy
 
     .LINK
-        https://stealthpuppy.com
+        https://github.com/aaronparker/Install-VisualCRedistributables
 
     .PARAMETER Xml
         The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
