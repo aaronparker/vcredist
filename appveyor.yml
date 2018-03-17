@@ -35,5 +35,5 @@ test_script:
   - ps: $res = Invoke-Pester -Path ".\Tests" -OutputFormat NUnitXml -OutputFile TestsResults.xml -PassThru
 
 branches:
-  only:
-  - development
+  except:
+  - docs
