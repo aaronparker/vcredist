@@ -13,9 +13,9 @@ Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolki
 ## SYNTAX
 
 ```
-Import-VcMdtApp [-VcList] <Array> [-Path] <String> [-Release <String[]>] [-Architecture <String[]>]
- -MdtPath <String> [-MdtDrive <Object>] [-Publisher <Object>] [-Language <Object>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Import-VcMdtApp [-VcList] <Array> [-Path] <String> -MdtPath <String> [-AppFolder <String>]
+ [-Release <String[]>] [-Architecture <String[]>] [-Bundle] [-MdtDrive <Object>] [-Publisher <Object>]
+ [-BundleName <Object>] [-Language <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -67,6 +67,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -MdtPath
+The path to the MDT deployment share.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AppFolder
+Specify Applications folder to import the VC Redistributables into.```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: VcRedists
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Release
 Specifies the release (or version) of the redistributables to download or install.
 
@@ -97,17 +125,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -MdtPath
-The path to the MDT deployment share.
-
-```yaml
-Type: String
+### -Bundle
+Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.```yaml
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -138,6 +164,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: Microsoft
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BundleName
+{{Fill BundleName Description}}
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Visual C++ Redistributables
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -189,8 +230,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

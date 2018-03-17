@@ -13,9 +13,9 @@ Creates Visual C++ Redistributable applications in a ConfigMgr site.
 ## SYNTAX
 
 ```
-Import-VcCmApp [-VcList] <Array> [-Path] <String> [-Release <String[]>] [-Architecture <String[]>]
- -SMSSiteCode <String> -CMPath <String> [-Publisher <Object>] [-Language <Object>] [-CMAppFolder <Object>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Import-VcCmApp [-VcList] <Array> [-Path] <String> -CMPath <String> -SMSSiteCode <String> [-AppFolder <String>]
+ [-Release <String[]>] [-Architecture <String[]>] [-Publisher <Object>] [-Language <Object>]
+ [-Keyword <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -62,6 +62,49 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -CMPath
+Specify a UNC path where the Visual C++ Redistributables will be distributed from
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SMSSiteCode
+Specify the Site Code for ConfigMgr app creation.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AppFolder
+Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: VcRedists
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Release
 Specifies the release (or version) of the redistributables to download or install.
 
@@ -88,36 +131,6 @@ Aliases:
 Required: False
 Position: Named
 Default value: @("x86", "x64")
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SMSSiteCode
-Specify the Site Code for ConfigMgr app creation.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CMPath
-Specify a UNC path where the Visual C++ Redistributables will be distributed from
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -152,8 +165,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CMAppFolder
-{{Fill CMAppFolder Description}}
+### -Keyword
+{{Fill Keyword Description}}
 
 ```yaml
 Type: Object
@@ -162,7 +175,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: VcRedist
+Default value: Visual C++ Redistributable
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -199,8 +212,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
