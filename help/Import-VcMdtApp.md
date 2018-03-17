@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com
+online version: https://github.com/aaronparker/Install-VisualCRedistributables
 schema: 2.0.0
 ---
 
@@ -19,21 +19,30 @@ Import-VcMdtApp [-VcList] <Array> [-Path] <String> -MdtPath <String> [-AppFolder
 ```
 
 ## DESCRIPTION
-Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
+Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.
 
-Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into MDT.
+Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -MDTShare \\server\deployment
+Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 ```
 
 Description:
-Retrieves the list of Visual C++ Redistributables, downloaded them C:\Temp\VcRedist and imports each Redistributable into the MDT dpeloyment share at \\\\server\deployment.
+Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\\\server\deployment.
 
-Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive
+### EXAMPLE 2
+```
+$VcList = Get-VcList -Export All
+```
+
+Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
+Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\\\server\deployment -Bundle
+
+Description:
+Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\\\server\deployment and creates an application bundle.
 
 ## PARAMETERS
 
@@ -68,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -MdtPath
-The path to the MDT deployment share.
+The local or network path to the MDT deployment share.
 
 ```yaml
 Type: String
@@ -83,7 +92,9 @@ Accept wildcard characters: False
 ```
 
 ### -AppFolder
-Specify Applications folder to import the VC Redistributables into.```yaml
+Specify Applications folder to import the VC Redistributables into.
+
+```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
@@ -96,7 +107,7 @@ Accept wildcard characters: False
 ```
 
 ### -Release
-Specifies the release (or version) of the redistributables to download or install.
+Specifies the release (or version) of the redistributables to import into MDT.
 
 ```yaml
 Type: String[]
@@ -111,7 +122,8 @@ Accept wildcard characters: False
 ```
 
 ### -Architecture
-Specifies the processor architecture to download or install.
+Specifies the processor architecture to import into MDT.
+Can be x86 or x64.
 
 ```yaml
 Type: String[]
@@ -126,7 +138,9 @@ Accept wildcard characters: False
 ```
 
 ### -Bundle
-Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.```yaml
+Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.
+
+```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
@@ -230,7 +244,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -245,5 +260,5 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[https://stealthpuppy.com](https://stealthpuppy.com)
+[https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
 

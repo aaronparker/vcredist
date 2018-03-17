@@ -94,8 +94,8 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://stealthpuppy.com</maml:linkText>
-        <maml:uri>https://stealthpuppy.com</maml:uri>
+        <maml:linkText>https://github.com/aaronparker/Install-VisualCRedistributables</maml:linkText>
+        <maml:uri>https://github.com/aaronparker/Install-VisualCRedistributables</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -105,13 +105,12 @@
       <command:verb>Get</command:verb>
       <command:noun>VcList</command:noun>
       <maml:description>
-        <maml:para>Creates and array of Visual C++ Redistributables listed in an external XML file.</maml:para>
+        <maml:para>Returns an array of Visual C++ Redistributables.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This function reads the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.</maml:para>
-      <maml:para>A complete XML file listing the redistributables is included. The basic structure of the XML file should be:</maml:para>
-      <maml:para>&lt;Redistributables&gt;     &lt;Platform Architecture="x64" Release="" Install=""&gt;         &lt;Redistributable&gt;             &lt;Name&gt;&lt;/Name&gt;             &lt;ShortName&gt;&lt;/ShortName&gt;             &lt;URL&gt;&lt;/URL&gt;             &lt;ProductCode&gt;&lt;/ProductCode&gt;             &lt;Download&gt;&lt;/Download&gt;     &lt;/Platform&gt;     &lt;Platform Architecture="x86" Release="" Install=""&gt;         &lt;Redistributable&gt;             &lt;Name&gt;&lt;/Name&gt;             &lt;ShortName&gt;&lt;/ShortName&gt;             &lt;URL&gt;&lt;/URL&gt;             &lt;ProductCode&gt;&lt;/ProductCode&gt;             &lt;Download&gt;&lt;/Download&gt;         &lt;/Redistributable&gt;     &lt;/Platform&gt; &lt;/Redistributables&gt;</maml:para>
+      <maml:para>This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.</maml:para>
+      <maml:para>A complete listing the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcXml.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -202,8 +201,8 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://stealthpuppy.com</maml:linkText>
-        <maml:uri>https://stealthpuppy.com</maml:uri>
+        <maml:linkText>https://github.com/aaronparker/Install-VisualCRedistributables</maml:linkText>
+        <maml:uri>https://github.com/aaronparker/Install-VisualCRedistributables</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -387,35 +386,21 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-VcRedist -VcXml $VcRedists -Path C:\Redist</dev:code>
+        <dev:code>Get-VcXml | Get-VcRedist -Path C:\Redist</dev:code>
         <dev:remarks>
-          <maml:para>Description: Downloads the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.</maml:para>
+          <maml:para>Description: Downloads the supported Visual C++ Redistributables to C:\Redist.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-VcXml | Get-VcRedist -Path C:\Redist</dev:code>
-        <dev:remarks>
-          <maml:para>Description: Downloads the Visual C++ Redistributables listed in $VcRedists to C:\Redist.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"</dev:code>
         <dev:remarks>
           <maml:para>Description: Downloads only the 2012, 2013 &amp; 2017 releases of the  Visual C++ Redistributables listed in $VcRedists</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist</dev:code>
-        <dev:remarks>
-          <maml:para>Description: Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
-        <dev:code>Get-VcRedist -VcList $VcRedists -Architecture "x64"</dev:code>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Architecture x64</dev:code>
         <dev:remarks>
           <maml:para>Description: Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.</maml:para>
         </dev:remarks>
@@ -423,8 +408,8 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://stealthpuppy.com</maml:linkText>
-        <maml:uri>https://stealthpuppy.com</maml:uri>
+        <maml:linkText>https://github.com/aaronparker/Install-VisualCRedistributables</maml:linkText>
+        <maml:uri>https://github.com/aaronparker/Install-VisualCRedistributables</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -468,6 +453,42 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CMPath</maml:name>
+          <maml:Description>
+            <maml:para>Specify a UNC path where the Visual C++ Redistributables will be distributed from</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SMSSiteCode</maml:name>
+          <maml:Description>
+            <maml:para>Specify the Site Code for ConfigMgr app creation.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AppFolder</maml:name>
+          <maml:Description>
+            <maml:para>Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>VcRedists</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Release</maml:name>
           <maml:Description>
@@ -491,30 +512,6 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>@("x86", "x64")</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>SMSSiteCode</maml:name>
-          <maml:Description>
-            <maml:para>Specify the Site Code for ConfigMgr app creation.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CMPath</maml:name>
-          <maml:Description>
-            <maml:para>Specify a UNC path where the Visual C++ Redistributables will be distributed from</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Publisher</maml:name>
@@ -541,16 +538,16 @@
           <dev:defaultValue>En-US</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CMAppFolder</maml:name>
+          <maml:name>Keyword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill CMAppFolder Description}}</maml:para>
+            <maml:para>{{Fill Keyword Description}}</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
           <dev:type>
             <maml:name>Object</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>VcRedist</dev:defaultValue>
+          <dev:defaultValue>Visual C++ Redistributable</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
@@ -601,6 +598,42 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CMPath</maml:name>
+        <maml:Description>
+          <maml:para>Specify a UNC path where the Visual C++ Redistributables will be distributed from</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SMSSiteCode</maml:name>
+        <maml:Description>
+          <maml:para>Specify the Site Code for ConfigMgr app creation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AppFolder</maml:name>
+        <maml:Description>
+          <maml:para>Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>VcRedists</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Release</maml:name>
         <maml:Description>
@@ -624,30 +657,6 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>@("x86", "x64")</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>SMSSiteCode</maml:name>
-        <maml:Description>
-          <maml:para>Specify the Site Code for ConfigMgr app creation.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CMPath</maml:name>
-        <maml:Description>
-          <maml:para>Specify a UNC path where the Visual C++ Redistributables will be distributed from</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Publisher</maml:name>
@@ -674,16 +683,16 @@
         <dev:defaultValue>En-US</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CMAppFolder</maml:name>
+        <maml:name>Keyword</maml:name>
         <maml:Description>
-          <maml:para>{{Fill CMAppFolder Description}}</maml:para>
+          <maml:para>{{Fill Keyword Description}}</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
         <dev:type>
           <maml:name>Object</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>VcRedist</dev:defaultValue>
+        <dev:defaultValue>Visual C++ Redistributable</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
@@ -729,16 +738,17 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code></dev:code>
+        <dev:code>$VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB</maml:para>
+          <maml:para>Description: Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://stealthpuppy.com</maml:linkText>
-        <maml:uri>https://stealthpuppy.com</maml:uri>
+        <maml:linkText>https://github.com/aaronparker/Install-VisualCRedistributables</maml:linkText>
+        <maml:uri>https://github.com/aaronparker/Install-VisualCRedistributables</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -752,8 +762,8 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.</maml:para>
-      <maml:para>Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into MDT.</maml:para>
+      <maml:para>Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.</maml:para>
+      <maml:para>Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -782,10 +792,34 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MdtPath</maml:name>
+          <maml:Description>
+            <maml:para>The local or network path to the MDT deployment share.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AppFolder</maml:name>
+          <maml:Description>
+            <maml:para>Specify Applications folder to import the VC Redistributables into.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>VcRedists</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Release</maml:name>
           <maml:Description>
-            <maml:para>Specifies the release (or version) of the redistributables to download or install.</maml:para>
+            <maml:para>Specifies the release (or version) of the redistributables to import into MDT.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -797,7 +831,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Architecture</maml:name>
           <maml:Description>
-            <maml:para>Specifies the processor architecture to download or install.</maml:para>
+            <maml:para>Specifies the processor architecture to import into MDT. Can be x86 or x64.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -806,17 +840,16 @@
           </dev:type>
           <dev:defaultValue>@("x86", "x64")</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>MdtPath</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Bundle</maml:name>
           <maml:Description>
-            <maml:para>The path to the MDT deployment share.</maml:para>
+            <maml:para>Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>SwitchParameter</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MdtDrive</maml:name>
@@ -841,6 +874,18 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>Microsoft</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BundleName</maml:name>
+          <maml:Description>
+            <maml:para>{{Fill BundleName Description}}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Visual C++ Redistributables</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Language</maml:name>
@@ -903,10 +948,34 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>MdtPath</maml:name>
+        <maml:Description>
+          <maml:para>The local or network path to the MDT deployment share.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AppFolder</maml:name>
+        <maml:Description>
+          <maml:para>Specify Applications folder to import the VC Redistributables into.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>VcRedists</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Release</maml:name>
         <maml:Description>
-          <maml:para>Specifies the release (or version) of the redistributables to download or install.</maml:para>
+          <maml:para>Specifies the release (or version) of the redistributables to import into MDT.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -918,7 +987,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Architecture</maml:name>
         <maml:Description>
-          <maml:para>Specifies the processor architecture to download or install.</maml:para>
+          <maml:para>Specifies the processor architecture to import into MDT. Can be x86 or x64.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -927,17 +996,17 @@
         </dev:type>
         <dev:defaultValue>@("x86", "x64")</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>MdtPath</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Bundle</maml:name>
         <maml:Description>
-          <maml:para>The path to the MDT deployment share.</maml:para>
+          <maml:para>Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>SwitchParameter</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>MdtDrive</maml:name>
@@ -962,6 +1031,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>Microsoft</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BundleName</maml:name>
+        <maml:Description>
+          <maml:para>{{Fill BundleName Description}}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Visual C++ Redistributables</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Language</maml:name>
@@ -1019,17 +1100,24 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -MDTShare \\server\deployment</dev:code>
+        <dev:code>Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment</dev:code>
         <dev:remarks>
-          <maml:para>Description: Retrieves the list of Visual C++ Redistributables, downloaded them C:\Temp\VcRedist and imports each Redistributable into the MDT dpeloyment share at \\server\deployment.</maml:para>
-          <maml:para>Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive</maml:para>
+          <maml:para>Description: Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\server\deployment.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$VcList = Get-VcList -Export All</dev:code>
+        <dev:remarks>
+          <maml:para>Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle</maml:para>
+          <maml:para>Description: Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://stealthpuppy.com</maml:linkText>
-        <maml:uri>https://stealthpuppy.com</maml:uri>
+        <maml:linkText>https://github.com/aaronparker/Install-VisualCRedistributables</maml:linkText>
+        <maml:uri>https://github.com/aaronparker/Install-VisualCRedistributables</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1228,8 +1316,8 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://stealthpuppy.com</maml:linkText>
-        <maml:uri>https://stealthpuppy.com</maml:uri>
+        <maml:linkText>https://github.com/aaronparker/Install-VisualCRedistributables</maml:linkText>
+        <maml:uri>https://github.com/aaronparker/Install-VisualCRedistributables</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

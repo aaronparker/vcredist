@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com
+online version: https://github.com/aaronparker/Install-VisualCRedistributables
 schema: 2.0.0
 ---
 
@@ -27,8 +27,13 @@ Use Get-VcList and Get-VcRedist to download the Redistributable and create the a
 
 ### EXAMPLE 1
 ```
-
+$VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
 ```
+
+Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\\\server\share\VcRedist" -SMSSiteCode LAB
+
+Description:
+Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
 
 ## PARAMETERS
 
@@ -93,7 +98,10 @@ Accept wildcard characters: False
 ```
 
 ### -AppFolder
-Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".```yaml
+Import the Visual C++ Redistributables into a sub-folder.
+Defaults to "VcRedists".
+
+```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
@@ -212,7 +220,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -227,5 +236,5 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[https://stealthpuppy.com](https://stealthpuppy.com)
+[https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
 

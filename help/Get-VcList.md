@@ -1,14 +1,14 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com
+online version: https://github.com/aaronparker/Install-VisualCRedistributables
 schema: 2.0.0
 ---
 
 # Get-VcList
 
 ## SYNOPSIS
-Creates and array of Visual C++ Redistributables listed in an external XML file.
+Returns an array of Visual C++ Redistributables.
 
 ## SYNTAX
 
@@ -17,30 +17,10 @@ Get-VcList [[-Xml] <String>] [-Export <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This function reads the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
+This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.
 
-A complete XML file listing the redistributables is included.
-The basic structure of the XML file should be:
-
-\<Redistributables\>
-    \<Platform Architecture="x64" Release="" Install=""\>
-        \<Redistributable\>
-            \<Name\>\</Name\>
-            \<ShortName\>\</ShortName\>
-            \<URL\>\</URL\>
-            \<ProductCode\>\</ProductCode\>
-            \<Download\>\</Download\>
-    \</Platform\>
-    \<Platform Architecture="x86" Release="" Install=""\>
-        \<Redistributable\>
-            \<Name\>\</Name\>
-            \<ShortName\>\</ShortName\>
-            \<URL\>\</URL\>
-            \<ProductCode\>\</ProductCode\>
-            \<Download\>\</Download\>
-        \</Redistributable\>
-    \</Platform\>
-\</Redistributables\>
+A complete listing the supported and all known redistributables is included in the module.
+These internal manifests can be exported with Export-VcXml.
 
 ## EXAMPLES
 
@@ -95,7 +75,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -110,5 +91,5 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[https://stealthpuppy.com](https://stealthpuppy.com)
+[https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
 

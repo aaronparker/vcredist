@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com
+online version: https://github.com/aaronparker/Install-VisualCRedistributables
 schema: 2.0.0
 ---
 
@@ -25,21 +25,13 @@ If the redistributable exists in the specified path, it will not be re-downloade
 
 ### EXAMPLE 1
 ```
-Get-VcRedist -VcXml $VcRedists -Path C:\Redist
-```
-
-Description:
-Downloads the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
-
-### EXAMPLE 2
-```
 Get-VcXml | Get-VcRedist -Path C:\Redist
 ```
 
 Description:
-Downloads the Visual C++ Redistributables listed in $VcRedists to C:\Redist.
+Downloads the supported Visual C++ Redistributables to C:\Redist.
 
-### EXAMPLE 3
+### EXAMPLE 2
 ```
 Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"
 ```
@@ -47,17 +39,9 @@ Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"
 Description:
 Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in $VcRedists
 
-### EXAMPLE 4
+### EXAMPLE 3
 ```
-Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
-```
-
-Description:
-Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
-
-### EXAMPLE 5
-```
-Get-VcRedist -VcList $VcRedists -Architecture "x64"
+Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Architecture x64
 ```
 
 Description:
@@ -157,7 +141,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -172,5 +157,5 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[https://stealthpuppy.com](https://stealthpuppy.com)
+[https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
 
