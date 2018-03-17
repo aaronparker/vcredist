@@ -2,32 +2,12 @@
 Function Get-VcList {
     <#
     .SYNOPSIS
-        Creates and array of Visual C++ Redistributables listed in an external XML file.
+        Returns an array of Visual C++ Redistributables.
 
     .DESCRIPTION
-        This function reads the Visual C++ Redistributables listed in an external XML file into an array that can be passed to other VcRedist functions.
+        This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.
 
-        A complete XML file listing the redistributables is included. The basic structure of the XML file should be:
-
-        <Redistributables>
-            <Platform Architecture="x64" Release="" Install="">
-                <Redistributable>
-                    <Name></Name>
-                    <ShortName></ShortName>
-                    <URL></URL>
-                    <ProductCode></ProductCode>
-                    <Download></Download>
-            </Platform>
-            <Platform Architecture="x86" Release="" Install="">
-                <Redistributable>
-                    <Name></Name>
-                    <ShortName></ShortName>
-                    <URL></URL>
-                    <ProductCode></ProductCode>
-                    <Download></Download>
-                </Redistributable>
-            </Platform>
-        </Redistributables>
+        A complete listing the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcXml.
 
     .OUTPUTS
          System.Array

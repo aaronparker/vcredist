@@ -7,6 +7,9 @@ Function Import-VcCmApp {
         Creates an application in a Configuration Manager site for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
 
         Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into ConfigMgr.
+
+    .OUTPUTS
+         System.Array
     
     .NOTES
         Name: Import-VcCmApp
@@ -22,21 +25,28 @@ Function Import-VcCmApp {
     .PARAMETER Path
         A folder containing the downloaded Visual C++ Redistributables.
 
+    .PARAMETER CMPath
+        Specify a UNC path where the Visual C++ Redistributables will be distributed from
+
+    .PARAMETER SMSSiteCode
+        Specify the Site Code for ConfigMgr app creation.
+
+    .PARAMETER AppFolder
+        Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
+
     .PARAMETER Release
         Specifies the release (or version) of the redistributables to download or install.
 
     .PARAMETER Architecture
         Specifies the processor architecture to download or install.
 
-    .PARAMETER SMSSiteCode
-        Specify the Site Code for ConfigMgr app creation.
-
-    .PARAMETER CMPath
-        Specify a UNC path where the Visual C++ Redistributables will be distributed from
-
     .EXAMPLE
+        $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
+        Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 
-#>
+        Description:
+        Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
+    #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
@@ -49,6 +59,17 @@ Function Import-VcCmApp {
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string]$Path,
 
+        [Parameter(Mandatory = $True, HelpMessage = "Specify a distribution UNC path to copy the Redistributables to.")]
+        [string]$CMPath,
+
+        [Parameter(Mandatory = $True, HelpMessage = "Specify ConfigMgr Site Code.")]
+        [ValidateScript( { If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
+        [string]$SMSSiteCode,
+
+        [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
+        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [string]$AppFolder = "VcRedists",
+
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
         [string[]]$Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
@@ -57,16 +78,9 @@ Function Import-VcCmApp {
         [ValidateSet('x86', 'x64')]
         [string[]]$Architecture = @("x86", "x64"),
 
-        [Parameter(Mandatory = $True, HelpMessage = "Specify ConfigMgr Site Code.")]
-        [ValidateScript( { If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
-        [string]$SMSSiteCode,
-
-        [Parameter(Mandatory = $True, HelpMessage = "Specify the ConfigMgr UNC path.")]
-        [string]$CMPath,
-
         [Parameter()]$Publisher = "Microsoft",
         [Parameter()]$Language = "en-US",
-        [Parameter()]$CMAppFolder = "VcRedist"
+        [Parameter()]$Keyword = "Visual C++ Redistributable"
     )
     Begin {        
         # CMPath will be the network location for copying the Visual C++ Redistributables to
@@ -98,17 +112,17 @@ Function Import-VcCmApp {
         }
 
         # Create the folder for importing the Redistributables into
-        If ($CMAppFolder) {
-            If ($PSCmdlet.ShouldProcess("$($SMSSiteCode):\Application\$($CMAppFolder)", "Creating")) {
-                New-Item -Path "$($SMSSiteCode):\Application\$($CMAppFolder)" -ErrorAction SilentlyContinue
+        If ($AppFolder) {
+            If ($PSCmdlet.ShouldProcess("$($SMSSiteCode):\Application\$($AppFolder)", "Creating")) {
+                New-Item -Path "$($SMSSiteCode):\Application\$($AppFolder)" -ErrorAction SilentlyContinue
             }
         }
-        If (Test-Path "$($SMSSiteCode):\Application\$($CMAppFolder)") {
-            Write-Verbose "Successfully created folder $($SMSSiteCode):\Application\$($CMAppFolder)"
-            $CMAppFolder = "$($SMSSiteCode):\Application\$($CMAppFolder)"
+        If (Test-Path "$($SMSSiteCode):\Application\$($AppFolder)") {
+            Write-Verbose "Successfully created folder $($SMSSiteCode):\Application\$($AppFolder)"
+            $AppFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
         } Else {
             Write-Verbose "Defaulting to folder: $($SMSSiteCode):\Application"
-            $CMAppFolder = "$($SMSSiteCode):\Application"
+            $AppFolder = "$($SMSSiteCode):\Application"
         }
 
         # Output variable
@@ -137,7 +151,7 @@ Function Import-VcCmApp {
                 $Filename = Split-Path -Path $Vc.Download -Leaf
                 
                 # Change to the SMS Application folder before importing the applications
-                Set-Location $CMAppFolder -ErrorVariable ConnectionError
+                Set-Location $AppFolder -ErrorVariable ConnectionError
 
                 # Create the ConfigMgr application with properties from the XML file
                 If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
@@ -146,10 +160,10 @@ Function Import-VcCmApp {
                         -SoftwareVersion "$($Vc.Release) $($Vc.Architecture)" `
                         -LinkText $Vc.URL `
                         -Publisher $Publisher `
-                        -Keyword "Visual C++ Redistributable" `
+                        -Keyword $Keyword `
                         -ErrorVariable CMAppError
                     $Output += $App
-                    $App | Move-CMObject -FolderPath $CMAppFolder -ErrorAction SilentlyContinue | Out-Null
+                    $App | Move-CMObject -FolderPath $AppFolder -ErrorAction SilentlyContinue | Out-Null
                 }
 
                 # Add a deployment type to the application

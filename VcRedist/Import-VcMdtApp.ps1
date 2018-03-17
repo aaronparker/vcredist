@@ -4,9 +4,12 @@ Function Import-VcMdtApp {
         Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share.
 
     .DESCRIPTION
-        Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
+        Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.
 
-        Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into MDT.
+        Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
+
+    .OUTPUTS
+         System.Array
 
     .NOTES
         Name: Import-VcMdtApp
@@ -23,21 +26,31 @@ Function Import-VcMdtApp {
         A folder containing the downloaded Visual C++ Redistributables.
 
     .PARAMETER Release
-        Specifies the release (or version) of the redistributables to download or install.
+        Specifies the release (or version) of the redistributables to import into MDT.
 
     .PARAMETER Architecture
-        Specifies the processor architecture to download or install.
+        Specifies the processor architecture to import into MDT. Can be x86 or x64.
 
-    .Parameter MDTShare
-        The local or network path to the Microsoft Deployment Toolkit share.        
+    .PARAMETER MdtPath
+        The local or network path to the MDT deployment share.
+
+    .PARAMETER Bundle
+        Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.
 
     .EXAMPLE
-        Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -MDTShare \\server\deployment
+        Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 
         Description:
-        Retrieves the list of Visual C++ Redistributables, downloaded them C:\Temp\VcRedist and imports each Redistributable into the MDT dpeloyment share at \\server\deployment.
+        Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\server\deployment.
+
+    .EXAMPLE
+        $VcList = Get-VcList -Export All
+        Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
+        Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
+
+        Description:
+        Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
     #>
-    # Parameter sets here means that Install, MDT and ConfigMgr actions are mutually exclusive
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
@@ -50,6 +63,15 @@ Function Import-VcMdtApp {
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string]$Path,
 
+        [Parameter(Mandatory = $True, HelpMessage = "The path to the MDT deployment share.")]
+        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [string]$MdtPath,
+
+        [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
+        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidateNotNullOrEmpty()]
+        [string]$AppFolder = "VcRedists",
+
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
         [string[]]$Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
@@ -58,12 +80,12 @@ Function Import-VcMdtApp {
         [ValidateSet('x86', 'x64')]
         [string[]]$Architecture = @("x86", "x64"),
 
-        [Parameter(ParameterSetName = 'MDT', Mandatory = $True, HelpMessage = "The path to the MDT deployment share.")]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string]$MdtPath,
+        [Parameter(Mandatory = $False, HelpMessage = "Add the imported Visual C++ Redistributables into an Application Bundle.")]
+        [switch]$Bundle,
 
         [Parameter()]$MdtDrive = "DS001",
         [Parameter()]$Publisher = "Microsoft",
+        [Parameter()]$BundleName = "Visual C++ Redistributables",
         [Parameter()]$Language = "en-US"
     )
     Begin {
@@ -82,15 +104,30 @@ Function Import-VcMdtApp {
         }
 
         # Create the PSDrive for MDT
-        If ($PSCmdlet.ShouldProcess("MDT deployment share $MDTPath", "Mapping")) {
+        If ($PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping")) {
             If (Test-Path -Path "$($MdtDrive):") {
                 Write-Verbose "Found existing MDT drive $MdtDrive. Removing."
                 Remove-PSDrive -Name $MdtDrive -Force
             }
-            New-PSDrive -Name $MdtDrive -PSProvider MDTProvider -Root $MDTPath -ErrorAction SilentlyContinue
+            New-PSDrive -Name $MdtDrive -PSProvider MDTProvider -Root $MdtPath -ErrorAction SilentlyContinue
             If (!(Test-Path -Path "$($MdtDrive):")) {
                 Throw "Failed to map MDT drive: $MdtDrive"
             }
+        }
+
+        # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
+        # Create $Target as the target Application folder to import into
+        If ($AppFolder.Length -ne 0) {
+            If (!(Test-Path -Path "$($MdtDrive):\Applications\$($AppFolder)")) {
+                If ($PSCmdlet.ShouldProcess("$($MdtDrive):\Applications\$($AppFolder)", "Creating folder")) {
+                    New-Item -Path "$($MdtDrive):\Applications" -Enable "True" -Name $AppFolder `
+                        -Comments "$($Publisher) $($BundleName)" -ItemType "Folder" -ErrorAction SilentlyContinue
+                }
+                $Target = "$($MdtDrive):\Applications\$($AppFolder)"
+            }
+        }
+        Else {
+            $Target = "$($MdtDrive):\Applications"
         }
     }
     Process {
@@ -105,23 +142,21 @@ Function Import-VcMdtApp {
         }
 
         ForEach ($Vc in $VcList) {
-            Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
-
             # Import as an application into MDT
-            If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $MDTPath", "Import MDT app")) {
+            If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $MdtPath", "Import MDT app")) {
 
                 # Configure parameters
-                $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                $Source = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
                 $Filename = Split-Path -Path $Vc.Download -Leaf
                 $Dir = "$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
                 $SupportedPlatform = If ($Vc.Architecture -eq "x86") { "All x86 Windows 7 and Newer" } `
                     Else { @("All x64 Windows 7 and Newer", "All x86 Windows 7 and Newer") }
 
-                Import-MDTApplication -Path "$($MdtDrive):\Applications" `
+                Import-MDTApplication -Path $Target `
                     -Name "$Publisher $($Vc.Name) $($Vc.Architecture)" `
                     -Enable $True `
                     -Reboot $False `
-                    -Hide $False `
+                    -Hide $(If ($Bundle) {"True"} Else {"False"}) `
                     -Comments "" `
                     -ShortName "$($Vc.Name) $($Vc.Architecture)" `
                     -Version $Vc.Release `
@@ -129,19 +164,43 @@ Function Import-VcMdtApp {
                     -Language $Language `
                     -CommandLine ".\$FileName $($Vc.Install)" `
                     -WorkingDirectory ".\Applications\$Dir" `
-                    -ApplicationSourcePath $Target `
+                    -ApplicationSourcePath $Source `
                     -DestinationFolder $Dir `
                     -UninstallKey $Vc.ProductCode `
                     -SupportedPlatform $SupportedPlatform `
-                    -Dependency ""
+                    -Dependency ""             
             }
         }
     }
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        $Output = Get-ChildItem -Path "$($MdtDrive):\Applications" | Where-Object { $_.Name -like "*Visual C++*" } | `
-        ForEach-Object { Get-ItemProperty -Path "$($MdtDrive):\Applications\$($_.Name)" } | `
-        Select-Object PSChildName, Source, CommandLine, Version, Language, SupportedPlatform, UninstallKey, Reboot
-        $Output
+        Write-Verbose "Getting Visual C++ Redistributables from the deployment share"
+        $Output = Get-ChildItem -Path $Target | Where-Object { $_.Name -like "*Visual C++*" } | `
+            ForEach-Object { Get-ItemProperty -Path "$($Target)\$($_.Name)" }
+
+        # Create the application bundle
+        If ($Bundle) {
+            If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Creating bundle")) {
+
+                # Grab the Visual C++ Redistributable application guids
+                $Dependencies = @(); ForEach ( $App in $Output ) { $Dependencies += $App.guid }
+
+                # Import the bundle
+                Import-MDTApplication -Path $Target `
+                    -Name "$($Publisher) $($BundleName)" `
+                    -Enable $True `
+                    -Reboot $False `
+                    -Hide $False `
+                    -Comments "Application bundle for installing Visual C++ Redistributables." `
+                    -ShortName $BundleName `
+                    -Version "" `
+                    -Publisher $Publisher `
+                    -Language $Language `
+                    -Bundle `
+                    -Dependency $Dependencies
+            }
+        }
+        # Return list of apps to the pipeline
+        $Output | Select-Object PSChildName, Source, CommandLine, Version, Language, SupportedPlatform, UninstallKey, Reboot
     }
 }

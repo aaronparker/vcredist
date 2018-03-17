@@ -8,6 +8,9 @@ Function Get-VcRedist {
         Downloads the Visual C++ Redistributables from an array returned by Get-VcXml into a folder structure that represents release and processor architecture.
         If the redistributable exists in the specified path, it will not be re-downloaded.
 
+    .OUTPUTS
+         System.Array
+
     .NOTES
         Name: Get-VcRedist
         Author: Aaron Parker
@@ -19,41 +22,29 @@ Function Get-VcRedist {
     .PARAMETER VcList
         Sepcifies the array that lists the Visual C++ Redistributables to download
 
-    .EXAMPLE
-        Get-VcRedist -VcXml $VcRedists -Path C:\Redist
-
-        Description:
-        Downloads the Visual C++ Redistributables listed in VisualCRedistributables.xml to C:\Redist.
-
     .PARAMETER Path
         Specify a target folder to download the Redistributables to, otherwise use the current folder.
+
+    .PARAMETER Release
+        Specifies the release (or version) of the redistributables to download or install.
+
+    .PARAMETER Architecture
+        Specifies the processor architecture to download or install.
 
     .EXAMPLE
         Get-VcXml | Get-VcRedist -Path C:\Redist
 
         Description:
-        Downloads the Visual C++ Redistributables listed in $VcRedists to C:\Redist.
-
-    .PARAMETER Release
-        Specifies the release (or version) of the redistributables to download or install.
-
+        Downloads the supported Visual C++ Redistributables to C:\Redist.
+        
     .EXAMPLE
         Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"
 
         Description:
         Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in $VcRedists
 
-    .PARAMETER Architecture
-        Specifies the processor architecture to download or install.
-
     .EXAMPLE
-        Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist
-
-        Description:
-        Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
-
-    .EXAMPLE
-        Get-VcRedist -VcList $VcRedists -Architecture "x64"
+        Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Architecture x64
 
         Description:
         Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.

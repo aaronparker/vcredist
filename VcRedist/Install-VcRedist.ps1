@@ -6,6 +6,9 @@ Function Install-VcRedist {
     .DESCRIPTION
         Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
 
+    .OUTPUTS
+         System.Array
+
     .NOTES
         Name: Install-VcRedist
         Author: Aaron Parker
