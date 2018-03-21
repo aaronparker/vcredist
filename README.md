@@ -39,11 +39,11 @@ Install-Module -Name VcRedist
 
 Deploying the Microsoft Visual C++ Redistributables in any complex desktop environment kinda sucks because there are so many versions that might be required. I got tired of updating my MDT deployment share with the redistributables manually, so wrote a module to automate the process.
 
-This module will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents major release, processor architecture and update release (e.g. SP1, MFC, ATL etc.). The module allows you to download, install or import Visual C++ Redistributables into the Microsoft Deployment Toolkit or System Center Configuration Manager.
+This module will download the Visual C++ Redistributables listed in an external XML file into a folder structure that represents major release, processor architecture and update release \(e.g. SP1, MFC, ATL etc.\). The module allows you to download, install or import Visual C++ Redistributables into the Microsoft Deployment Toolkit or System Center Configuration Manager.
 
-*NOTE:* Validation of the Redistributables listed in the XML file is required, as not all may need to be installed in your environment.
+_NOTE:_ Validation of the Redistributables listed in the XML file is required, as not all may need to be installed in your environment.
 
-The basic structure of the XML file should be as follows (an XSD schema is included in the repository):
+The basic structure of the XML file should be as follows \(an XSD schema is included in the repository\):
 
 ```xml
     <Redistributables>
@@ -182,3 +182,6 @@ Tested on Windows 10 and Windows Server 2016 with PowerShell 5.1. Install-VcRedi
 * Additional testing
 * Documentation updates
 * Add Pester tests
+
+
+
