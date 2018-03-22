@@ -119,10 +119,10 @@ Function Import-VcCmApp {
         }
         If (Test-Path "$($SMSSiteCode):\Application\$($AppFolder)") {
             Write-Verbose "Successfully created folder $($SMSSiteCode):\Application\$($AppFolder)"
-            $AppFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
+            $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
         } Else {
             Write-Verbose "Defaulting to folder: $($SMSSiteCode):\Application"
-            $AppFolder = "$($SMSSiteCode):\Application"
+            $DestFolder = "$($SMSSiteCode):\Application"
         }
 
         # Output variable
@@ -151,7 +151,7 @@ Function Import-VcCmApp {
                 $Filename = Split-Path -Path $Vc.Download -Leaf
                 
                 # Change to the SMS Application folder before importing the applications
-                Set-Location $AppFolder -ErrorVariable ConnectionError
+                Set-Location $DestFolder -ErrorVariable ConnectionError
 
                 # Create the ConfigMgr application with properties from the XML file
                 If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
@@ -163,7 +163,7 @@ Function Import-VcCmApp {
                         -Keyword $Keyword `
                         -ErrorVariable CMAppError
                     $Output += $App
-                    $App | Move-CMObject -FolderPath $AppFolder -ErrorAction SilentlyContinue | Out-Null
+                    $App | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
                 }
 
                 # Add a deployment type to the application
