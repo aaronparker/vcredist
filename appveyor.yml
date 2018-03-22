@@ -23,6 +23,11 @@ install:
 skip_commits:
   files:
     - README.md
+    - book.json
+    - docs/*
+    - help/*
+    - images/*
+    - scripts/*
   message: /updated readme.*|update readme.*s|update docs.*|update version.*|update appveyor.*/
 
 # There's no need to alter the build number for a Pull Request (PR) since they don't modify anything
