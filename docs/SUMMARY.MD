@@ -1,5 +1,7 @@
 # Summary
 
+* Installing the Module[install.MD]
+* Usage[usage.MD]
 * Functions
     * [Get-VcList](Get-VcList.md)
     * [Export-VcXml](Export-VcXml.md)
