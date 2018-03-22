@@ -2,11 +2,12 @@
 
 * [Installing the Module](install.MD)
 * [Usage](usage.MD)
+    * [Getting the VcRedist list][get-vcredists.MD]
     * [Downloading the Redistributables](download.MD)
     * [Installing the Redistributables](install-windows.MD)
     * [Importing into MDT](mdt.MD)
     * [Importing into ConfigMgr](configmgr.MD)
-* Functions
+* Function Syntax
     * [Get-VcList](Get-VcList.md)
     * [Export-VcXml](Export-VcXml.md)
     * [Get-VcRedist](Get-VcRedist.md)
