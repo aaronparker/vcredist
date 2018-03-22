@@ -91,8 +91,7 @@ Accept wildcard characters: False
 ```
 
 ### -AppFolder
-Import the Visual C++ Redistributables into a sub-folder.
-Defaults to "VcRedists".
+Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
 
 ```yaml
 Type: String
@@ -137,7 +136,7 @@ Accept wildcard characters: False
 ```
 
 ### -Publisher
-{{Fill Publisher Description}}
+Defaults to 'Microsoft'.
 
 ```yaml
 Type: Object
@@ -152,7 +151,7 @@ Accept wildcard characters: False
 ```
 
 ### -Language
-{{Fill Language Description}}
+Defaults to 'en-US'.
 
 ```yaml
 Type: Object
@@ -167,7 +166,7 @@ Accept wildcard characters: False
 ```
 
 ### -Keyword
-{{Fill Keyword Description}}
+Defaults to 'Visual C++ Redistributable'.
 
 ```yaml
 Type: Object

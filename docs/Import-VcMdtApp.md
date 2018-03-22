@@ -115,8 +115,7 @@ Accept wildcard characters: False
 ```
 
 ### -Architecture
-Specifies the processor architecture to import into MDT.
-Can be x86 or x64.
+Specifies the processor architecture to import into MDT. Can be x86 or x64.
 
 ```yaml
 Type: String[]
@@ -146,7 +145,7 @@ Accept wildcard characters: False
 ```
 
 ### -MdtDrive
-{{Fill MdtDrive Description}}
+Defaults to 'DS001'. PSDrive letter for mounting the MDT deployment share.
 
 ```yaml
 Type: Object
@@ -161,7 +160,7 @@ Accept wildcard characters: False
 ```
 
 ### -Publisher
-{{Fill Publisher Description}}
+Defaults to 'Microsoft'.
 
 ```yaml
 Type: Object
@@ -176,7 +175,7 @@ Accept wildcard characters: False
 ```
 
 ### -BundleName
-{{Fill BundleName Description}}
+The name for the Application Bundle. Defaults to 'Microsoft Visual C++ Redistributables'.
 
 ```yaml
 Type: Object
@@ -191,7 +190,7 @@ Accept wildcard characters: False
 ```
 
 ### -Language
-{{Fill Language Description}}
+Defaults to 'en-US'.
 
 ```yaml
 Type: Object
