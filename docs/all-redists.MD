@@ -1,12 +1,11 @@
 # Supported Redistributables
 
-Microsoft publishes a list of supported Visual C++ Redistributables here: [The latest supported Visual C++ downloads](https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads). VcRedist includes manifests for the supported Redistributables and the full list of available Redistributbles.
+Microsoft publishes a list of supported Visual C++ Redistributables here: [The latest supported Visual C++ downloads](https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads). VcRedist includes manifests for the supported Redistributables and the full list of available Redistributbles. This does include Redistributables that are no longer supported or updated, so install these Redistributables only if you have a specific requirement to install them.
 
 By default `Get-VcList` will only export the list of supported Redistributables from the internal manifest. To export the entire list of Redistributables, use `Get-VcList -Export All`. The full list includes the following XML structure.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads -->
 <Redistributables>
     <Platform Architecture="x64" Release="2005" Install="/Q">
         <Redistributable>

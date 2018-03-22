@@ -3,7 +3,7 @@
 * [Installing the Module](install.MD)
 * [Usage](usage.MD)
     * [Downloading the Redistributables](download.MD)
-    * [Installing the Redistributables](install.MD)
+    * [Installing the Redistributables](install-windows.MD)
     * [Importing into MDT](mdt.MD)
     * [Importing into ConfigMgr](configmgr.MD)
 * Functions
