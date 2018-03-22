@@ -1,10 +1,3 @@
----
-external help file: VcRedist-help.xml
-Module Name: VcRedist
-online version: https://github.com/aaronparker/Install-VisualCRedistributables
-schema: 2.0.0
----
-
 # Import-VcCmApp
 
 ## SYNOPSIS
@@ -221,7 +214,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -237,4 +230,3 @@ Twitter: @stealthpuppy
 ## RELATED LINKS
 
 [https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
-
