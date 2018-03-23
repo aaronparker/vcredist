@@ -33,7 +33,7 @@ Describe 'Get-VcRedist' {
         It "Downloads supported Visual C++ Redistributables" {
             $Path = ".\VcDownload"
             If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force -Verbose }
-            $VcList = Get-VcList -Verbose
+            $VcList = Get-VcList
             $Downloads = Get-VcRedist -VcList $VcList -Path $Path -Verbose
             Test-VcDownloads -VcList $Downloads -Path $Path | Should -Be $True
         }
