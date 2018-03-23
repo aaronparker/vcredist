@@ -1,4 +1,3 @@
-# Requires -Version 3
 Function Get-VcList {
     <#
     .SYNOPSIS
@@ -38,7 +37,7 @@ Function Get-VcList {
 
         Description:
         Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
-#>
+    #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     [OutputType([Array])]
     Param (

@@ -1,4 +1,3 @@
-# Requires -Version 3
 Function Export-VcXml {
     <#
     .SYNOPSIS

@@ -1,4 +1,3 @@
-# Requires -Version 3
 Function Get-VcRedist {
     <#
     .SYNOPSIS
@@ -48,7 +47,7 @@ Function Get-VcRedist {
 
         Description:
         Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
-#>
+    #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
