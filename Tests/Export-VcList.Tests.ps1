@@ -1,4 +1,3 @@
-# Pester tests
 Describe 'Export-VcXml' {
     Context "Export manifest" {
         It "Given valid parameter -Path, it exports an XML file" {

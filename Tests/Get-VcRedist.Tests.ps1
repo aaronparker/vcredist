@@ -1,4 +1,3 @@
-
 Function Test-VcDownloads {
     <#
         .SYNOPSIS
