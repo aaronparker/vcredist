@@ -18,6 +18,7 @@ install:
         Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
         Install-Module -Name Pester -Force
         Install-Module -Name PSScriptAnalyzer -Force
+        Import-Module .\VcRedist -Verbose
 
 # Ignore testing a commit if only the README.md file changed
 # Or if various strings are found in the commit message: updated readme, update readme, update docs, update version, update appveyor
