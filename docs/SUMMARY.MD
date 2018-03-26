@@ -2,7 +2,7 @@
 
 * [Installing the Module](install.MD)
 * [Usage](usage.MD)
-    * [Getting the VcRedist list][get-vcredists.MD]
+    * [Getting the VcRedist list](get-vcredists.MD)
     * [Downloading the Redistributables](download.MD)
     * [Installing the Redistributables](install-windows.MD)
     * [Importing into MDT](mdt.MD)
