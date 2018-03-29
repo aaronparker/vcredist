@@ -2,6 +2,7 @@
 
 [![Build status][appveyor-badge]][appveyor-build]
 [![PowerShell Gallery][psgallery-badge]][psgallery]
+[![GitHub Release][github-release]][github-release-badge]
 [![Book status][gitbooks-badge]][gitbooks-build]
 
 A PowerShell module for downloading and installing the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). The module also supports creating applications in the Microsoft Deployment Toolkit or System Center Configuration Manager to install the Redistributables.
@@ -28,3 +29,5 @@ Install-Module -Name VcRedist -Force
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
 [gitbooks-badge]: https://www.gitbook.com/button/status/book/aaronparker/vcredist/
 [gitbooks-build]: https://www.gitbook.com/book/aaronparker/vcredist
+[github-release-badge]: https://img.shields.io/github/release/aaronparker/Install-VisualCRedistributables.svg
+[github-release]: https://github.com/aaronparker/Install-VisualCRedistributables/releases/latest
