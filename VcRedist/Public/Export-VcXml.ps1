@@ -45,8 +45,8 @@ Function Export-VcXml {
     )
     Begin {
         Switch ($Export) {
-            "All" { $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesAll.xml" }
-            "Supported" { $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesSupported.xml" }
+            "All" { $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesAll.xml" }
+            "Supported" { $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesSupported.xml" }
         }
         If (!(Test-Path -Path $Xml -PathType 'Leaf')) {
             Throw "Cannot find file $Xml. Reinstall the VcRedist module."
