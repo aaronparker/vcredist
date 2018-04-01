@@ -44,7 +44,7 @@ Function Get-VcList {
         [Parameter(Mandatory = $False, Position = 0, HelpMessage = "Path to the XML document describing the Redistributables.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
-        [string]$Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesSupported.xml",
+        [string]$Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesSupported.xml",
 
         [Parameter(Mandatory = $False)]
         [ValidateSet('All', 'Supported')]
@@ -53,7 +53,7 @@ Function Get-VcList {
     Begin {
         Switch ($Export) {
             "All" {
-                $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\VisualCRedistributablesAll.xml"
+                $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesAll.xml"
                 Write-Warning "This array includes unsupported Visual C++ Redistributables."
             }
         }
