@@ -10,11 +10,11 @@ Else {
 }
 
 Describe 'Module Metadata Validation' {      
-    it 'Script fileinfo should be OK' {
+    It 'Script fileinfo should be OK' {
         {Test-ModuleManifest $manifest -ErrorAction Stop} | Should Not Throw
     }
         
-    it 'Import module should be OK' {
+    It 'Import module should be OK' {
         {Import-Module $module -Force -ErrorAction Stop} | Should Not Throw
     }
 }
