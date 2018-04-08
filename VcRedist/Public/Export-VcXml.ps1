@@ -37,16 +37,16 @@ Function Export-VcXml {
         [Parameter(Mandatory = $True, Position = 0, HelpMessage = "Path to the XML file content will be exported to.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
-        [string]$Path,
+        [string] $Path,
 
         [Parameter(Mandatory = $False)]
         [ValidateSet('All', 'Supported')]
-        [string]$Export = "Supported"
+        [string] $Export = "Supported"
     )
     Begin {
         Switch ( $Export ) {
-            "All" { $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesAll.xml" }
-            "Supported" { $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesSupported.xml" }
+            "All" { $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml" }
+            "Supported" { $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.xml" }
         }
         If ( !(Test-Path -Path $Xml -PathType 'Leaf') ) {
             Throw "Cannot find file $Xml. Reinstall the VcRedist module."
@@ -56,7 +56,7 @@ Function Export-VcXml {
         # Read the specifed XML document
         Try {
             Write-Verbose "Reading XML document $Xml."
-            [xml]$xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
+            [xml] $xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
         }
         Catch {
             Throw "Unable to read $Xml. $xmlReadError"

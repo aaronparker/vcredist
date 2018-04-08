@@ -89,32 +89,36 @@ Function Get-VcRedist {
             $Output += $Vc
 
             # Create the folder to store the downloaded file. Skip if it exists
-            $target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-            If ( Test-Path -Path $target ) {
-                Write-Verbose "Folder '$target' exists. Skipping."
+            # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+            $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+
+            If ( Test-Path -Path $folder ) {
+                Write-Verbose "Folder '$folder' exists. Skipping."
             }
             Else {
-                If ( $pscmdlet.ShouldProcess($target, "Create") ) {
-                    New-Item -Path $target -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
+                If ( $pscmdlet.ShouldProcess($folder, "Create") ) {
+                    New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
                 }
             }
 
             # If the target Redistributable is already downloaded, skip it.
             # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
-            If ( Test-Path -Path "$target\$(Split-Path -Path $Vc.Download -Leaf)" -PathType Leaf ) {
-                Write-Verbose "Redistributable exists. Skipping."
+            $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
+            Write-Verbose "Target is $($target)"
+            If ( Test-Path -Path $target -PathType Leaf ) {
+                Write-Verbose "$($target) exists. Skipping."
             }
             Else {
                 If ( Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue ) {
                     If ( $pscmdlet.ShouldProcess($Vc.Download, "BitsDownload") ) {
-                        Start-BitsTransfer -Source $Vc.Download -Destination "$target\$(Split-Path -Path $Vc.Download -Leaf)" `
+                        Start-BitsTransfer -Source $Vc.Download -Destination $target `
                             -Priority High -ErrorAction Continue -ErrorVariable $ErrorBits `
                             -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
                     }
                 }
                 Else {
                     If ( $pscmdlet.ShouldProcess($Vc.Download, "WebDownload") ) {
-                        Invoke-WebRequest -Uri $Vc.Download -OutFile "$target\$(Split-Path -Path $Vc.Download -Leaf)"
+                        Invoke-WebRequest -Uri $Vc.Download -OutFile $target
                     }
                 }
             }
