@@ -1,6 +1,6 @@
 # AppVeyor Testing
 If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
-    $ProjectRoot = 'env:APPVEYOR_BUILD_FOLDER'
+    $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
 }
 Else {
     # Local Testing 
