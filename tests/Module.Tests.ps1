@@ -1,13 +1,13 @@
 # AppVeyor Testing
 If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
-    $manifest = "$env:APPVEYOR_BUILD_FOLDER\VcRedist\VcRedist.psd1"
-    $module = "$env:APPVEYOR_BUILD_FOLDER\VcRedist\VcRedist.psm1"
+    $ProjectRoot = 'env:APPVEYOR_BUILD_FOLDER'
 }
 Else {
     # Local Testing 
-    $manifest = "$(Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)\..\VcRedist\VcRedist.psd1"
-    $module = "$(Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)\..\VcRedist\VcRedist.psm1"
+    $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
+$manifest = Join-Path (Join-Path $ProjectRoot "VcRedist") "VcRedist.psd1"
+$module = Join-Path (Join-Path $ProjectRoot "VcRedist") "VcRedist.psm1"
 
 Describe 'Module Metadata Validation' {      
     It 'Script fileinfo should be OK' {
