@@ -11,7 +11,7 @@ Install-Module -Name Pester -Force
 Install-Module -Name PSScriptAnalyzer -Force
 Install-Module -Name posh-git -Force
 
-# Import the ApplicationControl module
+# Import the module
 If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
     $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
 }

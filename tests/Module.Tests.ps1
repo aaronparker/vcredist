@@ -9,12 +9,15 @@ Else {
 $manifest = Join-Path (Join-Path $ProjectRoot "VcRedist") "VcRedist.psd1"
 $module = Join-Path (Join-Path $ProjectRoot "VcRedist") "VcRedist.psm1"
 
+Write-Host "Manifest is: $($manifest)"
+Write-Host "Module is: $($module)"
+
 Describe 'Module Metadata Validation' {      
     It 'Script fileinfo should be OK' {
-        {Test-ModuleManifest $manifest -ErrorAction Stop} | Should Not Throw
+        { Test-ModuleManifest $manifest -ErrorAction Stop } | Should Not Throw
     }
         
     It 'Import module should be OK' {
-        {Import-Module $module -Force -ErrorAction Stop} | Should Not Throw
+        { Import-Module $module -Force -ErrorAction Stop } | Should Not Throw
     }
 }
