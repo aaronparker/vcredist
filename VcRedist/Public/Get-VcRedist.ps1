@@ -74,47 +74,47 @@ Function Get-VcRedist {
     Process {
 
         # Filter release and architecture if specified
-        If ($PSBoundParameters.ContainsKey('Release')) {
+        If ( $PSBoundParameters.ContainsKey('Release') ) {
             Write-Verbose "Filtering releases for platform."
             $VcList = $VcList | Where-Object { $_.Release -eq $Release }
         }
-        If ($PSBoundParameters.ContainsKey('Architecture')) {
+        If ( $PSBoundParameters.ContainsKey('Architecture') ) {
             Write-Verbose "Filtering releases for architecture."
             $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
         }
 
         # Loop through each Redistributable and download to the target path
-        ForEach ($Vc in $VcList) {
+        ForEach ( $Vc in $VcList ) {
             Write-Verbose "Downloading: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
             $Output += $Vc
 
             # Create the folder to store the downloaded file. Skip if it exists
-            $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-            If (Test-Path -Path $Target) {
-                Write-Verbose "Folder '$Target' exists. Skipping."
+            $target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+            If ( Test-Path -Path $target ) {
+                Write-Verbose "Folder '$target' exists. Skipping."
             }
             Else {
-                If ($pscmdlet.ShouldProcess($target, "Create")) {
-                    New-Item -Path $Target -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
+                If ( $pscmdlet.ShouldProcess($target, "Create") ) {
+                    New-Item -Path $target -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
                 }
             }
 
             # If the target Redistributable is already downloaded, skip it.
             # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
-            If (Test-Path -Path "$Target\$(Split-Path -Path $Vc.Download -Leaf)" -PathType Leaf) {
+            If ( Test-Path -Path "$target\$(Split-Path -Path $Vc.Download -Leaf)" -PathType Leaf ) {
                 Write-Verbose "Redistributable exists. Skipping."
             }
             Else {
-                If (Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue) {
-                    If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
-                        Start-BitsTransfer -Source $Vc.Download -Destination "$Target\$(Split-Path -Path $Vc.Download -Leaf)" `
+                If ( Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue ) {
+                    If ( $pscmdlet.ShouldProcess($Vc.Download, "BitsDownload") ) {
+                        Start-BitsTransfer -Source $Vc.Download -Destination "$target\$(Split-Path -Path $Vc.Download -Leaf)" `
                             -Priority High -ErrorAction Continue -ErrorVariable $ErrorBits `
                             -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
                     }
                 }
                 Else {
-                    If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
-                        Invoke-WebRequest -Uri $Vc.Download -OutFile "$Target\$(Split-Path -Path $Vc.Download -Leaf)"
+                    If ( $pscmdlet.ShouldProcess($Vc.Download, "WebDownload") ) {
+                        Invoke-WebRequest -Uri $Vc.Download -OutFile "$target\$(Split-Path -Path $Vc.Download -Leaf)"
                     }
                 }
             }

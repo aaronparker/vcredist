@@ -85,8 +85,8 @@ Function Import-VcCmApp {
     Begin {        
         # CMPath will be the network location for copying the Visual C++ Redistributables to
         Set-Location -Path $Path
-        If (!([bool]([System.Uri]$CMPath).IsUnc)) { Throw "$CMPath must be a valid UNC path." }
-        If (Test-Path $CMPath) {
+        If ( !([bool]([System.Uri]$CMPath).IsUnc) ) { Throw "$CMPath must be a valid UNC path." }
+        If ( Test-Path $CMPath ) {
             # Copy VcRedists to the network location. Use robocopy for robustness
             If ($PSCmdlet.ShouldProcess("$($Path) to $($CMPath)", "Copy")) {
                 Robocopy.exe *.exe $Path $CMPath /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL
@@ -97,7 +97,7 @@ Function Import-VcCmApp {
         }
         
         # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
-        If (Test-Path $env:SMS_ADMIN_UI_PATH) {
+        If ( Test-Path $env:SMS_ADMIN_UI_PATH ) {
             Try {            
                 # Import the ConfigurationManager.psd1 module
                 Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" | Out-Null
@@ -113,12 +113,12 @@ Function Import-VcCmApp {
         }
 
         # Create the folder for importing the Redistributables into
-        If ($AppFolder) {
+        If ( $AppFolder ) {
             If ($PSCmdlet.ShouldProcess("$($SMSSiteCode):\Application\$($AppFolder)", "Creating")) {
                 New-Item -Path "$($SMSSiteCode):\Application\$($AppFolder)" -ErrorAction SilentlyContinue
             }
         }
-        If (Test-Path "$($SMSSiteCode):\Application\$($AppFolder)") {
+        If ( Test-Path "$($SMSSiteCode):\Application\$($AppFolder)" ) {
             Write-Verbose "Importing into: $($SMSSiteCode):\Application\$($AppFolder)"
             $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
         }
@@ -132,16 +132,16 @@ Function Import-VcCmApp {
     }
     Process {
         # Filter release and architecture if specified
-        If ($PSBoundParameters.ContainsKey('Release')) {
+        If ( $PSBoundParameters.ContainsKey('Release') ) {
             Write-Verbose "Filtering releases for platform."
             $VcList = $VcList | Where-Object { $_.Release -eq $Release }
         }
-        If ($PSBoundParameters.ContainsKey('Architecture')) {
+        If ( $PSBoundParameters.ContainsKey('Architecture') ) {
             Write-Verbose "Filtering releases for architecture."
             $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
         }
 
-        ForEach ($Vc in $VcList) {
+        ForEach ( $Vc in $VcList ) {
             Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Import as an application into ConfigMgr
@@ -158,8 +158,8 @@ Function Import-VcCmApp {
                 Set-Location $DestFolder -ErrorVariable ConnectionError
 
                 # Create the ConfigMgr application with properties from the XML file
-                If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
-                    If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
+                If ( (Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode ) {
+                    If ( $pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application") ) {
                         $App = New-CMApplication -Name "$($Vc.Name) $($Vc.Architecture)" `
                             -Description "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)" `
                             -SoftwareVersion "$($Vc.Release) $($Vc.Architecture)" `
@@ -172,7 +172,7 @@ Function Import-VcCmApp {
                     }
 
                     # Add a deployment type to the application
-                    If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Adding deployment type")) {
+                    If ( $pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Adding deployment type") ) {
                         $App | Add-CMScriptDeploymentType `
                             -InstallCommand "$Filename $($Vc.Install)" `
                             -ContentLocation $Target `
