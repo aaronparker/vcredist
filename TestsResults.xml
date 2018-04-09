@@ -1,119 +1,122 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="34" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2018-04-01" time="00:28:39">
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="42" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2018-04-09" time="00:11:23">
   <environment user="appveyor" machine-name="APPVYR-WIN" cwd="C:\projects\install-visualcredistributables" user-domain="APPVYR-WIN" platform="Microsoft Windows Server 2012 R2 Datacenter|C:\windows|\Device\Harddisk0\Partition5" nunit-version="2.5.8.0" os-version="6.3.9600" clr-version="4.0.30319.42000" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="13.0789" asserts="0" description="Pester">
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="9.6555" asserts="0" description="Pester">
     <results>
-      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Export-VcList.Tests.ps1" executed="True" result="Success" success="True" time="0.8269" asserts="0" description="C:\projects\install-visualcredistributables\tests\Export-VcList.Tests.ps1">
+      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Main.Tests.ps1" executed="True" result="Success" success="True" time="4.1631" asserts="0" description="C:\projects\install-visualcredistributables\tests\Main.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Export-VcXml" executed="True" result="Success" success="True" time="0.8269" asserts="0" description="Export-VcXml">
+          <test-suite type="TestFixture" name="General project validation" executed="True" result="Success" success="True" time="3.4993" asserts="0" description="General project validation">
             <results>
-              <test-suite type="TestFixture" name="Export manifest" executed="True" result="Success" success="True" time="0.6034" asserts="0" description="Export manifest">
+              <test-suite type="ParameterizedTest" name="General project validation.Script &lt;file&gt; should be valid PowerShell" executed="True" result="Success" success="True" time="0.8418" asserts="0" description="Script &lt;file&gt; should be valid PowerShell">
                 <results>
-                  <test-case description="Given valid parameter -Path, it exports an XML file" name="Export-VcXml.Export manifest.Given valid parameter -Path, it exports an XML file" time="0.6034" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should be valid PowerShell" time="0.6561" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should be valid PowerShell" time="0.1002" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should be valid PowerShell" time="0.0113" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should be valid PowerShell" time="0.0132" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should be valid PowerShell" time="0.0109" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should be valid PowerShell" time="0.0136" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should be valid PowerShell" time="0.0114" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should be valid PowerShell" time="0.0153" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should be valid PowerShell" time="0.0098" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
-              <test-suite type="TestFixture" name="Export and read manifest" executed="True" result="Success" success="True" time="0.2235" asserts="0" description="Export and read manifest">
+              <test-suite type="ParameterizedTest" name="General project validation.&lt;file&gt; should pass ScriptAnalyzer" executed="True" result="Success" success="True" time="2.6575" asserts="0" description="&lt;file&gt; should pass ScriptAnalyzer">
                 <results>
-                  <test-case description="Given valid parameter -Path, it exports an XML file" name="Export-VcXml.Export and read manifest.Given valid parameter -Path, it exports an XML file" time="0.2235" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should pass ScriptAnalyzer" time="0.6471" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should pass ScriptAnalyzer" time="0.1577" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should pass ScriptAnalyzer" time="0.2453" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should pass ScriptAnalyzer" time="0.1187" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should pass ScriptAnalyzer" time="0.4744" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should pass ScriptAnalyzer" time="0.3615" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should pass ScriptAnalyzer" time="0.2349" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should pass ScriptAnalyzer" time="0.2761" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should pass ScriptAnalyzer" time="0.1419" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Function validation" executed="True" result="Success" success="True" time="0.6638" asserts="0" description="Function validation">
+            <results>
+              <test-suite type="ParameterizedTest" name="Function validation.Script &lt;file&gt; should only contain one function" executed="True" result="Success" success="True" time="0.2162" asserts="0" description="Script &lt;file&gt; should only contain one function">
+                <results>
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should only contain one function" time="0.1022" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should only contain one function" time="0.0184" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should only contain one function" time="0.0118" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should only contain one function" time="0.0143" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should only contain one function" time="0.0143" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should only contain one function" time="0.0132" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should only contain one function" time="0.023" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should only contain one function" time="0.0191" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="ParameterizedTest" name="Function validation.&lt;file&gt; should match function name" executed="True" result="Success" success="True" time="0.4477" asserts="0" description="&lt;file&gt; should match function name">
+                <results>
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Private\Get-ValidPath.ps1 should match function name" time="0.0251" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Private\Test-PSCore.ps1 should match function name" time="0.0396" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should match function name" time="0.0132" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should match function name" time="0.0152" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should match function name" time="0.014" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should match function name" time="0.0157" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should match function name" time="0.0169" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should match function name" time="0.308" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Get-VcList.Tests.ps1" executed="True" result="Success" success="True" time="0.1828" asserts="0" description="C:\projects\install-visualcredistributables\tests\Get-VcList.Tests.ps1">
+      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Module.Tests.ps1" executed="True" result="Success" success="True" time="0.0914" asserts="0" description="C:\projects\install-visualcredistributables\tests\Module.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Get-VcList" executed="True" result="Success" success="True" time="0.1828" asserts="0" description="Get-VcList">
+          <test-suite type="TestFixture" name="Module Metadata Validation" executed="True" result="Success" success="True" time="0.0914" asserts="0" description="Module Metadata Validation">
             <results>
-              <test-suite type="TestFixture" name="Return built-in manifest" executed="True" result="Success" success="True" time="0.1407" asserts="0" description="Return built-in manifest">
-                <results>
-                  <test-case description="Given no parameters, it returns supported Visual C++ Redistributables" name="Get-VcList.Return built-in manifest.Given no parameters, it returns supported Visual C++ Redistributables" time="0.0821" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" name="Get-VcList.Return built-in manifest.Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" time="0.0586" asserts="0" success="True" result="Success" executed="True" />
-                </results>
-              </test-suite>
-              <test-suite type="TestFixture" name="Return external manifest" executed="True" result="Success" success="True" time="0.042" asserts="0" description="Return external manifest">
-                <results>
-                  <test-case description="Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" name="Get-VcList.Return external manifest.Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" time="0.042" asserts="0" success="True" result="Success" executed="True" />
-                </results>
-              </test-suite>
+              <test-case description="Script fileinfo should be OK" name="Module Metadata Validation.Script fileinfo should be OK" time="0.0522" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="Import module should be OK" name="Module Metadata Validation.Import module should be OK" time="0.0393" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Get-VcRedist.Tests.ps1" executed="True" result="Success" success="True" time="8.7248" asserts="0" description="C:\projects\install-visualcredistributables\tests\Get-VcRedist.Tests.ps1">
-        <results>
-          <test-suite type="TestFixture" name="Get-VcRedist" executed="True" result="Success" success="True" time="8.7248" asserts="0" description="Get-VcRedist">
-            <results>
-              <test-suite type="TestFixture" name="Download Redistributables" executed="True" result="Success" success="True" time="8.7248" asserts="0" description="Download Redistributables">
-                <results>
-                  <test-case description="Downloads supported Visual C++ Redistributables" name="Get-VcRedist.Download Redistributables.Downloads supported Visual C++ Redistributables" time="8.7248" asserts="0" success="True" result="Success" executed="True" />
-                </results>
-              </test-suite>
-            </results>
-          </test-suite>
-        </results>
+      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\PrivateFunctions.Tests.ps1" executed="True" result="Success" success="True" time="0" asserts="0" description="C:\projects\install-visualcredistributables\tests\PrivateFunctions.Tests.ps1">
+        <results />
       </test-suite>
-      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Main.Tests.ps1" executed="True" result="Success" success="True" time="3.0562" asserts="0" description="C:\projects\install-visualcredistributables\tests\Main.Tests.ps1">
+      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\PublicFunctions.Tests.ps1" executed="True" result="Success" success="True" time="5.401" asserts="0" description="C:\projects\install-visualcredistributables\tests\PublicFunctions.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="General project validation" executed="True" result="Success" success="True" time="2.7773" asserts="0" description="General project validation">
+          <test-suite type="TestFixture" name="Export-VcXml" executed="True" result="Success" success="True" time="0.3058" asserts="0" description="Export-VcXml">
             <results>
-              <test-suite type="ParameterizedTest" name="General project validation.Script &lt;file&gt; should be valid PowerShell" executed="True" result="Success" success="True" time="0.2046" asserts="0" description="Script &lt;file&gt; should be valid PowerShell">
+              <test-suite type="TestFixture" name="Export manifest" executed="True" result="Success" success="True" time="0.1803" asserts="0" description="Export manifest">
                 <results>
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should be valid PowerShell" time="0.1296" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should be valid PowerShell" time="0.0124" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should be valid PowerShell" time="0.0096" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should be valid PowerShell" time="0.0156" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should be valid PowerShell" time="0.0105" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should be valid PowerShell" time="0.0108" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should be valid PowerShell" name="General project validation.Script C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should be valid PowerShell" time="0.016" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Path, it exports an XML file" name="Export-VcXml.Export manifest.Given valid parameter -Path, it exports an XML file" time="0.1803" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
-              <test-suite type="ParameterizedTest" name="General project validation.&lt;file&gt; should pass ScriptAnalyzer" executed="True" result="Success" success="True" time="2.5727" asserts="0" description="&lt;file&gt; should pass ScriptAnalyzer">
+              <test-suite type="TestFixture" name="Export and read manifest" executed="True" result="Success" success="True" time="0.1255" asserts="0" description="Export and read manifest">
                 <results>
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should pass ScriptAnalyzer" time="1.3077" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should pass ScriptAnalyzer" time="0.1521" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should pass ScriptAnalyzer" time="0.3265" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should pass ScriptAnalyzer" time="0.2629" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should pass ScriptAnalyzer" time="0.2223" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should pass ScriptAnalyzer" time="0.254" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should pass ScriptAnalyzer" name="General project validation.C:\projects\install-visualcredistributables\VcRedist\VcRedist.psm1 should pass ScriptAnalyzer" time="0.0472" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Path, it exports an XML file" name="Export-VcXml.Export and read manifest.Given valid parameter -Path, it exports an XML file" time="0.1255" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Function validation" executed="True" result="Success" success="True" time="0.2789" asserts="0" description="Function validation">
+          <test-suite type="TestFixture" name="Get-VcList" executed="True" result="Success" success="True" time="0.1745" asserts="0" description="Get-VcList">
             <results>
-              <test-suite type="ParameterizedTest" name="Function validation.Script &lt;file&gt; should only contain one function" executed="True" result="Success" success="True" time="0.156" asserts="0" description="Script &lt;file&gt; should only contain one function">
+              <test-suite type="TestFixture" name="Return built-in manifest" executed="True" result="Success" success="True" time="0.1313" asserts="0" description="Return built-in manifest">
                 <results>
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should only contain one function" time="0.0622" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should only contain one function" time="0.0121" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should only contain one function" time="0.0155" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should only contain one function" time="0.0354" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should only contain one function" time="0.0145" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should only contain one function" name="Function validation.Script C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should only contain one function" time="0.0163" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given no parameters, it returns supported Visual C++ Redistributables" name="Get-VcList.Return built-in manifest.Given no parameters, it returns supported Visual C++ Redistributables" time="0.0672" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" name="Get-VcList.Return built-in manifest.Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" time="0.0641" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
-              <test-suite type="ParameterizedTest" name="Function validation.&lt;file&gt; should match function name" executed="True" result="Success" success="True" time="0.1229" asserts="0" description="&lt;file&gt; should match function name">
+              <test-suite type="TestFixture" name="Return external manifest" executed="True" result="Success" success="True" time="0.0432" asserts="0" description="Return external manifest">
                 <results>
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Export-VcXml.ps1 should match function name" time="0.0558" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcList.ps1 should match function name" time="0.013" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Get-VcRedist.ps1 should match function name" time="0.0135" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcCmApp.ps1 should match function name" time="0.0142" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Import-VcMdtApp.ps1 should match function name" time="0.0131" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should match function name" name="Function validation.C:\projects\install-visualcredistributables\VcRedist\Public\Install-VcRedist.ps1 should match function name" time="0.0134" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" name="Get-VcList.Return external manifest.Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" time="0.0432" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-        </results>
-      </test-suite>
-      <test-suite type="TestFixture" name="C:\projects\install-visualcredistributables\tests\Module.Tests.ps1" executed="True" result="Success" success="True" time="0.2883" asserts="0" description="C:\projects\install-visualcredistributables\tests\Module.Tests.ps1">
-        <results>
-          <test-suite type="TestFixture" name="Module Metadata Validation" executed="True" result="Success" success="True" time="0.2883" asserts="0" description="Module Metadata Validation">
+          <test-suite type="TestFixture" name="Get-VcRedist" executed="True" result="Success" success="True" time="4.9207" asserts="0" description="Get-VcRedist">
             <results>
-              <test-case description="Script fileinfo should be OK" name="Module Metadata Validation.Script fileinfo should be OK" time="0.0505" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="Import module should be OK" name="Module Metadata Validation.Import module should be OK" time="0.2377" asserts="0" success="True" result="Success" executed="True" />
+              <test-suite type="TestFixture" name="Download Redistributables" executed="True" result="Success" success="True" time="4.9207" asserts="0" description="Download Redistributables">
+                <results>
+                  <test-case description="Downloads supported Visual C++ Redistributables" name="Get-VcRedist.Download Redistributables.Downloads supported Visual C++ Redistributables" time="4.9207" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
             </results>
           </test-suite>
         </results>
