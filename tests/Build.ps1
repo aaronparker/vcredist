@@ -63,7 +63,7 @@ Else {
     }
 
     # Publish the new version to the PowerShell Gallery
-    <# Try {
+    Try {
         # Build a splat containing the required details and make sure to Stop for errors which will trigger the catch
         $PM = @{
             Path        = Join-Path $projectRoot "VcRedist"
@@ -77,5 +77,5 @@ Else {
         # Sad panda; it broke
         Write-Warning "Publishing update $newVersion to the PowerShell Gallery failed."
         throw $_
-    } #>
+    }
 }

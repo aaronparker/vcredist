@@ -11,7 +11,6 @@ Function Get-VcRedist {
          System.Array
 
     .NOTES
-        Name: Get-VcRedist
         Author: Aaron Parker
         Twitter: @stealthpuppy
 

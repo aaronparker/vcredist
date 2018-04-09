@@ -12,7 +12,6 @@ Function Import-VcCmApp {
          System.Array
     
     .NOTES
-        Name: Import-VcCmApp
         Author: Aaron Parker
         Twitter: @stealthpuppy
 

@@ -16,6 +16,6 @@ Function Get-ValidPath {
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
         [string] $Path
     )
-    $output = ((Get-Item $Path).FullName).TrimEnd("\")
+    $output = (Resolve-Path $Path).TrimEnd("\")
     Write-Output $output
 }

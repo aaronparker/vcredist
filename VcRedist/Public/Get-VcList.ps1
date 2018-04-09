@@ -12,7 +12,6 @@ Function Get-VcList {
          System.Array
     
     .NOTES
-        Name: Get-VcXml
         Author: Aaron Parker
         Twitter: @stealthpuppy
 

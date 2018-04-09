@@ -84,15 +84,17 @@ Function Install-VcRedist {
             }
             Else {
                 Write-Verbose "Install: [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
-                $target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+                $filename = Join-Path $Folder $(Split-Path -Path $Vc.Download -Leaf)
                 $filename = Split-Path -Path $Vc.Download -Leaf
-                If (Test-Path -Path "$target\$filename") {
-                    If ($pscmdlet.ShouldProcess("'$target\$filename $($Vc.Install)'", "Install")) {
-                        Start-Process -FilePath "$target\$filename" -ArgumentList $Vc.Install -Wait
+                If (Test-Path -Path (Join-Path $folder $filename)) {
+                    If ($pscmdlet.ShouldProcess("$(Join-Path $folder $filename) $($Vc.Install)'", "Install")) {
+                        Start-Process -FilePath (Join-Path $folder $filename) -ArgumentList $Vc.Install -Wait
                     }
                 }
                 Else {
-                    Write-Error "Cannot find "$target\$filename""
+                    Write-Error "Cannot find: $(Join-Path $folder $filename)"
                 }
             }
         }
