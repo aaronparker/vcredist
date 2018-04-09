@@ -10,7 +10,6 @@ Function Install-VcRedist {
          System.Array
 
     .NOTES
-        Name: Install-VcRedist
         Author: Aaron Parker
         Twitter: @stealthpuppy
 
@@ -64,44 +63,46 @@ Function Install-VcRedist {
     Begin {
         # Get script elevation status
         [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation."}
+        If ( !($Elevated) ) { Throw "Installing the Visual C++ Redistributables requires elevation."}
     }
     Process {
         # Filter release and architecture if specified
-        If ($PSBoundParameters.ContainsKey('Release')) {
+        If ( $PSBoundParameters.ContainsKey('Release') ) {
             Write-Verbose "Filtering releases for platform."
             $VcList = $VcList | Where-Object { $_.Release -eq $Release }
         }
-        If ($PSBoundParameters.ContainsKey('Architecture')) {
+        If ( $PSBoundParameters.ContainsKey('Architecture') ) {
             Write-Verbose "Filtering releases for architecture."
             $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
         }
 
         # Loop through each Redistributable and install
-        ForEach ($Vc in $VcList) {
+        ForEach ( $Vc in $VcList ) {
             $UninstallPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
             If (Get-ChildItem -Path $UninstallPath | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
                 Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
             }
             Else {
                 Write-Verbose "Install: [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
-                $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                $Filename = Split-Path -Path $Vc.Download -Leaf
-                If (Test-Path -Path "$Target\$Filename") {
-                    If ($pscmdlet.ShouldProcess("'$Target\$Filename $($Vc.Install)'", "Install")) {
-                        Start-Process -FilePath "$Target\$Filename" -ArgumentList $Vc.Install -Wait
+                # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+                $filename = Join-Path $Folder $(Split-Path -Path $Vc.Download -Leaf)
+                $filename = Split-Path -Path $Vc.Download -Leaf
+                If (Test-Path -Path (Join-Path $folder $filename)) {
+                    If ($pscmdlet.ShouldProcess("$(Join-Path $folder $filename) $($Vc.Install)'", "Install")) {
+                        Start-Process -FilePath (Join-Path $folder $filename) -ArgumentList $Vc.Install -Wait
                     }
                 }
                 Else {
-                    Write-Error "Cannot find "$Target\$Filename""
+                    Write-Error "Cannot find: $(Join-Path $folder $filename)"
                 }
             }
         }
     }
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        $Output = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | `
+        $output = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | `
         Get-ItemProperty | Where-Object {$_.DisplayName -like "Microsoft Visual C*"} | Select-Object Publisher, DisplayName, DisplayVersion
-        $Output
+        $output
     }
 }

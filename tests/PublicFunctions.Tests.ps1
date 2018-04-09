@@ -3,8 +3,8 @@ If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
     $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
 }
 Else {
-    # Local Testing 
-    $ProjectRoot = "$(Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)\..\"
+    # Local Testing, get parent folder
+    $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
 Import-Module $ProjectRoot\VcRedist
 
@@ -24,12 +24,13 @@ Function Test-VcDownloads {
     )
     $Output = $False
     ForEach ($Vc in $VcList) {
-        $Target = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-        If (Test-Path -Path "$Target\$(Split-Path -Path $Vc.Download -Leaf)" -PathType Leaf) {
-            Write-Verbose "$Target\$(Split-Path -Path $Vc.Download -Leaf) - exists."
+        $Folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+        $Target = Join-Path $Folder $(Split-Path -Path $Vc.Download -Leaf)
+        If (Test-Path -Path $Target -PathType Leaf) {
+            Write-Verbose "$($Target) - exists."
             $Output = $True
         } Else {
-            Write-Warning "$Target\$(Split-Path -Path $Vc.Download -Leaf) - not found."
+            Write-Warning "$($Target) - not found."
             $Output = $False
         }
     }
@@ -40,14 +41,14 @@ Function Test-VcDownloads {
 Describe 'Export-VcXml' {
     Context "Export manifest" {
         It "Given valid parameter -Path, it exports an XML file" {
-            $Xml = "$($pwd)\Redists.xml"
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
             Export-VcXml -Path $Xml -Verbose
             Test-Path -Path $Xml | Should -Be $True
         }
     }
     Context "Export and read manifest" {
         It "Given valid parameter -Path, it exports an XML file" {
-            $Xml = "$($pwd)\Redists.xml"
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
             Export-VcXml -Path $Xml -Export All -Verbose
             $VcList = Get-VcList -Xml $Xml
             $VcList.Count | Should -Be 32
@@ -68,7 +69,7 @@ Describe 'Get-VcList' {
     }
     Context "Return external manifest" {
         It "Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" {
-            $Xml = "$($pwd)\Redists.xml"
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
             Export-VcXml -Path $Xml -Verbose
             $VcList = Get-VcList -Xml $Xml -Verbose
             $VcList.Count | Should -Be 12
@@ -79,7 +80,7 @@ Describe 'Get-VcList' {
 Describe 'Get-VcRedist' {
     Context "Download Redistributables" {
         It "Downloads supported Visual C++ Redistributables" {
-            $Path = ".\VcDownload"
+            $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
             If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force -Verbose }
             $VcList = Get-VcList
             $Downloads = Get-VcRedist -VcList $VcList -Path $Path -Verbose

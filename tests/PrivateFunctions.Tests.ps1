@@ -4,7 +4,7 @@ If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
 }
 Else {
     # Local Testing 
-    $ProjectRoot = "$(Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)\..\"
+    $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
 Import-Module $ProjectRoot\VcRedist -Force
 

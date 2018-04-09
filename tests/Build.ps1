@@ -1,3 +1,11 @@
+If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
+    $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
+}
+Else {
+    # Local Testing 
+    $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
+}
+
 # Line break for readability in AppVeyor console
 Write-Host -Object ''
 
@@ -14,7 +22,7 @@ Else {
     # This means that the major / minor / build values will be consistent across GitHub and the Gallery
     Try {
         # This is where the module manifest lives
-        $manifestPath = '.\VcRedist\VcRedist.psd1'
+        $manifestPath = Join-Path (Join-Path $projectRoot "VcRedist") "VcRedist.psd1"
 
         # Start by importing the manifest to determine the version, then add 1 to the revision
         $manifest = Test-ModuleManifest -Path $manifestPath
@@ -24,7 +32,7 @@ Else {
         Write-Output "New Version: $newVersion"
 
         # Update the manifest with the new version value and fix the weird string replace bug
-        $functionList = ((Get-ChildItem -Path .\VcRedist\Public).BaseName)
+        $functionList = ((Get-ChildItem -Path (Join-Path (Join-Path $projectRoot "VcRedist") "Public")).BaseName)
         Update-ModuleManifest -Path $manifestPath -ModuleVersion $newVersion -FunctionsToExport $functionList
         (Get-Content -Path $manifestPath) -replace 'PSGet_VcRedist', 'VcRedist' | Set-Content -Path $manifestPath
         (Get-Content -Path $manifestPath) -replace 'NewManifest', 'VcRedist' | Set-Content -Path $manifestPath
@@ -55,10 +63,10 @@ Else {
     }
 
     # Publish the new version to the PowerShell Gallery
-    <# Try {
+    Try {
         # Build a splat containing the required details and make sure to Stop for errors which will trigger the catch
         $PM = @{
-            Path        = '.\VcRedist'
+            Path        = Join-Path $projectRoot "VcRedist"
             NuGetApiKey = $env:NuGetApiKey
             ErrorAction = 'Stop'
         }
@@ -69,5 +77,5 @@ Else {
         # Sad panda; it broke
         Write-Warning "Publishing update $newVersion to the PowerShell Gallery failed."
         throw $_
-    } #>
+    }
 }

@@ -12,7 +12,6 @@ Function Get-VcList {
          System.Array
     
     .NOTES
-        Name: Get-VcXml
         Author: Aaron Parker
         Twitter: @stealthpuppy
 
@@ -44,16 +43,16 @@ Function Get-VcList {
         [Parameter(Mandatory = $False, Position = 0, HelpMessage = "Path to the XML document describing the Redistributables.")]
         [ValidateNotNull()]
         [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
-        [string]$Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesSupported.xml",
+        [string] $Xml = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.xml"),
 
         [Parameter(Mandatory = $False)]
         [ValidateSet('All', 'Supported')]
-        [string]$Export = "Supported"
+        [string] $Export = "Supported"
     )
     Begin {
-        Switch ($Export) {
+        Switch ( $Export ) {
             "All" {
-                $Xml = "$($MyInvocation.MyCommand.Module.ModuleBase)\Manifests\VisualCRedistributablesAll.xml"
+                $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml"
                 Write-Warning "This array includes unsupported Visual C++ Redistributables."
             }
         }
@@ -65,14 +64,14 @@ Function Get-VcList {
         # Read the specifed XML document
         Try {
             Write-Verbose "Reading XML document $Xml."
-            [xml]$xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
+            [xml] $xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
         }
         Catch {
             Throw "Unable to read $Xml. $xmlReadError"
         }
 
         # Build the output object by compiling an array of each redistributable
-        $xmlContent = (Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument).Node
+        $xmlContent = ( Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument ).Node
         ForEach ($platform in $xmlContent) {
             Write-Verbose "Building array with $($platform.Release) on $($platform.Architecture)."
             ForEach ($redistributable in $platform.Redistributable) {

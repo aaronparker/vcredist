@@ -11,12 +11,12 @@ Install-Module -Name Pester -Force
 Install-Module -Name PSScriptAnalyzer -Force
 Install-Module -Name posh-git -Force
 
-# Import the ApplicationControl module
+# Import the module
 If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
     $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
 }
 Else {
     # Local Testing 
-    $ProjectRoot = "$(Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)\..\"
+    $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
-Import-Module "$projectRoot\VcRedist" -Verbose -Force
+Import-Module (Join-Path $projectRoot "VcRedist") -Verbose -Force
