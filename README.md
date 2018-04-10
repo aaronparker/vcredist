@@ -1,9 +1,10 @@
 # VcRedist
 
 [![Build status][appveyor-badge]][appveyor-build]
-[![PowerShell Gallery][psgallery-badge]][psgallery]
 [![GitHub Release][github-release-badge]][github-release]
-[![Book status][gitbooks-badge]][gitbooks-build]
+[![PowerShell Gallery][psgallery-badge]][psgallery]
+[![PowerShell Gallery Version][psgallery-version-badge]][psgallery]
+[![License][license-badge]][license]
 
 A PowerShell module for downloading and installing the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). The module also supports creating applications in the Microsoft Deployment Toolkit or System Center Configuration Manager to install the Redistributables.
 
@@ -13,7 +14,7 @@ The Microsoft Visual C++ Redistributables are a core component of any Windows de
 
 ## Documentation
 
-Full documentation for the module is located on GitBook at [https://aaronparker.gitbooks.io/vcredist/content/](https://aaronparker.gitbooks.io/vcredist/content/)
+Full documentation for the module is located at [https://docs.stealthpuppy.com/vcredist/](https://docs.stealthpuppy.com/vcredist/)
 
 ## PowerShell Gallery
 
@@ -23,11 +24,15 @@ The VcRedist module is published to the PowerShell Gallery and can be found here
 Install-Module -Name VcRedist -Force
 ```
 
-[appveyor-badge]: https://ci.appveyor.com/api/projects/status/ijnl2agu5ey3l1u7?svg=true
+[appveyor-badge]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/master.svg?style=flat-square&logo=appveyor
 [appveyor-build]: https://ci.appveyor.com/project/aaronparker/install-visualcredistributables
-[psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg
+[psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg?style=flat-square
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
+[psgallery-version-badge]: https://img.shields.io/powershellgallery/v/vcredist.svg?style=flat-square
+[psgallery-version]: https://www.powershellgallery.com/packages/vcredist
 [gitbooks-badge]: https://www.gitbook.com/button/status/book/aaronparker/vcredist/
 [gitbooks-build]: https://www.gitbook.com/book/aaronparker/vcredist
-[github-release-badge]: https://img.shields.io/github/release/aaronparker/Install-VisualCRedistributables.svg
+[github-release-badge]: https://img.shields.io/github/release/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
 [github-release]: https://github.com/aaronparker/Install-VisualCRedistributables/releases/latest
+[license-badge]: https://img.shields.io/github/license/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
+[license]: https://github.com/aaronparker/vcredist/blob/master/LICENSE

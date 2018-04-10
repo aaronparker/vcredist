@@ -38,41 +38,56 @@ Function Test-VcDownloads {
 }
 
 # Pester tests
-Describe 'Export-VcXml' {
-    Context "Export manifest" {
-        It "Given valid parameter -Path, it exports an XML file" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
-            Export-VcXml -Path $Xml -Verbose
-            Test-Path -Path $Xml | Should -Be $True
-        }
-    }
-    Context "Export and read manifest" {
-        It "Given valid parameter -Path, it exports an XML file" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
-            Export-VcXml -Path $Xml -Export All -Verbose
-            $VcList = Get-VcList -Xml $Xml
-            $VcList.Count | Should -Be 32
-        }
-    }
-}
-
 Describe 'Get-VcList' {
     Context "Return built-in manifest" {
         It "Given no parameters, it returns supported Visual C++ Redistributables" {
-            $VcList = Get-VcList -Verbose
+            $VcList = Get-VcList
             $VcList.Count | Should -Be 12
         }
         It "Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" {
-            $VcList = Get-VcList -Export All -Verbose
+            $VcList = Get-VcList -Export All
             $VcList.Count | Should -Be 32
         }
     }
     Context "Return external manifest" {
         It "Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" {
             $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
-            Export-VcXml -Path $Xml -Verbose
-            $VcList = Get-VcList -Xml $Xml -Verbose
+            Export-VcXml -Path $Xml
+            $VcList = Get-VcList -Xml $Xml
             $VcList.Count | Should -Be 12
+        }
+    }
+    Context "Test fail scenarios" {
+        It "Given an XML file that does not exist, it should throw an error" {
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.xml"
+            { Get-VcList -Xml $Xml } | Should Throw
+        }
+        It "Given an invalid XML file, should throw an error on read" {
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
+            { Get-VcList -Xml $Xml } | Should Throw
+        }
+    }
+}
+
+Describe 'Export-VcXml' {
+    Context "Export manifest" {
+        It "Given valid parameter -Path, it exports an XML file" {
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
+            Export-VcXml -Path $Xml
+            Test-Path -Path $Xml | Should -Be $True
+        }
+    }
+    Context "Export and read manifest" {
+        It "Given valid parameter -Path, it exports an XML file" {
+            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
+            Export-VcXml -Path $Xml -Export All
+            $VcList = Get-VcList -Xml $Xml
+            $VcList.Count | Should -Be 32
+        }
+    }
+    Context "Test fail scenarios" {
+        It "Given an invalid path, it should throw an error" {
+            { Export-VcXml -Path (Join-Path (Join-Path $ProjectRoot "Temp") "Temp.xml") } | Should Throw
         }
     }
 }
@@ -81,10 +96,15 @@ Describe 'Get-VcRedist' {
     Context "Download Redistributables" {
         It "Downloads supported Visual C++ Redistributables" {
             $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
-            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force -Verbose }
+            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
             $VcList = Get-VcList
-            $Downloads = Get-VcRedist -VcList $VcList -Path $Path -Verbose
+            $Downloads = Get-VcRedist -VcList $VcList -Path $Path
             Test-VcDownloads -VcList $Downloads -Path $Path | Should -Be $True
+        }
+    }
+    Context "Test fail scenarios" {
+        It "Given an invalid path, it should throw an error" {
+            { Get-VcRedist -Path (Join-Path $ProjectRoot "Temp") } | Should Throw
         }
     }
 }
