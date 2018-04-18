@@ -1,5 +1,6 @@
 # Summary
 
+* [Supported Platforms](SUPPORTED.md)
 * [Installing the Module](install.MD)
 * Usage
     * [Getting the VcRedist list](get-vcredists.MD)
