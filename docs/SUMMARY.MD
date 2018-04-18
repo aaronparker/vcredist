@@ -18,3 +18,4 @@
     * [Install-VcRedist](Install-VcRedist.md)
     * [Import-VcMdtApp](Import-VcMdtApp.md)
     * [Import-VcCmApp](Import-VcCmApp.md)
+* [Change log](CHANGELOG.md)
