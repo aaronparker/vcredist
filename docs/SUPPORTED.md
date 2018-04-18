@@ -8,7 +8,7 @@ VcRedist supports installing the Visual C++ Redistributables on Windows 10 / Win
 
 VcRedist supports PowerShell 5.0 and above with testing completed on Windows 10, Windows Server 2016 and even macOS. Given that the Visual C++ Redistributables are only installable on Windows, full support is only offered for Windows.
 
-Some testing has been performed on Windows 7 with WMF 5.1. If you are running an earlier version of PowerShell, update to the latest release of the [Windows Management Framework](https://docs.microsoft.com/en-us/powershell/wmf/readme) or please use the [previous scripts](https://github.com/aaronparker/MDT/tree/master/Updates) instead.
+Some testing has been performed on Windows 7 with WMF 5.1. If you are running an earlier version of PowerShell, update to the latest release of the [Windows Management Framework](https://docs.microsoft.com/en-us/powershell/wmf/readme).
 
 ### PowerShell Core
 
