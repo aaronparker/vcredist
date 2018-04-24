@@ -64,6 +64,10 @@ Function Install-VcRedist {
         # Get script elevation status
         [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
         If ( !($Elevated) ) { Throw "Installing the Visual C++ Redistributables requires elevation."}
+        $UninstallPath = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall")
+        If ([System.Environment]::Is64BitOperatingSystem) {
+            $UninstallPath += "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+        }
     }
     Process {
         # Filter release and architecture if specified
@@ -78,7 +82,6 @@ Function Install-VcRedist {
 
         # Loop through each Redistributable and install
         ForEach ( $Vc in $VcList ) {
-            $UninstallPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
             If (Get-ChildItem -Path $UninstallPath | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
                 Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
             }
@@ -101,7 +104,7 @@ Function Install-VcRedist {
     }
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        $output = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | `
+        $output = Get-ChildItem -Path $UninstallPath | `
         Get-ItemProperty | Where-Object {$_.DisplayName -like "Microsoft Visual C*"} | Select-Object Publisher, DisplayName, DisplayVersion
         $output
     }
