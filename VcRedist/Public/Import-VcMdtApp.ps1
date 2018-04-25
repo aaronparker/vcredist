@@ -56,36 +56,36 @@ Function Import-VcMdtApp {
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
-        [array]$VcList,
+        [array] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string]$Path,
+        [string] $Path,
 
         [Parameter(Mandatory = $True, HelpMessage = "The path to the MDT deployment share.")]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string]$MdtPath,
+        [string] $MdtPath,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
-        [string]$AppFolder = "VcRedists",
+        [string] $AppFolder = "VcRedists",
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]]$Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
         [ValidateSet('x86', 'x64')]
-        [string[]]$Architecture = @("x86", "x64"),
+        [string[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Add the imported Visual C++ Redistributables into an Application Bundle.")]
-        [switch]$Bundle,
+        [switch] $Bundle,
 
-        [Parameter()]$mdtDrive = "DS001",
-        [Parameter()]$Publisher = "Microsoft",
-        [Parameter()]$BundleName = "Visual C++ Redistributables",
-        [Parameter()]$Language = "en-US"
+        [Parameter()] $mdtDrive = "DS001",
+        [Parameter()] $Publisher = "Microsoft",
+        [Parameter()] $BundleName = "Visual C++ Redistributables",
+        [Parameter()] $Language = "en-US"
     )
     Begin {
         # If we can find the MDT PowerShell module, import it. Requires MDT console to be installed
@@ -200,6 +200,6 @@ Function Import-VcMdtApp {
             }
         }
         # Return list of apps to the pipeline
-        $Output | Select-Object PSChildName, Source, CommandLine, Version, Language, SupportedPlatform, UninstallKey, Reboot
+        Write-Output ($Output | Select-Object PSChildName, Source, CommandLine, Version, Language, SupportedPlatform, UninstallKey, Reboot)
     }
 }

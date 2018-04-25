@@ -68,6 +68,6 @@ Function Export-VcXml {
         # Write the document out to the file system and return the path to the file.
         Write-Verbose "Writing XML to $Path."
         $xmlDocument.Save($Path)
-        $Path
+        Write-Output $Path
     }
 }
