@@ -1,4 +1,10 @@
-# Change log
+# Change Log
+
+## v1.3.3.39
+
+- Update manifests with 2017 (14.13.26020) release
+- Update module `ReleaseNotes` property with a link to changelog [https://docs.stealthpuppy.com/vcredist/change-log](https://docs.stealthpuppy.com/vcredist/change-log)
+- Update functions with explicit `Write-Output`
 
 ## v1.3.2.35
 
@@ -20,7 +26,7 @@
 
 ## v1.3.1.0
 
-- Added function Import-VcCmApp for importing Visual C++ Redistributables into ConfigMgr.
+- Added function `Import-VcCmApp` for importing Visual C++ Redistributables into ConfigMgr.
 
 ## v1.3.0.0
 
