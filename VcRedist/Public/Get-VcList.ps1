@@ -91,6 +91,6 @@ Function Get-VcList {
     }
     End {
         # Return array to the pipeline
-        $Output
+        Write-Output $Output
     }
 }

@@ -53,19 +53,19 @@ Function Get-VcRedist {
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
                 HelpMessage = ".")]
         [ValidateNotNull()]
-        [array]$VcList,
+        [array] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1, HelpMessage = "Specify a target path to download the Redistributables to.")]
         [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string]$Path,
+        [string] $Path,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to download.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]]$Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to download.")]
         [ValidateSet('x86', 'x64')]
-        [string[]]$Architecture = @("x86", "x64")
+        [string[]] $Architecture = @("x86", "x64")
     )
     Begin {
         $Output = @()
@@ -125,6 +125,6 @@ Function Get-VcRedist {
     }
     End {
         # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        $Output
+        Write-Output $Output
     }
 }

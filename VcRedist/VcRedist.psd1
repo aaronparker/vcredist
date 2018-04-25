@@ -12,7 +12,7 @@
 RootModule = 'VcRedist.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.2.37'
+ModuleVersion = '1.3.3.37'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -99,7 +99,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Redistributables','VisualC'
+        Tags = 'Redistributables','VisualC', 'VisualStudio'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/aaronparker/Install-VisualCRedistributables/blob/master/LICENSE'
@@ -111,7 +111,7 @@ PrivateData = @{
         IconUri = 'https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VisualStudioLogo256.png'
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'https://docs.stealthpuppy.com/vcredist/change-log'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''

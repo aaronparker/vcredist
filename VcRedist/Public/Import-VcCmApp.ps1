@@ -52,34 +52,34 @@ Function Import-VcCmApp {
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
-        [array]$VcList,
+        [array] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string]$Path,
+        [string] $Path,
 
         [Parameter(Mandatory = $True, HelpMessage = "Specify a distribution UNC path to copy the Redistributables to.")]
-        [string]$CMPath,
+        [string] $CMPath,
 
         [Parameter(Mandatory = $True, HelpMessage = "Specify ConfigMgr Site Code.")]
         [ValidateScript( { If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
-        [string]$SMSSiteCode,
+        [string] $SMSSiteCode,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
-        [string]$AppFolder = "VcRedists",
+        [string] $AppFolder = "VcRedists",
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]]$Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
         [ValidateSet('x86', 'x64')]
-        [string[]]$Architecture = @("x86", "x64"),
+        [string[]] $Architecture = @("x86", "x64"),
 
-        [Parameter()]$Publisher = "Microsoft",
-        [Parameter()]$Language = "en-US",
-        [Parameter()]$Keyword = "Visual C++ Redistributable"
+        [Parameter()] $Publisher = "Microsoft",
+        [Parameter()] $Language = "en-US",
+        [Parameter()] $Keyword = "Visual C++ Redistributable"
     )
     Begin {        
         # CMPath will be the network location for copying the Visual C++ Redistributables to
@@ -196,6 +196,6 @@ Function Import-VcCmApp {
         Set-Location -Path $Path
 
         # Output array of applications created in ConfigMgr
-        $Output
+        Write-Output $Output
     }
 }
