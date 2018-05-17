@@ -5,7 +5,7 @@ To install the Visual C++ Redistributables on the local machine, use `Install-Vc
 The following command will install the Visual C++ Redistributables already downloaded locally with `Get-VcRedist` to C:\Temp\VcRedist.
 
 ```powershell
-Get-VcList | Install-VcRedist -Path C:\Temp\VcRedists
+Get-VcList | Install-VcRedist -Path C:\Temp\VcRedist
 ```
 
 Visual C++ Redistributables can be filtered for release and processor architecture.
