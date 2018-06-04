@@ -117,17 +117,21 @@ Function Import-VcMdtApp {
         # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
         # Create $target as the target Application folder to import into
         If ( $AppFolder.Length -ne 0 ) {
-            If (!(Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
+            If ((Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
+                $target = "$($mdtDrive):\Applications\$($AppFolder)"
+            }
+            Else {
                 If ($PSCmdlet.ShouldProcess("$($mdtDrive):\Applications\$($AppFolder)", "Creating folder")) {
                     New-Item -Path "$($mdtDrive):\Applications" -Enable "True" -Name $AppFolder `
                         -Comments "$($Publisher) $($BundleName)" -ItemType "Folder" -ErrorAction SilentlyContinue
+                    $target = "$($mdtDrive):\Applications\$($AppFolder)"
                 }
-                $target = "$($mdtDrive):\Applications\$($AppFolder)"
             }
         }
         Else {
             $target = "$($mdtDrive):\Applications"
         }
+        Write-Verbose "Importing applications into $target"
     }
     Process {
         # Filter release and architecture if specified
@@ -148,8 +152,13 @@ Function Import-VcMdtApp {
                 $source = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
                 $filename = Split-Path -Path $Vc.Download -Leaf
                 $dir = "$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
-                $supportedPlatform = If ($Vc.Architecture -eq "x86") { "All x86 Windows 7 and Newer" } `
-                    Else { @("All x64 Windows 7 and Newer", "All x86 Windows 7 and Newer") }
+
+                # Supported platforms might be better coming from the XML manifest
+                # This is basically hard coding the target platform
+                $supportedPlatform = If ($Vc.Architecture -eq "x86") {
+                    @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer") 
+                } `
+                    Else { "All x64 Windows 7 and Newer" }
 
                 Import-MDTApplication -Path $target `
                     -Name "$Publisher $($Vc.Name) $($Vc.Architecture)" `
