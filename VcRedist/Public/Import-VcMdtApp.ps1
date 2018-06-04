@@ -117,12 +117,15 @@ Function Import-VcMdtApp {
         # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
         # Create $target as the target Application folder to import into
         If ( $AppFolder.Length -ne 0 ) {
-            If (!(Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
+            If ((Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
+                $target = "$($mdtDrive):\Applications\$($AppFolder)"
+            }
+            Else {
                 If ($PSCmdlet.ShouldProcess("$($mdtDrive):\Applications\$($AppFolder)", "Creating folder")) {
                     New-Item -Path "$($mdtDrive):\Applications" -Enable "True" -Name $AppFolder `
                         -Comments "$($Publisher) $($BundleName)" -ItemType "Folder" -ErrorAction SilentlyContinue
+                    $target = "$($mdtDrive):\Applications\$($AppFolder)"
                 }
-                $target = "$($mdtDrive):\Applications\$($AppFolder)"
             }
         }
         Else {

@@ -19,3 +19,4 @@
     * [Import-VcMdtApp](Import-VcMdtApp.md)
     * [Import-VcCmApp](Import-VcCmApp.md)
 * [Change log](CHANGELOG.md)
+* [Known issues](ISSUES.MD)
