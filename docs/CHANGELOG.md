@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.3.4.45
+
+- Fix import of Redistributables with correct x86, x64 platform selection in MDT application in `Import-VcMdtApp`
+- Fix import of Redistributables into a folder specified by -AppFolder where the folder already exists in `Import-VcMdtApp`
+
 ## v1.3.3.39
 
 - Update manifests with 2017 (14.13.26020) release
