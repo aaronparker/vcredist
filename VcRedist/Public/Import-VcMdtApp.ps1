@@ -131,6 +131,7 @@ Function Import-VcMdtApp {
         Else {
             $target = "$($mdtDrive):\Applications"
         }
+        Write-Verbose "Importing applications into $target"
     }
     Process {
         # Filter release and architecture if specified
