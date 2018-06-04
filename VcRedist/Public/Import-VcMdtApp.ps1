@@ -148,8 +148,13 @@ Function Import-VcMdtApp {
                 $source = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
                 $filename = Split-Path -Path $Vc.Download -Leaf
                 $dir = "$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
-                $supportedPlatform = If ($Vc.Architecture -eq "x86") { "All x86 Windows 7 and Newer" } `
-                    Else { @("All x64 Windows 7 and Newer", "All x86 Windows 7 and Newer") }
+
+                # Supported platforms might be better coming from the XML manifest
+                # This is basically hard coding the target platform
+                $supportedPlatform = If ($Vc.Architecture -eq "x86") {
+                    @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer") 
+                } `
+                    Else { "All x64 Windows 7 and Newer" }
 
                 Import-MDTApplication -Path $target `
                     -Name "$Publisher $($Vc.Name) $($Vc.Architecture)" `
