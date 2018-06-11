@@ -7,6 +7,7 @@
             <ShortName>SP1MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26368</URL>
             <ProductCode>{5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}</ProductCode>
+            <Version>9.0.30729.5677</Version>
             <Download>https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -16,6 +17,7 @@
             <ShortName>SP1MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26368</URL>
             <ProductCode>{9BE518E6-ECC6-35A9-88E4-87755C07200F}</ProductCode>
+            <Version>9.0.30729.5677</Version>
             <Download>https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -25,6 +27,7 @@
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26999</URL>
             <ProductCode>{1D8E6291-B0D5-35EC-8441-6616F567A0F7}</ProductCode>
+            <Version>10.0.40219.325</Version>
             <Download>https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -34,6 +37,7 @@
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26999</URL>
             <ProductCode>{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}</ProductCode>
+            <Version>10.0.40219.325</Version>
             <Download>https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -43,6 +47,7 @@
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
             <ProductCode>{ca67548a-5ebe-413a-b50c-4b9ceb6d66c6}</ProductCode>
+            <Version>11.0.61030.0</Version>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -52,6 +57,7 @@
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
             <ProductCode>{33d1fd90-4274-48a1-9bc1-97e33d9c2d6f}</ProductCode>
+            <Version>11.0.61030.0</Version>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -61,6 +67,7 @@
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
             <ProductCode>{ef6b00ec-13e1-4c25-9064-b2f383cb8412}</ProductCode>
+            <Version>12.0.40660.0</Version>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -70,6 +77,7 @@
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
             <ProductCode>{61087a79-ac85-455c-934d-1fa22cc64f36}</ProductCode>
+            <Version>12.0.40660.0</Version>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -79,6 +87,7 @@
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
             <ProductCode>{d992c12e-cab2-426f-bde3-fb8c53950b0d}</ProductCode>
+            <Version>14.0.24215.1</Version>
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -88,6 +97,7 @@
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
             <ProductCode>{e2803110-78b3-4664-a479-3611a381656a}</ProductCode>
+            <Version>14.0.24215.1</Version>
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -96,8 +106,9 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{7474cd6e-76cc-4257-837e-5b9261e526af}</ProductCode>
-            <Download>https://download.visualstudio.microsoft.com/download/pr/11687625/2cd2dba5748dc95950a5c42c2d2d78e4/VC_redist.x64.exe</Download>
+            <ProductCode>{80586c77-db42-44bb-bfc8-7aebbb220c00}</ProductCode>
+            <Version>14.14.26429.4</Version>
+            <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
     <Platform Architecture="x86" Release="2017" Install="/install /passive /norestart">
@@ -105,8 +116,9 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{5c045b7f-e561-4794-91f8-c6cda0893107}</ProductCode>
-            <Download>https://download.visualstudio.microsoft.com/download/pr/11687613/88b50ce70017bf10f2d56d60fcba6ab1/VC_redist.x86.exe</Download>
+            <ProductCode>{2019b6a0-8533-4a04-ac0e-b2c10bdb9841}</ProductCode>
+            <Version>14.14.26429.4</Version>
+            <Download>https://aka.ms/vs/15/release/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
 </Redistributables>
