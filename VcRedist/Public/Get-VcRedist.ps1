@@ -47,6 +47,7 @@ Function Get-VcRedist {
         Description:
         Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
     #>
+    [Alias("Save-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
