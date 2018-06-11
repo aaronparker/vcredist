@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.3.5.48
+
+- Update manifests with `2017`, version `14.14`
+- Update manifests with `<Version></Version>` to enable better install logic e.g. skipping installing 2015 over 2017 (same 14.x version)
+
 ## v1.3.4.45
 
 - Fix import of Redistributables with correct x86, x64 platform selection in MDT application in `Import-VcMdtApp`
