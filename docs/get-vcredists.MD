@@ -1,4 +1,4 @@
-# Getting the list of Redistributables
+# Getting the List of Redistributables
 
 `Get-VcRedist` returns the list of Visual C++ Redistributables. The VcRedist module includes two manifests - the list of [supported Redistributables](supported-redists.MD) and the complete list of [available Redistributables](all-redists.MD).
 

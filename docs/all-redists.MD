@@ -13,6 +13,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26347</URL>
             <ProductCode>{ad8a2fa1-06e7-4b0d-927d-6e54b3d31028}</ProductCode>
+            <Version>8.0.61000</Version>
             <Download>https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x64.EXE</Download>
         </Redistributable>
         <Redistributable>
@@ -20,6 +21,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=14431</URL>
             <ProductCode>{6ce5bae9-d3ca-4b99-891a-1dc6c118a5fc}</ProductCode>
+            <Version>8.0.59192</Version>
             <Download>https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -27,6 +29,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=18471</URL>
             <ProductCode>{071c9b48-7c32-4621-a0ac-3f809523288f}</ProductCode>
+            <Version>8.0.56336</Version>
             <Download>https://download.microsoft.com/download/d/4/1/d41aca8a-faa5-49a7-a5f2-ea0aa4587da0/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -34,6 +37,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=21254</URL>
             <ShortName>RTM</ShortName>
             <ProductCode>{6E8E85E8-CE4B-4FF5-91F7-04999C9FAE6A}</ProductCode>
+            <Version>8.0.50727.42</Version>
             <Download>https://download.microsoft.com/download/9/1/4/914851c6-9141-443b-bdb4-8bad3a57bea9/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -43,6 +47,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26347</URL>
             <ProductCode>{710f4c1c-cc18-4c49-8cbf-51240c89a1a2}</ProductCode>
+            <Version>8.0.61000</Version>
             <Download>https://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE</Download>
         </Redistributable>
         <Redistributable>
@@ -50,6 +55,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=14431</URL>
             <ProductCode>{837b34e3-7c30-493c-8f6a-2b0f04e2912c}</ProductCode>
+            <Version>8.0.59192</Version>
             <Download>https://download.microsoft.com/download/6/B/B/6BB661D6-A8AE-4819-B79F-236472F6070C/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -57,6 +63,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=5638</URL>
             <ProductCode>{7299052b-02a4-4627-81f2-1818da5d550d}</ProductCode>
+            <Version>8.0.56336</Version>
             <Download>https://download.microsoft.com/download/e/1/c/e1c773de-73ba-494a-a5ba-f24906ecf088/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -64,6 +71,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=3387</URL>
             <ProductCode>{A49F249F-0C91-497F-86DF-B2585E8E76B7}</ProductCode>
+            <Version>8.0.50727.42</Version>
             <Download>https://download.microsoft.com/download/d/3/4/d342efa6-3266-4157-a2ec-5174867be706/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -73,20 +81,23 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=15336</URL>
             <ProductCode>{350AA351-21FA-3270-8B7A-835434E766AD}</ProductCode>
+            <Version>9.0.21022</Version>
             <Download>https://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
             <Name>Visual C++ 2008 Feature Pack Redistributable Package</Name>
             <ShortName>FP</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=16771</URL>
-			<ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
+            <ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
+            <Version>9.0.21022.218</Version>
             <Download>https://download.microsoft.com/download/1/9/0/190da410-d595-4342-ba2f-2422e78bc84d/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
             <Name>Visual C++ 2008 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10430</URL>
-            <ProductCode>{BBBE35B2-9349-3C48-BD3D-F574B17C7924}</ProductCode>
+            <ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
+            <Version>9.0.30411</Version>
             <Download>https://download.microsoft.com/download/A/5/3/A53B40CA-F75C-4678-852A-3C15EA82F186/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -94,6 +105,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=2092</URL>
             <ProductCode>{8220EEFE-38CD-377E-8595-13398D740ACE}</ProductCode>
+            <Version>9.0.30729</Version>
             <Download>https://download.microsoft.com/download/2/d/6/2d61c766-107b-409d-8fba-c39e61ca08e8/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -101,6 +113,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=11895</URL>
             <ProductCode>{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}</ProductCode>
+            <Version>9.0.30729.4148</Version>
             <Download>https://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -108,6 +121,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26368</URL>
             <ProductCode>{5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}</ProductCode>
+            <Version>9.0.30729.6161</Version>
             <Download>https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -117,20 +131,23 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=29</URL>
             <ProductCode>{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}</ProductCode>
+            <Version>9.0.21022</Version>
             <Download>https://download.microsoft.com/download/1/1/1/1116b75a-9ec3-481a-a3c8-1777b5381140/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
             <Name>Visual C++ 2008 Feature Pack Redistributable Package</Name>
             <ShortName>FP</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10015</URL>
-            <ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}</ProductCode>
+            <ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}}</ProductCode>
+            <Version>9.0.21022.218</Version>
             <Download>https://download.microsoft.com/download/d/1/0/d10d210e-e0ad-4010-b547-bc5e395ef691/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
             <Name>Visual C++ 2008 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10430</URL>
-            <ProductCode>{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}</ProductCode>
+            <ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}</ProductCode>
+            <Version>9.0.30411</Version>
             <Download>https://download.microsoft.com/download/A/5/3/A53B40CA-F75C-4678-852A-3C15EA82F186/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -138,6 +155,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=5582</URL>
             <ProductCode>{9A25302D-30C0-39D9-BD6F-21E6EC160475}</ProductCode>
+            <Version>9.0.30729</Version>
             <Download>https://download.microsoft.com/download/d/d/9/dd9a82d0-52ef-40db-8dab-795376989c03/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -145,6 +163,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=11895</URL>
             <ProductCode>{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}</ProductCode>
+            <Version>9.0.30729.4148</Version>
             <Download>https://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
@@ -152,6 +171,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1MFC</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26368</URL>
             <ProductCode>{9BE518E6-ECC6-35A9-88E4-87755C07200F}</ProductCode>
+            <Version>9.0.30729.6161</Version>
             <Download>https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -161,6 +181,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26999</URL>
             <ProductCode>{1D8E6291-B0D5-35EC-8441-6616F567A0F7}</ProductCode>
+            <Version>10.0.40219.325</Version>
             <Download>https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -170,6 +191,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>SP1</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=26999</URL>
             <ProductCode>{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}</ProductCode>
+            <Version>10.0.40219.325</Version>
             <Download>https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -178,7 +200,8 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
-            <ProductCode>{37B8F9C7-03FB-3253-8781-2517C99D7C00}</ProductCode>
+            <ProductCode>{ca67548a-5ebe-413a-b50c-4b9ceb6d66c6}</ProductCode>
+            <Version>11.0.61030.0</Version>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -187,7 +210,8 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
-            <ProductCode>{B175520C-86A2-35A7-8619-86DC379688B9}</ProductCode>
+            <ProductCode>{33d1fd90-4274-48a1-9bc1-97e33d9c2d6f}</ProductCode>
+            <Version>11.0.61030.0</Version>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -196,14 +220,16 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Name>Visual C++ Redistributable Packages for Visual Studio 2013</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=40784</URL>
-            <ProductCode>{929FBD26-9020-399B-9A7A-751D61F0B942}</ProductCode>
+            <ProductCode>{050d4fc8-5d48-4b8f-8972-47c82c46020f}</ProductCode>
+            <Version>12.0.30501.0</Version>
             <Download>https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe</Download>
         </Redistributable>
         <Redistributable>
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{5740BD44-B58D-321A-AFC0-6D3D4556DD6C}</ProductCode>
+            <ProductCode>{ef6b00ec-13e1-4c25-9064-b2f383cb8412}</ProductCode>
+            <Version>12.0.40660.0</Version>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -212,14 +238,16 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Name>Visual C++ Redistributable Packages for Visual Studio 2013</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=40784</URL>
-            <ProductCode>{F8CFEB22-A2E7-3971-9EDA-4B11EDEFC185}</ProductCode>
+            <ProductCode>{f65db027-aff3-4070-886a-0d87064aabb1}</ProductCode>
+            <Version>12.0.30501.0</Version>
             <Download>https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe</Download>
         </Redistributable>
         <Redistributable>
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{7DAD0258-515C-3DD4-8964-BD714199E0F7}</ProductCode>
+            <ProductCode>{61087a79-ac85-455c-934d-1fa22cc64f36}</ProductCode>
+            <Version>12.0.40660.0</Version>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -229,6 +257,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
             <ProductCode>{d992c12e-cab2-426f-bde3-fb8c53950b0d}</ProductCode>
+            <Version>14.0.24215.1</Version>
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -238,6 +267,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <ShortName>Update3</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=53840</URL>
             <ProductCode>{e2803110-78b3-4664-a479-3611a381656a}</ProductCode>
+            <Version>14.0.24215.1</Version>
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
@@ -246,8 +276,9 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{e2ee15e2-a480-4bc5-bfb7-e9803d1d9823}</ProductCode>
-            <Download>https://download.visualstudio.microsoft.com/download/pr/100349091/2cd2dba5748dc95950a5c42c2d2d78e4/VC_redist.x64.exe</Download>
+            <ProductCode>{80586c77-db42-44bb-bfc8-7aebbb220c00}}</ProductCode>
+            <Version>14.14.26429.4</Version>
+            <Download>https://aka.ms/vs/15/release/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
     <Platform Architecture="x86" Release="2017" Install="/install /passive /norestart">
@@ -255,8 +286,9 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{56e11d69-7cc9-40a5-a4f9-8f6190c4d84d}</ProductCode>
-            <Download>https://download.visualstudio.microsoft.com/download/pr/100349138/88b50ce70017bf10f2d56d60fcba6ab1/VC_redist.x86.exe</Download>
+            <ProductCode>{2019b6a0-8533-4a04-ac0e-b2c10bdb9841}</ProductCode>
+            <Version>14.14.26429.4</Version>
+            <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
 </Redistributables>

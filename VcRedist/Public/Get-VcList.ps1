@@ -79,6 +79,7 @@ Function Get-VcList {
                 $item = New-Object PSObject
                 $item | Add-Member -Type NoteProperty -Name 'Name' -Value $redistributable.Name
                 $item | Add-Member -Type NoteProperty -Name 'ProductCode' -Value $redistributable.ProductCode
+                $item | Add-Member -Type NoteProperty -Name 'Version' -Value $redistributable.Version
                 $item | Add-Member -Type NoteProperty -Name 'URL' -Value $redistributable.URL
                 $item | Add-Member -Type NoteProperty -Name 'Download' -Value $redistributable.Download
                 $item | Add-Member -Type NoteProperty -Name 'Release' -Value $platform.Release
