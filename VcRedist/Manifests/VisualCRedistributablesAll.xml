@@ -82,7 +82,7 @@
             <Name>Visual C++ 2008 Feature Pack Redistributable Package</Name>
             <ShortName>FP</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=16771</URL>
-			<ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
+            <ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
             <Version>9.0.21022.218</Version>
             <Download>https://download.microsoft.com/download/1/9/0/190da410-d595-4342-ba2f-2422e78bc84d/vcredist_x64.exe</Download>
         </Redistributable>
@@ -90,7 +90,7 @@
             <Name>Visual C++ 2008 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10430</URL>
-            <ProductCode>{BBBE35B2-9349-3C48-BD3D-F574B17C7924}</ProductCode>
+            <ProductCode>{D93AC9C8-B6CF-391E-BD2F-48AF4727476C}</ProductCode>
             <Version>9.0.30411</Version>
             <Download>https://download.microsoft.com/download/A/5/3/A53B40CA-F75C-4678-852A-3C15EA82F186/vcredist_x64.exe</Download>
         </Redistributable>
@@ -132,7 +132,7 @@
             <Name>Visual C++ 2008 Feature Pack Redistributable Package</Name>
             <ShortName>FP</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10015</URL>
-            <ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}</ProductCode>
+            <ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}}</ProductCode>
             <Version>9.0.21022.218</Version>
             <Download>https://download.microsoft.com/download/d/1/0/d10d210e-e0ad-4010-b547-bc5e395ef691/vcredist_x86.exe</Download>
         </Redistributable>
@@ -140,7 +140,7 @@
             <Name>Visual C++ 2008 Redistributable Package ATL Security Update</Name>
             <ShortName>ATL</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=10430</URL>
-            <ProductCode>{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}</ProductCode>
+            <ProductCode>{5DA8F6CD-C70E-39D8-8430-3D9808D6BD17}</ProductCode>
             <Version>9.0.30411</Version>
             <Download>https://download.microsoft.com/download/A/5/3/A53B40CA-F75C-4678-852A-3C15EA82F186/vcredist_x86.exe</Download>
         </Redistributable>
@@ -194,7 +194,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
-            <ProductCode>{37B8F9C7-03FB-3253-8781-2517C99D7C00}</ProductCode>
+            <ProductCode>{ca67548a-5ebe-413a-b50c-4b9ceb6d66c6}</ProductCode>
             <Version>11.0.61030.0</Version>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe</Download>
         </Redistributable>
@@ -204,7 +204,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=30679</URL>
-            <ProductCode>{B175520C-86A2-35A7-8619-86DC379688B9}</ProductCode>
+            <ProductCode>{33d1fd90-4274-48a1-9bc1-97e33d9c2d6f}</ProductCode>
             <Version>11.0.61030.0</Version>
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe</Download>
         </Redistributable>
@@ -214,7 +214,7 @@
             <Name>Visual C++ Redistributable Packages for Visual Studio 2013</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=40784</URL>
-            <ProductCode>{929FBD26-9020-399B-9A7A-751D61F0B942}</ProductCode>
+            <ProductCode>{050d4fc8-5d48-4b8f-8972-47c82c46020f}</ProductCode>
             <Version>12.0.30501.0</Version>
             <Download>https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe</Download>
         </Redistributable>
@@ -222,7 +222,7 @@
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{5740BD44-B58D-321A-AFC0-6D3D4556DD6C}</ProductCode>
+            <ProductCode>{ef6b00ec-13e1-4c25-9064-b2f383cb8412}</ProductCode>
             <Version>12.0.40660.0</Version>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
         </Redistributable>
@@ -232,7 +232,7 @@
             <Name>Visual C++ Redistributable Packages for Visual Studio 2013</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.microsoft.com/en-us/download/details.aspx?id=40784</URL>
-            <ProductCode>{F8CFEB22-A2E7-3971-9EDA-4B11EDEFC185}</ProductCode>
+            <ProductCode>{f65db027-aff3-4070-886a-0d87064aabb1}</ProductCode>
             <Version>12.0.30501.0</Version>
             <Download>https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe</Download>
         </Redistributable>
@@ -240,7 +240,7 @@
             <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
             <ShortName>Update</ShortName>
             <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{7DAD0258-515C-3DD4-8964-BD714199E0F7}</ProductCode>
+            <ProductCode>{61087a79-ac85-455c-934d-1fa22cc64f36}</ProductCode>
             <Version>12.0.40660.0</Version>
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
         </Redistributable>
@@ -270,7 +270,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{7474cd6e-76cc-4257-837e-5b9261e526af}</ProductCode>
+            <ProductCode>{80586c77-db42-44bb-bfc8-7aebbb220c00}}</ProductCode>
             <Version>14.14.26429.4</Version>
             <Download>https://aka.ms/vs/15/release/vc_redist.x86.exe</Download>
         </Redistributable>
@@ -280,7 +280,7 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{5c045b7f-e561-4794-91f8-c6cda0893107}</ProductCode>
+            <ProductCode>{2019b6a0-8533-4a04-ac0e-b2c10bdb9841}</ProductCode>
             <Version>14.14.26429.4</Version>
             <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
         </Redistributable>
