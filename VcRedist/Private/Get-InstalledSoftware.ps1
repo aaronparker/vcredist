@@ -20,7 +20,7 @@ Function Get-InstalledSoftware {
     param (
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$Name
+        [string] $Name
     )
 
     $UninstallKeys = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -42,8 +42,9 @@ Function Get-InstalledSoftware {
                 ErrorAction = 'SilentlyContinue'
             }
             $selectProperties = @(
-                @{n = 'GUID'; e = {$_.PSChildName}}, 
-                @{n = 'Name'; e = {$_.GetValue('DisplayName')}}
+                @{n = 'Name'; e = {$_.GetValue('DisplayName')}},
+                @{n = 'Version'; e = {$_.GetValue('DisplayVersion')}},
+                @{n = 'ProductCode'; e = {$_.PSChildName}}
             )
             Get-ChildItem @gciParams | Where-Object $WhereBlock | Select-Object -Property $selectProperties
         }
