@@ -12,7 +12,7 @@
 RootModule = 'VcRedist.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.5.49'
+ModuleVersion = '1.3.6.49'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -127,4 +127,3 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
-
