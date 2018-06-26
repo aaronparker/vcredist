@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.3.6.56
+
+- Add `Get-InstalledVcRedist`, using private function `Get-InstalledSoftware`. Closing issue #18 with feature request for this function. `Get-InstallSoftware` function by [Adam Bertram](https://4sysops.com/archives/find-the-product-guid-of-installed-software-with-powershell/)
+- Update manifests with correct ProductCodes
+- Update documentation
+
 ## v1.3.5.48
 
 - Update manifests with `2017`, version `14.14`
