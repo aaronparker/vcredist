@@ -8,6 +8,7 @@
     * [Installing the Redistributables](install-windows.MD)
     * [Importing into MDT](mdt.MD)
     * [Importing into ConfigMgr](configmgr.MD)
+    * [Getting the Installed Redistributables](get-installed.MD)
 * Redistributables
     * [Supported Redistributables](supported-redists.MD)
     * [All Redistributables](all-redists.MD)
