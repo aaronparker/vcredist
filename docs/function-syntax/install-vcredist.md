@@ -1,39 +1,42 @@
 # Install-VcRedist
 
 ## SYNOPSIS
+
 Installs the Visual C++ Redistributables.
 
 ## SYNTAX
 
-```
+```text
 Install-VcRedist [-VcList] <Array> [-Path] <String> [-Release <String[]>] [-Architecture <String[]>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```text
 Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
 ```
 
-Description:
-Installs the Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
+Description: Installs the Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
 
 ### EXAMPLE 2
-```
+
+```text
 Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Release "2012","2013",2017" -Architecture x64
 ```
 
-Description:
-Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
+Description: Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
 
 ## PARAMETERS
 
 ### -VcList
+
 An array containing details of the Visual C++ Redistributables from Get-VcList.
 
 ```yaml
@@ -49,6 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### -Path
+
 A folder containing the downloaded Visual C++ Redistributables.
 
 ```yaml
@@ -64,7 +68,8 @@ Accept wildcard characters: False
 ```
 
 ### -Release
-Specifies the release (or version) of the redistributables to download or install.
+
+Specifies the release \(or version\) of the redistributables to download or install.
 
 ```yaml
 Type: String[]
@@ -79,6 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Architecture
+
 Specifies the processor architecture to download or install.
 
 ```yaml
@@ -94,8 +100,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
@@ -110,6 +116,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -125,8 +132,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about\_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -135,10 +142,10 @@ For more information, see [about_CommonParameters](http://go.microsoft.com/fwlin
 ### System.Array
 
 ## NOTES
-Name: Install-VcRedist
-Author: Aaron Parker
-Twitter: @stealthpuppy
+
+Name: Install-VcRedist Author: Aaron Parker Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
 [https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
+

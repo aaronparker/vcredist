@@ -4,7 +4,7 @@
 
 The following command will return the list of installed Redistributables:
 
-```powershell
+```text
 Get-InstalledVcRedist
 ```
 
@@ -12,6 +12,7 @@ Get-InstalledVcRedist
 
 This list won't include the Additional and Minimum Runtimes by default. These can be returned with the `-ExportAll` switch:
 
-```powershell
+```text
 Get-InstalledVcRedist -ExportAll
 ```
+

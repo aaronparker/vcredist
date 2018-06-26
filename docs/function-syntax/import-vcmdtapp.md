@@ -1,17 +1,19 @@
 # Import-VcMdtApp
 
 ## SYNOPSIS
+
 Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share.
 
 ## SYNTAX
 
-```
+```text
 Import-VcMdtApp [-VcList] <Array> [-Path] <String> -MdtPath <String> [-AppFolder <String>]
  [-Release <String[]>] [-Architecture <String[]>] [-Bundle] [-MdtDrive <Object>] [-Publisher <Object>]
  [-BundleName <Object>] [-Language <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.
 
 Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
@@ -19,27 +21,27 @@ Use Get-VcList and Get-VcRedist to download the Redistributables and create the 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```text
 Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 ```
 
-Description:
-Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\\\server\deployment.
+Description: Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\server\deployment.
 
 ### EXAMPLE 2
-```
+
+```text
 $VcList = Get-VcList -Export All
 ```
 
-Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
-Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\\\server\deployment -Bundle
+Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
 
-Description:
-Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\\\server\deployment and creates an application bundle.
+Description: Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
 
 ## PARAMETERS
 
 ### -VcList
+
 An array containing details of the Visual C++ Redistributables from Get-VcList.
 
 ```yaml
@@ -55,6 +57,7 @@ Accept wildcard characters: False
 ```
 
 ### -Path
+
 A folder containing the downloaded Visual C++ Redistributables.
 
 ```yaml
@@ -70,6 +73,7 @@ Accept wildcard characters: False
 ```
 
 ### -MdtPath
+
 The local or network path to the MDT deployment share.
 
 ```yaml
@@ -85,6 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -AppFolder
+
 Specify Applications folder to import the VC Redistributables into.
 
 ```yaml
@@ -100,7 +105,8 @@ Accept wildcard characters: False
 ```
 
 ### -Release
-Specifies the release (or version) of the redistributables to import into MDT.
+
+Specifies the release \(or version\) of the redistributables to import into MDT.
 
 ```yaml
 Type: String[]
@@ -115,6 +121,7 @@ Accept wildcard characters: False
 ```
 
 ### -Architecture
+
 Specifies the processor architecture to import into MDT. Can be x86 or x64.
 
 ```yaml
@@ -130,6 +137,7 @@ Accept wildcard characters: False
 ```
 
 ### -Bundle
+
 Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.
 
 ```yaml
@@ -145,6 +153,7 @@ Accept wildcard characters: False
 ```
 
 ### -MdtDrive
+
 Defaults to 'DS001'. PSDrive letter for mounting the MDT deployment share.
 
 ```yaml
@@ -160,6 +169,7 @@ Accept wildcard characters: False
 ```
 
 ### -Publisher
+
 Defaults to 'Microsoft'.
 
 ```yaml
@@ -175,6 +185,7 @@ Accept wildcard characters: False
 ```
 
 ### -BundleName
+
 The name for the Application Bundle. Defaults to 'Microsoft Visual C++ Redistributables'.
 
 ```yaml
@@ -190,6 +201,7 @@ Accept wildcard characters: False
 ```
 
 ### -Language
+
 Defaults to 'en-US'.
 
 ```yaml
@@ -205,8 +217,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
@@ -221,6 +233,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -236,8 +249,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about\_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -246,10 +259,10 @@ For more information, see [about_CommonParameters](http://go.microsoft.com/fwlin
 ### System.Array
 
 ## NOTES
-Name: Import-VcMdtApp
-Author: Aaron Parker
-Twitter: @stealthpuppy
+
+Name: Import-VcMdtApp Author: Aaron Parker Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
 [https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
+

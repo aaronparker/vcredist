@@ -4,7 +4,7 @@
 
 The VcRedist module is published to the PowerShell Gallery and can be found here: [VcRedist](https://www.powershellgallery.com/packages/VcRedist/). The module can be installed from the gallery with:
 
-```powershell
+```text
 Install-Module -Name VcRedist
 Import-Module -Name VcRedist
 ```
@@ -13,7 +13,7 @@ Import-Module -Name VcRedist
 
 If you have installed a previous version of the module from the gallery, you can install the latest update with the `-Force` parameter:
 
-```powershell
+```text
 Install-Module -Name VcRedist -Force
 ```
 
@@ -36,6 +36,7 @@ To install from the repository
 
 Once installation is complete, you can validate that the module exists by running `Get-Module -ListAvailable VcRedist`. To use the module, load it with:
 
-```powershell
+```text
 Import-Module VcRedist
 ```
+

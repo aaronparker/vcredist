@@ -1,12 +1,12 @@
-# Getting the List of Redistributables
+# Getting the VcRedist List
 
-`Get-VcRedist` returns the list of Visual C++ Redistributables. The VcRedist module includes two manifests - the list of [supported Redistributables](supported-redists.MD) and the complete list of [available Redistributables](all-redists.MD).
+`Get-VcRedist` returns the list of Visual C++ Redistributables. The VcRedist module includes two manifests - the list of [supported Redistributables](../redistributables/supported-redistributables.md) and the complete list of [available Redistributables](../redistributables/all-redistributables.md).
 
 Unless you have a specific requirement, it is highly recommend that you install only the supported Redistributables.
 
 Running `Get-VcRedist` with no parameters will return an array of the supported Redistributables by reading the internal manifest. Output can then be manipulated to filter the results. Here's a sample of what's returned.
 
-```powershell
+```text
 PS C:\> Get-VcList
 
 
@@ -33,4 +33,5 @@ Install      : /Q
 
 To return the complete list of available Redistributables, run `Get-VcList -Export All`.
 
-The internal manifests can be exported to an XML file with [Export-VcXml](Export-VcXml.md)
+The internal manifests can be exported to an XML file with [Export-VcXml](../function-syntax/export-vcxml.md)
+

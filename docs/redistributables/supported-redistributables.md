@@ -4,7 +4,7 @@ Microsoft publishes a list of supported Visual C++ Redistributables here: [The l
 
 By default Get-VcList will only export the list of supported Redistributables from the internal manifest. The supported list includes the following XML structure.
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8"?>
 <Redistributables>
     <Platform Architecture="x64" Release="2008" Install="/Q">
@@ -117,3 +117,4 @@ By default Get-VcList will only export the list of supported Redistributables fr
     </Platform>
 </Redistributables>
 ```
+

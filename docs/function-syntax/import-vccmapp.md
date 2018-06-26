@@ -1,17 +1,19 @@
 # Import-VcCmApp
 
 ## SYNOPSIS
+
 Creates Visual C++ Redistributable applications in a ConfigMgr site.
 
 ## SYNTAX
 
-```
+```text
 Import-VcCmApp [-VcList] <Array> [-Path] <String> -CMPath <String> -SMSSiteCode <String> [-AppFolder <String>]
  [-Release <String[]>] [-Architecture <String[]>] [-Publisher <Object>] [-Language <Object>]
  [-Keyword <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Creates an application in a Configuration Manager site for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
 
 Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into ConfigMgr.
@@ -19,18 +21,19 @@ Use Get-VcList and Get-VcRedist to download the Redistributable and create the a
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```text
 $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
 ```
 
-Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\\\server\share\VcRedist" -SMSSiteCode LAB
+Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 
-Description:
-Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
+Description: Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
 
 ## PARAMETERS
 
 ### -VcList
+
 An array containing details of the Visual C++ Redistributables from Get-VcList.
 
 ```yaml
@@ -46,6 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -Path
+
 A folder containing the downloaded Visual C++ Redistributables.
 
 ```yaml
@@ -61,6 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -CMPath
+
 Specify a UNC path where the Visual C++ Redistributables will be distributed from
 
 ```yaml
@@ -76,6 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -SMSSiteCode
+
 Specify the Site Code for ConfigMgr app creation.
 
 ```yaml
@@ -91,6 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -AppFolder
+
 Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
 
 ```yaml
@@ -106,7 +113,8 @@ Accept wildcard characters: False
 ```
 
 ### -Release
-Specifies the release (or version) of the redistributables to download or install.
+
+Specifies the release \(or version\) of the redistributables to download or install.
 
 ```yaml
 Type: String[]
@@ -121,6 +129,7 @@ Accept wildcard characters: False
 ```
 
 ### -Architecture
+
 Specifies the processor architecture to download or install.
 
 ```yaml
@@ -136,6 +145,7 @@ Accept wildcard characters: False
 ```
 
 ### -Publisher
+
 Defaults to 'Microsoft'.
 
 ```yaml
@@ -151,6 +161,7 @@ Accept wildcard characters: False
 ```
 
 ### -Language
+
 Defaults to 'en-US'.
 
 ```yaml
@@ -166,6 +177,7 @@ Accept wildcard characters: False
 ```
 
 ### -Keyword
+
 Defaults to 'Visual C++ Redistributable'.
 
 ```yaml
@@ -181,8 +193,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
@@ -197,6 +209,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -212,8 +225,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about\_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -222,10 +235,10 @@ For more information, see [about_CommonParameters](http://go.microsoft.com/fwlin
 ### System.Array
 
 ## NOTES
-Name: Import-VcCmApp
-Author: Aaron Parker
-Twitter: @stealthpuppy
+
+Name: Import-VcCmApp Author: Aaron Parker Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
 [https://github.com/aaronparker/Install-VisualCRedistributables](https://github.com/aaronparker/Install-VisualCRedistributables)
+

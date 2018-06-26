@@ -13,3 +13,4 @@ Some testing has been performed on Windows 7 with WMF 5.1. If you are running an
 ### PowerShell Core
 
 `Get-VcList`, `Get-VcRedist`, `Export-VcXml` and `Install-VcRedist` support PowerShell Core; however, because `Import-VcMdtApp` and `Import-CmApp` require the MDT Workbench or ConfigMgr console, full support for PowerShell Core will depend on Microsoft updating the MDT and ConfigMgr PowerShell modules to support it.
+
