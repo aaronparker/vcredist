@@ -31,8 +31,8 @@ Function Get-InstalledVcRedist {
             Description:
             Returns the installed Microsoft Visual C++ Redistributables from the current system including the Additional and Minimum Runtimes.
     #>
-    [CmdletBinding(SupportsShouldProcess = $False)]
     [OutputType([System.Management.Automation.PSObject])]
+    [CmdletBinding(SupportsShouldProcess = $False)]
     Param (
         [Parameter(Mandatory = $False)]
         [switch] $ExportAll
@@ -46,7 +46,11 @@ Function Get-InstalledVcRedist {
         $VcRedists = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) {$_} } | `
             Sort-Object Name
     }
-    
+
+    # Add Architecture property to each entry
+    $VcRedists | ForEach-Object { If ( $_.Name -contains "x64" ) `
+        { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
+        
     # Write the installed VcRedists to the pipeline
     Write-Output $VcRedists
 }
