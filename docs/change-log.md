@@ -1,5 +1,10 @@
 # Change log
 
+## v1.3.7.xx
+
+* Update manifests with `2013`, version `12.0.40664`
+* Add `UninstallString` to function `Get-InstalledVcRedist` output
+
 ## v1.3.6.56
 
 * Add `Get-InstalledVcRedist`, using private function `Get-InstalledSoftware`. Closing issue \#18 with feature request for this function. `Get-InstallSoftware` function by [Adam Bertram](https://4sysops.com/archives/find-the-product-guid-of-installed-software-with-powershell/)

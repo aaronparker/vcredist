@@ -23,4 +23,3 @@
   * [Get-InstalledVcRedist](function-syntax/get-installedvcredist.md)
 * [Change log](change-log.md)
 * [Known issues](known-issues.md)
-
