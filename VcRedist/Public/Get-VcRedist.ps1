@@ -100,24 +100,26 @@ Function Get-VcRedist {
                     New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
                 }
             }
-
-            # If the target Redistributable is already downloaded, compare the version
+            
             $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
-            Write-Verbose "Target is $($target)"
-            $download = $True
+            Write-Verbose "Testing target: $($target)"
             If ( Test-Path -Path $target -PathType Leaf ) {
-                Write-Verbose "$($target) exists. Comparing versions."
                 $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
+                # If the target Redistributable is already downloaded, compare the version
                 If ( ($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion) ) {
                     # Download the newer version
-                    Write-Verbose "$($Vc.Version) > $ProductVersion. Downloading."
+                    Write-Verbose "$($Vc.Version) > $ProductVersion."
                     $download = $True
                 }
                 Else {
-                    # No need to download
+                    Write-Verbose "Manifest version: $($Vc.Version) matches file version: $ProductVersion."
                     $download = $False
                 }
             }
+            Else {
+                $download = $True
+            }
+
             If ($download) {
                 # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
                 If ( Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue ) {
@@ -132,6 +134,9 @@ Function Get-VcRedist {
                         Invoke-WebRequest -Uri $Vc.Download -OutFile $target
                     }
                 }
+            }
+            Else {
+                Write-Verbose "$($target) exists."
             }
         }
     }
