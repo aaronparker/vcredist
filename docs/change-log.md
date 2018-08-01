@@ -1,10 +1,12 @@
 # Change log
 
-## v1.3.7.xx
+## v1.3.7.60
 
 * Update manifests with `2013`, version `12.0.40664`
 * Added `UninstallString` to function `Get-InstalledVcRedist` output
 * `Get-VcList` will attempt to match the VcRedist version in the manifest to the `Product Version` property on an existing downloaded file. If the manifest has a higher version, the file will be re-downloaded
+* Added private function `Get-FileMetadata` to support retrieving `Product Version` from downloaded file
+* Update logic in `Install-VcRedist` when querying for installed VcRedists
 
 ## v1.3.6.56
 
