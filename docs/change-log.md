@@ -1,5 +1,11 @@
 # Change log
 
+## v1.3.7.xx
+
+* Update manifests with `2013`, version `12.0.40664`
+* Added `UninstallString` to function `Get-InstalledVcRedist` output
+* `Get-VcList` will attempt to match the VcRedist version in the manifest to the `Product Version` property on an existing downloaded file. If the manifest has a higher version, the file will be re-downloaded
+
 ## v1.3.6.56
 
 * Add `Get-InstalledVcRedist`, using private function `Get-InstalledSoftware`. Closing issue \#18 with feature request for this function. `Get-InstallSoftware` function by [Adam Bertram](https://4sysops.com/archives/find-the-product-guid-of-installed-software-with-powershell/)
@@ -47,4 +53,3 @@
 ## v1.3.0.0
 
 * Refactored into a PowerShell module to simplify coding and publishing to the PowerShell Gallery.
-

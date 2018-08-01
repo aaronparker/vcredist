@@ -57,7 +57,7 @@ Function Get-VcRedist {
         [array] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1, HelpMessage = "Specify a target path to download the Redistributables to.")]
-        [ValidateScript({ If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to download.")]
@@ -100,15 +100,28 @@ Function Get-VcRedist {
                     New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
                 }
             }
-
-            # If the target Redistributable is already downloaded, skip it.
-            # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
+            
             $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
-            Write-Verbose "Target is $($target)"
+            Write-Verbose "Testing target: $($target)"
             If ( Test-Path -Path $target -PathType Leaf ) {
-                Write-Verbose "$($target) exists. Skipping."
+                $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
+                # If the target Redistributable is already downloaded, compare the version
+                If ( ($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion) ) {
+                    # Download the newer version
+                    Write-Verbose "$($Vc.Version) > $ProductVersion."
+                    $download = $True
+                }
+                Else {
+                    Write-Verbose "Manifest version: $($Vc.Version) matches file version: $ProductVersion."
+                    $download = $False
+                }
             }
             Else {
+                $download = $True
+            }
+
+            If ($download) {
+                # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
                 If ( Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue ) {
                     If ( $pscmdlet.ShouldProcess($Vc.Download, "BitsDownload") ) {
                         Start-BitsTransfer -Source $Vc.Download -Destination $target `
@@ -121,6 +134,9 @@ Function Get-VcRedist {
                         Invoke-WebRequest -Uri $Vc.Download -OutFile $target
                     }
                 }
+            }
+            Else {
+                Write-Verbose "$($target) exists."
             }
         }
     }

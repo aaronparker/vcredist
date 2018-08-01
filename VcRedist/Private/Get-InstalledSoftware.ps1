@@ -44,7 +44,8 @@ Function Get-InstalledSoftware {
             $selectProperties = @(
                 @{n = 'Name'; e = {$_.GetValue('DisplayName')}},
                 @{n = 'Version'; e = {$_.GetValue('DisplayVersion')}},
-                @{n = 'ProductCode'; e = {$_.PSChildName}}
+                @{n = 'ProductCode'; e = {$_.PSChildName}},
+                @{n = 'UninstallString'; e = {$_.GetValue('UninstallString')}}
             )
             Get-ChildItem @gciParams | Where-Object $WhereBlock | Select-Object -Property $selectProperties
         }

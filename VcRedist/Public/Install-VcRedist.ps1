@@ -65,7 +65,8 @@ Function Install-VcRedist {
         [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
         If ( !($Elevated) ) { Throw "Installing the Visual C++ Redistributables requires elevation."}
         
-        $UninstallPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+        # $UninstallPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+        $Installed = Get-InstalledVcRedist
     }
     Process {
         # Filter release and architecture if specified
@@ -80,7 +81,10 @@ Function Install-VcRedist {
 
         # Loop through each Redistributable and install
         ForEach ( $Vc in $VcList ) {
-            If (Get-ChildItem -Path $UninstallPath | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
+            # If (Get-ChildItem -Path $UninstallPath | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
+            #    Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
+            #}
+            If ($Installed | Where-Object { $Vc.ProductCode -contains $_.ProductCode }) {
                 Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
             }
             Else {
