@@ -33,6 +33,9 @@ Function Import-VcMdtApp {
     .PARAMETER MdtPath
         The local or network path to the MDT deployment share.
 
+    .PARAMETER Silent
+        Add a completely silent command line install of the VcRedist with no UI. The default install is passive.
+
     .PARAMETER Bundle
         Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.
 
@@ -81,6 +84,9 @@ Function Import-VcMdtApp {
 
         [Parameter(Mandatory = $False, HelpMessage = "Add the imported Visual C++ Redistributables into an Application Bundle.")]
         [switch] $Bundle,
+
+        [Parameter(Mandatory = $False, HelpMessage = "Set a silent install command line.")]
+        [switch] $Silent
 
         [Parameter()] $mdtDrive = "DS001",
         [Parameter()] $Publisher = "Microsoft",
@@ -157,8 +163,15 @@ Function Import-VcMdtApp {
                 # This is basically hard coding the target platform
                 $supportedPlatform = If ($Vc.Architecture -eq "x86") {
                     @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer") 
-                } `
-                    Else { "All x64 Windows 7 and Newer" }
+                } Else { "All x64 Windows 7 and Newer" }
+
+                # If -Silent specified add the SilentInstall to the command line
+                If ($Silent) {
+                    $install = $Vc.SilentInstall
+                }
+                Else {
+                    $install = $Vc.Install
+                }
 
                 Import-MDTApplication -Path $target `
                     -Name "$Publisher $($Vc.Name) $($Vc.Architecture)" `
@@ -170,7 +183,7 @@ Function Import-VcMdtApp {
                     -Version $Vc.Release `
                     -Publisher $Publisher `
                     -Language $Language `
-                    -CommandLine ".\$filename $($Vc.Install)" `
+                    -CommandLine ".\$filename $install" `
                     -WorkingDirectory ".\Applications\$dir" `
                     -ApplicationSourcePath $source `
                     -DestinationFolder $dir `

@@ -28,6 +28,9 @@ Function Install-VcRedist {
     .PARAMETER Architecture
         Specifies the processor architecture to download or install.
 
+    .PARAMETER Silent
+        Perform a completely silent install of the VcRedist with no UI. The default install is passive.
+
     .EXAMPLE
         Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
 
@@ -39,6 +42,12 @@ Function Install-VcRedist {
 
         Description:
         Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
+
+    .EXAMPLE
+        Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent
+
+        Description:
+        Installs all supported Visual C++ Redistributables using a completely silent install.
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
@@ -58,7 +67,10 @@ Function Install-VcRedist {
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
         [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture = @("x86", "x64")
+        [string[]] $Architecture = @("x86", "x64"),
+
+        [Parameter(Mandatory = $False, HelpMessage = "Perform a silent install of the VcRedist.")]
+        [switch] $Silent
     )
     Begin {
         # Get script elevation status
@@ -81,21 +93,22 @@ Function Install-VcRedist {
 
         # Loop through each Redistributable and install
         ForEach ( $Vc in $VcList ) {
-            # If (Get-ChildItem -Path $UninstallPath | Where-Object { $_.Name -like "*$($Vc.ProductCode)" }) {
-            #    Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
-            #}
             If ($Installed | Where-Object { $Vc.ProductCode -contains $_.ProductCode }) {
                 Write-Verbose "Skip:    [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
             }
             Else {
                 Write-Verbose "Install: [$($Vc.Release)][$($Vc.Architecture)][$($Vc.Name)]"
-                # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
                 $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
                 $filename = Join-Path $Folder $(Split-Path -Path $Vc.Download -Leaf)
                 $filename = Split-Path -Path $Vc.Download -Leaf
                 If (Test-Path -Path (Join-Path $folder $filename)) {
                     If ($pscmdlet.ShouldProcess("$(Join-Path $folder $filename) $($Vc.Install)'", "Install")) {
-                        Start-Process -FilePath (Join-Path $folder $filename) -ArgumentList $Vc.Install -Wait
+                        If ($Silent) {
+                            Start-Process -FilePath (Join-Path $folder $filename) -ArgumentList $Vc.SilentInstall -Wait
+                        }
+                        Else {
+                            Start-Process -FilePath (Join-Path $folder $filename) -ArgumentList $Vc.Install -Wait
+                        }
                     }
                 }
                 Else {

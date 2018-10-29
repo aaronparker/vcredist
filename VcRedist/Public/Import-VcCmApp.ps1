@@ -39,6 +39,9 @@ Function Import-VcCmApp {
     .PARAMETER Architecture
         Specifies the processor architecture to download or install.
 
+    .PARAMETER Silent
+        Add a completely silent command line install of the VcRedist with no UI. The default install is passive.
+
     .EXAMPLE
         $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
         Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
@@ -76,6 +79,9 @@ Function Import-VcCmApp {
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
         [ValidateSet('x86', 'x64')]
         [string[]] $Architecture = @("x86", "x64"),
+
+        [Parameter(Mandatory = $False, HelpMessage = "Set a silent install command line.")]
+        [switch] $Silent
 
         [Parameter()] $Publisher = "Microsoft",
         [Parameter()] $Language = "en-US",
@@ -149,8 +155,8 @@ Function Import-VcCmApp {
                 # Configure parameters and change to the SMS Site drive
                 Write-Verbose "Setting location to $($Path)"
                 Set-Location -Path $Path
-                $Target = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                $Filename = Split-Path -Path $Vc.Download -Leaf
+                $target = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                $filename = Split-Path -Path $Vc.Download -Leaf
                 
                 # Change to the SMS Application folder before importing the applications
                 Write-Verbose "Setting location to $($DestFolder)"
@@ -170,10 +176,18 @@ Function Import-VcCmApp {
                         $App | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
                     }
 
+                    # If -Silent specified add the SilentInstall to the command line
+                    If ($Silent) {
+                        $install = $Vc.SilentInstall
+                    }
+                    Else {
+                        $install = $Vc.Install
+                    }
+
                     # Add a deployment type to the application
                     If ( $pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Adding deployment type") ) {
                         $App | Add-CMScriptDeploymentType `
-                            -InstallCommand "$Filename $($Vc.Install)" `
+                            -InstallCommand "$Filename $install" `
                             -ContentLocation $Target `
                             -ProductCode $Vc.ProductCode `
                             -SourceUpdateProductCode $Vc.ProductCode `
