@@ -81,7 +81,7 @@ Function Import-VcCmApp {
         [string[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Set a silent install command line.")]
-        [switch] $Silent
+        [switch] $Silent,
 
         [Parameter()] $Publisher = "Microsoft",
         [Parameter()] $Language = "en-US",

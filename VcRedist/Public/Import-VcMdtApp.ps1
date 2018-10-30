@@ -86,7 +86,7 @@ Function Import-VcMdtApp {
         [switch] $Bundle,
 
         [Parameter(Mandatory = $False, HelpMessage = "Set a silent install command line.")]
-        [switch] $Silent
+        [switch] $Silent,
 
         [Parameter()] $mdtDrive = "DS001",
         [Parameter()] $Publisher = "Microsoft",
