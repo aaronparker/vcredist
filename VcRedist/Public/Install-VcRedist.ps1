@@ -93,23 +93,29 @@ Function Install-VcRedist {
                 Write-Verbose "Skip:    [$($vc.Architecture)]$($vc.Name)"
             }
             Else {
-                # Construct variables
-                $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
-                $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
-
-                Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
-                If (Test-Path -Path $filename) {
-                    If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
-                        If ($Silent) {
-                            Start-Process -FilePath $filename -ArgumentList $vc.SilentInstall -Wait
-                        }
-                        Else {
-                            Start-Process -FilePath $filename -ArgumentList $vc.Install -Wait
-                        }
-                    }
+                # Avoid installing 64-bit Redistributable on x86 Windows 
+                If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
+                    Write-Verbose "Skip:    [$($vc.Architecture)]$($vc.Name)"
                 }
                 Else {
-                    Write-Error "Cannot find: $filename"
+                    # Construct variables
+                    $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
+                    $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
+
+                    Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
+                    If (Test-Path -Path $filename) {
+                        If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
+                            If ($Silent) {
+                                Start-Process -FilePath $filename -ArgumentList $vc.SilentInstall -Wait
+                            }
+                            Else {
+                                Start-Process -FilePath $filename -ArgumentList $vc.Install -Wait
+                            }
+                        }
+                    }
+                    Else {
+                        Write-Error "Cannot find: $filename"
+                    }
                 }
             }
         }

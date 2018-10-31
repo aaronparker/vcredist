@@ -147,7 +147,7 @@ Function Import-VcMdtApp {
         [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
     }
     Process {
-        ForEach ( $Vc in $VcList ) {
+        ForEach ( $Vc in $filteredVcList ) {
             # Import as an application into MDT
             If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $MdtPath", "Import MDT app")) {
 

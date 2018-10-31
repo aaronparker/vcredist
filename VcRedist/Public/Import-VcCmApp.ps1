@@ -142,7 +142,7 @@ Function Import-VcCmApp {
         [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
     }
     Process {
-        ForEach ( $Vc in $VcList ) {
+        ForEach ( $Vc in $filteredVcList ) {
             Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Import as an application into ConfigMgr
