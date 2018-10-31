@@ -6,8 +6,9 @@ By default `Get-VcList` will only export the list of supported Redistributables 
 
 ```markup
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads -->
 <Redistributables>
-    <Platform Architecture="x64" Release="2005" Install="/Q">
+    <Platform Architecture="x64" Release="2005" Install="/Q" SilentInstall="/Q">
         <Redistributable>
             <Name>Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>MFC</ShortName>
@@ -41,7 +42,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/9/1/4/914851c6-9141-443b-bdb4-8bad3a57bea9/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2005" Install="/Q">
+    <Platform Architecture="x86" Release="2005" Install="/Q" SilentInstall="/Q">
         <Redistributable>
             <Name>Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>MFC</ShortName>
@@ -75,7 +76,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/d/3/4/d342efa6-3266-4157-a2ec-5174867be706/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x64" Release="2008" Install="/Q">
+    <Platform Architecture="x64" Release="2008" Install="/Q" SilentInstall="/Q">
         <Redistributable>
             <Name>Visual C++ 2008 Redistributable Package</Name>
             <ShortName>RTM</ShortName>
@@ -125,7 +126,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2008" Install="/Q">
+    <Platform Architecture="x86" Release="2008" Install="/Q" SilentInstall="/Q">
         <Redistributable>
             <Name>Visual C++ 2008 Redistributable Package</Name>
             <ShortName>RTM</ShortName>
@@ -175,7 +176,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x64" Release="2010" Install="/passive /norestart">
+    <Platform Architecture="x64" Release="2010" Install="/passive /norestart" SilentInstall="/quiet /norestart">
         <Redistributable>
             <Name>Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>SP1</ShortName>
@@ -185,7 +186,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2010" Install="/passive /norestart">
+    <Platform Architecture="x86" Release="2010" Install="/passive /norestart" SilentInstall="/quiet /norestart">
         <Redistributable>
             <Name>Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update</Name>
             <ShortName>SP1</ShortName>
@@ -195,7 +196,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x64" Release="2012" Install="/install /passive /norestart">
+    <Platform Architecture="x64" Release="2012" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
@@ -205,7 +206,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2012" Install="/install /passive /norestart">
+    <Platform Architecture="x86" Release="2012" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ Redistributable for Visual Studio 2012 Update 4</Name>
             <ShortName>Update4</ShortName>
@@ -215,7 +216,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x86.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x64" Release="2013" Install="/install /passive /norestart">
+    <Platform Architecture="x64" Release="2013" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ Redistributable Packages for Visual Studio 2013</Name>
             <ShortName>RTM</ShortName>
@@ -233,25 +234,27 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2013" Install="/install /passive /norestart">
+    <Platform Architecture="x64" Release="2013" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
-            <Name>Visual C++ Redistributable Packages for Visual Studio 2013</Name>
-            <ShortName>RTM</ShortName>
-            <URL>https://www.microsoft.com/en-us/download/details.aspx?id=40784</URL>
-            <ProductCode>{f65db027-aff3-4070-886a-0d87064aabb1}</ProductCode>
-            <Version>12.0.30501.0</Version>
-            <Download>https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe</Download>
-        </Redistributable>
-        <Redistributable>
-            <Name>Update for Visual C++ 2013 and Visual C++ Redistributable Package</Name>
-            <ShortName>Update</ShortName>
-            <URL>https://support.microsoft.com/en-us/help/3179560/update-for-visual-c-2013-and-visual-c-redistributable-package</URL>
-            <ProductCode>{61087a79-ac85-455c-934d-1fa22cc64f36}</ProductCode>
-            <Version>12.0.40660.0</Version>
-            <Download>https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x86.exe</Download>
+            <Name>Visual C++ 2013 Update 5 Redistributable Package</Name>
+            <ShortName>Update5</ShortName>
+            <URL>https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package</URL>
+            <ProductCode>{042d26ef-3dbe-4c25-95d3-4c1b11b235a7}</ProductCode>
+            <Version>12.0.40664.0</Version>
+            <Download>https://download.visualstudio.microsoft.com/download/pr/10912041/cee5d6bca2ddbcd039da727bf4acb48a/vcredist_x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x64" Release="2015" Install="/install /passive /norestart">
+    <Platform Architecture="x86" Release="2013" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
+        <Redistributable>
+            <Name>Visual C++ 2013 Update 5 Redistributable Package</Name>
+            <ShortName>Update5</ShortName>
+            <URL>https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package</URL>
+            <ProductCode>{9dff3540-fc85-4ed5-ac84-9e3c7fd8bece}</ProductCode>
+            <Version>12.0.40664.0</Version>
+            <Download>https://download.visualstudio.microsoft.com/download/pr/10912113/5da66ddebb0ad32ebd4b922fd82e8e25/vcredist_x86.exe</Download>
+        </Redistributable>
+    </Platform>
+    <Platform Architecture="x64" Release="2015" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ 2015 Redistributable Update 3</Name>
             <ShortName>Update3</ShortName>
@@ -261,7 +264,7 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2015" Install="/install /passive /norestart">
+    <Platform Architecture="x86" Release="2015" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ 2015 Redistributable Update 3</Name>
             <ShortName>Update3</ShortName>
@@ -271,26 +274,25 @@ By default `Get-VcList` will only export the list of supported Redistributables 
             <Download>https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x64" Release="2017" Install="/install /passive /norestart">
+    <Platform Architecture="x64" Release="2017" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{80586c77-db42-44bb-bfc8-7aebbb220c00}}</ProductCode>
-            <Version>14.14.26429.4</Version>
-            <Download>https://aka.ms/vs/15/release/vc_redist.x86.exe</Download>
+            <ProductCode>{95ac1cfa-f4fb-4d1b-8912-7f9d5fbb140d}</ProductCode>
+            <Version>14.15.26706.0</Version>
+            <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
-    <Platform Architecture="x86" Release="2017" Install="/install /passive /norestart">
+    <Platform Architecture="x86" Release="2017" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{2019b6a0-8533-4a04-ac0e-b2c10bdb9841}</ProductCode>
-            <Version>14.14.26429.4</Version>
-            <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
+            <ProductCode>{7e9fae12-5bbf-47fb-b944-09c49e75c061}</ProductCode>
+            <Version>14.15.26706.0</Version>
+            <Download>https://aka.ms/vs/15/release/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
 </Redistributables>
 ```
-
