@@ -52,12 +52,13 @@ Function Install-VcRedist {
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
+        [Parameter(Mandatory = $True, Position = 0, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
-        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
         [array] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1, `
+                HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
@@ -72,56 +73,50 @@ Function Install-VcRedist {
         [Parameter(Mandatory = $False, HelpMessage = "Perform a silent install of the VcRedist.")]
         [switch] $Silent
     )
-    Begin {
-        # Get script elevation status
-        [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
+    # Begin {
+    # Get script elevation status
+    [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
         
-        # Get currently installed VcRedist versions
-        $currentInstalled = Get-InstalledVcRedist
+    # Get currently installed VcRedist versions
+    $currentInstalled = Get-InstalledVcRedist
 
-        # Filter release and architecture
-        Write-Verbose "Filtering releases for platform."
-        [array] $releaseVcList = $VcList | Where-Object { $Release -contains $_.Release }
-        Write-Verbose "Filtering releases for architecture."
-        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
-    }
-    Process {
-        # Loop through each Redistributable and install
-        ForEach ($vc in $filteredVcList) {
-            If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
-                Write-Verbose "Skip:    [$($vc.Architecture)]$($vc.Name)"
+    # Filter release and architecture
+    Write-Verbose "Filtering releases for platform and architecture."
+    $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
+
+    ForEach ($vc in $filteredVcList) {
+        If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
+            Write-Verbose "Already installed: [$($vc.Architecture)]$($vc.Name)"
+        }
+        Else {
+            # Avoid installing 64-bit Redistributable on x86 Windows 
+            If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
+                Write-Verbose "Incompatible architecture: [$($vc.Architecture)]$($vc.Name)"
             }
             Else {
-                # Avoid installing 64-bit Redistributable on x86 Windows 
-                If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
-                    Write-Verbose "Skip:    [$($vc.Architecture)]$($vc.Name)"
-                }
-                Else {
-                    # Construct variables
-                    $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
-                    $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
+                # Construct variables
+                $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
+                $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
 
-                    Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
-                    If (Test-Path -Path $filename) {
-                        If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
-                            If ($Silent) {
-                                Start-Process -FilePath $filename -ArgumentList $vc.SilentInstall -Wait
-                            }
-                            Else {
-                                Start-Process -FilePath $filename -ArgumentList $vc.Install -Wait
-                            }
+                Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
+                If (Test-Path -Path $filename) {
+                    If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
+                        If ($Silent) {
+                            Start-Process -FilePath $filename -ArgumentList $vc.SilentInstall -Wait
+                        }
+                        Else {
+                            Start-Process -FilePath $filename -ArgumentList $vc.Install -Wait
                         }
                     }
-                    Else {
-                        Write-Error "Cannot find: $filename"
-                    }
+                }
+                Else {
+                    Write-Error "Cannot find: $filename"
                 }
             }
         }
     }
-    End {
-        # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        Write-Output (Get-InstalledVcRedist)
-    }
+
+    # Get the imported Visual C++ Redistributables applications to return on the pipeline
+    Write-Output (Get-InstalledVcRedist)
 }

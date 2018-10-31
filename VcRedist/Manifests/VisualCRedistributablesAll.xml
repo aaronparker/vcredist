@@ -229,7 +229,7 @@
     </Platform>
     <Platform Architecture="x64" Release="2013" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2013 Update 5 Redistributable Package</Name>
+            <Name>Visual C++ 2013 Update 5 Redistributable Package</Name>
             <ShortName>Update5</ShortName>
             <URL>https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package</URL>
             <ProductCode>{042d26ef-3dbe-4c25-95d3-4c1b11b235a7}</ProductCode>
@@ -239,7 +239,7 @@
     </Platform>
     <Platform Architecture="x86" Release="2013" Install="/install /passive /norestart" SilentInstall="/install /quiet /norestart">
         <Redistributable>
-            <Name>Microsoft Visual C++ 2013 Update 5 Redistributable Package</Name>
+            <Name>Visual C++ 2013 Update 5 Redistributable Package</Name>
             <ShortName>Update5</ShortName>
             <URL>https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package</URL>
             <ProductCode>{9dff3540-fc85-4ed5-ac84-9e3c7fd8bece}</ProductCode>

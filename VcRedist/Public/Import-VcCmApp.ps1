@@ -52,12 +52,13 @@ Function Import-VcCmApp {
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
+        [Parameter(Mandatory = $True, Position = 0, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
         [array] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1, HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1, `
+                HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
@@ -136,10 +137,8 @@ Function Import-VcCmApp {
         $Output = @()
 
         # Filter release and architecture
-        Write-Verbose "Filtering releases for platform."
-        [array] $releaseVcList = $VcList | Where-Object { $Release -contains $_.Release }
-        Write-Verbose "Filtering releases for architecture."
-        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
+        Write-Verbose "Filtering releases for platform and architecture."
+        $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
     }
     Process {
         ForEach ( $Vc in $filteredVcList ) {
