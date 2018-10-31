@@ -137,9 +137,9 @@ Function Import-VcCmApp {
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform."
-        $VcList = $VcList | Where-Object { $_.Release -eq $Release }
+        [array] $releaseVcList = $VcList | Where-Object { $Release -contains $_.Release }
         Write-Verbose "Filtering releases for architecture."
-        $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
+        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
     }
     Process {
         ForEach ( $Vc in $VcList ) {

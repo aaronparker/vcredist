@@ -91,7 +91,8 @@ Function Import-VcMdtApp {
         [Parameter()] $mdtDrive = "DS001",
         [Parameter()] $Publisher = "Microsoft",
         [Parameter()] $BundleName = "Visual C++ Redistributables",
-        [Parameter()] $Language = "en-US"
+        [Parameter()] $Language = "en-US",
+        [Parameter()] $Comments = "Application bundle for installing Visual C++ Redistributables."
     )
     Begin {
         # If we can find the MDT PowerShell module, import it. Requires MDT console to be installed
@@ -141,9 +142,9 @@ Function Import-VcMdtApp {
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform."
-        $VcList = $VcList | Where-Object { $_.Release -eq $Release }
+        [array] $releaseVcList = $VcList | Where-Object { $Release -contains $_.Release }
         Write-Verbose "Filtering releases for architecture."
-        $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
+        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }re }
     }
     Process {
         ForEach ( $Vc in $VcList ) {
@@ -185,7 +186,7 @@ Function Import-VcMdtApp {
                     -DestinationFolder $dir `
                     -UninstallKey $Vc.ProductCode `
                     -SupportedPlatform $supportedPlatform `
-                    -Dependency ""             
+                    -Dependency ""
             }
         }
     }
@@ -208,7 +209,7 @@ Function Import-VcMdtApp {
                     -Enable $True `
                     -Reboot $False `
                     -Hide $False `
-                    -Comments "Application bundle for installing Visual C++ Redistributables." `
+                    -Comments $Comments `
                     -ShortName $BundleName `
                     -Version "" `
                     -Publisher $Publisher `

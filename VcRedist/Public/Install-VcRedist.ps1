@@ -75,29 +75,29 @@ Function Install-VcRedist {
     Begin {
         # Get script elevation status
         [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        If ( !($Elevated) ) { Throw "Installing the Visual C++ Redistributables requires elevation."}
+        If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
         
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
-    }
-    Process {
+
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform."
-        $VcList = $VcList | Where-Object { $_.Release -eq $Release }
+        [array] $releaseVcList = $VcList | Where-Object { $Release -contains $_.Release }
         Write-Verbose "Filtering releases for architecture."
-        $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
-
+        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
+    }
+    Process {
         # Loop through each Redistributable and install
-        ForEach ( $vc in $VcList ) {
+        ForEach ($vc in $filteredVcList) {
             If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
-                Write-Verbose "Skip:    [$($vc.Release)][$($vc.Architecture)][$($vc.Name)]"
+                Write-Verbose "Skip:    [$($vc.Architecture)][$($vc.Name)]"
             }
             Else {
                 # Construct variables
                 $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
                 $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
 
-                Write-Verbose "Install: [$($vc.Release)][$($vc.Architecture)][$($vc.Name)]"
+                Write-Verbose "Install: [$($vc.Architecture)][$($vc.Name)]"
                 If (Test-Path -Path $filename) {
                     If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
                         If ($Silent) {
