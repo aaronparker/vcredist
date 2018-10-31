@@ -86,6 +86,7 @@ Function Get-VcList {
                 $item | Add-Member -Type NoteProperty -Name 'Architecture' -Value $platform.Architecture
                 $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
                 $item | Add-Member -Type NoteProperty -Name 'Install' -Value $platform.Install
+                $item | Add-Member -Type NoteProperty -Name 'SilentInstall' -Value $platform.SilentInstall
                 $Output += $item
             }
         }

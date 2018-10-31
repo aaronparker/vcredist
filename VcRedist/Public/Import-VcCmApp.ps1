@@ -74,7 +74,7 @@ Function Import-VcCmApp {
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
         [ValidateSet('x86', 'x64')]
@@ -134,18 +134,14 @@ Function Import-VcCmApp {
 
         # Output variable
         $Output = @()
+
+        # Filter release and architecture
+        Write-Verbose "Filtering releases for platform."
+        $VcList = $VcList | Where-Object { $_.Release -eq $Release }
+        Write-Verbose "Filtering releases for architecture."
+        $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
     }
     Process {
-        # Filter release and architecture if specified
-        If ( $PSBoundParameters.ContainsKey('Release') ) {
-            Write-Verbose "Filtering releases for platform."
-            $VcList = $VcList | Where-Object { $_.Release -eq $Release }
-        }
-        If ( $PSBoundParameters.ContainsKey('Architecture') ) {
-            Write-Verbose "Filtering releases for architecture."
-            $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
-        }
-
         ForEach ( $Vc in $VcList ) {
             Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 

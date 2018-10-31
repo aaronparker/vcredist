@@ -63,7 +63,7 @@ Function Install-VcRedist {
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
         [ValidateSet('x86', 'x64')]
@@ -81,23 +81,15 @@ Function Install-VcRedist {
         $currentInstalled = Get-InstalledVcRedist
     }
     Process {
-        # Filter release and architecture if specified
-        If ( $PSBoundParameters.ContainsKey('Release') ) {
-            Write-Verbose "Filtering releases for platform."
-            $VcList = $VcList | Where-Object { $_.Release -eq $Release }
-        }
-        If ( $PSBoundParameters.ContainsKey('Architecture') ) {
-            Write-Verbose "Filtering releases for architecture."
-            $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
-        }
+        # Filter release and architecture
+        Write-Verbose "Filtering releases for platform."
+        $VcList = $VcList | Where-Object { $_.Release -eq $Release }
+        Write-Verbose "Filtering releases for architecture."
+        $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
 
         # Loop through each Redistributable and install
         ForEach ( $vc in $VcList ) {
-
-            $installedProductCode = $currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }
-            $installedVersion =  $currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }
-
-            If ($installedProductCode) {
+            If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
                 Write-Verbose "Skip:    [$($vc.Release)][$($vc.Architecture)][$($vc.Name)]"
             }
             Else {

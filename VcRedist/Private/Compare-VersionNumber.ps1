@@ -45,6 +45,7 @@ Function Compare-VersionNumber {
                 $result = $high.Minor -gt $low.Minor
             }
             Else {
+                # If major version numbers don't match return false
                 $result = $False
             }
         }
