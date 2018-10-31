@@ -1,5 +1,15 @@
 # Change log
 
+## v1.4.0.69
+
+* Update manifests for latest `2017` release, version `14.15.26706.0`
+* Update manifests with silent install command line arguments
+* Added `-Silent` switch to `Install-VcRedist`, `Import-VcMdtApp` & `Import-VcCmApp` to support optional silent install command line arguments
+* Added private function `Get-Bitness` to support determining processor architecture of current OS
+* Update `Install-VcRedist` to avoid installing 64-bit Redistributables on 32-bit Windows
+* Removed pipeline support for `-VcRedist` parameter in `Install-VcRedist`, `Import-VcMdtApp` & `Import-VcCmApp`. Passing output from `Get-VcList` to these commands is not working correctly. Pipeline support may be added back in a future release
+* Removed `2015` Redistributables from default value for `-Release` parameter for `Install-VcRedist`, `Import-VcMdtApp` & `Import-VcCmApp` functions to avoid installing `2015` then `2017` Redistributables that are the same major release version
+
 ## v1.3.7.60
 
 * Update manifests with `2013`, version `12.0.40664`

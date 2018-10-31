@@ -34,4 +34,3 @@ Install      : /Q
 To return the complete list of available Redistributables, run `Get-VcList -Export All`.
 
 The internal manifests can be exported to an XML file with [Export-VcXml](../function-syntax/export-vcxml.md)
-

@@ -18,6 +18,7 @@ The basic structure of the XML file should be as follows \(an XSD schema is incl
                 <ProductCode></ProductCode>
                 <Download></Download>
                 <Install></Install>
+                <SilentInstall></SilentInstall>
             </Redistributable>
         </Platform>
         <Platform Architecture="x86" Release="" Install="">
@@ -28,6 +29,7 @@ The basic structure of the XML file should be as follows \(an XSD schema is incl
                 <ProductCode></ProductCode>
                 <Download></Download>
                 <Install></Install>
+                <SilentInstall></SilentInstall>
             </Redistributable>
         </Platform>
     </Redistributables>
@@ -67,7 +69,7 @@ To install the Visual C++ Redistributables on the local machine, use `Install-Vc
 
 ### Import-VcMdtApp
 
-To install the Visual C++ Redistributables as a part of a reference image or for use with a deployment solution based on the Microsoft Deployment Toolkit, `Import-VcMdtApp` will import each of the Visual C++ Redistributables as a seperate application that includes silent command lines, platform support and the UninstallKey for detecting whether the Visual C++ Redistributable is already installed. Visual C++ Redistributables can be filtered for release and processor architecture.
+To install the Visual C++ Redistributables as a part of a reference image or for use with a deployment solution based on the Microsoft Deployment Toolkit, `Import-VcMdtApp` will import each of the Visual C++ Redistributables as a separate application that includes silent command lines, platform support and the UninstallKey for detecting whether the Visual C++ Redistributable is already installed. Visual C++ Redistributables can be filtered for release and processor architecture.
 
 Each Redistributables will be imported into the deployment share with application properties for a successful deployment.
 
@@ -119,7 +121,7 @@ Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist" -Release 2010, 2012, 2013, 20
 To install the Visual C++ Redistributables that have been downloaded to C:\Temp\VcRedist, run:
 
 ```powershell
-Get-VcList | Install-VcRedist -Path "C:\Temp\VcRedist"
+Install-VcRedist -Path "C:\Temp\VcRedist" -VcList (Get-VcList)
 ```
 
 The module can import the Visual C++ Redistributables into an MDT deployment share. First, download the Visual C++ Redistributables installers locally, then import them into the share with `Import-VcMdtApp`:
