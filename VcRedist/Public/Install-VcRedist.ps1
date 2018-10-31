@@ -90,14 +90,14 @@ Function Install-VcRedist {
         # Loop through each Redistributable and install
         ForEach ($vc in $filteredVcList) {
             If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
-                Write-Verbose "Skip:    [$($vc.Architecture)][$($vc.Name)]"
+                Write-Verbose "Skip:    [$($vc.Architecture)]$($vc.Name)"
             }
             Else {
                 # Construct variables
                 $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
                 $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
 
-                Write-Verbose "Install: [$($vc.Architecture)][$($vc.Name)]"
+                Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
                 If (Test-Path -Path $filename) {
                     If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
                         If ($Silent) {

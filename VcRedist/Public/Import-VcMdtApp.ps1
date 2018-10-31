@@ -144,7 +144,7 @@ Function Import-VcMdtApp {
         Write-Verbose "Filtering releases for platform."
         [array] $releaseVcList = $VcList | Where-Object { $Release -contains $_.Release }
         Write-Verbose "Filtering releases for architecture."
-        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }re }
+        [array] $filteredVcList = $releaseVcList | Where-Object { $Architecture -contains $_.Architecture }
     }
     Process {
         ForEach ( $Vc in $VcList ) {
