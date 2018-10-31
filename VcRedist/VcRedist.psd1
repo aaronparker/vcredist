@@ -99,7 +99,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Redistributables','VisualC','VisualStudio'
+        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/aaronparker/Install-VisualCRedistributables/blob/master/LICENSE'
