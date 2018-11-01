@@ -6,7 +6,7 @@ Unless you have a specific requirement, it is highly recommend that you install 
 
 Running `Get-VcList` with no parameters will return an array of the supported Redistributables by reading the internal manifest. Output can then be manipulated to filter the results. Here's a sample of what's returned.
 
-```text
+```powershell
 PS C:\> Get-VcList
 
 
@@ -33,4 +33,4 @@ Install      : /Q
 
 To return the complete list of available Redistributables, run `Get-VcList -Export All`.
 
-The internal manifests can be exported to an XML file with [Export-VcXml](../function-syntax/export-vcxml.md)
+The internal manifests can be exported to an XML file with [Export-VcXml](./export-manifests.md)

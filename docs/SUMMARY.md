@@ -10,6 +10,7 @@
   * [Importing into MDT](usage/importing-into-mdt.md)
   * [Importing into ConfigMgr](usage/importing-into-configmgr.md)
   * [Getting the Installed Redistributables](usage/getting-the-installed-redistributables.md)
+  * [Exporting the Manifests](usage/export-manifests.md)
 * [Redistributables](redistributables/README.md)
   * [Supported Redistributables](redistributables/supported-redistributables.md)
   * [All Redistributables](redistributables/all-redistributables.md)
