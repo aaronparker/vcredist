@@ -30,7 +30,7 @@ CompanyName = 'stealthpuppy'
 Copyright = '(c) 2018 stealthpuppy. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'A module for managing the Microsoft Visual C++ Redistributables for desktop deployment. Downloads the Supported (and unsupported) Redistributables locally, for installing to the local PC or importing into the Microsoft Deployment Toolkit or System Center Configuration Manger.'
+Description = 'A module for managing the Microsoft Visual C++ Redistributables for desktop deployment. Downloads the Supported (and unsupported) Redistributables locally, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or System Center Configuration Manager. Supports passive and silent installs.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
