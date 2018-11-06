@@ -139,7 +139,7 @@ Function Import-VcMdtApp {
                         Name        = $AppFolder
                         Comments    = "$($Publisher) $($BundleName)"
                         ItemType    = "Folder"
-                        ErrorAction = SilentlyContinue
+                        ErrorAction = "SilentlyContinue"
                     }
 
                     # Create -AppFolder below Applications
@@ -157,7 +157,7 @@ Function Import-VcMdtApp {
         $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
     }
     Process {
-        ForEach ( $Vc in $filteredVcList ) {
+        ForEach ($Vc in $filteredVcList) {
             # Import as an application into MDT
             If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $MdtPath", "Import MDT app")) {
 
@@ -201,16 +201,27 @@ Function Import-VcMdtApp {
     }
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        Write-Verbose "Getting Visual C++ Redistributables from the deployment share"
-        $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" } | `
-            ForEach-Object { Get-ItemProperty -Path "$($target)\$($_.Name)" }
+        try {
+            $imported = Test-Path $target
+        }
+        catch {
+            Throw "Unable to find path $target."
+        }
+        If ($imported) {
+            Write-Verbose "Getting Visual C++ Redistributables from the deployment share"
+            $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" } | `
+                ForEach-Object { Get-ItemProperty -Path "$($target)\$($_.Name)" }
+        }
+        Else {
+            Write-Error "Unable to find MDT drive $mdtDrive."
+        }
 
         # Create the application bundle
         If ($Bundle) {
             If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Creating bundle")) {
 
-                # Grab the Visual C++ Redistributable application guids
-                $importedVcRedists = $importedVcRedists | Sort-Object -Property Name
+                # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
+                $importedVcRedists = $importedVcRedists | Sort-Object -Property Version
                 $dependencies = @(); ForEach ( $App in $importedVcRedists ) { $dependencies += $App.guid }
 
                 # Splat the Import-MDTApplication parameters
