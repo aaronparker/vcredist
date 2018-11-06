@@ -1,5 +1,16 @@
 # Change log
 
+## v1.4.1.79
+
+* Add private function `Invoke-Process` (by Adam Bertram)
+* Update `Install-VcRedist` to use `Invoke-Process` for better `Start-Process` handling
+* Fix Resolve-Path / TrimEnd in private function `Get-ValidPath`
+* Fix relative path issue in `Import-VcCmApp` - closes issue \#24
+* Bundle added to MDT now adds Redistributables as dependencies in order from oldest to newest
+* Splatting arguments in `Install-VcRedist`, `Import-VcMdtApp`, `Import-VcCmApp`
+* Code formatting updates
+* Documentation updates
+
 ## v1.4.0.69
 
 * Update manifests for latest `2017` release, version `14.15.26706.0`
