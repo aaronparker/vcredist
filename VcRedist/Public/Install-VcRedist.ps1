@@ -73,50 +73,57 @@ Function Install-VcRedist {
         [Parameter(Mandatory = $False, HelpMessage = "Perform a silent install of the VcRedist.")]
         [switch] $Silent
     )
-    # Begin {
-    # Get script elevation status
-    [bool]$Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-    If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
-        
-    # Get currently installed VcRedist versions
-    $currentInstalled = Get-InstalledVcRedist
+    Begin {
+        # Get script elevation status
+        [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+        If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
+            
+        # Get currently installed VcRedist versions
+        $currentInstalled = Get-InstalledVcRedist
 
-    # Filter release and architecture
-    Write-Verbose "Filtering releases for platform and architecture."
-    $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
-
-    ForEach ($vc in $filteredVcList) {
-        If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
-            Write-Verbose "Already installed: [$($vc.Architecture)]$($vc.Name)"
-        }
-        Else {
-            # Avoid installing 64-bit Redistributable on x86 Windows 
-            If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
-                Write-Verbose "Incompatible architecture: [$($vc.Architecture)]$($vc.Name)"
+        # Filter release and architecture
+        Write-Verbose "Filtering releases for platform and architecture."
+        $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
+    }
+    Process {
+        ForEach ($vc in $filteredVcList) {
+            If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
+                Write-Verbose "Already installed: [$($vc.Architecture)]$($vc.Name)"
             }
             Else {
-                # Construct variables
-                $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
-                $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
-
-                Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
-                If (Test-Path -Path $filename) {
-                    If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
-                        If ($Silent) {
-                            Start-Process -FilePath $filename -ArgumentList $vc.SilentInstall -Wait
-                        }
-                        Else {
-                            Start-Process -FilePath $filename -ArgumentList $vc.Install -Wait
-                        }
-                    }
+                # Avoid installing 64-bit Redistributable on x86 Windows 
+                If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
+                    Write-Verbose "Incompatible architecture: [$($vc.Architecture)]$($vc.Name)"
                 }
                 Else {
-                    Write-Error "Cannot find: $filename"
+                    # Construct full path to VcRedist installer
+                    $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
+                    $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
+
+                    Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
+                    If (Test-Path -Path $filename) {
+                        If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
+
+                            # Create parameters with -ArgumentList set based on -Silent argument used in this function
+                            $invokeProcessParams = @{
+                                FilePath     = $filename
+                                ArgumentList = If($Silent) { $vc.SilentInstall } Else { $vc.Install }
+                            }
+
+                            # Install the VcRedist using the Invoke-Process private function
+                            Invoke-Process @invokeProcessParams
+                        }
+                    }
+                    Else {
+                        Write-Error "Cannot find: $filename"
+                    }
                 }
             }
         }
     }
-
-    # Get the imported Visual C++ Redistributables applications to return on the pipeline
-    Write-Output (Get-InstalledVcRedist)
+    End {
+        # Get the imported Visual C++ Redistributables applications to return on the pipeline
+        Write-Output (Get-InstalledVcRedist)
+    }
 }
+ 
