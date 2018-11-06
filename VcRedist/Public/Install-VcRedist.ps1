@@ -1,53 +1,53 @@
 Function Install-VcRedist {
     <#
-    .SYNOPSIS
-        Installs the Visual C++ Redistributables.
+        .SYNOPSIS
+            Installs the Visual C++ Redistributables.
 
-    .DESCRIPTION
-        Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
+        .DESCRIPTION
+            Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
 
-    .OUTPUTS
-         System.Array
+        .OUTPUTS
+            System.Array
 
-    .NOTES
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .NOTES
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .LINK
-        https://github.com/aaronparker/Install-VisualCRedistributables
+        .LINK
+            https://github.com/aaronparker/Install-VisualCRedistributables
 
-    .PARAMETER VcList
-        An array containing details of the Visual C++ Redistributables from Get-VcList.
+        .PARAMETER VcList
+            An array containing details of the Visual C++ Redistributables from Get-VcList.
 
-    .PARAMETER Path
-        A folder containing the downloaded Visual C++ Redistributables.
+        .PARAMETER Path
+            A folder containing the downloaded Visual C++ Redistributables.
 
-    .PARAMETER Release
-        Specifies the release (or version) of the redistributables to download or install.
+        .PARAMETER Release
+            Specifies the release (or version) of the redistributables to download or install.
 
-    .PARAMETER Architecture
-        Specifies the processor architecture to download or install.
+        .PARAMETER Architecture
+            Specifies the processor architecture to download or install.
 
-    .PARAMETER Silent
-        Perform a completely silent install of the VcRedist with no UI. The default install is passive.
+        .PARAMETER Silent
+            Perform a completely silent install of the VcRedist with no UI. The default install is passive.
 
-    .EXAMPLE
-        Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
+        .EXAMPLE
+            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
 
-        Description:
-        Installs the Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
+            Description:
+            Installs the Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
 
-    .EXAMPLE
-        Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Release "2012","2013",2017" -Architecture x64
+        .EXAMPLE
+            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Release "2012","2013",2017" -Architecture x64
 
-        Description:
-        Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
+            Description:
+            Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
 
-    .EXAMPLE
-        Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent
+        .EXAMPLE
+            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent
 
-        Description:
-        Installs all supported Visual C++ Redistributables using a completely silent install.
+            Description:
+            Installs all supported Visual C++ Redistributables using a completely silent install.
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]

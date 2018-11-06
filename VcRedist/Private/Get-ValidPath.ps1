@@ -1,14 +1,14 @@
 Function Get-ValidPath {
     <#
-    .SYNOPSIS
-        Test a file system path and return correct path string.
+        .SYNOPSIS
+            Test a file system path and return correct path string.
 
-    .NOTES
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .NOTES
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .PARAMETER Path
-        A directory path that the function will validate and return.
+        .PARAMETER Path
+            A directory path that the function will validate and return.
     #>
     [CmdletBinding()]
     [OutputType([String])]
