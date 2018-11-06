@@ -98,7 +98,7 @@ Function Import-VcMdtApp {
     Begin {
         # If we can find the MDT PowerShell module, import it. Requires MDT console to be installed
         $mdtModule = "$((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4" -ErrorAction SilentlyContinue).Install_Dir)bin\MicrosoftDeploymentToolkit.psd1"
-        If ( Test-Path -Path $mdtModule ) {
+        If (Test-Path -Path $mdtModule) {
             try {            
                 Import-Module -Name $mdtModule -ErrorAction SilentlyContinue
             }
@@ -111,7 +111,7 @@ Function Import-VcMdtApp {
         }
 
         # Create the PSDrive for MDT
-        If ( $PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping") ) {
+        If ($PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping")) {
             If ( Test-Path -Path "$($mdtDrive):" ) {
                 Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
                 Remove-PSDrive -Name $mdtDrive -Force
@@ -126,7 +126,7 @@ Function Import-VcMdtApp {
 
         # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
         # Create $target as the target Application folder to import into
-        If ( $AppFolder.Length -ne 0 ) {
+        If ($AppFolder.Length -ne 0) {
             $target = "$($mdtDrive):\Applications\$($AppFolder)"
 
             If (!(Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
