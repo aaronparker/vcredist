@@ -1,51 +1,51 @@
 Function Get-VcRedist {
     <#
-    .SYNOPSIS
-        Downloads the Visual C++ Redistributables from an array returned by Get-VcXml.
+        .SYNOPSIS
+            Downloads the Visual C++ Redistributables from an array returned by Get-VcXml.
 
-    .DESCRIPTION
-        Downloads the Visual C++ Redistributables from an array returned by Get-VcXml into a folder structure that represents release and processor architecture.
-        If the redistributable exists in the specified path, it will not be re-downloaded.
+        .DESCRIPTION
+            Downloads the Visual C++ Redistributables from an array returned by Get-VcXml into a folder structure that represents release and processor architecture.
+            If the redistributable exists in the specified path, it will not be re-downloaded.
 
-    .OUTPUTS
-         System.Array
+        .OUTPUTS
+            System.Array
 
-    .NOTES
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .NOTES
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .LINK
-        https://github.com/aaronparker/Install-VisualCRedistributables
+        .LINK
+            https://github.com/aaronparker/Install-VisualCRedistributables
 
-    .PARAMETER VcList
-        Sepcifies the array that lists the Visual C++ Redistributables to download
+        .PARAMETER VcList
+            Sepcifies the array that lists the Visual C++ Redistributables to download
 
-    .PARAMETER Path
-        Specify a target folder to download the Redistributables to, otherwise use the current folder.
+        .PARAMETER Path
+            Specify a target folder to download the Redistributables to, otherwise use the current folder.
 
-    .PARAMETER Release
-        Specifies the release (or version) of the redistributables to download or install.
+        .PARAMETER Release
+            Specifies the release (or version) of the redistributables to download or install.
 
-    .PARAMETER Architecture
-        Specifies the processor architecture to download or install.
+        .PARAMETER Architecture
+            Specifies the processor architecture to download or install.
 
-    .EXAMPLE
-        Get-VcXml | Get-VcRedist -Path C:\Redist
+        .EXAMPLE
+            Get-VcXml | Get-VcRedist -Path C:\Redist
 
-        Description:
-        Downloads the supported Visual C++ Redistributables to C:\Redist.
-        
-    .EXAMPLE
-        Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"
+            Description:
+            Downloads the supported Visual C++ Redistributables to C:\Redist.
+            
+        .EXAMPLE
+            Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"
 
-        Description:
-        Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in $VcRedists
+            Description:
+            Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in $VcRedists
 
-    .EXAMPLE
-        Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Architecture x64
+        .EXAMPLE
+            Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Architecture x64
 
-        Description:
-        Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
+            Description:
+            Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
     #>
     [Alias("Save-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True)]
@@ -69,10 +69,9 @@ Function Get-VcRedist {
         [string[]] $Architecture = @("x86", "x64")
     )
     Begin {
-        $Output = @()
+        $output = @()
     }
     Process {
-
         # Filter release and architecture if specified
         If ( $PSBoundParameters.ContainsKey('Release') ) {
             Write-Verbose "Filtering releases for platform."
@@ -84,29 +83,30 @@ Function Get-VcRedist {
         }
 
         # Loop through each Redistributable and download to the target path
-        ForEach ( $Vc in $VcList ) {
+        ForEach ($Vc in $VcList) {
             Write-Verbose "Downloading: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
-            $Output += $Vc
+            $output += $Vc
 
             # Create the folder to store the downloaded file. Skip if it exists
             # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
 
-            If ( Test-Path -Path $folder ) {
+            If (Test-Path -Path $folder) {
                 Write-Verbose "Folder '$folder' exists. Skipping."
             }
             Else {
-                If ( $pscmdlet.ShouldProcess($folder, "Create") ) {
+                If ($pscmdlet.ShouldProcess($folder, "Create")) {
                     New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
                 }
             }
             
             $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
             Write-Verbose "Testing target: $($target)"
-            If ( Test-Path -Path $target -PathType Leaf ) {
+            If (Test-Path -Path $target -PathType Leaf) {
                 $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
+                
                 # If the target Redistributable is already downloaded, compare the version
-                If ( ($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion) ) {
+                If (($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion)) {
                     # Download the newer version
                     Write-Verbose "$($Vc.Version) > $ProductVersion."
                     $download = $True
@@ -142,6 +142,6 @@ Function Get-VcRedist {
     }
     End {
         # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        Write-Output $Output
+        Write-Output $output
     }
 }

@@ -1,35 +1,35 @@
 Function Export-VcXml {
     <#
-    .SYNOPSIS
-        Exports the Visual C++ Redistributables XML to an external file.
+        .SYNOPSIS
+            Exports the Visual C++ Redistributables XML to an external file.
 
-    .DESCRIPTION
-        Reads the Visual C++ Redistributables XML manifests included in the VcRedist module and exports the XML to an external file.
-        This enables editing of the XML manifest for custom scenarios.
+        .DESCRIPTION
+            Reads the Visual C++ Redistributables XML manifests included in the VcRedist module and exports the XML to an external file.
+            This enables editing of the XML manifest for custom scenarios.
 
-    .OUTPUTS
-        System.String
-    
-    .NOTES
-        Name: Export-VcXml
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .OUTPUTS
+            System.String
+        
+        .NOTES
+            Name: Export-VcXml
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .LINK
-        https://github.com/aaronparker/Install-VisualCRedistributables
+        .LINK
+            https://github.com/aaronparker/Install-VisualCRedistributables
 
-    .PARAMETER Path
-        Path to the XML file the content will be exported to.
+        .PARAMETER Path
+            Path to the XML file the content will be exported to.
 
-    .PARAMETER Export
-        Switch parameter that defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
-        Defaults to exporting the Supported Redistributables.
+        .PARAMETER Export
+            Switch parameter that defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
+            Defaults to exporting the Supported Redistributables.
 
-    .EXAMPLE
-        Export-VcXml -Path "C:\Temp\VisualCRedistributablesSupported.xml" -Export Supported
+        .EXAMPLE
+            Export-VcXml -Path "C:\Temp\VisualCRedistributablesSupported.xml" -Export Supported
 
-        Description:
-        Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.xml.
+            Description:
+            Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.xml.
     #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     [OutputType([String])]
@@ -44,7 +44,7 @@ Function Export-VcXml {
         [string] $Export = "Supported"
     )
     Begin {
-        Switch ( $Export ) {
+        Switch ($Export) {
             "All" { $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml" }
             "Supported" { $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.xml" }
         }

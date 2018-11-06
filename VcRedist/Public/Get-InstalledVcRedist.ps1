@@ -48,7 +48,7 @@ Function Get-InstalledVcRedist {
     }
 
     # Add Architecture property to each entry
-    $VcRedists | ForEach-Object { If ( $_.Name -contains "x64" ) `
+    $VcRedists | ForEach-Object { If ($_.Name -contains "x64") `
         { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
         
     # Write the installed VcRedists to the pipeline

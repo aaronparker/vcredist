@@ -1,41 +1,41 @@
 Function Get-VcList {
     <#
-    .SYNOPSIS
-        Returns an array of Visual C++ Redistributables.
+        .SYNOPSIS
+            Returns an array of Visual C++ Redistributables.
 
-    .DESCRIPTION
-        This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.
+        .DESCRIPTION
+            This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.
 
-        A complete listing the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcXml.
+            A complete listing the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcXml.
 
-    .OUTPUTS
-         System.Array
-    
-    .NOTES
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .OUTPUTS
+            System.Array
+        
+        .NOTES
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .LINK
-        https://github.com/aaronparker/Install-VisualCRedistributables
+        .LINK
+            https://github.com/aaronparker/Install-VisualCRedistributables
 
-    .PARAMETER Xml
-        The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
+        .PARAMETER Xml
+            The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
 
-    .PARAMETER Export
-        Defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
-        Defaults to exporting the Supported Redistributables.
+        .PARAMETER Export
+            Defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
+            Defaults to exporting the Supported Redistributables.
 
-    .EXAMPLE
-        Get-VcList
+        .EXAMPLE
+            Get-VcList
 
-        Description:
-        Return an array of the Visual C++ Redistributables from the embedded manifest
+            Description:
+            Return an array of the Visual C++ Redistributables from the embedded manifest
 
-    .EXAMPLE
-        Get-VcList -Xml ".\VisualCRedistributablesSupported.xml"
+        .EXAMPLE
+            Get-VcList -Xml ".\VisualCRedistributablesSupported.xml"
 
-        Description:
-        Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
+            Description:
+            Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
     #>
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(SupportsShouldProcess = $False)]
@@ -50,7 +50,7 @@ Function Get-VcList {
         [string] $Export = "Supported"
     )
     Begin {
-        Switch ( $Export ) {
+        Switch ($Export) {
             "All" {
                 $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml"
                 Write-Warning "This array includes unsupported Visual C++ Redistributables."
@@ -58,15 +58,15 @@ Function Get-VcList {
         }
 
         # The array that will be returned
-        $Output = @()
+        $output = @()
     }
     Process {
         # Read the specifed XML document
-        Try {
+        try {
             Write-Verbose "Reading XML document $Xml."
             [xml] $xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
         }
-        Catch {
+        catch {
             Throw "Unable to read $Xml. $xmlReadError"
         }
 
@@ -87,12 +87,12 @@ Function Get-VcList {
                 $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
                 $item | Add-Member -Type NoteProperty -Name 'Install' -Value $platform.Install
                 $item | Add-Member -Type NoteProperty -Name 'SilentInstall' -Value $platform.SilentInstall
-                $Output += $item
+                $output += $item
             }
         }
     }
     End {
         # Return array to the pipeline
-        Write-Output $Output
+        Write-Output $output
     }
 }

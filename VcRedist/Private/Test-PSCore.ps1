@@ -1,14 +1,14 @@
 Function Test-PSCore {
     <#
-    .SYNOPSIS
-        Returns True is running on PowerShell Core.
+        .SYNOPSIS
+            Returns True is running on PowerShell Core.
 
-    .NOTES
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .NOTES
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .PARAMETER Version
-        The version of PowerShell Core. Optionally specified where value needs to be something other than 6.0.0.
+        .PARAMETER Version
+            The version of PowerShell Core. Optionally specified where value needs to be something other than 6.0.0.
     #>
     [CmdletBinding()]
     [OutputType([Boolean])]
