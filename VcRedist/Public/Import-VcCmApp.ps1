@@ -1,53 +1,53 @@
 Function Import-VcCmApp {
     <#
-    .SYNOPSIS
-        Creates Visual C++ Redistributable applications in a ConfigMgr site.
+        .SYNOPSIS
+            Creates Visual C++ Redistributable applications in a ConfigMgr site.
 
-    .DESCRIPTION
-        Creates an application in a Configuration Manager site for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
+        .DESCRIPTION
+            Creates an application in a Configuration Manager site for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
 
-        Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into ConfigMgr.
+            Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into ConfigMgr.
 
-    .OUTPUTS
-         System.Array
-    
-    .NOTES
-        Author: Aaron Parker
-        Twitter: @stealthpuppy
+        .OUTPUTS
+            System.Array
+        
+        .NOTES
+            Author: Aaron Parker
+            Twitter: @stealthpuppy
 
-    .LINK
-        https://github.com/aaronparker/Install-VisualCRedistributables
+        .LINK
+            https://github.com/aaronparker/Install-VisualCRedistributables
 
-    .PARAMETER VcList
-        An array containing details of the Visual C++ Redistributables from Get-VcList.
+        .PARAMETER VcList
+            An array containing details of the Visual C++ Redistributables from Get-VcList.
 
-    .PARAMETER Path
-        A folder containing the downloaded Visual C++ Redistributables.
+        .PARAMETER Path
+            A folder containing the downloaded Visual C++ Redistributables.
 
-    .PARAMETER CMPath
-        Specify a UNC path where the Visual C++ Redistributables will be distributed from
+        .PARAMETER CMPath
+            Specify a UNC path where the Visual C++ Redistributables will be distributed from
 
-    .PARAMETER SMSSiteCode
-        Specify the Site Code for ConfigMgr app creation.
+        .PARAMETER SMSSiteCode
+            Specify the Site Code for ConfigMgr app creation.
 
-    .PARAMETER AppFolder
-        Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
+        .PARAMETER AppFolder
+            Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
 
-    .PARAMETER Release
-        Specifies the release (or version) of the redistributables to download or install.
+        .PARAMETER Release
+            Specifies the release (or version) of the redistributables to download or install.
 
-    .PARAMETER Architecture
-        Specifies the processor architecture to download or install.
+        .PARAMETER Architecture
+            Specifies the processor architecture to download or install.
 
-    .PARAMETER Silent
-        Add a completely silent command line install of the VcRedist with no UI. The default install is passive.
+        .PARAMETER Silent
+            Add a completely silent command line install of the VcRedist with no UI. The default install is passive.
 
-    .EXAMPLE
-        $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
-        Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
+        .EXAMPLE
+            $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
+            Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 
-        Description:
-        Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
+            Description:
+            Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
@@ -92,6 +92,7 @@ Function Import-VcCmApp {
         # CMPath will be the network location for copying the Visual C++ Redistributables to
         Set-Location -Path $Path
         If ( !([bool]([System.Uri]$CMPath).IsUnc) ) { Throw "$CMPath must be a valid UNC path." }
+        
         If ( Test-Path $CMPath ) {
             # Copy VcRedists to the network location. Use robocopy for robustness
             If ($PSCmdlet.ShouldProcess("$($Path) to $($CMPath)", "Copy")) {
@@ -104,11 +105,11 @@ Function Import-VcCmApp {
         
         # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
         If ( Test-Path $env:SMS_ADMIN_UI_PATH ) {
-            Try {            
+            try {            
                 # Import the ConfigurationManager.psd1 module
                 Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" | Out-Null
             }
-            Catch {
+            catch {
                 Throw "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
                 Break
             }
@@ -134,7 +135,7 @@ Function Import-VcCmApp {
         }
 
         # Output variable
-        $Output = @()
+        $output = @()
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform and architecture."
@@ -150,49 +151,60 @@ Function Import-VcCmApp {
                 # Configure parameters and change to the SMS Site drive
                 Write-Verbose "Setting location to $($Path)"
                 Set-Location -Path $Path
-                $target = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                $filename = Split-Path -Path $Vc.Download -Leaf
                 
                 # Change to the SMS Application folder before importing the applications
                 Write-Verbose "Setting location to $($DestFolder)"
                 Set-Location $DestFolder -ErrorVariable ConnectionError
 
                 # Create the ConfigMgr application with properties from the XML file
-                If ( (Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode ) {
+                If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
                     If ( $pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application") ) {
-                        $App = New-CMApplication -Name "$($Vc.Name) $($Vc.Architecture)" `
-                            -Description "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)" `
-                            -SoftwareVersion "$($Vc.Release) $($Vc.Architecture)" `
-                            -LinkText $Vc.URL `
-                            -Publisher $Publisher `
-                            -Keyword $Keyword `
-                            -ErrorVariable CMAppError
-                        $Output += $App
-                        $App | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
-                    }
-
-                    # If -Silent specified add the SilentInstall to the command line
-                    If ($Silent) {
-                        $install = $Vc.SilentInstall
-                    }
-                    Else {
-                        $install = $Vc.Install
+                        
+                        # Splat New-CMApplication parameters
+                        $cmAppParams = @{
+                            Name            = "$($Vc.Name) $($Vc.Architecture)"
+                            Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
+                            SoftwareVersion = "$($Vc.Release) $($Vc.Architecture)"
+                            LinkText        = $Vc.URL
+                            Publisher       = $Publisher
+                            Keyword         = $Keyword
+                            ErrorVariable   = CMAppError
+                        }
+                        
+                        try {
+                            $app = New-CMApplication @cmAppParams
+                        }
+                        catch {
+                            Throw "Failed to create application $($Vc.Name) $($Vc.Architecture)."
+                        }
+                        $output += $app
+                        $app | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
                     }
 
                     # Add a deployment type to the application
-                    If ( $pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Adding deployment type") ) {
-                        $App | Add-CMScriptDeploymentType `
-                            -InstallCommand "$Filename $install" `
-                            -ContentLocation $Target `
-                            -ProductCode $Vc.ProductCode `
-                            -SourceUpdateProductCode $Vc.ProductCode `
-                            -DeploymentTypeName ("SCRIPT_" + $Vc.Name) `
-                            -UserInteractionMode Hidden `
-                            -UninstallCommand "msiexec /x $($Vc.ProductCode) /qn-" `
-                            -LogonRequirementType WhetherOrNotUserLoggedOn `
-                            -InstallationBehaviorType InstallForSystem `
-                            -Comment "Generated by $($MyInvocation.MyCommand)" `
-                            -ErrorVariable CMDtError | Out-Null
+                    If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Adding deployment type")) {
+
+                        # Splat Add-CMScriptDeploymentType parameters
+                        $cmScriptParams = @{
+                            InstallCommand              = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
+                            ContentLocation             = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                            ProductCode                 = $Vc.ProductCode
+                            SourceUpdateProductCode     = $Vc.ProductCode
+                            DeploymentTypeName          = ("SCRIPT_" + $Vc.Name)
+                            UserInteractionMode         = Hidden
+                            UninstallCommand            = "msiexec /x $($Vc.ProductCode) /qn-"
+                            LogonRequirementType        = WhetherOrNotUserLoggedOn
+                            InstallationBehaviorType    = InstallForSystem
+                            Comment                     = "Generated by $($MyInvocation.MyCommand)"
+                            ErrorVariable               = CMDtError
+                        }
+
+                        try {
+                            $App | Add-CMScriptDeploymentType @cmScriptParams | Out-Null
+                        }
+                        catch {
+                            Throw "Failed to add script deployment type."
+                        }
                     }
                 }
                 Else {
@@ -205,6 +217,6 @@ Function Import-VcCmApp {
         Set-Location -Path $Path
 
         # Output array of applications created in ConfigMgr
-        Write-Output $Output
+        Write-Output $output
     }
 }
