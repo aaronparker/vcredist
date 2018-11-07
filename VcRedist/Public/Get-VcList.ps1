@@ -71,7 +71,7 @@ Function Get-VcList {
         }
 
         # Build the output object by compiling an array of each redistributable
-        $xmlContent = ( Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument ).Node
+        $xmlContent = (Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument).Node
         ForEach ($platform in $xmlContent) {
             Write-Verbose "Building array with $($platform.Release) on $($platform.Architecture)."
             ForEach ($redistributable in $platform.Redistributable) {
