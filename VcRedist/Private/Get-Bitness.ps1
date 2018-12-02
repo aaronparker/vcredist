@@ -1,3 +1,4 @@
+Set-StrictMode -Version Latest
 Function Get-Bitness {
     <#
         .SYNOPSIS
@@ -20,6 +21,7 @@ Function Get-Bitness {
     # Alternative methods for checking bitness
     # [System.Environment]::Is64BitOperatingSystem
     # (Get-CimInstance -ClassName win32_operatingsystem).OSArchitecture
+    [bool] $output
 
     If ($PSBoundParameters.ContainsKey('Architecture')) {
         $output = $False

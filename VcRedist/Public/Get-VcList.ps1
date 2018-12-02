@@ -1,3 +1,4 @@
+Set-StrictMode -Version Latest
 Function Get-VcList {
     <#
         .SYNOPSIS
@@ -76,7 +77,7 @@ Function Get-VcList {
             Write-Verbose "Building array with $($platform.Release) on $($platform.Architecture)."
             ForEach ($redistributable in $platform.Redistributable) {
                 Write-Verbose "Adding to array with $($redistributable.Name)"
-                $item = New-Object PSObject
+                $item = New-Object PSCustomObject
                 $item | Add-Member -Type NoteProperty -Name 'Name' -Value $redistributable.Name
                 $item | Add-Member -Type NoteProperty -Name 'ProductCode' -Value $redistributable.ProductCode
                 $item | Add-Member -Type NoteProperty -Name 'Version' -Value $redistributable.Version

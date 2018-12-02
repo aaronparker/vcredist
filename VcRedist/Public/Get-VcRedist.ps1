@@ -1,3 +1,4 @@
+Set-StrictMode -Version Latest
 Function Get-VcRedist {
     <#
         .SYNOPSIS
@@ -54,10 +55,9 @@ Function Get-VcRedist {
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
-                HelpMessage = ".")]
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [array] $VcList,
+        [PSCustomObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1, HelpMessage = "Specify a target path to download the Redistributables to.")]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]

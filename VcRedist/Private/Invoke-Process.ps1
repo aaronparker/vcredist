@@ -16,7 +16,7 @@
     This function ensures any errors are sent to the error stream, standard output is sent via the Output stream and any 
     time the process returns an exit code other than 0, treat it as an error. 
 #> 
-param()
+Set-StrictMode -Version Latest
 
 Function Invoke-Process {
     [CmdletBinding(SupportsShouldProcess)]
