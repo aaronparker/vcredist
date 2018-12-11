@@ -43,6 +43,7 @@ Function Get-FileMetadata {
         [string[]]$Include = @('*.exe', '*.dll', '*.ocx', '*.msi', '*.ps1', '*.vbs', '*.js', '*.cmd', '*.bat')
     )
     Begin {
+
         # Measure time taken to gather data
         $StopWatch = [system.diagnostics.stopwatch]::StartNew()
 

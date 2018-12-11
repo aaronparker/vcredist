@@ -48,7 +48,7 @@ Function Export-VcXml {
             "All" { $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml" }
             "Supported" { $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.xml" }
         }
-        If ( !(Test-Path -Path $Xml -PathType 'Leaf') ) {
+        If (!(Test-Path -Path $Xml -PathType 'Leaf')) {
             Throw "Cannot find file $Xml. Reinstall the VcRedist module."
         }
     }
@@ -61,8 +61,6 @@ Function Export-VcXml {
         Catch {
             Throw "Unable to read $Xml. $xmlReadError"
         }
-
-        # TODO: Put some code here to filter on Release and Architecture
     }
     End {
         # Write the document out to the file system and return the path to the file.

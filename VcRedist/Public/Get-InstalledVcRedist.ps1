@@ -37,7 +37,7 @@ Function Get-InstalledVcRedist {
         [Parameter(Mandatory = $False)]
         [switch] $ExportAll
     )
-
+    
     # Get all installed Visual C++ Redistributables installed components
     $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -like "Microsoft Visual C++*" }
 

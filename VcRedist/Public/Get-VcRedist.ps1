@@ -29,6 +29,9 @@ Function Get-VcRedist {
         .PARAMETER Architecture
             Specifies the processor architecture to download or install.
 
+        .PARAMETER ForceWebRequest
+            Forces the use of Invoke-WebRequest over Start-BitsTransfer
+
         .EXAMPLE
             Get-VcXml | Get-VcRedist -Path C:\Redist
 
@@ -51,10 +54,9 @@ Function Get-VcRedist {
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $False, `
-                HelpMessage = ".")]
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [array] $VcList,
+        [PSCustomObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1, HelpMessage = "Specify a target path to download the Redistributables to.")]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
@@ -66,9 +68,13 @@ Function Get-VcRedist {
 
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to download.")]
         [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture = @("x86", "x64")
+        [string[]] $Architecture = @("x86", "x64"),
+
+        [Parameter(Mandatory = $False)]
+        [switch] $ForceWebRequest
     )
     Begin {
+        # Output variable
         $output = @()
     }
     Process {
@@ -90,16 +96,21 @@ Function Get-VcRedist {
             # Create the folder to store the downloaded file. Skip if it exists
             # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
-
             If (Test-Path -Path $folder) {
                 Write-Verbose "Folder '$folder' exists. Skipping."
             }
             Else {
                 If ($pscmdlet.ShouldProcess($folder, "Create")) {
-                    New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
+                    try {
+                        New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
+                    }
+                    catch {
+                        Throw "Failed to create folder $folder."
+                    }
                 }
             }
             
+            # Test whether the VcRedist is already on disk
             $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
             Write-Verbose "Testing target: $($target)"
             If (Test-Path -Path $target -PathType Leaf) {
@@ -120,18 +131,34 @@ Function Get-VcRedist {
                 $download = $True
             }
 
+            # The VcRedist needs to be downloaded
             If ($download) {
-                # If running on Windows PowerShell use Start-BitsTransfer, otherwise use Invoke-WebRequest
-                If ( Get-Command Start-BitsTransfer -ErrorAction SilentlyContinue ) {
-                    If ( $pscmdlet.ShouldProcess($Vc.Download, "BitsDownload") ) {
-                        Start-BitsTransfer -Source $Vc.Download -Destination $target `
-                            -Priority High -ErrorAction Continue -ErrorVariable $ErrorBits `
-                            -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
+
+                # If -ForceWebRequest or running on PowerShell Core (or Start-BitsTransfer is unavailable) download with Invoke-WebRequest
+                If ($ForceWebRequest -or (!(Get-Command -Name Start-BitsTransfer -ErrorAction SilentlyContinue))) {
+                    If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
+
+                        # Use Invoke-WebRequest in instances where Start-BitsTransfer isn't supported or won't work
+                        try {
+                            Invoke-WebRequest -Uri $Vc.Download -OutFile $target
+                        }
+                        catch {
+                            Throw "Failed to download VcRedist from $Vc.Download."
+                        }
                     }
                 }
                 Else {
-                    If ( $pscmdlet.ShouldProcess($Vc.Download, "WebDownload") ) {
-                        Invoke-WebRequest -Uri $Vc.Download -OutFile $target
+                    If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
+                        
+                        # Use Start-BitsTransfer
+                        try {
+                            Start-BitsTransfer -Source $Vc.Download -Destination $target `
+                                -Priority High -ErrorAction Continue -ErrorVariable $ErrorBits `
+                                -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
+                        }
+                        catch {
+                            Throw "Failed to download VcRedist from $Vc.Download."
+                        }
                     }
                 }
             }

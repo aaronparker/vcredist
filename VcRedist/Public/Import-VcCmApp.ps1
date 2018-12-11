@@ -88,15 +88,16 @@ Function Import-VcCmApp {
         [Parameter()] $Language = "en-US",
         [Parameter()] $Keyword = "Visual C++ Redistributable"
     )
-    Begin {        
+    Begin {
+        
         # CMPath will be the network location for copying the Visual C++ Redistributables to
         $validPath = Get-ValidPath $Path
         Write-Verbose "Setting location to $validPath"
         Set-Location -Path $validPath
 
-        If ( !([bool]([System.Uri]$CMPath).IsUnc) ) { Throw "$CMPath must be a valid UNC path." }
+        If (!([bool]([System.Uri]$CMPath).IsUnc)) { Throw "$CMPath must be a valid UNC path." }
         
-        If ( Test-Path $CMPath ) {
+        If (Test-Path $CMPath) {
             # Copy VcRedists to the network location. Use robocopy for robustness
             If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
                 Robocopy.exe *.exe $validPath $CMPath /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL
@@ -107,7 +108,7 @@ Function Import-VcCmApp {
         }
         
         # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
-        If ( Test-Path $env:SMS_ADMIN_UI_PATH ) {
+        If (Test-Path $env:SMS_ADMIN_UI_PATH) {
             try {            
                 # Import the ConfigurationManager.psd1 module
                 Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" | Out-Null

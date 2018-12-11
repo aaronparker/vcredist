@@ -74,6 +74,7 @@ Function Install-VcRedist {
         [switch] $Silent
     )
     Begin {
+
         # Get script elevation status
         [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
         If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }

@@ -16,10 +16,11 @@ Function Get-Bitness {
         [ValidateSet('x86', 'x64')]
         [string[]] $Architecture
     )
-
+    
     # Alternative methods for checking bitness
     # [System.Environment]::Is64BitOperatingSystem
     # (Get-CimInstance -ClassName win32_operatingsystem).OSArchitecture
+    [bool] $output
 
     If ($PSBoundParameters.ContainsKey('Architecture')) {
         $output = $False
