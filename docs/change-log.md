@@ -1,5 +1,9 @@
 # Change log
 
+## v1.4.2.85
+
+* Fixed incorrect working directory when importing VcRedists into MDT in `Import-VcMdtApp`
+
 ## v1.4.1.79
 
 * Add private function `Invoke-Process` (by Adam Bertram)
