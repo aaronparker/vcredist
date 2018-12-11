@@ -1,4 +1,3 @@
-Set-StrictMode -Version Latest
 Function Import-VcCmApp {
     <#
         .SYNOPSIS
@@ -89,7 +88,8 @@ Function Import-VcCmApp {
         [Parameter()] $Language = "en-US",
         [Parameter()] $Keyword = "Visual C++ Redistributable"
     )
-    Begin {        
+    Begin {
+        
         # CMPath will be the network location for copying the Visual C++ Redistributables to
         $validPath = Get-ValidPath $Path
         Write-Verbose "Setting location to $validPath"

@@ -1,4 +1,3 @@
-Set-StrictMode -Version Latest
 Function Get-ValidPath {
     <#
         .SYNOPSIS
@@ -17,6 +16,7 @@ Function Get-ValidPath {
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
         [string] $Path
     )
+    
     $output = (Resolve-Path -Path $Path).Path.TrimEnd("\")
     Write-Output $output
 }

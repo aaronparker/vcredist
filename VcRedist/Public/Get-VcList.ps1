@@ -1,4 +1,3 @@
-Set-StrictMode -Version Latest
 Function Get-VcList {
     <#
         .SYNOPSIS

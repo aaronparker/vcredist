@@ -1,4 +1,3 @@
-Set-StrictMode -Version Latest
 Function Get-VcRedist {
     <#
         .SYNOPSIS
@@ -75,6 +74,7 @@ Function Get-VcRedist {
         [switch] $ForceWebRequest
     )
     Begin {
+        # Output variable
         $output = @()
     }
     Process {
