@@ -17,6 +17,10 @@ Function Get-ValidPath {
         [string] $Path
     )
     
-    $output = (Resolve-Path -Path $Path).Path.TrimEnd("\")
-    Write-Output $output
+    # Resolve the path, trim any trailing backslash and return the string
+    $resolvedPath = Resolve-Path -Path $Path -ErrorAction SilentlyContinue
+    If ($resolvedPath) {
+        $output = $resolvedPath.Path.TrimEnd("\")
+        Write-Output $output
+    }
 }
