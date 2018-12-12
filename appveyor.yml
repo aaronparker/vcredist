@@ -8,7 +8,7 @@
 build: off
 
 # Version number
-version: 1.3.1.{build}
+version: 1.4.2.{build}
 
 # There's no need to alter the build number for a Pull Request (PR) since they don't modify anything
 pull_requests:
@@ -34,12 +34,12 @@ skip_commits:
     - scripts/*
     - TestsResults.xml
     - Redists.xml
-  message: /updated readme.*|update readme.*s|update docs.*|update version.*|update appveyor.*/
+  message: /updated readme.*|update readme.*s|update docs.*|update version.*|update appveyor.*|Merge branch 'master' of.*/
 
 only_commits:
   files:
-    - VcRedist/
-    - tests/
+    - VcRedist/*
+    - tests/*
 
 # Install Pester to enable tests
 install:
