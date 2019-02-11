@@ -20,21 +20,21 @@ Function Get-Bitness {
     # Alternative methods for checking bitness
     # [System.Environment]::Is64BitOperatingSystem
     # (Get-CimInstance -ClassName win32_operatingsystem).OSArchitecture
-    [bool] $output
-
+    
     If ($PSBoundParameters.ContainsKey('Architecture')) {
-        $output = $False
+        [bool] $output = $False
         Switch ($Architecture) {
             "x64" { If ([System.IntPtr]::Size -eq 8) { $output = $True } }
             "x86" { If ([System.IntPtr]::Size -eq 4) { $output = $True } }
         }
+        Write-Output $output
     }
     Else {
+        [string] $output = "x64"
         Switch ([System.IntPtr]::Size) {
             8 { $output = "x64" }
             4 { $output = "x86" }
         }
+        Write-Output $output
     }
-        
-    Write-Output $output
 }
