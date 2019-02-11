@@ -38,8 +38,8 @@ skip_commits:
 
 only_commits:
   files:
-    - VcRedist/*
-    - tests/*
+    - VcRedist/
+    - tests/
 
 # Install Pester to enable tests
 install:
