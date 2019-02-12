@@ -272,8 +272,8 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{95ac1cfa-f4fb-4d1b-8912-7f9d5fbb140d}</ProductCode>
-            <Version>14.15.26706.0</Version>
+            <ProductCode>{5fb2083a-f3cc-4b78-93ff-bd9788b5de01}</ProductCode>
+            <Version>14.16.27024.1</Version>
             <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
@@ -282,8 +282,8 @@
             <Name>Visual C++ Redistributable for Visual Studio 2017</Name>
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
-            <ProductCode>{7e9fae12-5bbf-47fb-b944-09c49e75c061}</ProductCode>
-            <Version>14.15.26706.0</Version>
+            <ProductCode>{2ff11a2a-f7ac-4a6c-8cd4-c7bb974f3642}</ProductCode>
+            <Version>14.16.27024.1</Version>
             <Download>https://aka.ms/vs/15/release/vc_redist.x86.exe</Download>
         </Redistributable>
     </Platform>
