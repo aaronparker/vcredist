@@ -89,74 +89,66 @@ Function Import-VcMdtApp {
         [Parameter(Mandatory = $False, HelpMessage = "Set a silent install command line.")]
         [switch] $Silent,
 
-        [Parameter()] $mdtDrive = "DS001",
-        [Parameter()] $Publisher = "Microsoft",
-        [Parameter()] $BundleName = "Visual C++ Redistributables",
-        [Parameter()] $Language = "en-US",
-        [Parameter()] $Comments = "Application bundle for installing Visual C++ Redistributables."
+        [Parameter()][string] $mdtDrive = "DS001",
+        [Parameter()][string] $Publisher = "Microsoft",
+        [Parameter()][string] $BundleName = "Visual C++ Redistributables",
+        [Parameter()][string] $Language = "en-US",
+        [Parameter()][string] $Comments = "Application bundle for installing Visual C++ Redistributables."
     )
     Begin {
 
-        # If we can find the MDT PowerShell module, import it. Requires MDT console to be installed
-        $mdtModule = "$((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4" -ErrorAction SilentlyContinue).Install_Dir)bin\MicrosoftDeploymentToolkit.psd1"
-        If (Test-Path -Path $mdtModule) {
-            try {            
-                Import-Module -Name $mdtModule -ErrorAction SilentlyContinue
-            }
-            catch {
-                Throw "Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."
-            }
-        }
-        Else {
-            Throw "Cannot find the MDT PowerShell module. Is the MDT console installed?"
-        }
+        # Import the MDT module and create a PS drive to MdtPath
+        If (Import-MdtModule) {
+            If ($PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping")) {
+                If (Test-Path -Path "$($mdtDrive):") {
+                    Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
+                    Remove-PSDrive -Name $mdtDrive -Force
+                }
+                try {
+                    New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MdtPath -ErrorAction SilentlyContinue
+                }
+                catch {
+                    Throw "Failed to map MDT drive: $mdtDrive"
+                }
+                finally {
+                    # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
+                    # Create $target as the target Application folder to import into
+                    If ($AppFolder.Length -ne 0) {
+                        $target = "$($mdtDrive):\Applications\$($AppFolder)"
 
-        # Create the PSDrive for MDT
-        If ($PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping")) {
-            If (Test-Path -Path "$($mdtDrive):") {
-                Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
-                Remove-PSDrive -Name $mdtDrive -Force
-            }
-            try {
-                New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MdtPath -ErrorAction SilentlyContinue
-            }
-            catch {
-                Throw "Failed to map MDT drive: $mdtDrive"
-            }
-        }
+                        If (!(Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
+                            If ($PSCmdlet.ShouldProcess("$($mdtDrive):\Applications\$($AppFolder)", "Creating folder")) {
 
-        # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
-        # Create $target as the target Application folder to import into
-        If ($AppFolder.Length -ne 0) {
-            $target = "$($mdtDrive):\Applications\$($AppFolder)"
+                                # Splat New-Item parameters
+                                $newItemParams = @{
+                                    Path        = "$($mdtDrive):\Applications"
+                                    Enable      = "True"
+                                    Name        = $AppFolder
+                                    Comments    = "$($Publisher) $($BundleName)"
+                                    ItemType    = "Folder"
+                                    ErrorAction = "SilentlyContinue"
+                                }
 
-            If (!(Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
-                If ($PSCmdlet.ShouldProcess("$($mdtDrive):\Applications\$($AppFolder)", "Creating folder")) {
-
-                    # Splat New-Item parameters
-                    $newItemParams = @{
-                        Path        = "$($mdtDrive):\Applications"
-                        Enable      = "True"
-                        Name        = $AppFolder
-                        Comments    = "$($Publisher) $($BundleName)"
-                        ItemType    = "Folder"
-                        ErrorAction = "SilentlyContinue"
+                                # Create -AppFolder below Applications
+                                try {
+                                    New-Item @newItemParams
+                                }
+                                catch {
+                                    Throw "Unable to create MDT Applications folder: $AppFolder"
+                                }
+                            }
+                        }
                     }
-
-                    # Create -AppFolder below Applications
-                    try {
-                        New-Item @newItemParams
+                    Else {
+                        $target = "$($mdtDrive):\Applications"
                     }
-                    catch {
-                        Throw "Unable to create MDT Applications folder: $AppFolder"
-                    }
+                    Write-Verbose "Importing applications into $target"
                 }
             }
         }
         Else {
-            $target = "$($mdtDrive):\Applications"
+            Throw "Could not load MDT PowerShell module. Please make sure that the MDT console is installed correctly."
         }
-        Write-Verbose "Importing applications into $target"
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform and architecture."
@@ -211,18 +203,15 @@ Function Import-VcMdtApp {
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         try {
-            $imported = Test-Path $target
+            Test-Path $target > $Null
         }
         catch {
             Throw "Unable to find path $target."
         }
-        If ($imported) {
+        finally {
             Write-Verbose "Getting Visual C++ Redistributables from the deployment share"
             $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" } | `
                 ForEach-Object { Get-ItemProperty -Path "$($target)\$($_.Name)" }
-        }
-        Else {
-            Write-Error "Unable to find MDT drive $mdtDrive."
         }
 
         # Create the application bundle
@@ -257,6 +246,7 @@ Function Import-VcMdtApp {
                 }
             }
         }
+
         # Return list of apps to the pipeline
         Write-Output ($importedVcRedists | Select-Object PSChildName, Source, CommandLine, Version, Language, SupportedPlatform, UninstallKey, Reboot)
     }
