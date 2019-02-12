@@ -1,5 +1,16 @@
 # Change log
 
+## v1.5.0.92
+
+- Added private function `Import-MdtModule` to improve MDT module loading code
+- Update `Import-VcMdtApp` for more robust error checking
+- Update private function `Get-ValidPath` to avoid errors on invalid path
+- Update manifest with VcRedist 2017 version `14.16.27024.1`
+
+## v1.4.3.88
+
+- Fix private function `Get-Bitness` to ensure only single output when using no parameters or with `-Architecture`
+
 ## v1.4.2.85
 
 * Fixed incorrect working directory when importing VcRedists into MDT in `Import-VcMdtApp`
