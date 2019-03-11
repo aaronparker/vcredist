@@ -55,7 +55,7 @@ Function Import-VcCmApp {
         [Parameter(Mandatory = $True, Position = 0, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
-        [array] $VcList,
+        [PSCustomObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1, `
                 HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]

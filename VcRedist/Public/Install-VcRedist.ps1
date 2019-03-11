@@ -52,10 +52,9 @@ Function Install-VcRedist {
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, `
-                HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
-        [ValidateNotNullOrEmpty()]
-        [array] $VcList,
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
+        [ValidateNotNull()]
+        [PSCustomObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1, `
                 HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
@@ -78,13 +77,15 @@ Function Install-VcRedist {
         # Get script elevation status
         [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
         If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
-            
-        # Get currently installed VcRedist versions
-        $currentInstalled = Get-InstalledVcRedist
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform and architecture."
         $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
+
+        # Get currently installed VcRedist versions
+        $currentInstalled = Get-InstalledVcRedist
+
+        Write-Verbose $VcList
     }
     Process {
         ForEach ($vc in $filteredVcList) {
