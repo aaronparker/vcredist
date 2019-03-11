@@ -12,7 +12,7 @@
 RootModule = 'VcRedist.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.5.0.92'
+ModuleVersion = '1.5.1.92'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -79,7 +79,7 @@ CmdletsToExport = @()
 # VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @()
+AliasesToExport = @('Save-VcRedist')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -108,7 +108,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/aaronparker/Install-VisualCRedistributables/'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VisualStudioLogo256.png'
+        IconUri = 'https://raw.githubusercontent.com/aaronparker/Install-VisualCRedistributables/master/images/VisualStudioLogo2019-256.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = 'https://docs.stealthpuppy.com/vcredist/change-log'
