@@ -12,7 +12,8 @@
 RootModule = 'VcRedist.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.5.1.95'
+ModuleVersion = '1.5.2.92'
+
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

@@ -107,7 +107,7 @@
             <ShortName>RTM</ShortName>
             <URL>https://www.visualstudio.com/downloads/</URL>
             <ProductCode>{fd9b6070-d13e-45dc-819b-41806bf45b6b}</ProductCode>
-            <Version>14.16.27024.1</Version>
+            <Version>14.16.27027.1</Version>
             <Download>https://aka.ms/vs/15/release/vc_redist.x64.exe</Download>
         </Redistributable>
     </Platform>
