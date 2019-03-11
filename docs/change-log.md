@@ -1,5 +1,16 @@
 # Change log
 
+## v1.5.2.98
+
+- Update manifests with correct details for VcRedist 2017 `v14.16.27027.1`. v1.5.1.95 included the incorrect manifest commit.
+
+## v1.5.1.95
+
+- Update manifests with VcRedist 2017 `v14.16.27024.1`
+- Update module to export alias `Save-VcRedist` for `Get-VcRedist`. Next major version will rename `Get-VcRedist` to `Save-VcRedist`
+- Change `-VcList` to use `[PSCustomObject]` instead of `[array]` in `Import-VcCmApp` and `Import-VcMdtApp`
+- Update module icon to use new Visual Studio 2019 icon
+
 ## v1.5.0.92
 
 - Added private function `Import-MdtModule` to improve MDT module loading code
