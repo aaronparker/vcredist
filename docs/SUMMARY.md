@@ -15,4 +15,5 @@
   * [Supported Redistributables](redistributables/supported-redistributables.md)
   * [All Redistributables](redistributables/all-redistributables.md)
 * [Change log](change-log.md)
+* [Understanding VcRedist Versioning](versioning.md)
 * [Known issues](known-issues.md)
