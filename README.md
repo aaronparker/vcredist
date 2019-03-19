@@ -1,10 +1,10 @@
 # VcRedist
 
+[![License][license-badge]][license]
 [![Build status][appveyor-badge]][appveyor-build]
 [![GitHub Release][github-release-badge]][github-release]
 [![PowerShell Gallery][psgallery-badge]][psgallery]
 [![PowerShell Gallery Version][psgallery-version-badge]][psgallery]
-[![License][license-badge]][license]
 
 VcRedist is PowerShell module for downloading and installing the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). The module also supports creating applications in the Microsoft Deployment Toolkit or System Center Configuration Manager to install the Redistributables.
 
@@ -26,13 +26,13 @@ Install-Module -Name VcRedist -Force
 
 [appveyor-badge]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/master.svg?style=flat-square&logo=appveyor
 [appveyor-build]: https://ci.appveyor.com/project/aaronparker/install-visualcredistributables
-[psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg?style=flat-square
+[psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg?logo=PowerShell&style=flat-square
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
-[psgallery-version-badge]: https://img.shields.io/powershellgallery/v/vcredist.svg?style=flat-square
+[psgallery-version-badge]: https://img.shields.io/powershellgallery/v/vcredist.svg?logo=PowerShell&style=flat-square
 [psgallery-version]: https://www.powershellgallery.com/packages/vcredist
 [gitbooks-badge]: https://www.gitbook.com/button/status/book/aaronparker/vcredist/
 [gitbooks-build]: https://www.gitbook.com/book/aaronparker/vcredist
-[github-release-badge]: https://img.shields.io/github/release/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
+[github-release-badge]: https://img.shields.io/github/release/aaronparker/Install-VisualCRedistributables.svg?style=flat-square&logo=github
 [github-release]: https://github.com/aaronparker/Install-VisualCRedistributables/releases/latest
 [license-badge]: https://img.shields.io/github/license/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
 [license]: https://github.com/aaronparker/vcredist/blob/master/LICENSE
