@@ -84,8 +84,6 @@ Function Install-VcRedist {
 
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
-
-        Write-Verbose $VcList
     }
     Process {
         ForEach ($vc in $filteredVcList) {
