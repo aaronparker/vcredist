@@ -44,50 +44,50 @@ Describe 'Get-VcList' {
             $VcList = Get-VcList
             $VcList.Count | Should -Be 12
         }
-        It "Given valid parameter -Export 'All', it returns all Visual C++ Redistributables" {
-            $VcList = Get-VcList -Export All
+        It "Given valid parameter -ExportAll, it returns all Visual C++ Redistributables" {
+            $VcList = Get-VcList -ExportAll
             $VcList.Count | Should -Be 32
         }
     }
     Context "Return external manifest" {
-        It "Given valid parameter -Xml, it returns Visual C++ Redistributables from an external manifest" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
-            Export-VcXml -Path $Xml
-            $VcList = Get-VcList -Xml $Xml
+        It "Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest" {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+            Export-VcManifest -Path $Json
+            $VcList = Get-VcList -Path $Json
             $VcList.Count | Should -Be 12
         }
     }
     Context "Test fail scenarios" {
-        It "Given an XML file that does not exist, it should throw an error" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.xml"
-            { Get-VcList -Xml $Xml } | Should Throw
+        It "Given an JSON file that does not exist, it should throw an error" {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.json"
+            { Get-VcList -Path $Json } | Should Throw
         }
-        It "Given an invalid XML file, should throw an error on read" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
-            { Get-VcList -Xml $Xml } | Should Throw
+        It "Given an invalid JSON file, should throw an error on read" {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
+            { Get-VcList -Path $Json } | Should Throw
         }
     }
 }
 
-Describe 'Export-VcXml' {
+Describe 'Export-VcManifest' {
     Context "Export manifest" {
-        It "Given valid parameter -Path, it exports an XML file" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
-            Export-VcXml -Path $Xml
-            Test-Path -Path $Xml | Should -Be $True
+        It "Given valid parameter -Path, it exports an JSON file" {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+            Export-VcManifest -Path $Json
+            Test-Path -Path $Json | Should -Be $True
         }
     }
     Context "Export and read manifest" {
-        It "Given valid parameter -Path, it exports an XML file" {
-            $Xml = Join-Path -Path $ProjectRoot -ChildPath "Redists.xml"
-            Export-VcXml -Path $Xml -Export All
-            $VcList = Get-VcList -Xml $Xml
+        It "Given valid parameter -Path, it exports an JSON file" {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+            Export-VcManifest -Path $Json -ExportAll
+            $VcList = Get-VcList -Path $Json
             $VcList.Count | Should -Be 32
         }
     }
     Context "Test fail scenarios" {
         It "Given an invalid path, it should throw an error" {
-            { Export-VcXml -Path (Join-Path (Join-Path $ProjectRoot "Temp") "Temp.xml") } | Should Throw
+            { Export-VcManifest -Path (Join-Path (Join-Path $ProjectRoot "Temp") "Temp.json") } | Should Throw
         }
     }
 }
