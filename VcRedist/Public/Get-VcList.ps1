@@ -38,7 +38,7 @@ Function Get-VcList {
             Return an array of the all Visual C++ Redistributables from the embedded manifest, including unsupported versions.
 
         .EXAMPLE
-            Get-VcList -Manifest ".\VisualCRedistributables.json"
+            Get-VcList -Path ".\VisualCRedistributables.json"
 
             Description:
             Return an array of the Visual C++ Redistributables listed in the external manifest VisualCRedistributables.json.
@@ -51,23 +51,23 @@ Function Get-VcList {
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
         [Alias("Xml")]
-        [string] $Manifest = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.json"),
+        [string] $Path = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.json"),
 
         [Parameter(Mandatory = $False, ParameterSetName='Export')]
         [switch] $ExportAll
     )
     
     If ($ExportAll) {
-        $Manifest = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.json"
+        $Path = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.json"
         Write-Warning "This manifest includes unsupported Visual C++ Redistributables."
     }
 
     try {
-        Write-Verbose "Reading JSON document $Manifest."
-        $content = Get-Content -Raw -Path $Manifest -ErrorVariable readError -ErrorAction SilentlyContinue
+        Write-Verbose "Reading JSON document $Path."
+        $content = Get-Content -Raw -Path $Path -ErrorVariable readError -ErrorAction SilentlyContinue
     }
     catch {
-        Throw "Unable to read manifest $Manifest. $readError"
+        Throw "Unable to read manifest $Path. $readError"
         Break
     }
     
