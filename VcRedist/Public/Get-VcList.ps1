@@ -56,6 +56,7 @@ Function Get-VcList {
         [Parameter(Mandatory = $False, ParameterSetName='Export')]
         [switch] $ExportAll
     )
+    
     If ($ExportAll) {
         $Manifest = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.json"
         Write-Warning "This manifest includes unsupported Visual C++ Redistributables."
