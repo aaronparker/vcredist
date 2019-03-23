@@ -46,7 +46,7 @@ Function Export-VcManifest {
         [string] $Path,
 
         [Parameter(Mandatory = $False)]
-        [switch] $ExportAll = "Supported"
+        [switch] $ExportAll
     )
 
     # Get the list of VcRedists from Get-VcList
