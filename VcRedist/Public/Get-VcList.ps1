@@ -4,9 +4,9 @@ Function Get-VcList {
             Returns an array of Visual C++ Redistributables.
 
         .DESCRIPTION
-            This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.
+            This function reads the Visual C++ Redistributables listed in an internal manifest or an external JSON file into an array that can be passed to other VcRedist functions.
 
-            A complete listing the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcXml.
+            A complete listing of the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcManifest.
 
         .OUTPUTS
             System.Array
@@ -16,12 +16,12 @@ Function Get-VcList {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/vcredist/usage/export-manifests
 
-        .PARAMETER Xml
-            The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
+        .PARAMETER Manifest
+            The JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
 
-        .PARAMETER Export
+        .PARAMETER ExportAll
             Defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
             Defaults to exporting the Supported Redistributables.
 
@@ -29,69 +29,57 @@ Function Get-VcList {
             Get-VcList
 
             Description:
-            Return an array of the Visual C++ Redistributables from the embedded manifest
+            Return an array of the supported Visual C++ Redistributables from the embedded manifest.
 
         .EXAMPLE
-            Get-VcList -Xml ".\VisualCRedistributablesSupported.xml"
+            Get-VcList -ExportAll
 
             Description:
-            Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
+            Return an array of the all Visual C++ Redistributables from the embedded manifest, including unsupported versions.
+
+        .EXAMPLE
+            Get-VcList -Manifest ".\VisualCRedistributables.json"
+
+            Description:
+            Return an array of the Visual C++ Redistributables listed in the external manifest VisualCRedistributables.json.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $False)]
+    [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName='Manifest')]
     Param (
-        [Parameter(Mandatory = $False, Position = 0, HelpMessage = "Path to the XML document describing the Redistributables.")]
+        [Parameter(Mandatory = $False, Position = 0, ParameterSetName='Manifest', `
+            HelpMessage = "Path to the JSON document describing the Redistributables.")]
         [ValidateNotNull()]
-        [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
-        [string] $Xml = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.xml"),
+        [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
+        [Alias("Xml")]
+        [string] $Manifest = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.json"),
 
-        [Parameter(Mandatory = $False)]
-        [ValidateSet('All', 'Supported')]
-        [string] $Export = "Supported"
+        [Parameter(Mandatory = $False, ParameterSetName='Export')]
+        [switch] $ExportAll
     )
-    Begin {
-        Switch ($Export) {
-            "All" {
-                $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml"
-                Write-Warning "This array includes unsupported Visual C++ Redistributables."
-            }
-        }
-
-        # The array that will be returned
-        $output = @()
+    If ($ExportAll) {
+        $Manifest = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.json"
+        Write-Warning "This manifest includes unsupported Visual C++ Redistributables."
     }
-    Process {
-        # Read the specifed XML document
-        try {
-            Write-Verbose "Reading XML document $Xml."
-            [xml] $xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
-        }
-        catch {
-            Throw "Unable to read $Xml. $xmlReadError"
-        }
 
-        # Build the output object by compiling an array of each redistributable
-        $xmlContent = (Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument).Node
-        ForEach ($platform in $xmlContent) {
-            Write-Verbose "Building array with $($platform.Release) on $($platform.Architecture)."
-            ForEach ($redistributable in $platform.Redistributable) {
-                Write-Verbose "Adding to array with $($redistributable.Name)"
-                $item = New-Object PSCustomObject
-                $item | Add-Member -Type NoteProperty -Name 'Name' -Value $redistributable.Name
-                $item | Add-Member -Type NoteProperty -Name 'ProductCode' -Value $redistributable.ProductCode
-                $item | Add-Member -Type NoteProperty -Name 'Version' -Value $redistributable.Version
-                $item | Add-Member -Type NoteProperty -Name 'URL' -Value $redistributable.URL
-                $item | Add-Member -Type NoteProperty -Name 'Download' -Value $redistributable.Download
-                $item | Add-Member -Type NoteProperty -Name 'Release' -Value $platform.Release
-                $item | Add-Member -Type NoteProperty -Name 'Architecture' -Value $platform.Architecture
-                $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
-                $item | Add-Member -Type NoteProperty -Name 'Install' -Value $platform.Install
-                $item | Add-Member -Type NoteProperty -Name 'SilentInstall' -Value $platform.SilentInstall
-                $output += $item
-            }
-        }
+    try {
+        Write-Verbose "Reading JSON document $Manifest."
+        $content = Get-Content -Raw -Path $Manifest -ErrorVariable readError -ErrorAction SilentlyContinue
     }
-    End {
+    catch {
+        Throw "Unable to read manifest $Manifest. $readError"
+        Break
+    }
+    
+    try {
+        # Convert the JSON content to an object
+        Write-Verbose "Converting JSON."
+        $output = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
+    }
+    catch {
+        Throw "Unable to convert JSON to object. $convertError"
+        Break
+    }
+    finally {
         # Return array to the pipeline
         Write-Output $output
     }
