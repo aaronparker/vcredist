@@ -70,7 +70,7 @@
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 'Save-VcRedist', 
-        'Import-VcCmApp', 'Import-VcMdtApp', 'Install-VcRedist')
+        'Import-VcConfigMgrApp', 'Import-VcMdtApp', 'Install-VcRedist')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -79,7 +79,7 @@
     # VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport   = @('Get-VcRedist', 'Export-VcXml')
+    AliasesToExport   = @('Get-VcRedist', 'Export-VcXml', 'Import-VcCmApp')
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()

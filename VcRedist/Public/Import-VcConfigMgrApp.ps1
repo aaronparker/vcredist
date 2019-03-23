@@ -1,4 +1,4 @@
-Function Import-VcCmApp {
+Function Import-VcConfigMgrApp {
     <#
         .SYNOPSIS
             Creates Visual C++ Redistributable applications in a ConfigMgr site.
@@ -49,6 +49,7 @@ Function Import-VcCmApp {
             Description:
             Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
     #>
+    [Alias('Import-VcCmApp')]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/importing-into-configmgr")]
     [OutputType([Array])]
     Param (
@@ -88,6 +89,7 @@ Function Import-VcCmApp {
         [Parameter()] $Language = "en-US",
         [Parameter()] $Keyword = "Visual C++ Redistributable"
     )
+
     Begin {
         
         # CMPath will be the network location for copying the Visual C++ Redistributables to
@@ -145,6 +147,7 @@ Function Import-VcCmApp {
         Write-Verbose "Filtering releases for platform and architecture."
         $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
     }
+
     Process {
         ForEach ($Vc in $filteredVcList) {
             Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
@@ -226,6 +229,7 @@ Function Import-VcCmApp {
             }
         }
     }
+    
     End {
         Set-Location -Path $validPath
 
