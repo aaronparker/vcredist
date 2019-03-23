@@ -56,7 +56,7 @@ Function Import-VcMdtApp {
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, `
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
@@ -95,8 +95,8 @@ Function Import-VcMdtApp {
         [Parameter()][string] $Language = "en-US",
         [Parameter()][string] $Comments = "Application bundle for installing Visual C++ Redistributables."
     )
-    Begin {
 
+    Begin {
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
             If ($PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping")) {
@@ -154,6 +154,7 @@ Function Import-VcMdtApp {
         Write-Verbose "Filtering releases for platform and architecture."
         $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
     }
+
     Process {
         ForEach ($Vc in $filteredVcList) {
             # Import as an application into MDT
@@ -200,6 +201,7 @@ Function Import-VcMdtApp {
             }
         }
     }
+
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         try {

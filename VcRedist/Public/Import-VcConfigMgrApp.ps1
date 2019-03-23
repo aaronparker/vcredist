@@ -53,7 +53,7 @@ Function Import-VcConfigMgrApp {
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/importing-into-configmgr")]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, `
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
@@ -91,7 +91,6 @@ Function Import-VcConfigMgrApp {
     )
 
     Begin {
-        
         # CMPath will be the network location for copying the Visual C++ Redistributables to
         $validPath = Get-ValidPath $Path
         Write-Verbose "Setting location to $validPath"

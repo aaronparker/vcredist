@@ -72,11 +72,14 @@ Function Install-VcRedist {
         [Parameter(Mandatory = $False, HelpMessage = "Perform a silent install of the VcRedist.")]
         [switch] $Silent
     )
-    Begin {
 
+    Begin {
         # Get script elevation status
         [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
+        If (!($Elevated)) {
+            Throw "Installing the Visual C++ Redistributables requires elevation."
+            Break
+        }
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform and architecture."
@@ -85,6 +88,7 @@ Function Install-VcRedist {
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
     }
+
     Process {
         ForEach ($vc in $filteredVcList) {
             If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
@@ -121,6 +125,7 @@ Function Install-VcRedist {
             }
         }
     }
+
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         Write-Output (Get-InstalledVcRedist)

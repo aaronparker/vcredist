@@ -39,6 +39,7 @@ Function Save-VcRedist {
             Downloads the supported Visual C++ Redistributables to C:\Redist.
             
         .EXAMPLE
+            $VcRedists = Get-VcList
             Save-VcRedist -VcList $VcRedists -Release "2012","2013",2017"
 
             Description:
@@ -73,10 +74,12 @@ Function Save-VcRedist {
         [Parameter(Mandatory = $False)]
         [switch] $ForceWebRequest
     )
+
     Begin {
         # Output variable
         $output = @()
     }
+
     Process {
         # Filter release and architecture if specified
         If ( $PSBoundParameters.ContainsKey('Release') ) {
@@ -90,7 +93,7 @@ Function Save-VcRedist {
 
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcList) {
-            Write-Verbose "Downloading: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+            Write-Verbose "[$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
             $output += $Vc
 
             # Create the folder to store the downloaded file. Skip if it exists
@@ -167,6 +170,7 @@ Function Save-VcRedist {
             }
         }
     }
+    
     End {
         # Return the $VcList array on the pipeline so that we can act on what was downloaded
         Write-Output $output
