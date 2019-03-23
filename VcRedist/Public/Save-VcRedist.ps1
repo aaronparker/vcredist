@@ -1,4 +1,4 @@
-Function Get-VcRedist {
+Function Save-VcRedist {
     <#
         .SYNOPSIS
             Downloads the Visual C++ Redistributables from an array returned by Get-VcXml.
@@ -15,7 +15,7 @@ Function Get-VcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/vcredist/
 
         .PARAMETER VcList
             Sepcifies the array that lists the Visual C++ Redistributables to download
@@ -33,24 +33,24 @@ Function Get-VcRedist {
             Forces the use of Invoke-WebRequest over Start-BitsTransfer
 
         .EXAMPLE
-            Get-VcXml | Get-VcRedist -Path C:\Redist
+            Save-VcRedist -VcList (Get-VcList) -Path C:\Redist
 
             Description:
             Downloads the supported Visual C++ Redistributables to C:\Redist.
             
         .EXAMPLE
-            Get-VcRedist -VcXml $VcRedists -Release "2012","2013",2017"
+            Save-VcRedist -VcList $VcRedists -Release "2012","2013",2017"
 
             Description:
             Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in $VcRedists
 
         .EXAMPLE
-            Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist -Architecture x64
+            Save-VcRedist -VcList (Get-VcList) -Path C:\Temp\VcRedist -Architecture x64
 
             Description:
             Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
     #>
-    [Alias("Save-VcRedist")]
+    [Alias("Get-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([Array])]
     Param (

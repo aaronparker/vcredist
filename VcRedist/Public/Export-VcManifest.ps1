@@ -16,20 +16,25 @@ Function Export-VcManifest {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/vcredist/
 
         .PARAMETER Path
             Path to the JSON file the content will be exported to.
 
-        .PARAMETER Export
-            Switch parameter that defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
-            Defaults to exporting the Supported Redistributables.
+        .PARAMETER ExportAll
+            Switch parameter that forces the export of Visual C++ Redistributables including unsupported Redistributables.
 
         .EXAMPLE
-            Export-VcManifest -Path "C:\Temp\VisualCRedistributablesSupported.json" -Export Supported
+            Export-VcManifest -Path "C:\Temp\VisualCRedistributablesSupported.json"
 
             Description:
             Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.json
+
+        .EXAMPLE
+            Export-VcManifest -Path "C:\Temp\VisualCRedistributables.json" -ExportAll
+
+            Description:
+            Export the full list Visual C++ Redistributables, including unsupported, to C:\Temp\VisualCRedistributables.json
     #>
     [Alias("Export-VcXml")]
     [CmdletBinding(SupportsShouldProcess = $False)]
