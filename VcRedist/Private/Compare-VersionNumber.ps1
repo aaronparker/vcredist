@@ -10,9 +10,6 @@ Function Compare-VersionNumber {
             Author: Aaron Parker
             Twitter: @stealthpuppy
 
-        .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
-
         .PARAMETER LowVersion
             The lower version number to compare.
 

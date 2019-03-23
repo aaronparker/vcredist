@@ -14,7 +14,7 @@ Function Get-InstalledVcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/vcredist/
 
         .PARAMETER ExportAll
             Export all installed Redistributables including the Additional and Minimum Runtimes
