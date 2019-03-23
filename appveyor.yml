@@ -8,7 +8,7 @@
 build: off
 
 # Version number
-version: 1.5.2.{build}
+version: 2.0.{build}
 
 # There's no need to alter the build number for a Pull Request (PR) since they don't modify anything
 pull_requests:
