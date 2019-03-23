@@ -16,7 +16,7 @@ Function Export-VcManifest {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/
+            https://docs.stealthpuppy.com/vcredist/usage/export-manifests
 
         .PARAMETER Path
             Path to the JSON file the content will be exported to.
@@ -37,7 +37,7 @@ Function Export-VcManifest {
             Export the full list Visual C++ Redistributables, including unsupported, to C:\Temp\VisualCRedistributables.json
     #>
     [Alias("Export-VcXml")]
-    [CmdletBinding(SupportsShouldProcess = $False)]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/export-manifests")]
     [OutputType([String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, HelpMessage = "Path to the JSON file content will be exported to.")]

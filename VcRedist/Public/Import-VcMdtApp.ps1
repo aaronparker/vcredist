@@ -16,7 +16,7 @@ Function Import-VcMdtApp {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/
+            https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt
 
         .PARAMETER VcList
             An array containing details of the Visual C++ Redistributables from Get-VcList.
@@ -53,7 +53,7 @@ Function Import-VcMdtApp {
             Description:
             Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, `

@@ -16,7 +16,7 @@ Function Get-VcList {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/usage/export-manifests
+            https://docs.stealthpuppy.com/vcredist/usage/getting-the-vcredist-list
 
         .PARAMETER Manifest
             The JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
@@ -44,7 +44,8 @@ Function Get-VcList {
             Return an array of the Visual C++ Redistributables listed in the external manifest VisualCRedistributables.json.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName='Manifest')]
+    [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName='Manifest', `
+        HelpURI="https://docs.stealthpuppy.com/vcredist/usage/getting-the-vcredist-list")]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName='Manifest', `
             HelpMessage = "Path to the JSON document describing the Redistributables.")]
