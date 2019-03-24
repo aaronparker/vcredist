@@ -16,13 +16,13 @@ Function New-MdtDrive {
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([String])]
     Param (
-        [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $True)]
-        [ValidateNotNullOrEmpty()]
-        [String]$Path,
-
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline = $True)]
         [ValidateNotNullOrEmpty()]
-        [String]$Drive = "DS009"
+        [String] $Drive = "DS009",
+
+        [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $True)]
+        [ValidateNotNullOrEmpty()]
+        [String] $Path
     )
     $description = "MDT drive created by $($MyInvocation.MyCommand)"
     If ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {

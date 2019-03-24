@@ -32,7 +32,7 @@ Function Get-InstalledVcRedist {
             Returns the installed Microsoft Visual C++ Redistributables from the current system including the Additional and Minimum Runtimes.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/getting-the-installed-redistributables")]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/getting-the-installed-redistributables")]
     Param (
         [Parameter(Mandatory = $False)]
         [switch] $ExportAll

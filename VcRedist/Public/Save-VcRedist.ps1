@@ -52,7 +52,7 @@ Function Save-VcRedist {
             Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
     #>
     [Alias("Get-VcRedist")]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/downloading-the-redistributables")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/downloading-the-redistributables")]
     [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
