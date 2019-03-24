@@ -97,58 +97,31 @@ Function Import-VcMdtApp {
     )
 
     Begin {
+        # If running on PowerShell Core, error and exit.
+        If (Test-PSCore) {
+            Write-Error -Message "PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module." -ErrorAction Stop
+            Break
+        }
+
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($PSCmdlet.ShouldProcess("MDT deployment share $MdtPath", "Mapping")) {
-                If (Test-Path -Path "$($mdtDrive):") {
-                    Write-Verbose "Found existing MDT drive $mdtDrive. Removing."
-                    Remove-PSDrive -Name $mdtDrive -Force
-                }
-                try {
-                    New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $MdtPath -ErrorAction SilentlyContinue
-                }
-                catch {
-                    Throw "Failed to map MDT drive: $mdtDrive"
-                }
-                finally {
-                    # Create a sub-folder below Applications to import the Redistributables into, if $AppFolder not null
-                    # Create $target as the target Application folder to import into
-                    If ($AppFolder.Length -ne 0) {
-                        $target = "$($mdtDrive):\Applications\$($AppFolder)"
-
-                        If (!(Test-Path -Path "$($mdtDrive):\Applications\$($AppFolder)")) {
-                            If ($PSCmdlet.ShouldProcess("$($mdtDrive):\Applications\$($AppFolder)", "Creating folder")) {
-
-                                # Splat New-Item parameters
-                                $newItemParams = @{
-                                    Path        = "$($mdtDrive):\Applications"
-                                    Enable      = "True"
-                                    Name        = $AppFolder
-                                    Comments    = "$($Publisher) $($BundleName)"
-                                    ItemType    = "Folder"
-                                    ErrorAction = "SilentlyContinue"
-                                }
-
-                                # Create -AppFolder below Applications
-                                try {
-                                    New-Item @newItemParams
-                                }
-                                catch {
-                                    Throw "Unable to create MDT Applications folder: $AppFolder"
-                                }
-                            }
-                        }
-                    }
-                    Else {
-                        $target = "$($mdtDrive):\Applications"
-                    }
-                    Write-Verbose "Importing applications into $target"
-                }
+            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+                $drive = New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $DeployRoot
             }
         }
         Else {
-            Throw "Could not load MDT PowerShell module. Please make sure that the MDT console is installed correctly."
+            Write-Error -Message "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again." -ErrorAction Stop
+            Break
         }
+
+        # Create the Application folder
+        If ($AppFolder.Length -gt 0) {
+            New-MdtApplicationFolder -Drive $mdtDrive -Name $AppFolder -Description $($Publisher $BundleName)
+            $target = "$($mdtDrive):\Applications\$AppFolder"
+        Else {
+            $target = "$($mdtDrive):\Applications"
+        }
+        Write-Verbose "Importing applications into $target"
 
         # Filter release and architecture
         Write-Verbose "Filtering releases for platform and architecture."
