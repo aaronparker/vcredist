@@ -56,7 +56,7 @@ Function Import-VcMdtApp {
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline `
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline, `
                 HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
