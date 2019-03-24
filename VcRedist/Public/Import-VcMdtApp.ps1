@@ -106,7 +106,7 @@ Function Import-VcMdtApp {
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
             If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
-                $drive = New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $DeployRoot
+                New-PSDrive -Name $mdtDrive -PSProvider MDTProvider -Root $DeployRoot
             }
         }
         Else {
@@ -116,8 +116,9 @@ Function Import-VcMdtApp {
 
         # Create the Application folder
         If ($AppFolder.Length -gt 0) {
-            New-MdtApplicationFolder -Drive $mdtDrive -Name $AppFolder -Description $($Publisher $BundleName)
+            New-MdtApplicationFolder -Drive $mdtDrive -Name $AppFolder -Description $("$Publisher $BundleName")
             $target = "$($mdtDrive):\Applications\$AppFolder"
+        }
         Else {
             $target = "$($mdtDrive):\Applications"
         }

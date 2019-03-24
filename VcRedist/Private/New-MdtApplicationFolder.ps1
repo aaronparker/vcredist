@@ -25,7 +25,7 @@ Function New-MdtApplicationFolder {
         [Alias('AppFolder')]
         [string] $Name,
 
-        [Parameter(Mandatory = $False, Position = 2)
+        [Parameter(Mandatory = $False, Position = 2)]
         [ValidateNotNullOrEmpty()]
         [Parameter()]
         [string] $Description = "Microsoft Visual C++ Redistributables"
