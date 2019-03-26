@@ -27,7 +27,6 @@ Function New-MdtApplicationFolder {
 
         [Parameter(Mandatory = $False, Position = 2)]
         [ValidateNotNullOrEmpty()]
-        [Parameter()]
         [string] $Description = "Microsoft Visual C++ Redistributables"
     )
 

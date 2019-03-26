@@ -13,7 +13,7 @@ Function New-MdtDrive {
         .PARAMETER Drive
             A PS drive letter to map to the MDT share.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding(SupportsShouldProcess)]
     [OutputType([String])]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline = $True)]
