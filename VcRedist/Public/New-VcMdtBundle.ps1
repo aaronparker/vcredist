@@ -1,4 +1,4 @@
-Function Import-VcMdtBundle {
+Function New-VcMdtBundle {
     <#
         .SYNOPSIS
             Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share.
