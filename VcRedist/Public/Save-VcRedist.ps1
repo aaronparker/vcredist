@@ -76,8 +76,6 @@ Function Save-VcRedist {
     )
 
     Begin {
-        # Output variable
-        $output = @()
     }
 
     Process {
