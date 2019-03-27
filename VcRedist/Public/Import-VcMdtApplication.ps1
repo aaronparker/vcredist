@@ -50,6 +50,7 @@ Function New-VcMdtApplication {
             Description:
             Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
     #>
+    [Alias("Import-VcMdtApp")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
