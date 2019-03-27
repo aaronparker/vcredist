@@ -59,15 +59,15 @@ Function Save-VcRedist {
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
 
-        [Parameter(Mandatory = $False, Position = 1, HelpMessage = "Specify a target path to download the Redistributables to.")]
+        [Parameter(Mandatory = $False, Position = 1)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to download.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
         [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to download.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('x86', 'x64')]
         [string[]] $Architecture = @("x86", "x64"),
 
@@ -94,7 +94,6 @@ Function Save-VcRedist {
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcList) {
             Write-Verbose "[$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
-            $output += $Vc
 
             # Create the folder to store the downloaded file. Skip if it exists
             # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
@@ -173,6 +172,6 @@ Function Save-VcRedist {
     
     End {
         # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        Write-Output $output
+        Write-Output $VcList
     }
 }

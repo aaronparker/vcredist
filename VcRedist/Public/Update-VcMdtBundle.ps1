@@ -18,26 +18,11 @@ Function Update-VcMdtBundle {
         .LINK
             https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt
 
-        .PARAMETER VcList
-            An array containing details of the Visual C++ Redistributables from Get-VcList.
-
-        .PARAMETER Path
-            A folder containing the downloaded Visual C++ Redistributables.
-
-        .PARAMETER Release
-            Specifies the release (or version) of the redistributables to import into MDT.
-
-        .PARAMETER Architecture
-            Specifies the processor architecture to import into MDT. Can be x86 or x64.
-
         .PARAMETER MdtPath
             The local or network path to the MDT deployment share.
 
-        .PARAMETER Silent
-            Add a completely silent command line install of the VcRedist with no UI. The default install is passive.
-
-        .PARAMETER Bundle
-            Add to create an Application Bundle named 'Visual C++ Redistributables' to simplify installing the Redistributables.
+        .PARAMETER AppFolder
+            Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
 
         .EXAMPLE
             Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
@@ -56,11 +41,11 @@ Function Update-VcMdtBundle {
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, HelpMessage = "The path to the MDT deployment share.")]
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $MdtPath,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
+        [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
         [string] $AppFolder = "VcRedists",

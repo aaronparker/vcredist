@@ -47,8 +47,7 @@ Function Get-VcList {
     [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName = 'Manifest', `
             HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/getting-the-vcredist-list")]
     Param (
-        [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Manifest', `
-                HelpMessage = "Path to the JSON document describing the Redistributables.")]
+        [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline, ParameterSetName = 'Manifest')]
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
         [Alias("Xml")]

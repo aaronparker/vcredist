@@ -1,4 +1,4 @@
-Function New-VcMdtApplication {
+Function Import-VcMdtApplication {
     <#
         .SYNOPSIS
             Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share.
@@ -54,30 +54,28 @@ Function New-VcMdtApplication {
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline, `
-                HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1, `
-                HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
-        [Parameter(Mandatory = $True, HelpMessage = "The path to the MDT deployment share.")]
+        [Parameter(Mandatory = $True)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $MdtPath,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
+        [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
         [string] $AppFolder = "VcRedists",
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
         [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('x86', 'x64')]
         [string[]] $Architecture = @("x86", "x64"),
 
@@ -146,8 +144,6 @@ Function New-VcMdtApplication {
             # Check for existing application by matching current VcRedist
             Write-Verbose -Message "Matching for $VcName"
             $vcMatched = $existingVcRedists | Where-Object { $_.Name -eq $VcName  }
-
-            If ($vcMatched)
 
             # Each scenario accounted for here for clarity 
             If (($vcMatched.UninstallKey -ne $Vc.ProductCode) -or $Force.IsPresent) {

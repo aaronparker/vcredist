@@ -44,45 +44,43 @@ Function Import-VcConfigMgrApp {
 
         .EXAMPLE
             $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
-            Import-VcCmApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
+            Import-VcConfigMgrApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 
             Description:
-            Download the supportee Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
+            Download the supported Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
     #>
     [Alias('Import-VcCmApp')]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/importing-into-configmgr")]
     [OutputType([Array])]
     Param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline, `
-                HelpMessage = "An array containing details of the Visual C++ Redistributables from Get-VcList.")]
+        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1, `
-                HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1)]
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
-        [Parameter(Mandatory = $True, HelpMessage = "Specify a distribution UNC path to copy the Redistributables to.")]
+        [Parameter(Mandatory = $True)]
         [string] $CMPath,
 
-        [Parameter(Mandatory = $True, HelpMessage = "Specify ConfigMgr Site Code.")]
+        [Parameter(Mandatory = $True)]
         [ValidateScript( { If ($_ -match "^[a-zA-Z0-9]{3}$") { $True } Else { Throw "$_ is not a valid ConfigMgr site code." } })]
         [string] $SMSSiteCode,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify Applications folder to import the VC Redistributables into.")]
+        [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [string] $AppFolder = "VcRedists",
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
         [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('x86', 'x64')]
         [string[]] $Architecture = @("x86", "x64"),
 
-        [Parameter(Mandatory = $False, HelpMessage = "Set a silent install command line.")]
+        [Parameter(Mandatory = $False)]
         [switch] $Silent,
 
         [Parameter()] $Publisher = "Microsoft",
@@ -130,7 +128,7 @@ Function Import-VcConfigMgrApp {
                 New-Item -Path "$($SMSSiteCode):\Application\$($AppFolder)" -ErrorAction SilentlyContinue
             }
         }
-        If ( Test-Path "$($SMSSiteCode):\Application\$($AppFolder)" ) {
+        If (Test-Path "$($SMSSiteCode):\Application\$($AppFolder)") {
             Write-Verbose "Importing into: $($SMSSiteCode):\Application\$($AppFolder)"
             $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
         }
@@ -157,24 +155,22 @@ Function Import-VcConfigMgrApp {
                 # Create the ConfigMgr application with properties from the XML file
                 If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
                     If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
-                        
-                        # Splat New-CMApplication parameters
-                        $cmAppParams = @{
-                            Name            = "$($Vc.Name) $($Vc.Architecture)"
-                            Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
-                            SoftwareVersion = "$($Vc.Release) $($Vc.Architecture)"
-                            LinkText        = $Vc.URL
-                            Publisher       = $Publisher
-                            Keyword         = $Keyword
-                            ErrorVariable   = "CMAppError"
-                        }
-                        
-                        try {
+
                             # Change to the SMS Application folder before importing the applications
                             Write-Verbose "Setting location to $($DestFolder)"
                             Set-Location $DestFolder -ErrorVariable ConnectionError
-
-                            # Add the application
+                                                
+                        try {
+                            # Splat New-CMApplication parameters and add the application
+                            $cmAppParams = @{
+                                Name            = "$($Vc.Name) $($Vc.Architecture)"
+                                Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
+                                SoftwareVersion = "$($Vc.Release) $($Vc.Architecture)"
+                                LinkText        = $Vc.URL
+                                Publisher       = $Publisher
+                                Keyword         = $Keyword
+                                ErrorVariable   = "CMAppError"
+                            }
                             $app = New-CMApplication @cmAppParams
 
                             # Move the new application to the -AppFolder path
@@ -193,27 +189,25 @@ Function Import-VcConfigMgrApp {
                     # Add a deployment type to the application
                     If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Adding deployment type")) {
 
-                        # Splat Add-CMScriptDeploymentType parameters
-                        $cmScriptParams = @{
-                            InstallCommand              = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
-                            ContentLocation             = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                            ProductCode                 = $Vc.ProductCode
-                            SourceUpdateProductCode     = $Vc.ProductCode
-                            DeploymentTypeName          = ("SCRIPT_" + $Vc.Name)
-                            UserInteractionMode         = "Hidden"
-                            UninstallCommand            = "$env:SystemRoot\System32\msiexec.exe /x $($Vc.ProductCode) /qn-"
-                            LogonRequirementType        = "WhetherOrNotUserLoggedOn"
-                            InstallationBehaviorType    = "InstallForSystem"
-                            Comment                     = "Generated by $($MyInvocation.MyCommand)"
-                            ErrorVariable               = "CMDtError"
-                        }
+                        # Change to the SMS Application folder before importing the applications
+                        Write-Verbose "Setting location to $($DestFolder)"
+                        Set-Location $DestFolder -ErrorVariable ConnectionError
 
                         try {
-                            # Change to the SMS Application folder before importing the applications
-                            Write-Verbose "Setting location to $($DestFolder)"
-                            Set-Location $DestFolder -ErrorVariable ConnectionError
-
-                            # Add the application deployment type
+                            # Splat Add-CMScriptDeploymentType parameters and add the application deployment type
+                            $cmScriptParams = @{
+                                InstallCommand              = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
+                                ContentLocation             = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                                ProductCode                 = $Vc.ProductCode
+                                SourceUpdateProductCode     = $Vc.ProductCode
+                                DeploymentTypeName          = ("SCRIPT_" + $Vc.Name)
+                                UserInteractionMode         = "Hidden"
+                                UninstallCommand            = "$env:SystemRoot\System32\msiexec.exe /x $($Vc.ProductCode) /qn-"
+                                LogonRequirementType        = "WhetherOrNotUserLoggedOn"
+                                InstallationBehaviorType    = "InstallForSystem"
+                                Comment                     = "Generated by $($MyInvocation.MyCommand)"
+                                ErrorVariable               = "CMDtError"
+                            }
                             $app | Add-CMScriptDeploymentType @cmScriptParams | Out-Null
                         }
                         catch {

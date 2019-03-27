@@ -56,20 +56,19 @@ Function Install-VcRedist {
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1, `
-                HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1)]
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
         [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
+        [Parameter(Mandatory = $False)]
         [ValidateSet('x86', 'x64')]
         [string[]] $Architecture = @("x86", "x64"),
 
-        [Parameter(Mandatory = $False, HelpMessage = "Perform a silent install of the VcRedist.")]
+        [Parameter(Mandatory = $False)]
         [switch] $Silent
     )
 
