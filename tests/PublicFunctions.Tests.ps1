@@ -41,16 +41,16 @@ Function Test-VcDownloads {
 # Pester tests
 Describe 'Get-VcList' {
     Context 'Return built-in manifest' {
+        $VcList = Get-VcList
         It 'Given no parameters, it returns supported Visual C++ Redistributables' {
-            $VcList = Get-VcList
             $VcList.Count | Should -Be 14
         }
+        $VcList = Get-VcList -Export All
         It 'Given valid parameter -Export All, it returns all Visual C++ Redistributables' {
-            $VcList = Get-VcList -Export All
             $VcList.Count | Should -Be 34
         }
+        $VcList = Get-VcList -Export Unsupported
         It 'Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables' {
-            $VcList = Get-VcList -Export Unsupported
             $VcList.Count | Should -Be 20
         }
     }
@@ -72,20 +72,20 @@ Describe 'Get-VcList' {
         }
     }
     Context 'Return external manifest' {
+        $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+        Export-VcManifest -Path $Json
+        $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest' {
-            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-            Export-VcManifest -Path $Json
-            $VcList = Get-VcList -Path $Json
             $VcList.Count | Should -Be 14
         }
     }
     Context 'Test fail scenarios' {
+        $Json = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.json"
         It 'Given an JSON file that does not exist, it should throw an error' {
-            $Json = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.json"
             { Get-VcList -Path $Json } | Should Throw
         }
+        $Json = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
         It 'Given an invalid JSON file, should throw an error on read' {
-            $Json = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
             { Get-VcList -Path $Json } | Should Throw
         }
     }
@@ -93,17 +93,17 @@ Describe 'Get-VcList' {
 
 Describe 'Export-VcManifest' {
     Context 'Export manifest' {
+        $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+        Export-VcManifest -Path $Json
         It 'Given valid parameter -Path, it exports an JSON file' {
-            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-            Export-VcManifest -Path $Json
             Test-Path -Path $Json | Should -Be $True
         }
     }
     Context 'Export and read manifest' {
+        $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+        Export-VcManifest -Path $Json -Export All
+        $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it exports an JSON file' {
-            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-            Export-VcManifest -Path $Json -Export All
-            $VcList = Get-VcList -Path $Json
             $VcList.Count | Should -Be 34
         }
     }
@@ -116,11 +116,11 @@ Describe 'Export-VcManifest' {
 
 Describe 'Save-VcRedist' {
     Context 'Download Redistributables' {
+        $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
+        If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
+        $VcList = Get-VcList
+        $Downloads = Save-VcRedist -VcList $VcList -Path $Path
         It 'Downloads supported Visual C++ Redistributables' {
-            $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
-            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
-            $VcList = Save-VcList
-            $Downloads = Save-VcRedist -VcList $VcList -Path $Path
             Test-VcDownloads -VcList $Downloads -Path $Path | Should -Be $True
         }
     }
@@ -133,19 +133,22 @@ Describe 'Save-VcRedist' {
 
 Describe 'Install-VcRedist' {
     Context 'Download Redistributables' {
+        $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
+        If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
+        $VcList = Get-VcList -Export All
+        $Downloads = Save-VcRedist -VcList $VcList -Path $Path
         It 'Downloads supported Visual C++ Redistributables' {
-            $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
-            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
-            $VcList = Get-VcList -Export All
-            $Downloads = Save-VcRedist -VcList $VcList -Path $Path
             Test-VcDownloads -VcList $Downloads -Path $Path | Should -Be $True
         }
     }
     Context 'Test fail scenarios' {
-        It 'Installs the VcRedists' {
-            $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
-            Install-VcRedist -VcList (Get-VcList -Export All) -Path $Path -Silent -Verbose
-            (Get-InstalledVcRedist).Count | Should -Be 22
+        $VcRedists = Get-VcList -Export All
+        $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
+        $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent -Verbose
+        ForEach ($Vc in $VcRedists) {
+            It 'Installed the VcRedists' {
+                $Vc.ProductCode | Where-Object { $Installed.ProductCode -contains $_ } | Should -Not -BeNullOrEmpty
+            }
         }
     }
 }
