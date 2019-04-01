@@ -9,18 +9,6 @@ Else {
 Import-Module (Join-Path $ProjectRoot "VcRedist") -Force
 
 InModuleScope VcRedist {
-
-    Describe 'Import-MdtModule' {
-        Context "Importing the MDT PowerShell module" {
-            Function Get-ValidPath {}
-            Mock -CommandName Get-ValidPath -MockWith { $ProjectRoot }
-            Mock Import-Module { $True }
-            It "Imports the MDT PowerShell module and returns True" {
-                Import-MdtModule | Should Be @($True, $True)
-            }
-        }
-    }
-
     Describe 'New-MdtDrive' {
         $Path = "\\server\share"
         $Drive = "DS004"
@@ -58,25 +46,25 @@ InModuleScope VcRedist {
         }
     }
 
-    Describe 'New-MdtPackagesFolder' {
-        Context "Packages folder exists" {
+    Describe 'New-MdtApplicationFolder' {
+        Context "Application folder exists" {
             Mock Test-Path { $True }
-            It "Returns True if the Packages folder exists" {
-                New-MdtPackagesFolder -Drive "DS001" -Path "Windows 10" | Should Be $True
+            It "Returns True if the Application folder exists" {
+                New-MdtApplicationFolder -Drive "DS001" -Name "VcRedists" | Should Be $True
             }
         }
         Context "Creates a new Packages folder" {
             Function New-Item {}
             Mock Test-Path { $False }
-            Mock New-Item { $obj = [PSCustomObject]@{Name = "Windows 10"} }
-            It "Successfully creates a Packages folder" {
-                New-MdtPackagesFolder -Drive "DS001" -Path "Windows 10" | Should Be $True
+            Mock New-Item { $obj = [PSCustomObject]@{Name = "VcRedists"} }
+            It "Successfully creates a Application folder" {
+                New-MdtApplicationFolder -Drive "DS001" -Name "VcRedists" | Should Be $True
             }
         }
     }
 
     Describe 'Get-ValidPath' {
-        $RelPath = "..\LatestUpdate\"
+        $RelPath = "..\VcRedist\"
         Context "Return valid path" {
             It "Given a relative path, it returns a fully qualified path" {
                 $Path = Get-ValidPath -Path $RelPath
