@@ -51,17 +51,12 @@ Function Get-VcList {
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
         [Alias("Xml")]
-        [string] $Path = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.json"),
+        [string] $Path = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributables.json"),
 
         [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
         [switch] $ExportAll
     )
     
-    If ($ExportAll) {
-        $Path = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.json"
-        Write-Warning "This manifest includes unsupported Visual C++ Redistributables."
-    }
-
     try {
         Write-Verbose "Reading JSON document $Path."
         $content = Get-Content -Raw -Path $Path -ErrorVariable readError -ErrorAction SilentlyContinue
@@ -74,7 +69,16 @@ Function Get-VcList {
     try {
         # Convert the JSON content to an object
         Write-Verbose "Converting JSON."
-        $output = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
+        $content = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
+
+        # Create the output object
+        If ($ExportAll) {
+            Write-Warning "This list includes unsupported Visual C++ Redistributables."
+            $output = $content.Supported + $content.Unsupported     
+        }
+        Else {
+            $output = $content.Supported
+        }
     }
     catch {
         Throw "Unable to convert JSON to object. $convertError"
