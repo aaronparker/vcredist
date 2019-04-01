@@ -6,9 +6,9 @@ Else {
     # Local Testing, get parent folder
     $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
-Import-Module $ProjectRoot\VcRedist
+Import-Module (Join-Path $ProjectRoot "VcRedist") -Force
 
-# Functions used in tests
+#region Functions used in tests
 Function Test-VcDownloads {
     <#
         .SYNOPSIS
@@ -37,8 +37,9 @@ Function Test-VcDownloads {
     }
     Write-Output $Output
 }
+#endregion
 
-# Pester tests
+#region Pester tests
 Describe 'Get-VcList' {
     Context 'Return built-in manifest' {
         $VcList = Get-VcList
@@ -119,7 +120,7 @@ Describe 'Save-VcRedist' {
         $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
         If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
         $VcList = Get-VcList
-        $Downloads = Save-VcRedist -VcList $VcList -Path $Path
+        $Downloads = Save-VcRedist -VcList $VcList -Path $Path -Verbose
         It 'Downloads supported Visual C++ Redistributables' {
             Test-VcDownloads -VcList $Downloads -Path $Path | Should -Be $True
         }
@@ -146,7 +147,7 @@ Describe 'Install-VcRedist' {
         $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
         $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent -Verbose
         ForEach ($Vc in $VcRedists) {
-            It 'Installed the VcRedists' {
+            It "Installed the VcRedist: '$($vc.Name)'" {
                 $vc.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
             }
         }
@@ -166,3 +167,4 @@ Describe 'Get-InstalledVcRedist' {
         }
     }
 }
+#endregion
