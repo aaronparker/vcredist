@@ -141,13 +141,13 @@ Describe 'Install-VcRedist' {
             Test-VcDownloads -VcList $Downloads -Path $Path | Should -Be $True
         }
     }
-    Context 'Test fail scenarios' {
+    Context 'Install Redistributables' {
         $VcRedists = Get-VcList -Export All
         $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
         $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent -Verbose
         ForEach ($Vc in $VcRedists) {
             It 'Installed the VcRedists' {
-                $Vc.ProductCode | Where-Object { $Installed.ProductCode -contains $_ } | Should -Not -BeNullOrEmpty
+                $vc.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
             }
         }
     }
