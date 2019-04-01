@@ -64,7 +64,7 @@ InModuleScope VcRedist {
     }
 
     Describe 'Get-ValidPath' {
-        $RelPath = "..\VcRedist\"
+        $RelPath = "..\"
         Context "Return valid path" {
             It "Given a relative path, it returns a fully qualified path" {
                 $Path = Get-ValidPath -Path $RelPath
