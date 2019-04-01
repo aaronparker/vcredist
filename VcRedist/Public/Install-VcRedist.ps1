@@ -76,7 +76,7 @@ Function Install-VcRedist {
         # Get script elevation status
         [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
         If (!($Elevated)) {
-            Throw "Installing the Visual C++ Redistributables requires elevation."
+            Throw "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again."
             Break
         }
 

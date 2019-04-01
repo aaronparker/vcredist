@@ -54,11 +54,12 @@ Function Get-VcList {
         [string] $Path = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributables.json"),
 
         [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
-        [switch] $ExportAll
+        [ValidateSet('Supported', 'All', 'Unsupported')]
+        [string] $Export = "Supported"
     )
     
     try {
-        Write-Verbose "Reading JSON document $Path."
+        Write-Verbose -Message "Reading JSON document $Path."
         $content = Get-Content -Raw -Path $Path -ErrorVariable readError -ErrorAction SilentlyContinue
     }
     catch {
@@ -68,23 +69,32 @@ Function Get-VcList {
     
     try {
         # Convert the JSON content to an object
-        Write-Verbose "Converting JSON."
+        Write-Verbose -Message "Converting JSON."
         $content = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
-
-        # Create the output object
-        If ($ExportAll) {
-            Write-Warning "This list includes unsupported Visual C++ Redistributables."
-            $output = $content.Supported + $content.Unsupported     
-        }
-        Else {
-            $output = $content.Supported
-        }
     }
     catch {
         Throw "Unable to convert JSON to object. $convertError"
         Break
     }
     finally {
+        # Create the output object
+        Switch ($Export) {
+            "Supported" {
+                Write-Verbose -Message "Exporting supported VcRedists."
+                $output = $content.Supported
+            }
+            "All" {
+                Write-Verbose -Message "Exporting all VcRedists."
+                Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                $output = $content.Supported + $content.Unsupported
+            }
+            "Unsupported" {
+                Write-Verbose -Message "Exporting unsupported VcRedists."
+                Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                $output = $content.Unsupported
+            }
+        }
+
         # Return array to the pipeline
         Write-Output $output
     }

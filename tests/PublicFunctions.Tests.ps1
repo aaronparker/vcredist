@@ -42,11 +42,15 @@ Describe 'Get-VcList' {
     Context "Return built-in manifest" {
         It "Given no parameters, it returns supported Visual C++ Redistributables" {
             $VcList = Get-VcList
-            $VcList.Count | Should -Be 12
+            $VcList.Count | Should -Be 14
         }
-        It "Given valid parameter -ExportAll, it returns all Visual C++ Redistributables" {
-            $VcList = Get-VcList -ExportAll
-            $VcList.Count | Should -Be 32
+        It "Given valid parameter -Export All, it returns all Visual C++ Redistributables" {
+            $VcList = Get-VcList -Export All
+            $VcList.Count | Should -Be 34
+        }
+        It "Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" {
+            $VcList = Get-VcList -Export All
+            $VcList.Count | Should -Be 20
         }
     }
     Context "Return external manifest" {
@@ -54,7 +58,7 @@ Describe 'Get-VcList' {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
             Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList.Count | Should -Be 12
+            $VcList.Count | Should -Be 14
         }
     }
     Context "Test fail scenarios" {
@@ -80,9 +84,9 @@ Describe 'Export-VcManifest' {
     Context "Export and read manifest" {
         It "Given valid parameter -Path, it exports an JSON file" {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-            Export-VcManifest -Path $Json -ExportAll
+            Export-VcManifest -Path $Json -Export All
             $VcList = Get-VcList -Path $Json
-            $VcList.Count | Should -Be 32
+            $VcList.Count | Should -Be 34
         }
     }
     Context "Test fail scenarios" {

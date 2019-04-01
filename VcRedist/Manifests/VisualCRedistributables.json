@@ -143,6 +143,30 @@
             "ShortName": "RTM",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart"
+        },
+        {
+            "Name": "Visual C++ Redistributable for Visual Studio 2019",
+            "ProductCode": "{fd9b6070-d13e-45dc-819b-41806bf45b6b}",
+            "Version": "14.16.27027.1",
+            "URL": "https://www.visualstudio.com/downloads/",
+            "Download": "https://aka.ms/vs/15/release/vc_redist.x64.exe",
+            "Release": "2019",
+            "Architecture": "x64",
+            "ShortName": "RTM",
+            "Install": "/install /passive /norestart",
+            "SilentInstall": "/install /quiet /norestart"
+        },
+        {
+            "Name": "Visual C++ Redistributable for Visual Studio 2019",
+            "ProductCode": "{39e28474-b67b-4209-af1b-e9ad0a83d8ca}",
+            "Version": "14.16.27027.1",
+            "URL": "https://www.visualstudio.com/downloads/",
+            "Download": "https://aka.ms/vs/15/release/vc_redist.x86.exe",
+            "Release": "2019",
+            "Architecture": "x86",
+            "ShortName": "RTM",
+            "Install": "/install /passive /norestart",
+            "SilentInstall": "/install /quiet /norestart"
         }
     ],
     "Unsupported": [

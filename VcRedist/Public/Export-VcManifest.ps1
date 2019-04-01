@@ -45,16 +45,27 @@ Function Export-VcManifest {
         [ValidateScript( { If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [string] $Path,
 
-        [Parameter(Mandatory = $False)]
-        [switch] $ExportAll
+        [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
+        [ValidateSet('Supported', 'All', 'Unsupported')]
+        [string] $Export = "Supported"
     )
 
     # Get the list of VcRedists from Get-VcList
-    If ($ExportAll) {
-        $vcList = Get-Vclist -ExportAll
-    }
-    Else {
-        $vcList = Get-VcList
+    Switch ($Export) {
+        "Supported" {
+            Write-Verbose -Message "Exporting supported VcRedists."
+            $vcList = Get-Vclist -Export Supported
+        }
+        "All" {
+            Write-Verbose -Message "Exporting all VcRedists."
+            Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+            $vcList = Get-Vclist -Export All
+        }
+        "Unsupported" {
+            Write-Verbose -Message "Exporting unsupported VcRedists."
+            Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+            $vcList = Get-Vclist -Export Unsupported
+        }
     }
 
     # Output the VcList object to a JSON file
