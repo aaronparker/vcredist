@@ -42,10 +42,15 @@ Function Get-InstalledSoftware {
                 ErrorAction = 'SilentlyContinue'
             }
             $selectProperties = @(
+                @{n = 'Publisher'; e = {$_.GetValue('Publisher')}},
                 @{n = 'Name'; e = {$_.GetValue('DisplayName')}},
                 @{n = 'Version'; e = {$_.GetValue('DisplayVersion')}},
                 @{n = 'ProductCode'; e = {$_.PSChildName}},
-                @{n = 'UninstallString'; e = {$_.GetValue('UninstallString')}}
+                @{n = 'UninstallString'; e = {$_.GetValue('UninstallString')}},
+                @{n = 'QuietUninstallString'; e = {$_.GetValue('QuietUninstallString')}},
+                @{n = 'BundleCachePath'; e = {$_.GetValue('BundleCachePath')}},
+                @{n = 'Architecture'; e = {If ($_.GetValue('DisplayName') -like "*x64*") { "x64" } Else { "x86" }}},
+                @{n = 'Release'; e = {If ($_.GetValue('DisplayName') -match ([regex]"\b(19|20)\d{2}\b")) { $matches[0] }}}
             )
             Get-ChildItem @gciParams | Where-Object $WhereBlock | Select-Object -Property $selectProperties
         }

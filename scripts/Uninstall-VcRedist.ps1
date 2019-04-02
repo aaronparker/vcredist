@@ -1,3 +1,7 @@
+<#
+    Uninstall Visual C++ Redistributables
+#>
+
 $InstalledVcRedists = Get-InstalledVcRedist
 ForEach ($VcRedist in $InstalledVcRedists) {
     Write-Host $VcRedist.Name
