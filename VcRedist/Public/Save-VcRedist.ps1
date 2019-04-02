@@ -64,8 +64,8 @@ Function Save-VcRedist {
         [string] $Path,
 
         [Parameter(Mandatory = $False)]
-        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017"),
+        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017", "2019"),
 
         [Parameter(Mandatory = $False)]
         [ValidateSet('x86', 'x64')]

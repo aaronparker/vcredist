@@ -69,11 +69,11 @@ Function Import-VcMdtApplication {
         [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
-        [string] $AppFolder = "VcRedists",
+        [string] $AppFolder = "VcRedist",
 
         [Parameter(Mandatory = $False)]
-        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
+        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
 
         [Parameter(Mandatory = $False)]
         [ValidateSet('x86', 'x64')]
@@ -134,6 +134,7 @@ Function Import-VcMdtApplication {
 
     Process {
         ForEach ($Vc in $filteredVcList) {
+
             # Set variables
             $supportedPlatform = If ($Vc.Architecture -eq "x86") {
                 @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer")
@@ -142,35 +143,22 @@ Function Import-VcMdtApplication {
             $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
 
             # Check for existing application by matching current VcRedist
-            Write-Verbose -Message "Matching for $VcName"
-            $vcMatched = $existingVcRedists | Where-Object { $_.Name -eq $VcName  }
+            Write-Verbose -Message "Matching for $vcName"
+            $vcMatched = $existingVcRedists | Where-Object { $_.Name -eq $vcName }
 
-            # Each scenario accounted for here for clarity 
-            If (($vcMatched.UninstallKey -ne $Vc.ProductCode) -or $Force.IsPresent) {
-                # Remove if ProductKey does not match or the -Force parameter is specified
-                If ($PSCmdlet.ShouldProcess($vcMatched.Name, "Remove app")) {
-                    Remove-Item -Path $("$target\$($vcMatched.Name)") -Force
-                    $importApp = $True
+            If ($Force.IsPresent) {
+                If ($vcMatched.UninstallKey -eq $Vc.ProductCode) {
+                    If ($PSCmdlet.ShouldProcess($vcMatched.Name, "Remove app")) {
+                        Remove-Item -Path $("$target\$($vcMatched.Name)") -Force
+                    }
                 }
-            }
-            ElseIf ($vcMatched.UninstallKey -eq $Vc.ProductCode) {
-                # Existing VcRedist matches
-                Write-Verbose -Message "Found: $VcName"
-                $importApp = $False
-            }
-            ElseIf ($Null -eq $vcMatched) {
-                # No existing VcRedist
-                Write-Verbose -Message "Not found: $VcName"
-                $importApp = $True
-            }
-            Else {
-                # If all else fails avoid errors when attempting to import app
-                Write-Verbose -Message "Taking the safe route"
-                $importApp = $False
             }
 
             # Import as an application into the MDT deployment share
-            If ($importApp) {
+            If (Test-Path -Path $("$target\$($vcMatched.Name)") -ErrorAction SilentlyContinue) {
+                Write-Verbose "'$("$target\$($vcMatched.Name)")' exists. Use -Force to overwrite the exsiting application."
+            }
+            Else {
                 If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $MdtPath", "Import app")) {
                     try {
                         # Splat the Import-MDTApplication arguments
@@ -199,6 +187,9 @@ Function Import-VcMdtApplication {
                         Throw "Error encountered importing the application - $($Vc.Name) $($Vc.Architecture)."
                     }
                 }
+            }
+            Else {
+                Write-Verbose "Found existing: $vcName"
             }
         }
     }
