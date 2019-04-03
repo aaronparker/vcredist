@@ -25,14 +25,14 @@ Function Update-VcMdtBundle {
             Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
 
         .EXAMPLE
-            Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
+            Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 
             Description:
             Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\server\deployment.
 
         .EXAMPLE
             $VcList = Get-VcList -ExportAll
-            Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
+            Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
             Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
 
             Description:
@@ -65,10 +65,10 @@ Function Update-VcMdtBundle {
 
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            #If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
-            New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
-            Restore-MDTPersistentDrive -Force | Out-Null
-            #}
+            If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
+                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
+                Restore-MDTPersistentDrive -Force | Out-Null
+            }
         }
         Else {
             Throw "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."

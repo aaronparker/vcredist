@@ -31,10 +31,10 @@ Function Export-VcManifest {
             Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.json
 
         .EXAMPLE
-            Export-VcManifest -Path "C:\Temp\VisualCRedistributables.json" -ExportAll
+            Export-VcManifest -Path "C:\Temp\VisualCRedistributables.json" -Export All
 
             Description:
-            Export the full list Visual C++ Redistributables, including unsupported, to C:\Temp\VisualCRedistributables.json
+            Export the full list of Visual C++ Redistributables, including unsupported, to C:\Temp\VisualCRedistributables.json
     #>
     [Alias("Export-VcXml")]
     [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/export-manifests")]

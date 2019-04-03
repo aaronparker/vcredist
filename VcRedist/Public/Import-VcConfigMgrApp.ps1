@@ -33,17 +33,12 @@ Function Import-VcConfigMgrApp {
         .PARAMETER AppFolder
             Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
 
-        .PARAMETER Release
-            Specifies the release (or version) of the redistributables to download or install.
-
-        .PARAMETER Architecture
-            Specifies the processor architecture to download or install.
-
         .PARAMETER Silent
             Add a completely silent command line install of the VcRedist with no UI. The default install is passive.
 
         .EXAMPLE
-            $VcList = Get-VcList | Get-VcRedist -Path "C:\Temp\VcRedist"
+            $VcList = Get-VcList
+            Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
             Import-VcConfigMgrApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 
             Description:
@@ -71,14 +66,6 @@ Function Import-VcConfigMgrApp {
         [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [string] $AppFolder = "VcRedists",
-
-        [Parameter(Mandatory = $False)]
-        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
-
-        [Parameter(Mandatory = $False)]
-        [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $False)]
         [switch] $Silent,
@@ -139,14 +126,10 @@ Function Import-VcConfigMgrApp {
 
         # Output variable
         $output = @()
-
-        # Filter release and architecture
-        Write-Verbose "Filtering releases for platform and architecture."
-        $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
     }
 
     Process {
-        ForEach ($Vc in $filteredVcList) {
+        ForEach ($Vc in $VcList) {
             Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Import as an application into ConfigMgr

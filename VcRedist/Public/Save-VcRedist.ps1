@@ -23,12 +23,6 @@ Function Save-VcRedist {
         .PARAMETER Path
             Specify a target folder to download the Redistributables to, otherwise use the current folder.
 
-        .PARAMETER Release
-            Specifies the release (or version) of the redistributables to download or install.
-
-        .PARAMETER Architecture
-            Specifies the processor architecture to download or install.
-
         .PARAMETER ForceWebRequest
             Forces the use of Invoke-WebRequest over Start-BitsTransfer
 
@@ -39,17 +33,17 @@ Function Save-VcRedist {
             Downloads the supported Visual C++ Redistributables to C:\Redist.
             
         .EXAMPLE
-            $VcRedists = Get-VcList
-            Save-VcRedist -VcList $VcRedists -Release "2012","2013",2017"
+            Get-VcList | Save-VcRedist -Path C:\Redist -ForceWebRequest
 
             Description:
-            Downloads only the 2012, 2013 & 2017 releases of the  Visual C++ Redistributables listed in $VcRedists
+            Passes the list of supported Visual C++ Redistributables to Save-VcRedist and uses Invoke-WebRequest to download the Redistributables to C:\Redist.
 
         .EXAMPLE
-            Save-VcRedist -VcList (Get-VcList) -Path C:\Temp\VcRedist -Architecture x64
+            $VcList = Get-VcList -Release 2013, 2019 -Architecture x86
+            Save-VcRedist -VcList $VcList -Path C:\Redist -ForceWebRequest
 
             Description:
-            Downloads only the 64-bit versions of the Visual C++ Redistributables listed in $VcRedists.
+            Passes the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and uses Invoke-WebRequest to download the Redistributables to C:\Redist.
     #>
     [Alias("Get-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/downloading-the-redistributables")]
@@ -64,14 +58,6 @@ Function Save-VcRedist {
         [string] $Path,
 
         [Parameter(Mandatory = $False)]
-        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2015", "2017", "2019"),
-
-        [Parameter(Mandatory = $False)]
-        [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture = @("x86", "x64"),
-
-        [Parameter(Mandatory = $False)]
         [switch] $ForceWebRequest
     )
 
@@ -79,22 +65,11 @@ Function Save-VcRedist {
     }
 
     Process {
-        # Filter release and architecture if specified
-        If ( $PSBoundParameters.ContainsKey('Release') ) {
-            Write-Verbose "Filtering releases for platform."
-            $VcList = $VcList | Where-Object { $_.Release -eq $Release }
-        }
-        If ( $PSBoundParameters.ContainsKey('Architecture') ) {
-            Write-Verbose "Filtering releases for architecture."
-            $VcList = $VcList | Where-Object { $_.Architecture -eq $Architecture }
-        }
-
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcList) {
             Write-Verbose "[$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Create the folder to store the downloaded file. Skip if it exists
-            # $folder = "$($(Get-Item -Path $Path).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
             If (Test-Path -Path $folder) {
                 Write-Verbose "Folder '$folder' exists. Skipping."
@@ -170,6 +145,6 @@ Function Save-VcRedist {
     
     End {
         # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        Write-Output $VcList
+        Write-Output $filteredVcList
     }
 }
