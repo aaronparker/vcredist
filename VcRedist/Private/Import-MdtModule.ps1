@@ -10,7 +10,7 @@ Function Import-MdtModule {
         .PARAMETER Force
             Re-imports the MDT module and its members, even if the module or its members have an access mode of read-only.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding(SupportsShouldProcess = $False)]
     [OutputType([Boolean])]
     Param (
         [Parameter(Mandatory = $False)]
@@ -40,7 +40,7 @@ Function Import-MdtModule {
     $mdtModule = "$mdtInstallDir\bin\MicrosoftDeploymentToolkit.psd1"
     If (Test-Path -Path $mdtModule) {
         try {
-            If ($pscmdlet.ShouldProcess($mdtModule, "Importing module")) {
+            #If ($pscmdlet.ShouldProcess($mdtModule, "Importing module")) {
                 If ($Force) {
                     Import-Module -Name $mdtModule -ErrorAction SilentlyContinue
                 }
@@ -48,7 +48,7 @@ Function Import-MdtModule {
                     Write-Verbose "Importing the MDT module with -Force."
                     Import-Module -Name $mdtModule -ErrorAction SilentlyContinue -Force
                 }
-            }
+            #}
         }
         catch {
             Write-Warning "Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."

@@ -14,7 +14,7 @@ Function Get-InstalledVcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-installed-redistributables
 
         .PARAMETER ExportAll
             Export all installed Redistributables including the Additional and Minimum Runtimes
@@ -32,7 +32,7 @@ Function Get-InstalledVcRedist {
             Returns the installed Microsoft Visual C++ Redistributables from the current system including the Additional and Minimum Runtimes.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $False)]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-installed-redistributables")]
     Param (
         [Parameter(Mandatory = $False)]
         [switch] $ExportAll

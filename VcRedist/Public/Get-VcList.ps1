@@ -4,9 +4,9 @@ Function Get-VcList {
             Returns an array of Visual C++ Redistributables.
 
         .DESCRIPTION
-            This function reads the Visual C++ Redistributables listed in an internal manifest or an external XML file into an array that can be passed to other VcRedist functions.
+            This function reads the Visual C++ Redistributables listed in an internal manifest or an external JSON file into an array that can be passed to other VcRedist functions.
 
-            A complete listing the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcXml.
+            A complete listing of the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcManifest.
 
         .OUTPUTS
             System.Array
@@ -16,83 +16,130 @@ Function Get-VcList {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list
 
-        .PARAMETER Xml
-            The XML file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
+        .PARAMETER Manifest
+            The JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
 
         .PARAMETER Export
-            Defines the list of Visual C++ Redistributables to export - All Redistributables or Supported Redistributables only.
+            Defines the list of Visual C++ Redistributables to export - All, Supported or Unsupported Redistributables.
             Defaults to exporting the Supported Redistributables.
+
+        .PARAMETER Release
+            Specifies the release (or version) of the redistributables to import into MDT.
+
+        .PARAMETER Architecture
+            Specifies the processor architecture to import into MDT. Can be x86 or x64.
 
         .EXAMPLE
             Get-VcList
 
             Description:
-            Return an array of the Visual C++ Redistributables from the embedded manifest
+            Return an array of the supported Visual C++ Redistributables from the embedded manifest.
 
         .EXAMPLE
-            Get-VcList -Xml ".\VisualCRedistributablesSupported.xml"
+            Get-VcList
 
             Description:
-            Return an array of the Visual C++ Redistributables listed in VisualCRedistributablesSupported.xml.
+            Returns the 2008, 2010, 2012, 2013 and 2019, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.
+
+        .EXAMPLE
+            Get-VcList -Export All
+
+            Description:
+            Returns a list of the all Visual C++ Redistributables from the embedded manifest, including unsupported versions.
+
+        .EXAMPLE
+            Get-VcList -Export Supported
+
+            Description:
+            Returns the full list of supported Visual C++ Redistributables from the embedded manifest.
+
+        .EXAMPLE
+            Get-VcList -Release 2013, 2019 -Architecture x86
+
+            Description:
+            Returns the 2013 and 2019 x64 Visual C++ Redistributables from the list of supported Redistributables in the embedded manifest.
+
+        .EXAMPLE
+            Get-VcList -Path ".\VisualCRedistributables.json"
+
+            Description:
+            Returns a list of the Visual C++ Redistributables listed in the external manifest VisualCRedistributables.json.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $False)]
+    [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName = 'Manifest', `
+            HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list")]
     Param (
-        [Parameter(Mandatory = $False, Position = 0, HelpMessage = "Path to the XML document describing the Redistributables.")]
+        [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline, ParameterSetName = 'Manifest')]
         [ValidateNotNull()]
-        [ValidateScript({ If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
-        [string] $Xml = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesSupported.xml"),
+        [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
+        [Alias("Xml")]
+        [string] $Path = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributables.json"),
 
-        [Parameter(Mandatory = $False)]
-        [ValidateSet('All', 'Supported')]
-        [string] $Export = "Supported"
+        [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
+        [ValidateSet('Supported', 'All', 'Unsupported')]
+        [string] $Export = "Supported",
+
+        [Parameter(Mandatory = $False, ParameterSetName = 'Manifest')]
+        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
+        [string[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
+
+        [Parameter(Mandatory = $False, ParameterSetName = 'Manifest')]
+        [ValidateSet('x86', 'x64')]
+        [string[]] $Architecture = @("x86", "x64")
     )
-    Begin {
-        Switch ($Export) {
-            "All" {
-                $Xml = Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributablesAll.xml"
-                Write-Warning "This array includes unsupported Visual C++ Redistributables."
+    
+    try {
+        Write-Verbose -Message "Reading JSON document $Path."
+        $content = Get-Content -Raw -Path $Path -ErrorVariable readError -ErrorAction SilentlyContinue
+    }
+    catch {
+        Throw "Unable to read manifest $Path. $readError"
+        Break
+    }
+    
+    try {
+        # Convert the JSON content to an object
+        Write-Verbose -Message "Converting JSON."
+        $json = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
+    }
+    catch {
+        Throw "Unable to convert manifest JSON to required object. Please validate the input manifest."
+        Break
+    }
+    finally {
+        If ($Null -ne $json) {
+            If ($PSBoundParameters.ContainsKey('Export')) {
+                Switch ($Export) {
+                    "Supported" {
+                        Write-Verbose -Message "Exporting supported VcRedists."
+                        [PSCustomObject] $output = $json.Supported
+                    }
+                    "All" {
+                        Write-Verbose -Message "Exporting all VcRedists."
+                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                        [PSCustomObject] $output = $json.Supported + $json.Unsupported
+                    }
+                    "Unsupported" {
+                        Write-Verbose -Message "Exporting unsupported VcRedists."
+                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                        [PSCustomObject] $output = $json.Unsupported
+                    }
+                }
+            }
+            Else {
+                # Filter the list for architecture and release
+                If ($json | Get-Member -Name "Supported" -MemberType "Properties") {
+                    [PSCustomObject] $supported = $json.Supported
+                }
+                Else {
+                    [PSCustomObject] $supported = $json
+                }
+                [PSCustomObject] $release = $supported | Where-Object { $Release -contains $_.Release }
+                [PSCustomObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
             }
         }
-
-        # The array that will be returned
-        $output = @()
-    }
-    Process {
-        # Read the specifed XML document
-        try {
-            Write-Verbose "Reading XML document $Xml."
-            [xml] $xmlDocument = Get-Content -Path $Xml -ErrorVariable xmlReadError -ErrorAction SilentlyContinue
-        }
-        catch {
-            Throw "Unable to read $Xml. $xmlReadError"
-        }
-
-        # Build the output object by compiling an array of each redistributable
-        $xmlContent = (Select-Xml -XPath "/Redistributables/Platform" -Xml $xmlDocument).Node
-        ForEach ($platform in $xmlContent) {
-            Write-Verbose "Building array with $($platform.Release) on $($platform.Architecture)."
-            ForEach ($redistributable in $platform.Redistributable) {
-                Write-Verbose "Adding to array with $($redistributable.Name)"
-                $item = New-Object PSCustomObject
-                $item | Add-Member -Type NoteProperty -Name 'Name' -Value $redistributable.Name
-                $item | Add-Member -Type NoteProperty -Name 'ProductCode' -Value $redistributable.ProductCode
-                $item | Add-Member -Type NoteProperty -Name 'Version' -Value $redistributable.Version
-                $item | Add-Member -Type NoteProperty -Name 'URL' -Value $redistributable.URL
-                $item | Add-Member -Type NoteProperty -Name 'Download' -Value $redistributable.Download
-                $item | Add-Member -Type NoteProperty -Name 'Release' -Value $platform.Release
-                $item | Add-Member -Type NoteProperty -Name 'Architecture' -Value $platform.Architecture
-                $item | Add-Member -Type NoteProperty -Name 'ShortName' -Value $redistributable.ShortName
-                $item | Add-Member -Type NoteProperty -Name 'Install' -Value $platform.Install
-                $item | Add-Member -Type NoteProperty -Name 'SilentInstall' -Value $platform.SilentInstall
-                $output += $item
-            }
-        }
-    }
-    End {
-        # Return array to the pipeline
         Write-Output $output
     }
 }

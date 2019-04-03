@@ -11,9 +11,6 @@ Function Get-FileMetadata {
             Author: Aaron Parker
             Twitter: @stealthpuppy
         
-        .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
-
         .OUTPUTS
             [System.Array]
 

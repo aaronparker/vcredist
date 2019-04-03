@@ -14,7 +14,7 @@ Function Install-VcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://github.com/aaronparker/Install-VisualCRedistributables
+            https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables
 
         .PARAMETER VcList
             An array containing details of the Visual C++ Redistributables from Get-VcList.
@@ -22,71 +22,59 @@ Function Install-VcRedist {
         .PARAMETER Path
             A folder containing the downloaded Visual C++ Redistributables.
 
-        .PARAMETER Release
-            Specifies the release (or version) of the redistributables to download or install.
-
-        .PARAMETER Architecture
-            Specifies the processor architecture to download or install.
-
         .PARAMETER Silent
             Perform a completely silent install of the VcRedist with no UI. The default install is passive.
 
         .EXAMPLE
+            $VcRedists = Get-VcList -Release 2013, 2019 -Architecture x64
             Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
 
             Description:
-            Installs the Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
+            Installs the 2013 and 2019 64-bit Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
 
         .EXAMPLE
-            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Release "2012","2013",2017" -Architecture x64
+            $VcRedists = Get-VcList -Release "2012","2013",2017" -Architecture x64
+            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
 
             Description:
             Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
 
         .EXAMPLE
+            $VcRedists = Get-VcList -Release "2012","2013",2017" -Architecture x64    
             Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent
 
             Description:
             Installs all supported Visual C++ Redistributables using a completely silent install.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables")]
     [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [PSCustomObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1, `
-                HelpMessage = "A folder containing the downloaded Visual C++ Redistributables.")]
+        [Parameter(Mandatory = $True, Position = 1)]
         [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [string] $Path,
 
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the version of the Redistributables to install.")]
-        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2017"),
-
-        [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture/s to install.")]
-        [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture = @("x86", "x64"),
-
-        [Parameter(Mandatory = $False, HelpMessage = "Perform a silent install of the VcRedist.")]
+        [Parameter(Mandatory = $False)]
         [switch] $Silent
     )
-    Begin {
 
+    Begin {
         # Get script elevation status
         [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        If (!($Elevated)) { Throw "Installing the Visual C++ Redistributables requires elevation." }
-
-        # Filter release and architecture
-        Write-Verbose "Filtering releases for platform and architecture."
-        $filteredVcList = $VcList | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
+        If (!($Elevated)) {
+            Throw "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again."
+            Break
+        }
 
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
     }
+
     Process {
-        ForEach ($vc in $filteredVcList) {
+        ForEach ($vc in $VcList) {
             If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
                 Write-Verbose "Already installed: [$($vc.Architecture)]$($vc.Name)"
             }
@@ -121,6 +109,7 @@ Function Install-VcRedist {
             }
         }
     }
+
     End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         Write-Output (Get-InstalledVcRedist)
