@@ -1,4 +1,4 @@
-Function Import-VcConfigMgrApp {
+Function Import-VcConfigMgrApplication {
     <#
         .SYNOPSIS
             Creates Visual C++ Redistributable applications in a ConfigMgr site.
@@ -39,7 +39,7 @@ Function Import-VcConfigMgrApp {
         .EXAMPLE
             $VcList = Get-VcList
             Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
-            Import-VcConfigMgrApp -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
+            Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 
             Description:
             Download the supported Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.

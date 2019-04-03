@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 'Import-VcConfigMgrApp', 'Import-VcMdtApplication', 'Install-VcRedist', 'New-VcMdtBundle', 'Save-VcRedist', 'Update-VcMdtApplication', 'Update-VcMdtBundle')
+    FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 'Import-VcConfigMgrApplication', 'Import-VcMdtApplication', 'Install-VcRedist', 'New-VcMdtBundle', 'Save-VcRedist', 'Update-VcMdtApplication', 'Update-VcMdtBundle')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -110,7 +110,7 @@
             IconUri      = 'https://raw.githubusercontent.com/aaronparker/VcRedist/master/img/VisualStudioLogo2019-256.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'https://docs.stealthpuppy.com/vcredist/change-log'
+            ReleaseNotes = 'https://docs.stealthpuppy.com/docs/vcredist/change-log'
 
             # Prerelease string of this module
             # Prerelease = ''

@@ -11,7 +11,6 @@ Function Export-VcManifest {
             System.String
         
         .NOTES
-            Name: Export-VcManifest
             Author: Aaron Parker
             Twitter: @stealthpuppy
 
