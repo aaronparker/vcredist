@@ -109,7 +109,7 @@ Describe 'Export-VcManifest' {
         Export-VcManifest -Path $Json -Export All
         $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it exports an JSON file' {
-            $VcList.Count | Should -Be 34
+            $VcList.Count | Should -Be 22
         }
     }
     Context 'Test fail scenarios' {

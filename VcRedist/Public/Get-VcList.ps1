@@ -105,39 +105,41 @@ Function Get-VcList {
         $json = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
     }
     catch {
-        Throw "Unable to convert JSON to object. $convertError"
+        Throw "Unable to convert manifest JSON to required object. Please validate the input manifest."
         Break
     }
     finally {
-        If ($PSBoundParameters.ContainsKey('Export')) {
-            Switch ($Export) {
-                "Supported" {
-                    Write-Verbose -Message "Exporting supported VcRedists."
-                    [PSCustomObject] $output = $json.Supported
+        If ($Null -ne $json) {
+            If ($PSBoundParameters.ContainsKey('Export')) {
+                Switch ($Export) {
+                    "Supported" {
+                        Write-Verbose -Message "Exporting supported VcRedists."
+                        [PSCustomObject] $output = $json.Supported
+                    }
+                    "All" {
+                        Write-Verbose -Message "Exporting all VcRedists."
+                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                        [PSCustomObject] $output = $json.Supported + $json.Unsupported
+                    }
+                    "Unsupported" {
+                        Write-Verbose -Message "Exporting unsupported VcRedists."
+                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                        [PSCustomObject] $output = $json.Unsupported
+                    }
                 }
-                "All" {
-                    Write-Verbose -Message "Exporting all VcRedists."
-                    Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                    [PSCustomObject] $output = $json.Supported + $json.Unsupported
-                }
-                "Unsupported" {
-                    Write-Verbose -Message "Exporting unsupported VcRedists."
-                    Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                    [PSCustomObject] $output = $json.Unsupported
-                }
-            }
-        }
-        Else {
-            # Filter the list for architecture and release
-            If (Get-Member -inputobject $json -name "Supported" -Membertype Properties) {
-                [PSCustomObject] $supported = $json.Supported
             }
             Else {
-                [PSCustomObject] $supported = $json
+                # Filter the list for architecture and release
+                If ($json | Get-Member -Name "Supported" -MemberType "Properties") {
+                    [PSCustomObject] $supported = $json.Supported
+                }
+                Else {
+                    [PSCustomObject] $supported = $json
+                }
+                [PSCustomObject] $release = $supported | Where-Object { $Release -contains $_.Release }
+                [PSCustomObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
             }
-            [PSCustomObject] $release = $supported | Where-Object { $Release -contains $_.Release }
-            [PSCustomObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
         }
+        Write-Output $output
     }
-    Write-Output $output
 }
