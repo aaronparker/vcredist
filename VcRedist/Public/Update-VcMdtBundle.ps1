@@ -59,25 +59,28 @@ Function Update-VcMdtBundle {
     Begin {
         # If running on PowerShell Core, error and exit.
         If (Test-PSCore) {
-            Write-Error -Message "PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module." -ErrorAction Stop
+            Write-Error -Message "PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
             Break
         }
 
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
-                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue
-                Restore-MDTPersistentDrive -Force | Out-Null
-            }
+            #If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
+            New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
+            Restore-MDTPersistentDrive -Force | Out-Null
+            #}
         }
         Else {
-            Write-Error -Message "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again." -ErrorAction Stop
+            Throw "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
             Break
         }
+
+        $target = "$($MdtDrive):\Applications\$AppFolder"
+        Write-Verbose -Message "Update applications in: $target"
     }
 
     Process {
-        If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Update bundle")) {
+        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
             # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
             $existingVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
             $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
@@ -92,18 +95,29 @@ Function Update-VcMdtBundle {
 
             If ($Null -ne $bundle) {
                 try {
-                    Set-ItemProperty -Path $bundle.PSPath -Name "Dependency" -Value $dependencies
+                    If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update")) {
+                        Set-ItemProperty -Path "$target\$($Publisher) $($BundleName)" -Name "Dependency" -Value $dependencies
+                        Set-ItemProperty -Path "$target\$($Publisher) $($BundleName)" -Name "Version" -Value (Get-Date -format "yyyy-MMM-dd")
+                    }
                 }
                 catch {
                     Throw "Error updating VcRedist bundle dependencies."
-                }    
+                }
             }
+        }
+        Else {
+            Write-Error -Message "Failed to find path $target."
         }
     }
 
     End {
-        # Return list of apps to the pipeline
-        $bundle = Get-ChildItem -Path "$target\$($Publisher) $($BundleName)"
-        Write-Output $bundle
+        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+            # Return list of apps to the pipeline
+            $bundle = Get-ChildItem -Path "$target\$($Publisher) $($BundleName)"
+            Write-Output $bundle
+        }
+        Else {
+            Write-Error -Message "Failed to find path $target."
+        }
     }
 }
