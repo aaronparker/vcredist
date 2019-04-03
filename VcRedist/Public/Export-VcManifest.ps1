@@ -54,17 +54,17 @@ Function Export-VcManifest {
     Switch ($Export) {
         "Supported" {
             Write-Verbose -Message "Exporting supported VcRedists."
-            $vcList = Get-Vclist -Export Supported
+            $vcList = Get-VcList -Export Supported
         }
         "All" {
             Write-Verbose -Message "Exporting all VcRedists."
             Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-            $vcList = Get-Vclist -Export All
+            $vcList = Get-VcList -Export All
         }
         "Unsupported" {
             Write-Verbose -Message "Exporting unsupported VcRedists."
             Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-            $vcList = Get-Vclist -Export Unsupported
+            $vcList = Get-VcList -Export Unsupported
         }
     }
 
@@ -77,6 +77,6 @@ Function Export-VcManifest {
         Break
     }
     finally {
-        Write-Output $Path
+        Write-Output (Resolve-Path -Path $Path)
     }
 }

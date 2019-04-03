@@ -118,7 +118,7 @@ Function Get-VcList {
                 "All" {
                     Write-Verbose -Message "Exporting all VcRedists."
                     Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                    [PSCustomObject] $output = $json.Supported + $content.Unsupported
+                    [PSCustomObject] $output = $json.Supported + $json.Unsupported
                 }
                 "Unsupported" {
                     Write-Verbose -Message "Exporting unsupported VcRedists."
@@ -126,14 +126,18 @@ Function Get-VcList {
                     [PSCustomObject] $output = $json.Unsupported
                 }
             }
-            Write-Output $output
         }
         Else {
             # Filter the list for architecture and release
-            [PSCustomObject] $supported = $json.Supported
+            If (Get-Member -inputobject $json -name "Supported" -Membertype Properties) {
+                [PSCustomObject] $supported = $json.Supported
+            }
+            Else {
+                [PSCustomObject] $supported = $json
+            }
             [PSCustomObject] $release = $supported | Where-Object { $Release -contains $_.Release }
             [PSCustomObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
-            Write-Output $output
         }
     }
+    Write-Output $output
 }
