@@ -50,7 +50,7 @@ Function Get-InstalledSoftware {
                 @{n = 'QuietUninstallString'; e = {$_.GetValue('QuietUninstallString')}},
                 @{n = 'BundleCachePath'; e = {$_.GetValue('BundleCachePath')}},
                 @{n = 'Architecture'; e = {If ($_.GetValue('DisplayName') -like "*x64*") { "x64" } Else { "x86" }}},
-                @{n = 'Release'; e = {If ($_.GetValue('DisplayName') -match [regex]"(\d{4})\s+") { $matches[0] }}}
+                @{n = 'Release'; e = {If ($_.GetValue('DisplayName') -match [regex]"(\d{4})\s+") { $matches[0].Trim(" ") }}}
             )
             Get-ChildItem @gciParams | Where-Object $WhereBlock | Select-Object -Property $selectProperties
         }
