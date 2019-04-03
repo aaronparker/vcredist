@@ -107,7 +107,7 @@
             ProjectUri   = 'https://github.com/aaronparker/VcRedist/'
 
             # A URL to an icon representing this module.
-            IconUri      = 'https://raw.githubusercontent.com/aaronparker/VcRedist/master/images/VisualStudioLogo2019-256.png'
+            IconUri      = 'https://raw.githubusercontent.com/aaronparker/VcRedist/master/img/VisualStudioLogo2019-256.png'
 
             # ReleaseNotes of this module
             ReleaseNotes = 'https://docs.stealthpuppy.com/vcredist/change-log'
