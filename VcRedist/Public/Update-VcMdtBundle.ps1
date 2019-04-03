@@ -16,7 +16,7 @@ Function Update-VcMdtBundle {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt
+            https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-mdt
 
         .PARAMETER MdtPath
             The local or network path to the MDT deployment share.
@@ -38,7 +38,7 @@ Function Update-VcMdtBundle {
             Description:
             Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/importing-into-mdt")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-mdt")]
     [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

@@ -16,7 +16,7 @@ Function Get-VcList {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/usage/getting-the-vcredist-list
+            https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list
 
         .PARAMETER Manifest
             The JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
@@ -69,7 +69,7 @@ Function Get-VcList {
     #>
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName = 'Manifest', `
-            HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/getting-the-vcredist-list")]
+            HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list")]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline, ParameterSetName = 'Manifest')]
         [ValidateNotNull()]

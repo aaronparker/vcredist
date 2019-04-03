@@ -14,7 +14,7 @@ Function Install-VcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/usage/installing-the-redistributables
+            https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables
 
         .PARAMETER VcList
             An array containing details of the Visual C++ Redistributables from Get-VcList.
@@ -46,7 +46,7 @@ Function Install-VcRedist {
             Description:
             Installs all supported Visual C++ Redistributables using a completely silent install.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/vcredist/usage/installing-the-redistributables")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables")]
     [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

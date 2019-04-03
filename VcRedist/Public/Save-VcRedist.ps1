@@ -15,7 +15,7 @@ Function Save-VcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/vcredist/usage/downloading-the-redistributables
+            https://docs.stealthpuppy.com/docs/vcredist/usage/downloading-the-redistributables
 
         .PARAMETER VcList
             Sepcifies the array that lists the Visual C++ Redistributables to download
@@ -46,7 +46,7 @@ Function Save-VcRedist {
             Passes the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and uses Invoke-WebRequest to download the Redistributables to C:\Redist.
     #>
     [Alias("Get-VcRedist")]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/vcredist/usage/downloading-the-redistributables")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/downloading-the-redistributables")]
     [OutputType([Array])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
