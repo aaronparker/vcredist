@@ -180,7 +180,7 @@ Function Import-VcConfigMgrApplication {
                             # Splat Add-CMScriptDeploymentType parameters and add the application deployment type
                             $cmScriptParams = @{
                                 InstallCommand              = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
-                                ContentLocation             = "$($(Get-Item -Path $CMPath).FullName)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                                ContentLocation             = "$CMPath\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
                                 ProductCode                 = $Vc.ProductCode
                                 SourceUpdateProductCode     = $Vc.ProductCode
                                 DeploymentTypeName          = ("SCRIPT_" + $Vc.Name)
