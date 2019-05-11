@@ -26,10 +26,10 @@ Function Get-VcList {
             Defaults to exporting the Supported Redistributables.
 
         .PARAMETER Release
-            Specifies the release (or version) of the redistributables to import into MDT.
+            Specifies the release (or version) of the redistributables to return.
 
         .PARAMETER Architecture
-            Specifies the processor architecture to import into MDT. Can be x86 or x64.
+            Specifies the processor architecture to of the redistributables to return. Can be x86 or x64.
 
         .EXAMPLE
             Get-VcList

@@ -17,7 +17,7 @@ Function Get-InstalledVcRedist {
             https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-installed-redistributables
 
         .PARAMETER ExportAll
-            Export all installed Redistributables including the Additional and Minimum Runtimes
+            Export all installed Redistributables including the Additional and Minimum Runtimes typically hidden from Programs and Features
 
         .EXAMPLE
             Get-InstalledVcRedist
