@@ -27,10 +27,8 @@ environment:
 skip_commits:
   files:
     - README.md
-    - book.json
-    - docs/*
-    - help/*
-    - images/*
+    - .github/&
+    - img/*
     - scripts/*
     - TestsResults.xml
     - Redists.xml
@@ -40,6 +38,10 @@ only_commits:
   files:
     - VcRedist/
     - tests/
+
+branches:
+  except:
+  - docs
 
 # Install Pester to enable tests
 install:
@@ -57,8 +59,4 @@ test_script:
   - git config --global user.name "Aaron Parker"
   - git config --global core.autocrlf true
   - git config --global core.safecrlf false
-  - ps: . .\tests\Build.ps1
-
-branches:
-  except:
-  - docs
+  #- ps: . .\tests\Build.ps1

@@ -76,6 +76,6 @@ Else {
     Catch {
         # Sad panda; it broke
         Write-Warning "Publishing update $newVersion to the PowerShell Gallery failed."
-        throw $_
+        Throw $_
     }
 }
