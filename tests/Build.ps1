@@ -6,6 +6,9 @@ Else {
     $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
 
+# Module name
+$name = "VcRedist"
+
 # Line break for readability in AppVeyor console
 Write-Host -Object ''
 
@@ -22,7 +25,7 @@ Else {
     # This means that the major / minor / build values will be consistent across GitHub and the Gallery
     Try {
         # This is where the module manifest lives
-        $manifestPath = Join-Path (Join-Path $projectRoot "VcRedist") "VcRedist.psd1"
+        $manifestPath = Join-Path (Join-Path $projectRoot "$name") "$name.psd1"
 
         # Start by importing the manifest to determine the version, then add 1 to the revision
         $manifest = Test-ModuleManifest -Path $manifestPath
@@ -32,10 +35,10 @@ Else {
         Write-Output "New Version: $newVersion"
 
         # Update the manifest with the new version value and fix the weird string replace bug
-        $functionList = ((Get-ChildItem -Path (Join-Path (Join-Path $projectRoot "VcRedist") "Public")).BaseName)
+        $functionList = ((Get-ChildItem -Path (Join-Path (Join-Path $projectRoot "$name") "Public")).BaseName)
         Update-ModuleManifest -Path $manifestPath -ModuleVersion $newVersion -FunctionsToExport $functionList
-        (Get-Content -Path $manifestPath) -replace 'PSGet_VcRedist', 'VcRedist' | Set-Content -Path $manifestPath
-        (Get-Content -Path $manifestPath) -replace 'NewManifest', 'VcRedist' | Set-Content -Path $manifestPath
+        (Get-Content -Path $manifestPath) -replace 'PSGet_$name', '$name' | Set-Content -Path $manifestPath
+        (Get-Content -Path $manifestPath) -replace 'NewManifest', '$name' | Set-Content -Path $manifestPath
         (Get-Content -Path $manifestPath) -replace 'FunctionsToExport = ', 'FunctionsToExport = @(' | Set-Content -Path $manifestPath -Force
         (Get-Content -Path $manifestPath) -replace "$($functionList[-1])'", "$($functionList[-1])')" | Set-Content -Path $manifestPath -Force
     }
@@ -54,7 +57,7 @@ Else {
         git status
         git commit -s -m "Update version to $newVersion"
         git push origin master
-        Write-Host "VcRedist PowerShell Module version $newVersion published to GitHub." -ForegroundColor Cyan
+        Write-Host "$name PowerShell Module version $newVersion published to GitHub." -ForegroundColor Cyan
     }
     Catch {
         # Sad panda; it broke
@@ -66,12 +69,12 @@ Else {
     Try {
         # Build a splat containing the required details and make sure to Stop for errors which will trigger the catch
         $PM = @{
-            Path        = Join-Path $projectRoot "VcRedist"
+            Path        = Join-Path $projectRoot "$name"
             NuGetApiKey = $env:NuGetApiKey
             ErrorAction = 'Stop'
         }
         Publish-Module @PM
-        Write-Host "VcRedist PowerShell Module version $newVersion published to the PowerShell Gallery." -ForegroundColor Cyan
+        Write-Host "$name PowerShell Module version $newVersion published to the PowerShell Gallery." -ForegroundColor Cyan
     }
     Catch {
         # Sad panda; it broke

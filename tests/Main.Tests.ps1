@@ -7,9 +7,12 @@ Else {
     $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
 
+# Module name
+$name = "VcRedist"
+
 Describe "General project validation" {
 
-    $scripts = Get-ChildItem (Join-Path $projectRoot "VcRedist") -Recurse -Include *.ps1, *.psm1
+    $scripts = Get-ChildItem (Join-Path $projectRoot $name) -Recurse -Include *.ps1, *.psm1
 
     # TestCases are splatted to the script so we need hashtables
     $testCase = $scripts | Foreach-Object {@{file = $_}}         
@@ -44,7 +47,7 @@ Describe "General project validation" {
 
 Describe "Function validation" {
     
-    $scripts = Get-ChildItem (Join-Path $projectRoot "VcRedist") -Recurse -Include *.ps1
+    $scripts = Get-ChildItem (Join-Path $projectRoot $name) -Recurse -Include *.ps1
     $testCase = $scripts | Foreach-Object {@{file = $_}}         
     It "Script <file> should only contain one function" -TestCases $testCase {
         param($file)   

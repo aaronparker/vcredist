@@ -6,6 +6,7 @@
 # Without this, the following error shows up:
 # "Specify a project or solution file. The directory does not contain a project or solution file."
 build: off
+image: WMF 5
 
 # Version number
 version: 2.0.{build}
@@ -31,7 +32,6 @@ skip_commits:
     - img/*
     - scripts/*
     - TestsResults.xml
-    - Redists.xml
   message: /updated readme.*|update readme.*s|update docs.*|update version.*|update appveyor.*|Merge branch 'master' of.*/
 
 only_commits:
@@ -59,4 +59,4 @@ test_script:
   - git config --global user.name "Aaron Parker"
   - git config --global core.autocrlf true
   - git config --global core.safecrlf false
-  #- ps: . .\tests\Build.ps1
+  - ps: . .\tests\Build.ps1

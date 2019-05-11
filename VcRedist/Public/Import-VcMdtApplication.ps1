@@ -164,7 +164,6 @@ Function Import-VcMdtApplication {
                             DestinationFolder     = "$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
                             UninstallKey          = $Vc.ProductCode
                             SupportedPlatform     = $supportedPlatform
-                            Dependency            = ""
                         }
                         Import-MDTApplication @importMDTAppParams
                     }
