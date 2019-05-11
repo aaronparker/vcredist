@@ -2,6 +2,9 @@
     .SYNOPSIS
         AppVeyor tests setup script.
 #>
+# Module name
+$name = "VcRedist"
+
 # Line break for readability in AppVeyor console
 Write-Host -Object ''
 Write-Host "PowerShell Version:" $PSVersionTable.PSVersion.tostring()
@@ -19,4 +22,4 @@ Else {
     # Local Testing 
     $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
 }
-Import-Module (Join-Path $projectRoot "VcRedist") -Verbose -Force
+Import-Module (Join-Path $projectRoot $name) -Verbose -Force
