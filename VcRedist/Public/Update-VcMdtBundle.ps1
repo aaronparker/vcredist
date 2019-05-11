@@ -81,11 +81,8 @@ Function Update-VcMdtBundle {
 
     Process {
         If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-            # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
-            $existingVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
-            $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
-            $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
 
+            # Get properties from the existing bundle
             try {
                 $bundle = Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" -ErrorAction SilentlyContinue
             }
@@ -93,9 +90,14 @@ Function Update-VcMdtBundle {
                 Throw "Failed to retreive the existing Visual C++ Redistributables bundle"
             }
 
+            # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
+            $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) }
+            $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
+            $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
+
             If ($Null -ne $bundle) {
                 try {
-                    If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update")) {
+                    If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
                         Set-ItemProperty -Path "$target\$($Publisher) $($BundleName)" -Name "Dependency" -Value $dependencies
                         Set-ItemProperty -Path "$target\$($Publisher) $($BundleName)" -Name "Version" -Value (Get-Date -format "yyyy-MMM-dd")
                     }
