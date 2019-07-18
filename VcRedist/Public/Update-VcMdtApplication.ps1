@@ -45,105 +45,151 @@ Function Update-VcMdtApplication {
             Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
     #>
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-mdt")]
-    [OutputType([Array])]
+    [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [PSCustomObject] $VcList,
+        [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string] $Path,
+        [System.String] $Path,
 
         [Parameter(Mandatory = $True)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string] $MdtPath,
+        [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
-        [string] $AppFolder = "VcRedists",
+        [System.String] $AppFolder = "VcRedists",
 
         [Parameter(Mandatory = $False)]
-        [switch] $Silent,
+        [System.Management.Automation.SwitchParameter] $Silent,
 
-        [Parameter()][string] $MdtDrive = "DS001",
-        [Parameter()][string] $Publisher = "Microsoft",
-        [Parameter()][string] $BundleName = "Visual C++ Redistributables",
-        [Parameter()][string] $Language = "en-US"
+        [Parameter(Mandatory = $False, Position = 2)]
+        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [System.String] $MdtDrive = "DS001",
+
+        [Parameter(Mandatory = $False, Position = 3)]
+        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [System.String] $Publisher = "Microsoft",
+
+        [Parameter(Mandatory = $False, Position = 4)]
+        [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
+        [System.String] $BundleName = "Visual C++ Redistributables",
+
+        [Parameter(Mandatory = $False, Position = 5)]
+        [ValidatePattern('^[a-zA-Z0-9-]+$')]
+        [System.String] $Language = "en-US"
     )
 
-    Begin {
-        # If running on PowerShell Core, error and exit.
-        If (Test-PSCore) {
-            Write-Error -Message "PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module." -ErrorAction Stop
-            Break
-        }
+    # If running on PowerShell Core, error and exit.
+    If (Test-PSCore) {
+        Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
+        Throw [System.Management.Automation.InvalidPowerShellStateException]
+        Exit
+    }
 
-        # Import the MDT module and create a PS drive to MdtPath
-        If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
-                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue
+    # Import the MDT module and create a PS drive to MdtPath
+    If (Import-MdtModule) {
+        If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+            try {
+                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
                 Restore-MDTPersistentDrive -Force | Out-Null
             }
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
+                Throw $_.Exception.Message
+                Exit
+            }
         }
-        Else {
-            Write-Error -Message "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again." -ErrorAction Stop
-            Break
-        }
-
-        $target = "$($MdtDrive):\Applications\$AppFolder"
-        Write-Verbose -Message "Update applications in: $target"
+    }
+    Else {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
+        Throw [System.Management.Automation.InvalidPowerShellStateException]
+        Exit
     }
 
-    Process {
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-            ForEach ($Vc in $VcList) {
-                # Set variables
-                $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
+    $target = "$($MdtDrive):\Applications\$AppFolder"
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Update applications in: $target"
 
-                try {
-                    $existingVc = Get-ChildItem -Path "$target\$vcName" -ErrorAction SilentlyContinue
+    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        ForEach ($Vc in $VcList) {
+            # Set variables
+            $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
+
+            try {
+                $gciParams = @{
+                    Path        = (Join-Path -Path $target -ChildPath $vcName)
+                    ErrorAction = SilentlyContinue
                 }
-                catch {
-                    Throw "Failed to retreive the existing application: $vcName"
-                }
+                $existingVc = Get-ChildItem @gciParams
+            }
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing application: [$vcName]."
+                Throw $_.Exception.Message
+                Exit
+            }
     
-                If ($Null -ne $existingVc) {
-                    try {
-                        If ($existingVc.CommandLine -ne ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })") {
-                            If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update CommandLine")) {
-                                Set-ItemProperty -Path "$target\$vcName" -Name "CommandLine" -Value ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })"
+            If ($Null -ne $existingVc) {
+                try {
+                    If ($existingVc.CommandLine -ne ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })") {
+                        If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update CommandLine")) {
+                            try {
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $target -ChildPath $vcName)
+                                    Name  = "CommandLine"
+                                    Value = ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })"
+                                }
+                                Set-ItemProperty @$sipParams
                             }
-                        }
-                        If ($existingVc.UninstallKey -ne $Vc.ProductCode) {
-                            If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update UninstallKey")) {
-                                Set-ItemProperty -Path "$target\$vcName" -Name "UninstallKey" -Value $Vc.ProductCode
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application command line."
+                                Throw $_.Exception.Message
+                                Continue
                             }
                         }
                     }
-                    catch {
-                        Throw "Error updating VcRedist application dependencies."
+                    If ($existingVc.UninstallKey -ne $Vc.ProductCode) {
+                        If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update UninstallKey")) {
+                            try {
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $target -ChildPath $vcName)
+                                    Name  = "UninstallKey"
+                                    Value = $Vc.ProductCode
+                                }
+                                Set-ItemProperty @$sipParams
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application dependencies."
+                                Throw $_.Exception.Message
+                                Continue
+                            }
+                        }
                     }
+                }
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application."
+                    Throw $_.Exception.Message
+                    Continue
                 }
             }
         }
-        Else {
-            Write-Error -Message "Failed to find path $target."
-        }
+    }
+    Else {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $target."
     }
 
-    End {
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-            # Get the imported Visual C++ Redistributables applications to return on the pipeline
-            Write-Verbose -Message "Getting Visual C++ Redistributables from the deployment share"
-            $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
+    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        # Get the imported Visual C++ Redistributables applications to return on the pipeline
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
+        $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
 
-            # Return list of apps to the pipeline
-            Write-Output $importedVcRedists
-        }
-        Else {
-            Write-Error -Message "Failed to find path $target."
-        }
+        # Return list of apps to the pipeline
+        Write-Output $importedVcRedists
+    }
+    Else {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $target."
     }
 }

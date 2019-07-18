@@ -68,35 +68,35 @@ Function Get-VcList {
             Returns a list of the Visual C++ Redistributables listed in the external manifest VisualCRedistributables.json.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $False, DefaultParameterSetName = 'Manifest', `
-            HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list")]
+    [CmdletBinding(DefaultParameterSetName = 'Manifest', HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list")]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline, ParameterSetName = 'Manifest')]
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
         [Alias("Xml")]
-        [string] $Path = (Join-Path (Join-Path $MyInvocation.MyCommand.Module.ModuleBase "Manifests") "VisualCRedistributables.json"),
-
-        [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
-        [ValidateSet('Supported', 'All', 'Unsupported')]
-        [string] $Export = "Supported",
+        [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 
         [Parameter(Mandatory = $False, ParameterSetName = 'Manifest')]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
-        [string[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
+        [System.String[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
 
         [Parameter(Mandatory = $False, ParameterSetName = 'Manifest')]
         [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture = @("x86", "x64")
+        [System.String[]] $Architecture = @("x86", "x64"),
+
+        [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
+        [ValidateSet('Supported', 'All', 'Unsupported')]
+        [System.String] $Export = "Supported"
     )
     
     try {
-        Write-Verbose -Message "Reading JSON document $Path."
-        $content = Get-Content -Raw -Path $Path -ErrorVariable readError -ErrorAction SilentlyContinue
+        Write-Verbose -Message "Reading JSON document [$Path]."
+        $content = Get-Content -Raw -Path $Path -ErrorAction SilentlyContinue
     }
-    catch {
-        Throw "Unable to read manifest $Path. $readError"
-        Break
+    catch [System.Exception] {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Unable to read manifest [$Path]."
+        Throw $_.Exception.Message
+        Exit
     }
     
     try {
@@ -104,42 +104,42 @@ Function Get-VcList {
         Write-Verbose -Message "Converting JSON."
         $json = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
     }
-    catch {
-        Throw "Unable to convert manifest JSON to required object. Please validate the input manifest."
-        Break
+    catch [System.Exception] {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Unable to convert manifest JSON to required object. Please validate the input manifest."
+        Throw $_.Exception.Message
+        Exit
     }
-    finally {
-        If ($Null -ne $json) {
-            If ($PSBoundParameters.ContainsKey('Export')) {
-                Switch ($Export) {
-                    "Supported" {
-                        Write-Verbose -Message "Exporting supported VcRedists."
-                        [PSCustomObject] $output = $json.Supported
-                    }
-                    "All" {
-                        Write-Verbose -Message "Exporting all VcRedists."
-                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                        [PSCustomObject] $output = $json.Supported + $json.Unsupported
-                    }
-                    "Unsupported" {
-                        Write-Verbose -Message "Exporting unsupported VcRedists."
-                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                        [PSCustomObject] $output = $json.Unsupported
-                    }
+
+    If ($Null -ne $json) {
+        If ($PSBoundParameters.ContainsKey('Export')) {
+            Switch ($Export) {
+                "Supported" {
+                    Write-Verbose -Message "Exporting supported VcRedists."
+                    [PSCustomObject] $output = $json.Supported
                 }
-            }
-            Else {
-                # Filter the list for architecture and release
-                If ($json | Get-Member -Name "Supported" -MemberType "Properties") {
-                    [PSCustomObject] $supported = $json.Supported
+                "All" {
+                    Write-Verbose -Message "Exporting all VcRedists."
+                    Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                    [PSCustomObject] $output = $json.Supported + $json.Unsupported
                 }
-                Else {
-                    [PSCustomObject] $supported = $json
+                "Unsupported" {
+                    Write-Verbose -Message "Exporting unsupported VcRedists."
+                    Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+                    [PSCustomObject] $output = $json.Unsupported
                 }
-                [PSCustomObject] $release = $supported | Where-Object { $Release -contains $_.Release }
-                [PSCustomObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
             }
         }
-        Write-Output $output
+        Else {
+            # Filter the list for architecture and release
+            If ($json | Get-Member -Name "Supported" -MemberType "Properties") {
+                [System.Management.Automation.PSObject] $supported = $json.Supported
+            }
+            Else {
+                [System.Management.Automation.PSObject] $supported = $json
+            }
+            [System.Management.Automation.PSObject] $release = $supported | Where-Object { $Release -contains $_.Release }
+            [System.Management.Automation.PSObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
+        }
     }
+    Write-Output -InputObject $output
 }

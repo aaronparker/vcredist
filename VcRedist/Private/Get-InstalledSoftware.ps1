@@ -20,14 +20,15 @@ Function Get-InstalledSoftware {
     param (
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $Name
+        [System.String] $Name
     )
 
     $UninstallKeys = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
     $null = New-PSDrive -Name HKU -PSProvider Registry -Root Registry::HKEY_USERS
-    $UninstallKeys += Get-ChildItem HKU: -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'S-\d-\d+-(\d+-){1,14}\d+$' } | ForEach-Object { "HKU:\$($_.PSChildName)\Software\Microsoft\Windows\CurrentVersion\Uninstall" }
+    $UninstallKeys += Get-ChildItem HKU: -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'S-\d-\d+-(\d+-){1,14}\d+$' } | `
+        ForEach-Object { "HKU:\$($_.PSChildName)\Software\Microsoft\Windows\CurrentVersion\Uninstall" }
     if (-not $UninstallKeys) {
-        Write-Verbose -Message 'No software registry keys found'
+        Write-Verbose -Message "$($MyInvocation.MyCommand): No software registry keys found."
     }
     else {
         foreach ($UninstallKey in $UninstallKeys) {
@@ -42,15 +43,15 @@ Function Get-InstalledSoftware {
                 ErrorAction = 'SilentlyContinue'
             }
             $selectProperties = @(
-                @{n = 'Publisher'; e = {$_.GetValue('Publisher')}},
-                @{n = 'Name'; e = {$_.GetValue('DisplayName')}},
-                @{n = 'Version'; e = {$_.GetValue('DisplayVersion')}},
-                @{n = 'ProductCode'; e = {$_.PSChildName}},
-                @{n = 'UninstallString'; e = {$_.GetValue('UninstallString')}},
-                @{n = 'QuietUninstallString'; e = {$_.GetValue('QuietUninstallString')}},
-                @{n = 'BundleCachePath'; e = {$_.GetValue('BundleCachePath')}},
-                @{n = 'Architecture'; e = {If ($_.GetValue('DisplayName') -like "*x64*") { "x64" } Else { "x86" }}},
-                @{n = 'Release'; e = {If ($_.GetValue('DisplayName') -match [regex]"(\d{4})\s+") { $matches[0].Trim(" ") }}}
+                @{n = 'Publisher'; e = { $_.GetValue('Publisher') } },
+                @{n = 'Name'; e = { $_.GetValue('DisplayName') } },
+                @{n = 'Version'; e = { $_.GetValue('DisplayVersion') } },
+                @{n = 'ProductCode'; e = { $_.PSChildName } },
+                @{n = 'UninstallString'; e = { $_.GetValue('UninstallString') } },
+                @{n = 'QuietUninstallString'; e = { $_.GetValue('QuietUninstallString') } },
+                @{n = 'BundleCachePath'; e = { $_.GetValue('BundleCachePath') } },
+                @{n = 'Architecture'; e = { If ($_.GetValue('DisplayName') -like "*x64*") { "x64" } Else { "x86" } } },
+                @{n = 'Release'; e = { If ($_.GetValue('DisplayName') -match [regex]"(\d{4})\s+") { $matches[0].Trim(" ") } } }
             )
             Get-ChildItem @gciParams | Where-Object $WhereBlock | Select-Object -Property $selectProperties
         }

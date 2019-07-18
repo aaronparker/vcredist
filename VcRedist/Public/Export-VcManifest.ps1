@@ -37,45 +37,46 @@ Function Export-VcManifest {
     #>
     [Alias("Export-VcXml")]
     [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/export-manifests")]
-    [OutputType([String])]
+    [OutputType([System.String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
-        [string] $Path,
+        [System.String] $Path,
 
         [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
         [ValidateSet('Supported', 'All', 'Unsupported')]
-        [string] $Export = "Supported"
+        [System.String] $Export = "Supported"
     )
 
     # Get the list of VcRedists from Get-VcList
     Switch ($Export) {
         "Supported" {
-            Write-Verbose -Message "Exporting supported VcRedists."
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting supported VcRedists."
             $vcList = Get-VcList -Export Supported
         }
         "All" {
-            Write-Verbose -Message "Exporting all VcRedists."
-            Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting all VcRedists."
+            Write-Warning -Message "$($MyInvocation.MyCommand): This list includes unsupported Visual C++ Redistributables."
             $vcList = Get-VcList -Export All
         }
         "Unsupported" {
-            Write-Verbose -Message "Exporting unsupported VcRedists."
-            Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting unsupported VcRedists."
+            Write-Warning -Message "$($MyInvocation.MyCommand): This list includes unsupported Visual C++ Redistributables."
             $vcList = Get-VcList -Export Unsupported
         }
     }
 
     # Output the VcList object to a JSON file
     try {
-        $vcList | ConvertTo-Json | Out-File -FilePath $Path -ErrorAction SilentlyContinue -ErrorVariable writeError
+        $vcList | ConvertTo-Json | Out-File -FilePath $Path -ErrorAction SilentlyContinue
     }
     catch {
-        Throw "Failed to write JSON to $Path with $writeError."
+        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to write JSON to $Path with $writeError."
+        Throw $_.Exception.Message
         Break
     }
     finally {
-        Write-Output (Resolve-Path -Path $Path)
+        Write-Output -InputObject (Resolve-Path -Path $Path)
     }
 }

@@ -39,87 +39,127 @@ Function Update-VcMdtBundle {
             Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
     #>
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-mdt")]
-    [OutputType([Array])]
+    [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string] $MdtPath,
+        [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
-        [string] $AppFolder = "VcRedists",
+        [System.String] $AppFolder = "VcRedists",
 
-        [Parameter()][string] $MdtDrive = "DS001",
-        [Parameter()][string] $Publisher = "Microsoft",
-        [Parameter()][string] $BundleName = "Visual C++ Redistributables",
-        [Parameter()][string] $Language = "en-US"
+        [Parameter(Mandatory = $False, Position = 1)]
+        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [System.String] $MdtDrive = "DS001",
+
+        [Parameter(Mandatory = $False, Position = 2)]
+        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [System.String] $Publisher = "Microsoft",
+
+        [Parameter(Mandatory = $False, Position = 3)]
+        [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
+        [System.String] $BundleName = "Visual C++ Redistributables",
+
+        [Parameter(Mandatory = $False, Position = 4)]
+        [ValidatePattern('^[a-zA-Z0-9-]+$')]
+        [System.String] $Language = "en-US"
     )
 
-    Begin {
-        # If running on PowerShell Core, error and exit.
-        If (Test-PSCore) {
-            Write-Error -Message "PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
-            Break
-        }
+    # If running on PowerShell Core, error and exit.
+    If (Test-PSCore) {
+        Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
+        Throw [System.Management.Automation.InvalidPowerShellStateException]
+        Exit
+    }
 
-        # Import the MDT module and create a PS drive to MdtPath
-        If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
+    # Import the MDT module and create a PS drive to MdtPath
+    If (Import-MdtModule) {
+        If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+            try {
                 New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
                 Restore-MDTPersistentDrive -Force | Out-Null
             }
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
+                Throw $_.Exception.Message
+                Exit
+            }
         }
-        Else {
-            Throw "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
-            Break
-        }
-
-        $target = "$($MdtDrive):\Applications\$AppFolder"
-        Write-Verbose -Message "Update applications in: $target"
+    }
+    Else {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
+        Throw [System.Management.Automation.InvalidPowerShellStateException]
+        Exit
     }
 
-    Process {
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+    $target = "$($MdtDrive):\Applications\$AppFolder"
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Update applications in: $target"
 
-            # Get properties from the existing bundle
-            try {
-                $bundle = Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" -ErrorAction SilentlyContinue
+    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+
+        # Get properties from the existing bundle
+        try {
+            $gciParams = @{
+                Path        = "$target\$($Publisher) $($BundleName)"
+                ErrorAction = SilentlyContinue
             }
-            catch {
-                Throw "Failed to retreive the existing Visual C++ Redistributables bundle"
-            }
+            $bundle = Get-ChildItem @gciParams
+        }
+        catch [System.Exception] {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing Visual C++ Redistributables bundle."
+            Throw $_.Exception.Message
+            Exit
+        }
 
-            # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
-            $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) }
-            $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
-            $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
+        # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
+        $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) }
+        $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
+        $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
 
-            If ($Null -ne $bundle) {
+        If ($Null -ne $bundle) {
+            If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
                 try {
-                    If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
-                        Set-ItemProperty -Path "$target\$($Publisher) $($BundleName)" -Name "Dependency" -Value $dependencies
-                        Set-ItemProperty -Path "$target\$($Publisher) $($BundleName)" -Name "Version" -Value (Get-Date -format "yyyy-MMM-dd")
+                    $sipParams = @{
+                        Path        = "$target\$($Publisher) $($BundleName)"
+                        Name        = "Dependency"
+                        Value       = $dependencies
+                        ErrorAction = "SilentlyContinue"
                     }
+                    Set-ItemProperty @sipParams
                 }
-                catch {
-                    Throw "Error updating VcRedist bundle dependencies."
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
+                    Throw $_.Exception.Message
+                    Continue
+                }
+                try {
+                    $sipParams = @{
+                        Path        = "$target\$($Publisher) $($BundleName)"
+                        Name        = "Version"
+                        Value       = (Get-Date -format "yyyy-MMM-dd")
+                        ErrorAction = "SilentlyContinue"
+                    }
+                    Set-ItemProperty @sipParams
+                }
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."
+                    Throw $_.Exception.Message
+                    Continue
                 }
             }
         }
-        Else {
-            Write-Error -Message "Failed to find path $target."
-        }
+    }
+    Else {
+        Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path: [$target]."
     }
 
-    End {
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-            # Return list of apps to the pipeline
-            $bundle = Get-ChildItem -Path "$target\$($Publisher) $($BundleName)"
-            Write-Output $bundle
-        }
-        Else {
-            Write-Error -Message "Failed to find path $target."
-        }
+    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        # Return list of apps to the pipeline
+        Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)")
+    }
+    Else {
+        Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path: [$target]."
     }
 }

@@ -14,28 +14,28 @@ Function New-MdtApplicationFolder {
             A folder name to create below the MDT Applications folder.
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType([String])]
+    [OutputType([System.String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0)]
         [ValidateNotNullOrEmpty()]
-        [string] $Drive,
+        [System.String] $Drive,
 
         [Parameter(Mandatory = $True, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [Alias('AppFolder')]
-        [string] $Name,
+        [System.String] $Name,
 
         [Parameter(Mandatory = $False, Position = 2)]
         [ValidateNotNullOrEmpty()]
-        [string] $Description = "Microsoft Visual C++ Redistributables"
+        [System.String] $Description = "Microsoft Visual C++ Redistributables"
     )
 
     # Create a sub-folder below Applications to import the Redistributables into
     $target = "$($Drive):\Applications\$($Name)"
 
     If (Test-Path -Path $target) {
-        Write-Verbose "MDT folder exists: $target"
-        Write-Output $True
+        Write-Verbose "$($MyInvocation.MyCommand): MDT folder exists: $target"
+        Write-Output -InputObject $True
     }
     Else {
         If ($PSCmdlet.ShouldProcess($target, "Create folder")) {
@@ -51,13 +51,12 @@ Function New-MdtApplicationFolder {
                 }
                 New-Item @newItemParams
             }
-            catch {
-                Throw "Failed to create MDT Applications folder: $Name"
-                Write-Output $false
-                Break
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT Applications folder: $Name"
+                Throw $_.Exception.Message
             }
             finally {
-                Write-Output $True
+                Write-Output -InputObject $True
             }
         }
     }
