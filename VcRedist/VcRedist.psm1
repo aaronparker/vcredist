@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-        LatestUpdate script to initiate the module
+        VcRedist script to initiate the module
 #>
 [CmdletBinding()]
 Param ()

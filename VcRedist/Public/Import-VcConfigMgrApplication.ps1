@@ -178,7 +178,7 @@ Function Import-VcConfigMgrApplication {
                             $app | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
 
                             # Write app detail to the pipeline
-                            Write-Output -InoutObject $app
+                            Write-Output -InputObject $app
                         }
                         catch [System.Exception] {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture) with error: $CMAppError."
