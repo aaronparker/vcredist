@@ -124,7 +124,7 @@ Describe 'Save-VcRedist' {
         $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
         If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
         $VcList = Get-VcList
-        Save-VcRedist -VcList $VcList -Path $Path -Verbose
+        Save-VcRedist -VcList $VcList -Path $Path -Verbose -ForceWebRequest
         It 'Downloads supported Visual C++ Redistributables' {
             Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
         }
@@ -141,7 +141,7 @@ Describe 'Install-VcRedist' {
         $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
         If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
         $VcList = Get-VcList -Export All
-        Save-VcRedist -VcList $VcList -Path $Path
+        Save-VcRedist -VcList $VcList -Path $Path -ForceWebRequest
         It 'Downloads supported Visual C++ Redistributables' {
             Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
         }
