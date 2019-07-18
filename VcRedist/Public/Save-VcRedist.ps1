@@ -58,12 +58,23 @@ Function Save-VcRedist {
         [System.String] $Path,
 
         [Parameter(Mandatory = $False)]
-        [System.Management.Automation.SwitchParameter] $ForceWebRequest
+        [System.Management.Automation.SwitchParameter] $ForceWebRequest,
+
+        [Parameter(Mandatory = $False, Position = 2)]
+        [ValidateSet('Foreground', 'High', 'Normal', 'Low')]
+        [System.String] $Priority = "Foreground",
+
+        [Parameter(Mandatory = $False, Position = 3)]
+        [System.String] $Proxy,
+
+        [Parameter(Mandatory = $False, Position = 4)]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential = [System.Management.Automation.PSCredential]::Empty
     )
 
     # Loop through each Redistributable and download to the target path
     ForEach ($Vc in $VcList) {
-        Write-Verbose -Message "$($MyInvocation.MyCommand): [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
 
         # Create the folder to store the downloaded file. Skip if it exists
         $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
@@ -115,13 +126,31 @@ Function Save-VcRedist {
                     # Use Invoke-WebRequest in instances where Start-BitsTransfer isn't supported or won't work
                     try {
                         $iwrParams = @{
-                            Uri     = $Vc.Download
-                            OutFile = $target
+                            Uri             = $Vc.Download
+                            OutFile         = $target
+                            UseBasicParsing = $True
+                            ErrorAction     = "SilentlyContinue"
+                        }
+                        If ($PSBoundParameters.ContainsKey('Proxy')) {
+                            $iwrParams.Proxy = $Proxy
+                        }
+                        If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+                            $iwrParams.ProxyCredentials = $ProxyCredential
                         }
                         Invoke-WebRequest @iwrParams
                     }
+                    catch [System.Net.Http.HttpRequestException] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
+                        Throw $_.Exception.Message
+                        Continue
+                    }
+                    catch [System.Net.WebException] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
+                        Throw $_.Exception.Message
+                        Continue
+                    }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from [$($Vc.Download)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
                         Throw $_.Exception.Message
                         Continue
                     }
@@ -135,15 +164,24 @@ Function Save-VcRedist {
                         $sbtParams = @{
                             Source      = $Vc.Download
                             Destination = $target
-                            Priority    = "High"
-                            ErrorAction = "Continue"
+                            Priority    = $Priority
                             DisplayName = "Visual C++ Redistributable Download"
                             Description = $Vc.Name
+                            ErrorAction = "SilentlyContinue"
+                        }
+                        If ($PSBoundParameters.ContainsKey('Proxy')) {
+                            # Set priority to Foreground because the proxy will remove the Range protocol header
+                            $sbtParams.Priority = "Foreground"
+                            $sbtParams.ProxyUsage = "Override"
+                            $sbtParams.ProxyList = $Proxy
+                        }
+                        If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+                            $sbtParams.ProxyCredential = $ProxyCredentials
                         }
                         Start-BitsTransfer @sbtParams
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from [$($Vc.Download)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
                         Throw $_.Exception.Message
                         Continue
                     }
