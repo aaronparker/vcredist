@@ -103,7 +103,7 @@ Function Update-VcMdtBundle {
         try {
             $gciParams = @{
                 Path        = "$target\$($Publisher) $($BundleName)"
-                ErrorAction = SilentlyContinue
+                ErrorAction = "SilentlyContinue"
             }
             $bundle = Get-ChildItem @gciParams
         }
@@ -127,7 +127,7 @@ Function Update-VcMdtBundle {
                         Value       = $dependencies
                         ErrorAction = "SilentlyContinue"
                     }
-                    Set-ItemProperty @sipParams
+                    Set-ItemProperty @sipParams | Out-Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
@@ -141,7 +141,7 @@ Function Update-VcMdtBundle {
                         Value       = (Get-Date -format "yyyy-MMM-dd")
                         ErrorAction = "SilentlyContinue"
                     }
-                    Set-ItemProperty @sipParams
+                    Set-ItemProperty @sipParams | Out-Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."
@@ -157,7 +157,7 @@ Function Update-VcMdtBundle {
 
     If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
         # Return list of apps to the pipeline
-        Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)")
+        Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" | Select-Object -Property * )
     }
     Else {
         Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path: [$target]."

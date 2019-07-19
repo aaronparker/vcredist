@@ -157,7 +157,7 @@ Function New-VcMdtBundle {
                         Dependency = $dependencies
                         Bundle     = $True
                     }
-                    Import-MDTApplication @importMDTAppParams
+                    Import-MDTApplication @importMDTAppParams | Out-Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error importing the VcRedist bundle. If -Force was specified, the original bundle will have been removed."
@@ -173,8 +173,7 @@ Function New-VcMdtBundle {
 
     If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
         # Return list of apps to the pipeline
-        $bundle = Get-ChildItem -Path "$target\$($Publisher) $($BundleName)"
-        Write-Output -InputObject $bundle
+        Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" | Select-Object -Property *)
     }
     Else {
         Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path $target."

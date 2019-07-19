@@ -122,7 +122,7 @@ Function Update-VcMdtApplication {
             try {
                 $gciParams = @{
                     Path        = (Join-Path -Path $target -ChildPath $vcName)
-                    ErrorAction = SilentlyContinue
+                    ErrorAction = "SilentlyContinue"
                 }
                 $existingVc = Get-ChildItem @gciParams
             }
@@ -142,7 +142,7 @@ Function Update-VcMdtApplication {
                                     Name  = "CommandLine"
                                     Value = ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })"
                                 }
-                                Set-ItemProperty @$sipParams
+                                Set-ItemProperty @sipParams | Out-Null
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application command line."
@@ -159,7 +159,7 @@ Function Update-VcMdtApplication {
                                     Name  = "UninstallKey"
                                     Value = $Vc.ProductCode
                                 }
-                                Set-ItemProperty @$sipParams
+                                Set-ItemProperty @sipParams | Out-Null
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application dependencies."
@@ -184,10 +184,7 @@ Function Update-VcMdtApplication {
     If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
-        $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
-
-        # Return list of apps to the pipeline
-        Write-Output $importedVcRedists
+        Write-Output -InputObject (Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })
     }
     Else {
         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $target."

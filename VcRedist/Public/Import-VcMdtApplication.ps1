@@ -194,7 +194,7 @@ Function Import-VcMdtApplication {
                         UninstallKey          = $Vc.ProductCode
                         SupportedPlatform     = $supportedPlatform
                     }
-                    Import-MDTApplication @importMDTAppParams
+                    Import-MDTApplication @importMDTAppParams | Out-Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error encountered importing the application: [$($Vc.Name) $($Vc.Architecture)]."
@@ -207,8 +207,5 @@ Function Import-VcMdtApplication {
 
     # Get the imported Visual C++ Redistributables applications to return on the pipeline
     Write-Verbose -Message "$($MyInvocation.MyCommand): Retrieving Visual C++ Redistributables imported into the deployment share"
-    $importedVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
-
-    # Return list of apps to the pipeline
-    Write-Output -InputObject $importedVcRedists
+    Write-Output -InputObject (Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" } | Select-Object -Property *)
 }

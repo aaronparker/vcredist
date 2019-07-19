@@ -134,21 +134,28 @@ Function Import-VcConfigMgrApplication {
 
         # Create the folder for importing the Redistributables into
         If ($AppFolder) {
-            If ($PSCmdlet.ShouldProcess("$($SMSSiteCode):\Application\$($AppFolder)", "Creating")) {
-                New-Item -Path "$($SMSSiteCode):\Application\$($AppFolder)" -ErrorAction SilentlyContinue
+            $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
+            If ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
+                try {
+                    New-Item -Path $DestFolder -ErrorAction SilentlyContinue
+                }
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
+                    Throw $_.Exception.Message
+                    Break
+                }
+            }
+            If (Test-Path -Path $DestFolder) {
+                Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$DestFolder]."
             }
         }
-        If (Test-Path "$($SMSSiteCode):\Application\$($AppFolder)") {
-            Write-Verbose "Importing into: $($SMSSiteCode):\Application\$($AppFolder)"
-            $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
-        }
         Else {
-            Write-Verbose "Importing into: $($SMSSiteCode):\Application"
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$($SMSSiteCode):\Application]."
             $DestFolder = "$($SMSSiteCode):\Application"
         }
 
         ForEach ($Vc in $VcList) {
-            Write-Verbose "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+            Write-Verbose -Message "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
             # Import as an application into ConfigMgr
             If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $CMPath", "Import ConfigMgr app")) {
@@ -158,11 +165,18 @@ Function Import-VcConfigMgrApplication {
                     If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
 
                         # Change to the SMS Application folder before importing the applications
-                        Write-Verbose "Setting location to $($DestFolder)"
-                        Set-Location $DestFolder -ErrorVariable ConnectionError
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to $($DestFolder)"
+                        try {
+                            Set-Location -Path $DestFolder -ErrorAction SilentlyContinue
+                        }
+                        catch [System.Exception] {
+                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
+                            Throw $_.Exception.Message
+                            Continue
+                        }
                                                 
                         try {
-                            # Splat New-CMApplication parameters and add the application
+                            # Splat New-CMApplication parameters, add the application and move into the target golder
                             $cmAppParams = @{
                                 Name            = "$($Vc.Name) $($Vc.Architecture)"
                                 Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
@@ -170,20 +184,20 @@ Function Import-VcConfigMgrApplication {
                                 LinkText        = $Vc.URL
                                 Publisher       = $Publisher
                                 Keyword         = $Keyword
-                                ErrorVariable   = "CMAppError"
                             }
                             $app = New-CMApplication @cmAppParams
-
-                            # Move the new application to the -AppFolder path
-                            $app | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
-
-                            # Write app detail to the pipeline
-                            Write-Output -InputObject $app
+                            If ($AppFolder) {
+                                $app | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
+                            }
                         }
                         catch [System.Exception] {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture) with error: $CMAppError."
                             Throw $_.Exception.Message
                             Break
+                        }
+                        finally {
+                            # Write app detail to the pipeline
+                            Write-Output -InputObject $app
                         }
 
                         try {
@@ -192,7 +206,7 @@ Function Import-VcConfigMgrApplication {
                         catch [System.Exception] {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
                             Throw $_.Exception.Message
-                            Break
+                            Continue
                         }
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
                     }
@@ -259,6 +273,6 @@ Function Import-VcConfigMgrApplication {
         Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
     }
     Else {
-        Write-Warning "Unable to confirm $CMPath exists. Please check that $CMPath is valid."
+        Write-Warning -Message "$($MyInvocation.MyCommand): Unable to confirm $CMPath exists. Please check that $CMPath is valid."
     }
 }
