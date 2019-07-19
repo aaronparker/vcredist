@@ -17,18 +17,18 @@ Function Compare-VersionNumber {
             The higher version number to compare.
     #>
     [CmdletBinding()]
-    [OutputType([Bool])]
+    [OutputType([System.Boolean])]
     Param (
         [Parameter(Mandatory = $True, Position = 0)]
         [ValidateNotNull()]
-        [string] $LowVersion,
+        [System.String] $LowVersion,
 
         [Parameter(Mandatory = $True, Position = 1)]
         [ValidateNotNull()]
-        [string] $HighVersion,
+        [System.String] $HighVersion,
 
         [Parameter(Mandatory = $False)]
-        [switch] $MatchMinor
+        [System.Management.Automation.SwitchParameter] $MatchMinor
     )
     Begin {
         # Convert parameters to version numbers
@@ -52,6 +52,6 @@ Function Compare-VersionNumber {
     }
     End {
         # Return result
-        Write-Output $result
+        Write-Output -InputObject $result
     }
 }

@@ -14,7 +14,7 @@ Function Get-Bitness {
     Param (
         [Parameter(Mandatory = $False, HelpMessage = "Specify the processor architecture to test for.")]
         [ValidateSet('x86', 'x64')]
-        [string[]] $Architecture
+        [System.String[]] $Architecture
     )
     
     # Alternative methods for checking bitness
@@ -22,19 +22,19 @@ Function Get-Bitness {
     # (Get-CimInstance -ClassName win32_operatingsystem).OSArchitecture
     
     If ($PSBoundParameters.ContainsKey('Architecture')) {
-        [bool] $output = $False
+        [System.Boolean] $output = $False
         Switch ($Architecture) {
             "x64" { If ([System.IntPtr]::Size -eq 8) { $output = $True } }
             "x86" { If ([System.IntPtr]::Size -eq 4) { $output = $True } }
         }
-        Write-Output $output
+        Write-Output -InputObject $output
     }
     Else {
-        [string] $output = "x64"
+        [System.String] $output = "x64"
         Switch ([System.IntPtr]::Size) {
             8 { $output = "x64" }
             4 { $output = "x86" }
         }
-        Write-Output $output
+        Write-Output -InputObject $output
     }
 }

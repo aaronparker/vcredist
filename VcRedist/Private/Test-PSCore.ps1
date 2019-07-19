@@ -11,17 +11,17 @@ Function Test-PSCore {
             The version of PowerShell Core. Optionally specified where value needs to be something other than 6.0.0.
     #>
     [CmdletBinding()]
-    [OutputType([Boolean])]
+    [OutputType([System.Boolean])]
     Param (
         [Parameter(ValueFromPipeline)]
-        [String] $Version = '6.0.0'
+        [System.String] $Version = '6.0.0'
     )
 
     # Check whether current PowerShell environment matches or is higher than $Version
-    If (($PSVersionTable.PSVersion -ge [version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
-        Write-Output $True
+    If (($PSVersionTable.PSVersion -ge [System.Version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
+        Write-Output -InputObject $True
     }
     Else {
-        Write-Output $False
+        Write-Output -InputObject $False
     }
 }

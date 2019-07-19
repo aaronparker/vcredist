@@ -47,104 +47,152 @@ Function Save-VcRedist {
     #>
     [Alias("Get-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/downloading-the-redistributables")]
-    [OutputType([Array])]
+    [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [PSCustomObject] $VcList,
+        [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string] $Path,
+        [System.String] $Path,
 
         [Parameter(Mandatory = $False)]
-        [switch] $ForceWebRequest
+        [System.Management.Automation.SwitchParameter] $ForceWebRequest,
+
+        [Parameter(Mandatory = $False, Position = 2)]
+        [ValidateSet('Foreground', 'High', 'Normal', 'Low')]
+        [System.String] $Priority = "Foreground",
+
+        [Parameter(Mandatory = $False, Position = 3)]
+        [System.String] $Proxy,
+
+        [Parameter(Mandatory = $False, Position = 4)]
+        [System.Management.Automation.PSCredential]
+        $ProxyCredential = [System.Management.Automation.PSCredential]::Empty
     )
 
-    Begin {
-    }
+    # Loop through each Redistributable and download to the target path
+    ForEach ($Vc in $VcList) {
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
 
-    Process {
-        # Loop through each Redistributable and download to the target path
-        ForEach ($Vc in $VcList) {
-            Write-Verbose "[$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
-
-            # Create the folder to store the downloaded file. Skip if it exists
-            $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
-            If (Test-Path -Path $folder) {
-                Write-Verbose "Folder '$folder' exists. Skipping."
-            }
-            Else {
-                If ($pscmdlet.ShouldProcess($folder, "Create")) {
-                    try {
-                        New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
-                    }
-                    catch {
-                        Throw "Failed to create folder $folder."
-                    }
+        # Create the folder to store the downloaded file. Skip if it exists
+        $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+        If (Test-Path -Path $folder) {
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
+        }
+        Else {
+            If ($pscmdlet.ShouldProcess($folder, "Create")) {
+                try {
+                    New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
                 }
-            }
-            
-            # Test whether the VcRedist is already on disk
-            $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
-            Write-Verbose "Testing target: $($target)"
-            If (Test-Path -Path $target -PathType Leaf) {
-                $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
-                
-                # If the target Redistributable is already downloaded, compare the version
-                If (($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion)) {
-                    # Download the newer version
-                    Write-Verbose "$($Vc.Version) > $ProductVersion."
-                    $download = $True
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
+                    Throw $_.Exception.Message
+                    Continue
                 }
-                Else {
-                    Write-Verbose "Manifest version: $($Vc.Version) matches file version: $ProductVersion."
-                    $download = $False
-                }
-            }
-            Else {
-                $download = $True
-            }
-
-            # The VcRedist needs to be downloaded
-            If ($download) {
-
-                # If -ForceWebRequest or running on PowerShell Core (or Start-BitsTransfer is unavailable) download with Invoke-WebRequest
-                If ($ForceWebRequest -or (!(Get-Command -Name Start-BitsTransfer -ErrorAction SilentlyContinue))) {
-                    If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
-
-                        # Use Invoke-WebRequest in instances where Start-BitsTransfer isn't supported or won't work
-                        try {
-                            Invoke-WebRequest -Uri $Vc.Download -OutFile $target
-                        }
-                        catch {
-                            Throw "Failed to download VcRedist from $Vc.Download."
-                        }
-                    }
-                }
-                Else {
-                    If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
-                        
-                        # Use Start-BitsTransfer
-                        try {
-                            Start-BitsTransfer -Source $Vc.Download -Destination $target `
-                                -Priority High -ErrorAction Continue -ErrorVariable $ErrorBits `
-                                -DisplayName "Visual C++ Redistributable Download" -Description $Vc.Name
-                        }
-                        catch {
-                            Throw "Failed to download VcRedist from $Vc.Download."
-                        }
-                    }
-                }
-            }
-            Else {
-                Write-Verbose "$($target) exists."
             }
         }
+            
+        # Test whether the VcRedist is already on disk
+        $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Testing target: $($target)"
+
+        If (Test-Path -Path $target -PathType Leaf) {
+            $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
+                
+            # If the target Redistributable is already downloaded, compare the version
+            If (($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion)) {
+                # Download the newer version
+                Write-Verbose -Message "$($MyInvocation.MyCommand): $($Vc.Version) > $ProductVersion."
+                $download = $True
+            }
+            Else {
+                Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: $($Vc.Version) matches file version: $ProductVersion."
+                $download = $False
+            }
+        }
+        Else {
+            $download = $True
+        }
+
+        # The VcRedist needs to be downloaded
+        If ($download) {
+
+            # If -ForceWebRequest or running on PowerShell Core (or Start-BitsTransfer is unavailable) download with Invoke-WebRequest
+            If ($ForceWebRequest -or (Test-PSCore)) {
+                If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
+
+                    # Use Invoke-WebRequest in instances where Start-BitsTransfer isn't supported or won't work
+                    try {
+                        $iwrParams = @{
+                            Uri             = $Vc.Download
+                            OutFile         = $target
+                            UseBasicParsing = $True
+                            ErrorAction     = "SilentlyContinue"
+                        }
+                        If ($PSBoundParameters.ContainsKey('Proxy')) {
+                            $iwrParams.Proxy = $Proxy
+                        }
+                        If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+                            $iwrParams.ProxyCredentials = $ProxyCredential
+                        }
+                        Invoke-WebRequest @iwrParams
+                    }
+                    catch [System.Net.Http.HttpRequestException] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
+                        Throw $_.Exception.Message
+                        Continue
+                    }
+                    catch [System.Net.WebException] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
+                        Throw $_.Exception.Message
+                        Continue
+                    }
+                    catch [System.Exception] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
+                        Throw $_.Exception.Message
+                        Continue
+                    }
+                }
+            }
+            Else {
+                If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
+                        
+                    # Use Start-BitsTransfer
+                    try {
+                        $sbtParams = @{
+                            Source      = $Vc.Download
+                            Destination = $target
+                            Priority    = $Priority
+                            DisplayName = "Visual C++ Redistributable Download"
+                            Description = $Vc.Name
+                            ErrorAction = "SilentlyContinue"
+                        }
+                        If ($PSBoundParameters.ContainsKey('Proxy')) {
+                            # Set priority to Foreground because the proxy will remove the Range protocol header
+                            $sbtParams.Priority = "Foreground"
+                            $sbtParams.ProxyUsage = "Override"
+                            $sbtParams.ProxyList = $Proxy
+                        }
+                        If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+                            $sbtParams.ProxyCredential = $ProxyCredentials
+                        }
+                        Start-BitsTransfer @sbtParams
+                    }
+                    catch [System.Exception] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
+                        Throw $_.Exception.Message
+                        Continue
+                    }
+                }
+            }
+        }
+        Else {
+            Write-Verbose -Message "$($MyInvocation.MyCommand): $($target) exists."
+        }
     }
-    
-    End {
-        # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        Write-Output $filteredVcList
-    }
+
+    # Return the $VcList array on the pipeline so that we can act on what was downloaded
+    Write-Output -InputObject $filteredVcList
 }

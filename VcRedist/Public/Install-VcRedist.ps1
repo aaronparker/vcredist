@@ -46,73 +46,73 @@ Function Install-VcRedist {
             Description:
             Installs all supported Visual C++ Redistributables using a completely silent install.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI="https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables")]
-    [OutputType([Array])]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables")]
+    [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [PSCustomObject] $VcList,
+        [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( {If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [string] $Path,
+        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [System.String] $Path,
 
         [Parameter(Mandatory = $False)]
-        [switch] $Silent
+        [System.Management.Automation.SwitchParameter] $Silent
     )
 
-    Begin {
-        # Get script elevation status
-        [bool] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        If (!($Elevated)) {
-            Throw "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again."
-            Break
-        }
-
+    # Get script elevation status
+    [System.Boolean] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    If ($Elevated) {
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
-    }
 
-    Process {
         ForEach ($vc in $VcList) {
             If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
-                Write-Verbose "Already installed: [$($vc.Architecture)]$($vc.Name)"
+                Write-Warning -Message "$($MyInvocation.MyCommand): Already installed: [$($vc.Architecture), $($vc.Name)]."
             }
             Else {
                 # Avoid installing 64-bit Redistributable on x86 Windows 
                 If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
-                    Write-Verbose "Incompatible architecture: [$($vc.Architecture)]$($vc.Name)"
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Incompatible architecture: [$($vc.Architecture), $($vc.Name)]."
                 }
                 Else {
                     # Construct full path to VcRedist installer
-                    $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $vc.Release) $vc.Architecture) $vc.ShortName
-                    $filename = Join-Path $folder $(Split-Path -Path $vc.Download -Leaf)
+                    $folder = Join-Path -Path (Join-Path -Path (Join-Path -Path $(Resolve-Path -Path $Path) -ChildPath $vc.Release) -ChildPath $vc.Architecture) -ChildPath $vc.ShortName
+                    $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $vc.Download -Leaf)
 
-                    Write-Verbose "Install: [$($vc.Architecture)]$($vc.Name)"
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Install: [$($vc.Architecture), $($vc.Name)]."
                     If (Test-Path -Path $filename) {
                         If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
 
-                            # Create parameters with -ArgumentList set based on -Silent argument used in this function
-                            $invokeProcessParams = @{
-                                FilePath     = $filename
-                                ArgumentList = If($Silent) { $vc.SilentInstall } Else { $vc.Install }
+                            try {
+                                # Create parameters with -ArgumentList set based on -Silent argument used in this function
+                                # Install the VcRedist using the Invoke-Process private function
+                                $invokeProcessParams = @{
+                                    FilePath     = $filename
+                                    ArgumentList = If ($Silent) { $vc.SilentInstall } Else { $vc.Install }
+                                }
+                                Invoke-Process @invokeProcessParams
                             }
-
-                            # Install the VcRedist using the Invoke-Process private function
-                            Invoke-Process @invokeProcessParams
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failure install Visual C++ Redistributable."
+                                Throw $_.Exception.Message
+                                Continue
+                            }
                         }
                     }
                     Else {
-                        Write-Error "Cannot find: $filename"
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Install Failure. Cannot find: [$filename]."
                     }
                 }
             }
         }
-    }
 
-    End {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
-        Write-Output (Get-InstalledVcRedist)
+        Write-Output -InputObject (Get-InstalledVcRedist)
+    }
+    Else {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again."
+        Throw [System.Management.Automation.ScriptRequiresException]
     }
 }
- 

@@ -1,62 +1,26 @@
-#          YAML Reference Guide: https://www.appveyor.com/docs/appveyor-yml/
-# Environmental Variables Guide: https://www.appveyor.com/docs/environment-variables/
-#                YAML Validator: https://ci.appveyor.com/tools/validate-yaml
-
-# Disable automatic builds
-# Without this, the following error shows up:
-# "Specify a project or solution file. The directory does not contain a project or solution file."
-build: off
-image: WMF 5
-
-# Version number
 version: 2.0.{build}
-
-# There's no need to alter the build number for a Pull Request (PR) since they don't modify anything
 pull_requests:
   do_not_increment_build_number: true
-
-# PowerShell Gallery API key for publishing an update to the module
-# The "secure:" value is the Appveyor encryption of the key
+image: WMF 5
 environment:
   GitHubKey:
     secure: unWb9ORoL3oo22K6z2U2fZ+AdBmv75laNb7jibBwQCMGv9u8Cs2GayQBGjkqfPro
   NuGetApiKey:
     secure: /YPozcX4yV1XCrZuS8DAhOmH/OOjkg6+zrCTT3lHR3a7/SY7S83JNNgYBsROlLq3
+  Module: VcRedist
+install:
+- ps: . .\ci\Install.ps1
+build_script:
+- ps: . .\ci\Build.ps1
+test_script:
+- ps: . .\ci\Tests.ps1
+deploy_script:
+- ps: . .\ci\Deploy.ps1
 
-# Ignore testing a commit if only the README.md file changed
-# Or if various strings are found in the commit message: updated readme, update readme, update docs, update version, update appveyor
 skip_commits:
-  files:
-    - README.md
-    - .github/&
-    - img/*
-    - scripts/*
-    - TestsResults.xml
-  message: /updated readme.*|update readme.*s|update docs.*|update version.*|update appveyor.*|Merge branch 'master' of.*/
+  message: /AppVeyor validate.*|Merge branch 'master' of.*//
 
 only_commits:
   files:
-    - VcRedist/
-    - tests/
-
-branches:
-  except:
-  - docs
-
-# Install Pester to enable tests
-install:
-    - ps: . .\tests\Install.ps1
-
-# Invoke Pester to run all of the unit tests, then save the results into XML in order to populate the AppVeyor tests section
-# If any of the tests fail, consider the pipeline failed
-test_script:
-  - ps: $res = Invoke-Pester -Path ".\tests" -OutputFormat NUnitXml -OutputFile TestsResults.xml -PassThru
-  - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestsResults.xml))
-  - ps: if ($res.FailedCount -gt 0) { throw "$($res.FailedCount) tests failed."}
-  - git config --global credential.helper store
-  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GitHubKey):x-oauth-basic@github.com`n"
-  - git config --global user.email "aaron@stealthpuppy.com"
-  - git config --global user.name "Aaron Parker"
-  - git config --global core.autocrlf true
-  - git config --global core.safecrlf false
-  - ps: . .\tests\Build.ps1
+    - VcRedist/**/*
+    - tests/**/*

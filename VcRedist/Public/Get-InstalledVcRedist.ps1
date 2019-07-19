@@ -31,11 +31,11 @@ Function Get-InstalledVcRedist {
             Description:
             Returns the installed Microsoft Visual C++ Redistributables from the current system including the Additional and Minimum Runtimes.
     #>
-    [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-installed-redistributables")]
+    [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $False)]
-        [switch] $ExportAll
+        [System.Management.Automation.SwitchParameter] $ExportAll
     )
     
     # Get all installed Visual C++ Redistributables installed components
@@ -52,5 +52,5 @@ Function Get-InstalledVcRedist {
         { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
         
     # Write the installed VcRedists to the pipeline
-    Write-Output $VcRedists
+    Write-Output -InputObject $VcRedists
 }

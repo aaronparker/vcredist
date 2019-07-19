@@ -14,29 +14,38 @@ Function New-MdtDrive {
             A PS drive letter to map to the MDT share.
     #>
     [CmdletBinding(SupportsShouldProcess)]
-    [OutputType([String])]
+    [OutputType([System.String])]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline = $True)]
         [ValidateNotNullOrEmpty()]
-        [String] $Drive = "DS009",
+        [System.String] $Drive = "DS009",
 
         [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $True)]
         [ValidateNotNullOrEmpty()]
-        [String] $Path
+        [System.String] $Path
     )
     $description = "MDT drive created by $($MyInvocation.MyCommand)"
     If ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
-        Write-Verbose "Found MDT drive: $($mdtDrives[0].Name)"
+        Write-Verbose "$($MyInvocation.MyCommand): Found MDT drive: $($mdtDrives[0].Name)"
         $output = $mdtDrives[0].Name
     }
     Else {
         If ($pscmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
-            New-PSDrive -Name $Drive -PSProvider "MDTProvider" -Root $Path `
-                -NetworkPath $Path -Description $description | Add-MDTPersistentDrive
-            $psDrive = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Name -eq $Drive) }
-            Write-Verbose "Found: $($psDrive.Name)"
-            $output = $psDrive.Name
+            try {
+                New-PSDrive -Name $Drive -PSProvider "MDTProvider" -Root $Path `
+                    -NetworkPath $Path -Description $description | Add-MDTPersistentDrive
+                $psDrive = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Name -eq $Drive) }
+            }
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT drive at: [$Path]."
+                Throw $_.Exception.Message
+                Continue
+            }
+            finally {
+                Write-Verbose "$($MyInvocation.MyCommand): Found: $($psDrive.Name)"
+                $output = $psDrive.Name
+            }
         }
     }
-    Write-Output $output
+    Write-Output -InputObject $output
 }
