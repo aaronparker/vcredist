@@ -114,14 +114,14 @@ Describe 'Export-VcManifest' {
     }
     Context 'Test fail scenarios' {
         It 'Given an invalid path, it should throw an error' {
-            { Export-VcManifest -Path (Join-Path (Join-Path $ProjectRoot "Temp") "Temp.json") } | Should Throw
+            { Export-VcManifest -Path (Join-Path -Path (Join-Path -Path $ProjectRoot -ChildPath "Temp") -ChildPath "Temp.json") } | Should Throw
         }
     }
 }
 
 Describe 'Save-VcRedist' {
     Context 'Download Redistributables' {
-        $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
+        $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
         If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
         $VcList = Get-VcList
         Save-VcRedist -VcList $VcList -Path $Path -Verbose -ForceWebRequest
@@ -131,14 +131,15 @@ Describe 'Save-VcRedist' {
     }
     Context "Test pipeline support" {
         It "Should not throw when passed via pipeline with no parameters" {
-            Push-Location -Path $env:Temp
-            Get-VcList | Save-VcRedist | Should -Not Throw
+            New-Item -Path (Join-Path -Path $env:Temp -ChildPath "VcTest") -ItemType Directory | Out-Null
+            Push-Location -Path (Join-Path -Path $env:Temp -ChildPath "VcTest")
+            Get-VcList | Save-VcRedist -ForceWebRequest | Should -Not Throw
             Pop-Location
         }
     }
     Context 'Test fail scenarios' {
         It 'Given an invalid path, it should throw an error' {
-            { Save-VcRedist -Path (Join-Path $ProjectRoot "Temp") } | Should Throw
+            { Save-VcRedist -Path (Join-Path -Path $ProjectRoot -ChildPath "Temp") } | Should Throw
         }
     }
 }
@@ -152,8 +153,8 @@ Describe 'Install-VcRedist' {
         }
     }
     Context 'Install Redistributables' {
-        $VcRedists = Get-VcList -Export All
-        $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
+        $VcRedists = Get-VcList
+        $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
         $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent -Verbose
         ForEach ($Vc in $VcRedists) {
             It "Installed the VcRedist: '$($vc.Name)'" {
