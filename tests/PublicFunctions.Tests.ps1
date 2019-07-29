@@ -132,7 +132,7 @@ Describe 'Save-VcRedist' {
     Context "Test pipeline support" {
         It "Should not throw when passed via pipeline with no parameters" {
             Push-Location -Path $env:Temp
-            Get-VcList | Save-VcList | Should -Not Throw
+            Get-VcList | Save-VcRedist | Should -Not Throw
             Pop-Location
         }
     }
@@ -145,9 +145,9 @@ Describe 'Save-VcRedist' {
 
 Describe 'Install-VcRedist' {
     Context 'Test exception handling for invalid VcRedist download path' {
-        It "Should not throw when passed via pipeline with no parameters" {
+        It "Should throw when passed via pipeline with no parameters" {
             Push-Location -Path $env:Temp
-            Get-VcList | Install-VcList | Should Throw
+            Get-VcList | Install-VcRedist | Should Throw
             Pop-Location
         }
     }
