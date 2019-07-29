@@ -44,19 +44,19 @@ Describe 'Get-VcList' {
     Context 'Return built-in manifest' {
         $VcList = Get-VcList
         It 'Given no parameters, it returns supported Visual C++ Redistributables' {
-            $VcList.Count | Should -Be 10
+            $VcList | Should -HaveCount 10
         }
         $VcList = Get-VcList -Export All
         It 'Given valid parameter -Export All, it returns all Visual C++ Redistributables' {
-            $VcList.Count | Should -Be 34
+            $VcList | Should -HaveCount 34
         }
         $VcList = Get-VcList -Export Supported
         It 'Given valid parameter -Export Supported, it returns all Visual C++ Redistributables' {
-            $VcList.Count | Should -Be 14
+            $VcList | Should -HaveCount 14
         }
         $VcList = Get-VcList -Export Unsupported
         It 'Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables' {
-            $VcList.Count | Should -Be 20
+            $VcList | Should -HaveCount 20
         }
     }
     Context 'Validate Get-VcList array properties' {
@@ -81,7 +81,7 @@ Describe 'Get-VcList' {
         Export-VcManifest -Path $Json -Export All
         $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest' {
-            $VcList.Count | Should -Be 22
+            $VcList | Should -HaveCount 22
         }
     }
     Context 'Test fail scenarios' {
@@ -109,7 +109,7 @@ Describe 'Export-VcManifest' {
         Export-VcManifest -Path $Json -Export All
         $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it exports an JSON file' {
-            $VcList.Count | Should -Be 22
+            $VcList | Should -HaveCount 22
         }
     }
     Context 'Test fail scenarios' {
@@ -129,6 +129,13 @@ Describe 'Save-VcRedist' {
             Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
         }
     }
+    Context "Test pipeline support" {
+        It "Should not throw when passed via pipeline with no parameters" {
+            Push-Location -Path $env:Temp
+            Get-VcList | Save-VcList | Should -Not Throw
+            Pop-Location
+        }
+    }
     Context 'Test fail scenarios' {
         It 'Given an invalid path, it should throw an error' {
             { Save-VcRedist -Path (Join-Path $ProjectRoot "Temp") } | Should Throw
@@ -137,13 +144,11 @@ Describe 'Save-VcRedist' {
 }
 
 Describe 'Install-VcRedist' {
-    Context 'Download Redistributables' {
-        $Path = Join-Path -Path $ProjectRoot -ChildPath "VcDownload"
-        If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
-        $VcList = Get-VcList -Export All
-        Save-VcRedist -VcList $VcList -Path $Path -ForceWebRequest
-        It 'Downloads supported Visual C++ Redistributables' {
-            Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
+    Context 'Test exception handling for invalid VcRedist download path' {
+        It "Should not throw when passed via pipeline with no parameters" {
+            Push-Location -Path $env:Temp
+            Get-VcList | Install-VcList | Should Throw
+            Pop-Location
         }
     }
     Context 'Install Redistributables' {

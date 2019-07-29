@@ -53,9 +53,9 @@ Function Install-VcRedist {
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1)]
+        [Parameter(Mandatory = $False, Position = 1)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [System.String] $Path,
+        [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $Silent
@@ -102,7 +102,7 @@ Function Install-VcRedist {
                         }
                     }
                     Else {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Install Failure. Cannot find: [$filename]."
+                        Throw "$($MyInvocation.MyCommand): Install Failure. Cannot find: [$filename]."
                     }
                 }
             }

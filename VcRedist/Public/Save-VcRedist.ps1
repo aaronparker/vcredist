@@ -55,7 +55,7 @@ Function Save-VcRedist {
 
         [Parameter(Mandatory = $False, Position = 1)]
         [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
-        [System.String] $Path,
+        [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $ForceWebRequest,
