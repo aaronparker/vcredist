@@ -1,12 +1,9 @@
-# Pester tests
-If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
-    $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
-}
-Else {
-    # Local Testing, get parent folder
-    $ProjectRoot = ((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName
-}
-Import-Module (Join-Path $ProjectRoot "VcRedist") -Force
+<#
+    .SYNOPSIS
+        Public Pester function tests.
+#>
+[OutputType()]
+Param ()
 
 #region Functions used in tests
 Function Test-VcDownloads {
@@ -40,29 +37,29 @@ Function Test-VcDownloads {
 #endregion
 
 #region Pester tests
-Describe 'Get-VcList' {
+Describe 'Get-VcList' -Tag "Get" {
     Context 'Return built-in manifest' {
-        $VcList = Get-VcList
         It 'Given no parameters, it returns supported Visual C++ Redistributables' {
+            $VcList = Get-VcList
             $VcList | Should -HaveCount 10
         }
-        $VcList = Get-VcList -Export All
         It 'Given valid parameter -Export All, it returns all Visual C++ Redistributables' {
+            $VcList = Get-VcList -Export All
             $VcList | Should -HaveCount 34
         }
-        $VcList = Get-VcList -Export Supported
         It 'Given valid parameter -Export Supported, it returns all Visual C++ Redistributables' {
+            $VcList = Get-VcList -Export Supported
             $VcList | Should -HaveCount 14
         }
-        $VcList = Get-VcList -Export Unsupported
         It 'Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables' {
+            $VcList = Get-VcList -Export Unsupported
             $VcList | Should -HaveCount 20
         }
     }
     Context 'Validate Get-VcList array properties' {
         $VcList = Get-VcList
         ForEach ($vc in $VcList) {
-            It "VcRedist '$($vc.Name)' has expected properties" {
+            It "VcRedist [$($vc.Name), $($vc.Architecture)] has expected properties" {
                 $vc.Name.Length | Should -BeGreaterThan 0
                 $vc.ProductCode.Length | Should -BeGreaterThan 0
                 $vc.Version.Length | Should -BeGreaterThan 0
@@ -77,38 +74,38 @@ Describe 'Get-VcList' {
         }
     }
     Context 'Return external manifest' {
-        $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-        Export-VcManifest -Path $Json -Export All
-        $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest' {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+            Export-VcManifest -Path $Json -Export All
+            $VcList = Get-VcList -Path $Json
             $VcList | Should -HaveCount 22
         }
     }
     Context 'Test fail scenarios' {
-        $Json = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.json"
         It 'Given an JSON file that does not exist, it should throw an error' {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "RedistsFail.json"
             { Get-VcList -Path $Json } | Should Throw
         }
-        $Json = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
         It 'Given an invalid JSON file, should throw an error on read' {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "README.MD"
             { Get-VcList -Path $Json } | Should Throw
         }
     }
 }
 
-Describe 'Export-VcManifest' {
+Describe 'Export-VcManifest' -Tag "Export" {
     Context 'Export manifest' {
-        $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-        Export-VcManifest -Path $Json
         It 'Given valid parameter -Path, it exports an JSON file' {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+            Export-VcManifest -Path $Json
             Test-Path -Path $Json | Should -Be $True
         }
     }
     Context 'Export and read manifest' {
-        $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-        Export-VcManifest -Path $Json -Export All
-        $VcList = Get-VcList -Path $Json
         It 'Given valid parameter -Path, it exports an JSON file' {
+            $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
+            Export-VcManifest -Path $Json -Export All
+            $VcList = Get-VcList -Path $Json
             $VcList | Should -HaveCount 22
         }
     }
@@ -119,36 +116,38 @@ Describe 'Export-VcManifest' {
     }
 }
 
-Describe 'Save-VcRedist' {
+Describe 'Save-VcRedist' -Tag "Save" {
     Context 'Download Redistributables' {
-        $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
-        If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
-        $VcList = Get-VcList
-        Save-VcRedist -VcList $VcList -Path $Path -Verbose -ForceWebRequest
         It 'Downloads supported Visual C++ Redistributables' {
+            $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
+            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
+            $VcList = Get-VcList
+            Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
+            Save-VcRedist -VcList $VcList -Path $Path -ForceWebRequest
             Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
         }
     }
     Context "Test pipeline support" {
         It "Should not throw when passed via pipeline with no parameters" {
-            New-Item -Path (Join-Path -Path $env:Temp -ChildPath "VcTest") -ItemType Directory | Out-Null
+            New-Item -Path (Join-Path -Path $env:Temp -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
             Push-Location -Path (Join-Path -Path $env:Temp -ChildPath "VcTest")
-            Get-VcList | Save-VcRedist -ForceWebRequest | Should -Not Throw
+            Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
+            {Get-VcList | Save-VcRedist -ForceWebRequest} | Should -Not -Throw
             Pop-Location
         }
     }
     Context 'Test fail scenarios' {
         It 'Given an invalid path, it should throw an error' {
-            { Save-VcRedist -Path (Join-Path -Path $ProjectRoot -ChildPath "Temp") } | Should Throw
+            { Save-VcRedist -Path (Join-Path -Path $ProjectRoot -ChildPath "Temp") } | Should -Throw
         }
     }
 }
 
-Describe 'Install-VcRedist' {
+Describe 'Install-VcRedist' -Tag "Install" {
     Context 'Test exception handling for invalid VcRedist download path' {
         It "Should throw when passed via pipeline with no parameters" {
             Push-Location -Path $env:Temp
-            Get-VcList | Install-VcRedist | Should Throw
+            {Get-VcList | Install-VcRedist} | Should -Throw
             Pop-Location
         }
     }
@@ -164,7 +163,7 @@ Describe 'Install-VcRedist' {
     }
 }
 
-Describe 'Get-InstalledVcRedist' {
+Describe 'Get-InstalledVcRedist' -Tag "Install" {
     Context 'Validate Get-InstalledVcRedist array properties' {
         $VcList = Get-InstalledVcRedist
         ForEach ($vc in $VcList) {

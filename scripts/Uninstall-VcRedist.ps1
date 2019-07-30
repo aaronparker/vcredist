@@ -4,16 +4,17 @@
 #>
 
 [CmdletBinding()]
-param (
-)
+Param ()
 
-$InstalledVcRedists = Get-InstalledVcRedist | Where-Object { $_.Release -eq 2008 }
+$InstalledVcRedists = Get-InstalledVcRedist
 ForEach ($Vc in $InstalledVcRedists) {
-    Write-Output $Vc.Name
+    Write-Host $Vc.Name
     If ($Null -ne $vc.QuietUninstallString) {
-        Start-Process -FilePath "$env:SystemRoot\System32\cmd.exe" -ArgumentList $vc.QuietUninstallString -Wait
+        Write-Host "`t$($vc.QuietUninstallString)"
+        Start-Process -FilePath "$env:SystemRoot\System32\cmd.exe" -ArgumentList "/c $($vc.QuietUninstallString)" -Wait
     }
     Else {
+        Write-Host "`t$($Vc.UninstallString)"
         Start-Process -FilePath "$env:SystemRoot\System32\cmd.exe" -ArgumentList "/c $($Vc.UninstallString) /passive" -Wait
     }
 }

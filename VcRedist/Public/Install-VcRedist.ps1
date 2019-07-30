@@ -85,7 +85,7 @@ Function Install-VcRedist {
                         $folder = Join-Path -Path (Join-Path -Path (Join-Path -Path $(Resolve-Path -Path $Path) -ChildPath $vc.Release) -ChildPath $vc.Architecture) -ChildPath $vc.ShortName
                         $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $vc.Download -Leaf)
 
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Install: [$($vc.Architecture), $($vc.Name)]."
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Install: [$($vc.Architecture), $($vc.Name)]."
                         If (Test-Path -Path $filename) {
                             If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
 

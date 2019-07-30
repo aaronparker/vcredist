@@ -90,7 +90,7 @@ Function Get-VcList {
     )
     
     try {
-        Write-Verbose -Message "Reading JSON document [$Path]."
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Reading JSON document [$Path]."
         $content = Get-Content -Raw -Path $Path -ErrorAction SilentlyContinue
     }
     catch [System.Exception] {
@@ -101,7 +101,7 @@ Function Get-VcList {
     
     try {
         # Convert the JSON content to an object
-        Write-Verbose -Message "Converting JSON."
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Converting JSON."
         $json = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
     }
     catch [System.Exception] {
@@ -114,18 +114,18 @@ Function Get-VcList {
         If ($PSBoundParameters.ContainsKey('Export')) {
             Switch ($Export) {
                 "Supported" {
-                    Write-Verbose -Message "Exporting supported VcRedists."
-                    [PSCustomObject] $output = $json.Supported
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting supported VcRedists."
+                    [System.Management.Automation.PSObject] $output = $json.Supported
                 }
                 "All" {
-                    Write-Verbose -Message "Exporting all VcRedists."
-                    Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                    [PSCustomObject] $output = $json.Supported + $json.Unsupported
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting all VcRedists."
+                    Write-Warning -Message "$($MyInvocation.MyCommand): This list includes unsupported Visual C++ Redistributables."
+                    [System.Management.Automation.PSObject] $output = $json.Supported + $json.Unsupported
                 }
                 "Unsupported" {
-                    Write-Verbose -Message "Exporting unsupported VcRedists."
-                    Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
-                    [PSCustomObject] $output = $json.Unsupported
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting unsupported VcRedists."
+                    Write-Warning -Message "$($MyInvocation.MyCommand): This list includes unsupported Visual C++ Redistributables."
+                    [System.Management.Automation.PSObject] $output = $json.Unsupported
                 }
             }
         }
