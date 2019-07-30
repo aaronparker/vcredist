@@ -29,8 +29,10 @@ Else {
         # This means that the major / minor / build values will be consistent across GitHub and the Gallery
         Try {
             # This is where the module manifest lives
-            $modulePath = Join-Path $projectRoot $module
-            $manifestPath = Join-Path $modulePath "$module.psd1"
+            $modulePath = Join-Path -Path $projectRoot -ChildPath $module
+            Write-Host "Module path: $modulePath" -ForegroundColor Cyan
+            $manifestPath = Join-Path -Path $modulePath -ChildPath "$module.psd1"
+            Write-Host "Manifest path: $manifestPath" -ForegroundColor Cyan
 
             # Start by importing the manifest to determine the version, then add 1 to the revision
             $manifest = Test-ModuleManifest -Path $manifestPath
