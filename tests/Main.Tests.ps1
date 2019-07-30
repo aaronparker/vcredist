@@ -19,7 +19,6 @@ Else {
 $moduleParent = Join-Path $projectRoot $module
 $manifestPath = Join-Path $moduleParent "$module.psd1"
 $modulePath = Join-Path $moduleParent "$module.psm1"
-Import-Module (Join-Path $projectRoot $module) -Force
 
 Describe "General project validation" {
     $scripts = Get-ChildItem (Join-Path $projectRoot $module) -Recurse -Include *.ps1, *.psm1

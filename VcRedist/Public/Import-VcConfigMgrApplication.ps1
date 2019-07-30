@@ -85,75 +85,83 @@ Function Import-VcConfigMgrApplication {
         [System.String] $Keyword = "Visual C++ Redistributable"
     )
 
-    # CMPath will be the network location for copying the Visual C++ Redistributables to
-    $validPath = Get-ValidPath $Path
-    try {
-        Set-Location -Path $validPath -ErrorAction SilentlyContinue
-    }
-    catch [System.Exception] {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
-        Throw $_.Exception.Message
-        Exit
-    }
-    Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
-        
-    If (Test-Path $CMPath) {
-        # Copy VcRedists to the network location. Use robocopy for robustness
-        If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
-            try {
-                $invokeProcessParams = @{
-                    FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                    ArgumentList = "*.exe $validPath $CMPath /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
-                }
-                Invoke-Process @invokeProcessParams
-            }
-            catch [System.Exception] {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$validPath] to [$CMPath]."
-                Throw $_.Exception.Message
-                Exit        
-            }
+    Begin {
+        # CMPath will be the network location for copying the Visual C++ Redistributables to
+        $validPath = Get-ValidPath $Path
+        try {
+            Set-Location -Path $validPath -ErrorAction SilentlyContinue
         }
-
-        # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
-        If (Test-Path $env:SMS_ADMIN_UI_PATH) {
-            try {            
-                # Import the ConfigurationManager.psd1 module
-                Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" | Out-Null
-            }
-            catch [System.Exception] {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
-                Throw $_.Exception.Message
-                Exit
-            }
-        }
-        Else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
+        catch [System.Exception] {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
             Throw $_.Exception.Message
             Exit
         }
-
-        # Create the folder for importing the Redistributables into
-        If ($AppFolder) {
-            $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
-            If ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
+        
+        If (Test-Path $CMPath) {
+            # Copy VcRedists to the network location. Use robocopy for robustness
+            If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
                 try {
-                    New-Item -Path $DestFolder -ErrorAction SilentlyContinue
+                    $invokeProcessParams = @{
+                        FilePath     = "$env:SystemRoot\System32\robocopy.exe"
+                        ArgumentList = "*.exe $validPath $CMPath /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                    }
+                    Invoke-Process @invokeProcessParams
                 }
                 catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$validPath] to [$CMPath]."
                     Throw $_.Exception.Message
-                    Break
+                    Exit        
                 }
             }
-            If (Test-Path -Path $DestFolder) {
-                Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$DestFolder]."
+
+            # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
+            If (Test-Path $env:SMS_ADMIN_UI_PATH) {
+                try {            
+                    # Import the ConfigurationManager.psd1 module
+                    Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" | Out-Null
+                }
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
+                    Throw $_.Exception.Message
+                    Exit
+                }
+            }
+            Else {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
+                Throw $_.Exception.Message
+                Exit
+            }
+
+            # Create the folder for importing the Redistributables into
+            If ($AppFolder) {
+                $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
+                If ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
+                    try {
+                        New-Item -Path $DestFolder -ErrorAction SilentlyContinue
+                    }
+                    catch [System.Exception] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
+                        Throw $_.Exception.Message
+                        Break
+                    }
+                }
+                If (Test-Path -Path $DestFolder) {
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$DestFolder]."
+                }
+            }
+            Else {
+                Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$($SMSSiteCode):\Application]."
+                $DestFolder = "$($SMSSiteCode):\Application"
             }
         }
         Else {
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$($SMSSiteCode):\Application]."
-            $DestFolder = "$($SMSSiteCode):\Application"
+            Write-Warning -Message "$($MyInvocation.MyCommand): Unable to confirm $CMPath exists. Please check that $CMPath is valid."
+            Exit
         }
-
+    }
+    
+    Process {
         ForEach ($Vc in $VcList) {
             Write-Verbose -Message "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
@@ -261,18 +269,16 @@ Function Import-VcConfigMgrApplication {
                 }
             }
         }
+    }
 
+    End {
         try {
             Set-Location -Path $validPath -ErrorAction SilentlyContinue
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
             Throw $_.Exception.Message
-            Break
         }
         Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
-    }
-    Else {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Unable to confirm $CMPath exists. Please check that $CMPath is valid."
     }
 }

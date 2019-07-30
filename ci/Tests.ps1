@@ -5,7 +5,9 @@
 [OutputType()]
 Param ()
 
-If (Get-Variable -Name projectRoot -ErrorAction SilentlyContinue) {
+If (Test-Path -Path "env:APPVEYOR_BUILD_FOLDER") {
+    $ProjectRoot = $env:APPVEYOR_BUILD_FOLDER
+    Import-Module (Join-Path -Path $ProjectRoot -ChildPath "VcRedist") -Force
 
     # Invoke Pester tests and upload results to AppVeyor
     $res = Invoke-Pester -Path $tests -OutputFormat NUnitXml -OutputFile $output -PassThru
@@ -18,8 +20,8 @@ If (Get-Variable -Name projectRoot -ErrorAction SilentlyContinue) {
     }
 }
 Else {
-    Write-Warning -Message "Required variable does not exist: projectRoot."
+    Write-Warning -Message "Required variable does not exist: ProjectRoot."
 }
 
 # Line break for readability in AppVeyor console
-Write-Host -Object ''
+Write-Host ""
