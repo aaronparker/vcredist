@@ -6,9 +6,6 @@ Function Install-VcRedist {
         .DESCRIPTION
             Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
 
-        .OUTPUTS
-            System.Array
-
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy
@@ -99,7 +96,7 @@ Function Install-VcRedist {
                                     Invoke-Process @invokeProcessParams
                                 }
                                 catch [System.Exception] {
-                                    Write-Warning -Message "$($MyInvocation.MyCommand): Failure install Visual C++ Redistributable."
+                                    Write-Warning -Message "$($MyInvocation.MyCommand): Failure in installing Visual C++ Redistributable."
                                     Throw $_.Exception.Message
                                     Continue
                                 }

@@ -154,7 +154,8 @@ Describe 'Install-VcRedist' -Tag "Install" {
     Context 'Install Redistributables' {
         $VcRedists = Get-VcList
         $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
-        $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent -Verbose
+        Write-Host "`tInstalling VcRedists." -ForegroundColor Cyan
+        $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent
         ForEach ($Vc in $VcRedists) {
             It "Installed the VcRedist: '$($vc.Name)'" {
                 $vc.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
@@ -174,6 +175,13 @@ Describe 'Get-InstalledVcRedist' -Tag "Install" {
                 $vc.UninstallString.Length | Should -BeGreaterThan 0
             }
         }
+    }
+}
+
+Describe 'Uninstall-VcRedist' -Tag "Uninstall" {
+    Context 'Uninstall VcRedists' {
+        Write-Host "`tUninstalling VcRedists." -ForegroundColor Cyan
+        { Uninstall-VcRedist -Release 2008, 2010 -Verbose -Confirm:$False } | Should -Not -Throw
     }
 }
 #endregion
