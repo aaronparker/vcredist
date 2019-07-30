@@ -18,6 +18,10 @@ ElseIf ($env:APPVEYOR_PULL_REQUEST_NUMBER -gt 0) {
 }
 Else {
 
+    # Ensure we're in the project root
+    Push-Location -Path $projectRoot
+    Write-Host "Current directory is $PWD." -ForegroundColor Cyan
+
     # Tests success, push to GitHub
     If ($res.FailedCount -eq 0) {
 
