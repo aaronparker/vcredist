@@ -23,7 +23,13 @@ Function Uninstall-VcRedist {
             Uninstall-VcRedist
 
             Description:
-            Uninstalls the x64 and x86 2005-2019 Visual C++ Redistributables.
+            Uninstalls installs all installed x64, x86 2005-2019 Visual C++ Redistributables.
+
+        .EXAMPLE
+            Uninstall-VcRedist -Release 2008, 2010
+
+            Description:
+            Uninstalls installs all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
     #>
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "High", 
         HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/uninstalling-the-redistributables")]

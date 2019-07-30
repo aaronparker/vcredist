@@ -181,7 +181,7 @@ Describe 'Get-InstalledVcRedist' -Tag "Install" {
 Describe 'Uninstall-VcRedist' -Tag "Uninstall" {
     Context 'Uninstall VcRedists' {
         Write-Host "`tUninstalling VcRedists." -ForegroundColor Cyan
-        { Uninstall-VcRedist -Release 2008, 2010 -Verbose -Confirm:$False } | Should -Not -Throw
+        { Uninstall-VcRedist -Release 2008, 2010 -Confirm:$False } | Should -Not -Throw
     }
 }
 #endregion
