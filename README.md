@@ -1,10 +1,12 @@
 # VcRedist
 
 [![License][license-badge]][license]
-[![Build status][appveyor-badge]][appveyor-build]
 [![GitHub Release][github-release-badge]][github-release]
-[![PowerShell Gallery][psgallery-badge]][psgallery]
 [![PowerShell Gallery Version][psgallery-version-badge]][psgallery]
+[![PowerShell Gallery][psgallery-badge]][psgallery]
+
+[![Master build status][appveyor-badge]][appveyor-build]
+[![Development build status][appveyor-badge-dev]][appveyor-build]
 
 VcRedist is PowerShell module for downloading and installing the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). The module also supports creating applications in the Microsoft Deployment Toolkit or System Center Configuration Manager to install the Redistributables.
 
@@ -24,7 +26,8 @@ The VcRedist module is published to the PowerShell Gallery and can be found here
 Install-Module -Name VcRedist -Force
 ```
 
-[appveyor-badge]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/master.svg?style=flat-square&logo=appveyor
+[appveyor-badge]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/master.svg?style=flat-square&logo=appveyor&label=master
+[appveyor-badge-dev]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/development.svg?style=flat-square&logo=appveyor&label=development
 [appveyor-build]: https://ci.appveyor.com/project/aaronparker/install-visualcredistributables
 [psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg?logo=PowerShell&style=flat-square
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
