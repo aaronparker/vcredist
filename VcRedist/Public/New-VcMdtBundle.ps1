@@ -8,9 +8,6 @@ Function New-VcMdtBundle {
 
             Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
 
-        .OUTPUTS
-            System.Array
-
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy

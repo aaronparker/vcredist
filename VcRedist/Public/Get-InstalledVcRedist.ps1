@@ -5,9 +5,6 @@ Function Get-InstalledVcRedist {
 
         .DESCRIPTION
             Returns the installed Visual C++ Redistributables.
-
-        .OUTPUTS
-            System.Array
         
         .NOTES
             Author: Aaron Parker

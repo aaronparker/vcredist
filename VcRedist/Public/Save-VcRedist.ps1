@@ -7,9 +7,6 @@ Function Save-VcRedist {
             Downloads the Visual C++ Redistributables from an array returned by Get-VcXml into a folder structure that represents release and processor architecture.
             If the redistributable exists in the specified path, it will not be re-downloaded.
 
-        .OUTPUTS
-            System.Array
-
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy
