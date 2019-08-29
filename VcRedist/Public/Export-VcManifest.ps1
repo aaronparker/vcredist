@@ -6,9 +6,6 @@ Function Export-VcManifest {
         .DESCRIPTION
             Reads the Visual C++ Redistributables JSON manifests included in the VcRedist module and exports the JSON to an external file.
             This enables editing of the JSON manifest for custom scenarios.
-
-        .OUTPUTS
-            System.String
         
         .NOTES
             Author: Aaron Parker

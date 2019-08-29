@@ -7,9 +7,6 @@ Function Get-VcList {
             This function reads the Visual C++ Redistributables listed in an internal manifest or an external JSON file into an array that can be passed to other VcRedist functions.
 
             A complete listing of the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcManifest.
-
-        .OUTPUTS
-            System.Array
         
         .NOTES
             Author: Aaron Parker
