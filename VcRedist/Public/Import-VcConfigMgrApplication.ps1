@@ -54,7 +54,6 @@ Function Import-VcConfigMgrApplication {
         [System.String] $Path,
 
         [Parameter(Mandatory = $True, Position = 2)]
-        [ValidateScript( { If (!([bool]([System.Uri]$CMPath).IsUnc)) { $True } Else { Throw "$_ must be a valid UNC path." } })]
         [System.String] $CMPath,
 
         [Parameter(Mandatory = $True, Position = 3)]
@@ -94,11 +93,14 @@ Function Import-VcConfigMgrApplication {
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
             Throw $_.Exception.Message
-            Exit
+            Break
         }
         Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
         
-        If (Test-Path $CMPath) {
+        # Validate $CMPath
+        If (Resolve-Path -Path $CMPath) {
+            $CMPath = $CMPath.TrimEnd("\")
+
             # Copy VcRedists to the network location. Use robocopy for robustness
             If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
                 try {
@@ -111,53 +113,52 @@ Function Import-VcConfigMgrApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$validPath] to [$CMPath]."
                     Throw $_.Exception.Message
-                    Exit        
+                    Break        
                 }
             }
 
             # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
-            If (Test-Path $env:SMS_ADMIN_UI_PATH) {
+            If (Test-Path -Path env:SMS_ADMIN_UI_PATH) {
                 try {            
                     # Import the ConfigurationManager.psd1 module
                     Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" | Out-Null
+
+                    # Create the folder for importing the Redistributables into
+                    If ($AppFolder) {
+                        $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
+                        If ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
+                            try {
+                                New-Item -Path $DestFolder -ErrorAction SilentlyContinue
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
+                                Throw $_.Exception.Message
+                                Break
+                            }
+                        }
+                        If (Test-Path -Path $DestFolder) {
+                            Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$DestFolder]."
+                        }
+                    }
+                    Else {
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$($SMSSiteCode):\Application]."
+                        $DestFolder = "$($SMSSiteCode):\Application"
+                    }
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
                     Throw $_.Exception.Message
-                    Exit
+                    Break
                 }
             }
             Else {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
-                Throw $_.Exception.Message
-                Exit
-            }
-
-            # Create the folder for importing the Redistributables into
-            If ($AppFolder) {
-                $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
-                If ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
-                    try {
-                        New-Item -Path $DestFolder -ErrorAction SilentlyContinue
-                    }
-                    catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
-                        Throw $_.Exception.Message
-                        Break
-                    }
-                }
-                If (Test-Path -Path $DestFolder) {
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$DestFolder]."
-                }
-            }
-            Else {
-                Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$($SMSSiteCode):\Application]."
-                $DestFolder = "$($SMSSiteCode):\Application"
+                Break
             }
         }
         Else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to confirm $CMPath exists. Please check that $CMPath is valid."
-            Exit
+            Break
         }
     }
     
@@ -165,106 +166,110 @@ Function Import-VcConfigMgrApplication {
         ForEach ($Vc in $VcList) {
             Write-Verbose -Message "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
 
-            # Import as an application into ConfigMgr
-            If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $CMPath", "Import ConfigMgr app")) {
+            # If SMS_ADMIN_UI_PATH variable exists, assume module imported successfully earlier
+            If (Test-Path -Path env:SMS_ADMIN_UI_PATH) {
+
+                # Import as an application into ConfigMgr
+                If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $CMPath", "Import ConfigMgr app")) {
                 
-                # Create the ConfigMgr application with properties from the XML file
-                If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
-                    If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
+                    # Create the ConfigMgr application with properties from the XML file
+                    If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
+                        If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
 
-                        # Change to the SMS Application folder before importing the applications
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to $($DestFolder)"
-                        try {
-                            Set-Location -Path $DestFolder -ErrorAction SilentlyContinue
-                        }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
-                            Throw $_.Exception.Message
-                            Continue
-                        }
+                            # Change to the SMS Application folder before importing the applications
+                            Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to $($DestFolder)"
+                            try {
+                                Set-Location -Path $DestFolder -ErrorAction SilentlyContinue
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
+                                Throw $_.Exception.Message
+                                Continue
+                            }
                                                 
-                        try {
-                            # Splat New-CMApplication parameters, add the application and move into the target golder
-                            $cmAppParams = @{
-                                Name            = "$($Vc.Name) $($Vc.Architecture)"
-                                Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
-                                SoftwareVersion = "$($Vc.Release) $($Vc.Architecture)"
-                                LinkText        = $Vc.URL
-                                Publisher       = $Publisher
-                                Keyword         = $Keyword
+                            try {
+                                # Splat New-CMApplication parameters, add the application and move into the target golder
+                                $cmAppParams = @{
+                                    Name            = "$($Vc.Name) $($Vc.Architecture)"
+                                    Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
+                                    SoftwareVersion = "$($Vc.Release) $($Vc.Architecture)"
+                                    LinkText        = $Vc.URL
+                                    Publisher       = $Publisher
+                                    Keyword         = $Keyword
+                                }
+                                $app = New-CMApplication @cmAppParams
+                                If ($AppFolder) {
+                                    $app | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
+                                }
                             }
-                            $app = New-CMApplication @cmAppParams
-                            If ($AppFolder) {
-                                $app | Move-CMObject -FolderPath $DestFolder -ErrorAction SilentlyContinue | Out-Null
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture) with error: $CMAppError."
+                                Throw $_.Exception.Message
+                                Break
                             }
-                        }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture) with error: $CMAppError."
-                            Throw $_.Exception.Message
-                            Break
-                        }
-                        finally {
-                            # Write app detail to the pipeline
-                            Write-Output -InputObject $app
-                        }
-
-                        try {
-                            Set-Location -Path $validPath -ErrorAction SilentlyContinue
-                        }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
-                            Throw $_.Exception.Message
-                            Continue
-                        }
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
-                    }
-
-                    # Add a deployment type to the application
-                    If ($pscmdlet.ShouldProcess($("$Vc.Name $($Vc.Architecture)"), "Adding deployment type")) {
-
-                        # Change to the SMS Application folder before importing the applications
-                        try {
-                            Set-Location -Path $DestFolder -ErrorAction SilentlyContinue
-                        }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
-                            Throw $_.Exception.Message
-                            Break
-                        }
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$DestFolder]."
-
-                        try {
-                            # Splat Add-CMScriptDeploymentType parameters and add the application deployment type
-                            $cmScriptParams = @{
-                                InstallCommand           = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
-                                ContentLocation          = "$CMPath\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                                ProductCode              = $Vc.ProductCode
-                                SourceUpdateProductCode  = $Vc.ProductCode
-                                DeploymentTypeName       = ("SCRIPT_" + $Vc.Name)
-                                UserInteractionMode      = "Hidden"
-                                UninstallCommand         = "$env:SystemRoot\System32\msiexec.exe /x $($Vc.ProductCode) /qn-"
-                                LogonRequirementType     = "WhetherOrNotUserLoggedOn"
-                                InstallationBehaviorType = "InstallForSystem"
-                                Comment                  = "Generated by $($MyInvocation.MyCommand)"
-                                ErrorVariable            = "CMDtError"
+                            finally {
+                                # Write app detail to the pipeline
+                                Write-Output -InputObject $app
                             }
-                            $app | Add-CMScriptDeploymentType @cmScriptParams | Out-Null
-                        }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to add script deployment type with error $CMDtError."
-                            Throw $_.Exception.Message
-                            Break
+
+                            try {
+                                Set-Location -Path $validPath -ErrorAction SilentlyContinue
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
+                                Throw $_.Exception.Message
+                                Continue
+                            }
+                            Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
                         }
 
-                        try {
-                            Set-Location -Path $validPath -ErrorAction SilentlyContinue
+                        # Add a deployment type to the application
+                        If ($pscmdlet.ShouldProcess($("$Vc.Name $($Vc.Architecture)"), "Adding deployment type")) {
+
+                            # Change to the SMS Application folder before importing the applications
+                            try {
+                                Set-Location -Path $DestFolder -ErrorAction SilentlyContinue
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
+                                Throw $_.Exception.Message
+                                Break
+                            }
+                            Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$DestFolder]."
+
+                            try {
+                                # Splat Add-CMScriptDeploymentType parameters and add the application deployment type
+                                $cmScriptParams = @{
+                                    InstallCommand           = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
+                                    ContentLocation          = "$CMPath\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
+                                    ProductCode              = $Vc.ProductCode
+                                    SourceUpdateProductCode  = $Vc.ProductCode
+                                    DeploymentTypeName       = ("SCRIPT_" + $Vc.Name)
+                                    UserInteractionMode      = "Hidden"
+                                    UninstallCommand         = "$env:SystemRoot\System32\msiexec.exe /x $($Vc.ProductCode) /qn-"
+                                    LogonRequirementType     = "WhetherOrNotUserLoggedOn"
+                                    InstallationBehaviorType = "InstallForSystem"
+                                    Comment                  = "Generated by $($MyInvocation.MyCommand)"
+                                    ErrorVariable            = "CMDtError"
+                                }
+                                $app | Add-CMScriptDeploymentType @cmScriptParams | Out-Null
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to add script deployment type with error $CMDtError."
+                                Throw $_.Exception.Message
+                                Break
+                            }
+
+                            try {
+                                Set-Location -Path $validPath -ErrorAction SilentlyContinue
+                            }
+                            catch [System.Exception] {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
+                                Throw $_.Exception.Message
+                                Break
+                            }
+                            Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
                         }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
-                            Throw $_.Exception.Message
-                            Break
-                        }
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
                     }
                 }
             }
