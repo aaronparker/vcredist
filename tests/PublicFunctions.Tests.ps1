@@ -76,9 +76,9 @@ Describe 'Get-VcList' -Tag "Get" {
     Context 'Return external manifest' {
         It 'Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest' {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-            Export-VcManifest -Path $Json -Export All
+            Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList | Should -HaveCount 22
+            $VcList | Should -BeGreaterOrEqual 10
         }
     }
     Context 'Test fail scenarios' {
@@ -104,9 +104,9 @@ Describe 'Export-VcManifest' -Tag "Export" {
     Context 'Export and read manifest' {
         It 'Given valid parameter -Path, it exports an JSON file' {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
-            Export-VcManifest -Path $Json -Export All
+            Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList | Should -HaveCount 22
+            $VcList | Should -BeGreaterOrEqual 10
         }
     }
     Context 'Test fail scenarios' {
