@@ -30,7 +30,7 @@ CompanyName = 'stealthpuppy'
 Copyright = '(c) 2019 stealthpuppy. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. Downloads the supported (and unsupported) Redistributables locally, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or System Center Configuration Manager. Supports passive and silent installs of the Visual C++ Redistributables.'
+Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. Downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -75,13 +75,13 @@ FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList'
                'Uninstall-VcRedist', 'Update-VcMdtApplication', 'Update-VcMdtBundle')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @()
+# CmdletsToExport = @()
 
 # Variables to export from this module
-# VariablesToExport = @()
+VariablesToExport = @('VcManifest')
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = 'Get-VcRedist', 'Export-VcXml', 'Import-VcCmApp', 'Import-VcMdtApp'
+AliasesToExport = @('Get-VcRedist', 'Export-VcXml', 'Import-VcCmApp', 'Import-VcMdtApp')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -101,7 +101,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM'
+        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM', 'MEMCM'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/master/LICENSE'
