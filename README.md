@@ -1,7 +1,6 @@
 # VcRedist
 
 [![License][license-badge]][license]
-[![GitHub Release][github-release-badge]][github-release]
 [![PowerShell Gallery Version][psgallery-version-badge]][psgallery]
 [![PowerShell Gallery][psgallery-badge]][psgallery]
 
@@ -10,7 +9,7 @@
 
 ## About
 
-VcRedist is PowerShell module for downloading and installing the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). The module also supports creating applications in the Microsoft Deployment Toolkit or System Center Configuration Manager to install the Redistributables.
+VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
 
 ### Visual C++ Redistributables
 
@@ -37,7 +36,5 @@ Install-Module -Name VcRedist -Force
 [psgallery-version]: https://www.powershellgallery.com/packages/vcredist
 [gitbooks-badge]: https://www.gitbook.com/button/status/book/aaronparker/vcredist/
 [gitbooks-build]: https://www.gitbook.com/book/aaronparker/vcredist
-[github-release-badge]: https://img.shields.io/github/release/aaronparker/Install-VisualCRedistributables.svg?style=flat-square&logo=github
-[github-release]: https://github.com/aaronparker/Install-VisualCRedistributables/releases/latest
 [license-badge]: https://img.shields.io/github/license/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
 [license]: https://github.com/aaronparker/vcredist/blob/master/LICENSE
