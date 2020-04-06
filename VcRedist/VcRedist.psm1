@@ -2,6 +2,7 @@
     .SYNOPSIS
         VcRedist script to initiate the module
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignment", "")]
 [CmdletBinding()]
 Param ()
 
@@ -22,6 +23,6 @@ ForEach ($import in @($public + $private)) {
     }
 }
 
-# Export the public modules and aliases
+# Export the public functions, aliases and variables
 [System.String] $VcManifest = Join-Path -Path $PSScriptRoot -ChildPath "VisualCRedistributables.json"
 Export-ModuleMember -Function $public.Basename -Alias * -Variable VcManifest
