@@ -30,7 +30,7 @@ CompanyName = 'stealthpuppy'
 Copyright = '(c) 2019 stealthpuppy. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. Downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
+Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
