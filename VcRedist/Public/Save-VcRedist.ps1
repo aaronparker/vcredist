@@ -69,7 +69,15 @@ Function Save-VcRedist {
         $ProxyCredential = [System.Management.Automation.PSCredential]::Empty
     )
 
-    Begin { }
+    Begin { 
+        # Disable the Invoke-WebRequest progress bar for faster downloads
+        If ($PSBoundParameters.ContainsKey('Verbose')) {
+            $ProgressPreference = "Continue"
+        }
+        Else {
+            $ProgressPreference = "SilentlyContinue"
+        }
+    }
 
     Process {
         # Loop through each Redistributable and download to the target path
