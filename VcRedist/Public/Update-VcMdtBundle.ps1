@@ -91,72 +91,68 @@ Function Update-VcMdtBundle {
         Exit
     }
 
+    # Get properties from the existing bundle/s
+    try {
+        $gciParams = @{
+            Path        = "$($MdtDrive):\Applications"
+            Include     = "$Publisher $BundleName"
+            Recurse     = $True
+            ErrorAction = "SilentlyContinue"
+        }
+        $Bundles = Get-ChildItem @gciParams | Where-Object { $_.CommandLine -eq "" }
+        #Write-Verbose -Message "$($MyInvocation.MyCommand): Bundle is: $($bundle.PSPath)"
+    }
+    catch [System.Exception] {
+        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing Visual C++ Redistributables bundle."
+        Throw $_.Exception.Message
+        Exit
+    }
+
+    # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
     $target = "$($MdtDrive):\Applications\$AppFolder"
-    Write-Verbose -Message "$($MyInvocation.MyCommand): Update applications in: $target"
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Gathering VcRedist applications in: $target"
+    $existingVcRedists = Get-ChildItem -Path $target | `
+        Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) -and ($_.CommandLine -ne "") }
+    $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
+    $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
 
-    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-
-        # Get properties from the existing bundle
-        try {
-            $gciParams = @{
-                Path        = "$target\$($Publisher) $($BundleName)"
-                ErrorAction = "SilentlyContinue"
+    ForEach ($bundle in $Bundles) {
+        If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
+            try {
+                $sipParams = @{
+                    Path        = ($bundle.PSPath.Replace($bundle.PSProvider, "")).Trim(":")
+                    Name        = "Dependency"
+                    Value       = $dependencies
+                    ErrorAction = "SilentlyContinue"
+                    Force       = $True
+                }
+                Set-ItemProperty @sipParams | Out-Null
             }
-            $bundle = Get-ChildItem @gciParams
-        }
-        catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing Visual C++ Redistributables bundle."
-            Throw $_.Exception.Message
-            Exit
-        }
-
-        # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
-        $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) }
-        $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
-        $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
-
-        If ($Null -ne $bundle) {
-            If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
-                try {
-                    $sipParams = @{
-                        Path        = "$target\$($Publisher) $($BundleName)"
-                        Name        = "Dependency"
-                        Value       = $dependencies
-                        ErrorAction = "SilentlyContinue"
-                    }
-                    Set-ItemProperty @sipParams | Out-Null
-                }
-                catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
-                    Throw $_.Exception.Message
-                    Continue
-                }
-                try {
-                    $sipParams = @{
-                        Path        = "$target\$($Publisher) $($BundleName)"
-                        Name        = "Version"
-                        Value       = (Get-Date -format "yyyy-MMM-dd")
-                        ErrorAction = "SilentlyContinue"
-                    }
-                    Set-ItemProperty @sipParams | Out-Null
-                }
-                catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."
-                    Throw $_.Exception.Message
-                    Continue
-                }
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
+                Throw $_.Exception.Message
+                Continue
             }
         }
-    }
-    Else {
-        Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path: [$target]."
-    }
-
-    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-        # Return list of apps to the pipeline
-        Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" | Select-Object -Property * )
-    }
-    Else {
-        Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path: [$target]."
+        If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update version")) {
+            try {
+                $sipParams = @{
+                    Path        = ($bundle.PSPath.Replace($bundle.PSProvider, "")).Trim(":")
+                    Name        = "Version"
+                    Value       = (Get-Date -format "yyyy-MMM-dd")
+                    ErrorAction = "SilentlyContinue"
+                    Force       = $True
+                }
+                Set-ItemProperty @sipParams | Out-Null
+            }
+            catch [System.Exception] {
+                Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."
+                Throw $_.Exception.Message
+                Continue
+            }
+        }
+        
+        # Write the bundle to the pipeline
+        Write-Output -InputObject ($bundle | Select-Object -Property * )
     }
 }
