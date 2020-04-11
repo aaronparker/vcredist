@@ -1,41 +1,39 @@
 Function Update-VcMdtBundle {
     <#
         .SYNOPSIS
-            Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share.
+            Updates Visual C++ Redistributable application bundles in a Microsoft Deployment Toolkit share.
 
         .DESCRIPTION
-            Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.
-
-            Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
+            After importing or adding Visual C++ Redistributable applications in a Microsoft Deployment Toolkit share, an existing application bundle can be updated with GUIDs for the new Visual C++ Redistributable applications.
 
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-mdt
+            https://docs.stealthpuppy.com/docs/vcredist/usage/update-vcmdtbundle
 
         .PARAMETER MdtPath
             The local or network path to the MDT deployment share.
 
         .PARAMETER AppFolder
-            Import the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists".
+            A sub-folder of Applications that the Visual C++ Redistributables are in. Defaults to "VcRedists".
+
+        .PARAMETER Publisher
+            Publisher name for the Visual C++ Redistributables bundle. Defaults to "Microsoft".
+
+        .PARAMETER BundleName
+            Application name for the bundle. Defaults to "Visual C++ Redistributables".
 
         .EXAMPLE
-            Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
+            Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist
+            Update-VcMdtApplication -VcList (Get-VcList) -Path C:\Temp\VcRedist -MdtPath \\server\deployment
+            Update-VcMdtBundle -MdtPath \\server\deployment
 
             Description:
-            Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \\server\deployment.
-
-        .EXAMPLE
-            $VcList = Get-VcList -ExportAll
-            Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
-            Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
-
-            Description:
-            Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \\server\deployment and creates an application bundle.
+            Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and updates each Redistributable in the MDT deployment share at \\server\deployment.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-mdt")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/update-vcmdtbundle")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
