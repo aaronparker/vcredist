@@ -36,6 +36,15 @@ Function Test-VcDownloads {
 }
 #endregion
 
+# Target download directory
+If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
+    $downloadDir = $env:Temp
+}
+Else {
+    $downloadDir = $env:TMPDIR
+}
+Write-Host -ForegroundColor Cyan "Download dir: $downloadDir."
+
 #region Pester tests
 Describe 'Get-VcList' -Tag "Get" {
     Context 'Return built-in manifest' {
@@ -119,33 +128,38 @@ Describe 'Export-VcManifest' -Tag "Export" {
 Describe 'Save-VcRedist' -Tag "Save" {
     Context 'Download Redistributables' {
         It 'Downloads supported Visual C++ Redistributables' {
-            If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
-                $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
+            If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
+                $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
                 If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
                 $VcList = Get-VcList
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
-                $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
+                Save-VcRedist -VcList $VcList -Path $Path
                 Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
             }
             Else {
-                Write-Warning -Message "env:Temp does not exist."
+                Write-Warning -Message "$downloadDir does not exist."
             }
         }
-        It 'Returns an object to the pipeline' {
+        It 'Returns an expected object type to the pipeline' {
+            $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
+            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
+            $VcList = Get-VcList
+            Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
+            $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
             $DownloadedRedists | Should -BeOfType PSCustomObject
         }
     }
     Context "Test pipeline support" {
         It "Should not throw when passed via pipeline with no parameters" {
-            If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
-                New-Item -Path (Join-Path -Path $env:Temp -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-                Push-Location -Path (Join-Path -Path $env:Temp -ChildPath "VcTest")
+            If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
+                New-Item -Path (Join-Path -Path $downloadDir -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+                Push-Location -Path (Join-Path -Path $downloadDir -ChildPath "VcTest")
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
                 { Get-VcList | Save-VcRedist } | Should -Not -Throw
                 Pop-Location
             }
             Else {
-                Write-Warning -Message "env:Temp does not exist."
+                Write-Warning -Message "$downloadDir does not exist."
             }
         }
     }
@@ -158,21 +172,21 @@ Describe 'Save-VcRedist' -Tag "Save" {
 
 Describe 'Install-VcRedist' -Tag "Install" {
     Context 'Test exception handling for invalid VcRedist download path' {
-        If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
             It "Should throw when passed via pipeline with no parameters" {
-                Push-Location -Path $env:Temp
+                Push-Location -Path $downloadDir
                 { Get-VcList | Install-VcRedist } | Should -Throw
                 Pop-Location
             }
         }
         Else {
-            Write-Warning -Message "env:Temp does not exist."
+            Write-Warning -Message "$downloadDir does not exist."
         }
     }
     Context 'Install Redistributables' {
-        If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
             $VcRedists = Get-VcList
-            $Path = Join-Path -Path $env:Temp -ChildPath "VcDownload"
+            $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
             Write-Host "`tInstalling VcRedists." -ForegroundColor Cyan
             $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent
             ForEach ($Vc in $VcRedists) {
@@ -182,7 +196,7 @@ Describe 'Install-VcRedist' -Tag "Install" {
             }
         }
         Else {
-            Write-Warning -Message "env:Temp does not exist."
+            Write-Warning -Message "$downloadDir does not exist."
         }
     }
 }
