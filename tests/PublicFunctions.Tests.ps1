@@ -124,12 +124,15 @@ Describe 'Save-VcRedist' -Tag "Save" {
                 If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
                 $VcList = Get-VcList
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
-                Save-VcRedist -VcList $VcList -Path $Path
+                $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
                 Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
             }
             Else {
                 Write-Warning -Message "env:Temp does not exist."
             }
+        }
+        It 'Returns an object to the pipeline' {
+            $DownloadedRedists | Should -BeOfType PSCustomObject
         }
     }
     Context "Test pipeline support" {

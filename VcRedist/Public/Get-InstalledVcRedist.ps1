@@ -36,12 +36,12 @@ Function Get-InstalledVcRedist {
     )
     
     # Get all installed Visual C++ Redistributables installed components
-    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -like "Microsoft Visual C++*" }
+    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -like "^Microsoft Visual C.*Redistributable.*" }
 
     # If -ExportAll used, export everything instead of filtering for the primary Redistributable
     If (-not $ExportAll) {
-        $VcRedists = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) {$_} } | `
-            Sort-Object Name
+        $VcRedists = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | `
+            Sort-Object -Property Name
     }
 
     # Add Architecture property to each entry

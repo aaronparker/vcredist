@@ -46,7 +46,8 @@ Function Uninstall-VcRedist {
     )
 
     # Get the installed VcRedists and filter
-    Write-Verbose -Message "Getting locally installed Visual C++ Redistributables"
+    Write-Warning -Message "$($MyInvocation.MyCommand): Uninstalling Visual C++ Redistributables"
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Getting locally installed Visual C++ Redistributables"
     $VcRedistsToRemove = Get-InstalledVcRedist | Where-Object { $Release -contains $_.Release }
     $VcRedistsToRemove = $VcRedistsToRemove | Where-Object { $Architecture -contains $_.Architecture }
 

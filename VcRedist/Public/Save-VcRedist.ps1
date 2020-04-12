@@ -33,7 +33,7 @@ Function Save-VcRedist {
             Downloads the supported Visual C++ Redistributables to C:\Redist.
             
         .EXAMPLE
-            Get-VcList | Save-VcRedist -Path C:\Redist -ForceWebRequest
+            Get-VcList | Save-VcRedist -Path C:\Redist
 
             Description:
             Passes the list of supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
@@ -99,9 +99,9 @@ Function Save-VcRedist {
     Process {
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcList) {
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
 
             # Create the folder to store the downloaded file. Skip if it exists
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Test: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
             If (Test-Path -Path $folder) {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
@@ -146,6 +146,7 @@ Function Save-VcRedist {
                 If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
                     # Use Invoke-WebRequest with no progress bar by default for best compatibility and speed
                     try {
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
                         # Enable TLS 1.2
                         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
                         $iwrParams = @{
@@ -161,21 +162,28 @@ Function Save-VcRedist {
                             $iwrParams.ProxyCredential = $ProxyCredential
                         }
                         Invoke-WebRequest @iwrParams
+                        $return = $True
                     }
                     catch [System.Net.Http.HttpRequestException] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
                         Throw $_.Exception.Message
-                        Continue
+                        $return = $False
                     }
                     catch [System.Net.WebException] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
                         Throw $_.Exception.Message
-                        Continue
+                        $return = $False
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
                         Throw $_.Exception.Message
-                        Continue
+                        $return = $False
+                    }
+                    finally {
+                        If ($return) {
+                            # Return the $VcList array on the pipeline so that we can act on what was downloaded
+                            Write-Output -InputObject $Vc
+                        }
                     }
                 }
             }
@@ -185,8 +193,5 @@ Function Save-VcRedist {
         }
     }
 
-    End {
-        # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        Write-Output -InputObject $filteredVcList
-    }
+    End { }
 }
