@@ -124,7 +124,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
                 If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
                 $VcList = Get-VcList
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
-                Save-VcRedist -VcList $VcList -Path $Path -ForceWebRequest
+                Save-VcRedist -VcList $VcList -Path $Path
                 Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
             }
             Else {
@@ -138,7 +138,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
                 New-Item -Path (Join-Path -Path $env:Temp -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
                 Push-Location -Path (Join-Path -Path $env:Temp -ChildPath "VcTest")
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
-                { Get-VcList | Save-VcRedist -ForceWebRequest } | Should -Not -Throw
+                { Get-VcList | Save-VcRedist } | Should -Not -Throw
                 Pop-Location
             }
             Else {
