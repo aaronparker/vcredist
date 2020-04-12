@@ -91,7 +91,7 @@ Function Update-VcMdtApplication {
 
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+            If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
                     New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
                     Restore-MDTPersistentDrive -Force | Out-Null
@@ -119,6 +119,7 @@ Function Update-VcMdtApplication {
                 # Set variables
                 $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
 
+                # Get the existing VcRedist applications in the MDT share
                 try {
                     $gciParams = @{
                         Path        = (Join-Path -Path $target -ChildPath $vcName)
@@ -129,12 +130,13 @@ Function Update-VcMdtApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing application: [$vcName]."
                     Throw $_.Exception.Message
-                    Exit
+                    Break
                 }
     
                 If ($Null -ne $existingVc) {
                     try {
                         If ($existingVc.CommandLine -ne ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })") {
+                            # Check the existing command line on the application and update
                             If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update CommandLine")) {
                                 try {
                                     $sipParams = @{
@@ -152,7 +154,25 @@ Function Update-VcMdtApplication {
                             }
                         }
                         If ($existingVc.UninstallKey -ne $Vc.ProductCode) {
-                            If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update UninstallKey")) {
+                            # Update the ProductCode value
+                            If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update Exe & UninstallKey")) {
+                                # Copy the updated executable
+                                try {
+                                    $Source = "$(Get-ValidPath $Path)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)\*.exe"
+                                    $Destination = "$(Get-ValidPath -Path $MdtPath)\Applications\$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
+                                    $ciParams = @{
+                                        Path       = $Source
+                                        Destination = $Destination
+                                        Force       = $True
+                                    }
+                                    Write-Verbose -Message "Copying [$Source] to [$Destination]."
+                                    Copy-Item @ciParams
+                                }
+                                catch {
+                                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed copying in copy [$Source] to [$Destination]."
+                                    Throw $_.Exception.Message
+                                    Break
+                                }
                                 try {
                                     $sipParams = @{
                                         Path  = (Join-Path -Path $target -ChildPath $vcName)

@@ -20,8 +20,11 @@ Function Save-VcRedist {
         .PARAMETER Path
             Specify a target folder to download the Redistributables to, otherwise use the current folder.
 
-        .PARAMETER ForceWebRequest
-            Forces the use of Invoke-WebRequest over Start-BitsTransfer
+        .PARAMETER Proxy
+            Specifies a proxy server for the request, rather than connecting directly to the internet resource. Enter the URI of a network proxy server.
+
+        .PARAMETER ProxyCredential
+            Specifies a user account that has permission to use the proxy server that is specified by the Proxy parameter. The default is the current user.
 
         .EXAMPLE
             Save-VcRedist -VcList (Get-VcList) -Path C:\Redist
@@ -30,18 +33,30 @@ Function Save-VcRedist {
             Downloads the supported Visual C++ Redistributables to C:\Redist.
             
         .EXAMPLE
-            Get-VcList | Save-VcRedist -Path C:\Redist -ForceWebRequest
+            Get-VcList | Save-VcRedist -Path C:\Redist
 
             Description:
-            Passes the list of supported Visual C++ Redistributables to Save-VcRedist and uses Invoke-WebRequest to download the Redistributables to C:\Redist.
+            Passes the list of supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
 
         .EXAMPLE
             $VcList = Get-VcList -Release 2013, 2019 -Architecture x86
-            Save-VcRedist -VcList $VcList -Path C:\Redist -ForceWebRequest
+            Save-VcRedist -VcList $VcList -Path C:\Redist
 
             Description:
-            Passes the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and uses Invoke-WebRequest to download the Redistributables to C:\Redist.
-    #>
+            Passes the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
+
+        .EXAMPLE
+            Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist
+
+            Description:
+            Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist.
+
+        .EXAMPLE
+            Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
+
+            Description:
+            Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
+        #>
     [Alias("Get-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/downloading-the-redistributables")]
     [OutputType([System.Management.Automation.PSObject])]
@@ -55,9 +70,11 @@ Function Save-VcRedist {
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
+        [System.ObsoleteAttribute("This parameter should no longer be used. Invoke-WebRequest is used for all download operations.")]
         [System.Management.Automation.SwitchParameter] $ForceWebRequest,
 
         [Parameter(Mandatory = $False, Position = 2)]
+        [System.ObsoleteAttribute("This parameter should no longer be used. Invoke-WebRequest is used for all download operations.")]
         [ValidateSet('Foreground', 'High', 'Normal', 'Low')]
         [System.String] $Priority = "Foreground",
 
@@ -82,9 +99,9 @@ Function Save-VcRedist {
     Process {
         # Loop through each Redistributable and download to the target path
         ForEach ($Vc in $VcList) {
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
 
             # Create the folder to store the downloaded file. Skip if it exists
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Test: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
             If (Test-Path -Path $folder) {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
@@ -126,72 +143,46 @@ Function Save-VcRedist {
 
             # The VcRedist needs to be downloaded
             If ($download) {
-
-                # If -ForceWebRequest or running on PowerShell Core (or Start-BitsTransfer is unavailable) download with Invoke-WebRequest
-                If ($ForceWebRequest -or (Test-PSCore)) {
-                    If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
-
-                        # Use Invoke-WebRequest in instances where Start-BitsTransfer isn't supported or won't work
-                        try {
-                            $iwrParams = @{
-                                Uri             = $Vc.Download
-                                OutFile         = $target
-                                UseBasicParsing = $True
-                                ErrorAction     = "SilentlyContinue"
-                            }
-                            If ($PSBoundParameters.ContainsKey('Proxy')) {
-                                $iwrParams.Proxy = $Proxy
-                            }
-                            If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
-                                $iwrParams.ProxyCredentials = $ProxyCredential
-                            }
-                            Invoke-WebRequest @iwrParams
+                If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
+                    # Use Invoke-WebRequest with no progress bar by default for best compatibility and speed
+                    try {
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
+                        # Enable TLS 1.2
+                        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                        $iwrParams = @{
+                            Uri             = $Vc.Download
+                            OutFile         = $target
+                            UseBasicParsing = $True
+                            ErrorAction     = "SilentlyContinue"
                         }
-                        catch [System.Net.Http.HttpRequestException] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
-                            Throw $_.Exception.Message
-                            Continue
+                        If ($PSBoundParameters.ContainsKey('Proxy')) {
+                            $iwrParams.Proxy = $Proxy
                         }
-                        catch [System.Net.WebException] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
-                            Throw $_.Exception.Message
-                            Continue
+                        If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+                            $iwrParams.ProxyCredential = $ProxyCredential
                         }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
-                            Throw $_.Exception.Message
-                            Continue
-                        }
+                        Invoke-WebRequest @iwrParams
+                        $return = $True
                     }
-                }
-                Else {
-                    If ($pscmdlet.ShouldProcess($Vc.Download, "BitsDownload")) {
-                        
-                        # Use Start-BitsTransfer
-                        try {
-                            $sbtParams = @{
-                                Source      = $Vc.Download
-                                Destination = $target
-                                Priority    = $Priority
-                                DisplayName = "Visual C++ Redistributable Download"
-                                Description = $Vc.Name
-                                ErrorAction = "SilentlyContinue"
-                            }
-                            If ($PSBoundParameters.ContainsKey('Proxy')) {
-                                # Set priority to Foreground because the proxy will remove the Range protocol header
-                                $sbtParams.Priority = "Foreground"
-                                $sbtParams.ProxyUsage = "Override"
-                                $sbtParams.ProxyList = $Proxy
-                            }
-                            If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
-                                $sbtParams.ProxyCredential = $ProxyCredentials
-                            }
-                            Start-BitsTransfer @sbtParams
-                        }
-                        catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
-                            Throw $_.Exception.Message
-                            Continue
+                    catch [System.Net.Http.HttpRequestException] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
+                        Throw $_.Exception.Message
+                        $return = $False
+                    }
+                    catch [System.Net.WebException] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
+                        Throw $_.Exception.Message
+                        $return = $False
+                    }
+                    catch [System.Exception] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
+                        Throw $_.Exception.Message
+                        $return = $False
+                    }
+                    finally {
+                        If ($return) {
+                            # Return the $VcList array on the pipeline so that we can act on what was downloaded
+                            Write-Output -InputObject $Vc
                         }
                     }
                 }
@@ -202,8 +193,5 @@ Function Save-VcRedist {
         }
     }
 
-    End {
-        # Return the $VcList array on the pipeline so that we can act on what was downloaded
-        Write-Output -InputObject $filteredVcList
-    }
+    End { }
 }

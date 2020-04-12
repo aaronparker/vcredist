@@ -19,7 +19,7 @@ Function Import-MdtModule {
 
     # Get path to the MDT PowerShell module via the Registry and fail if we can't read the properties
     try {
-        $mdtReg = Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4" -ErrorAction SilentlyContinue
+        $mdtReg = Get-ItemProperty "HKLM:SOFTWARE\Microsoft\Deployment 4" -ErrorAction "SilentlyContinue"
     }
     catch [System.Exception] {
         Write-Warning "$($MyInvocation.MyCommand): Unable to read MDT Registry path properties."
@@ -40,17 +40,18 @@ Function Import-MdtModule {
     # Attempt to load the module
     $mdtModule = "$mdtInstallDir\bin\MicrosoftDeploymentToolkit.psd1"
     If (Test-Path -Path $mdtModule) {
+        Write-Verbose "$($MyInvocation.MyCommand): Loading MDT module from: [$mdtInstallDir]."
         try {
-            If ($Force) {
-                Write-Verbose "$($MyInvocation.MyCommand): Importing the MDT module with -Force."
-                Import-Module -Name $mdtModule -Force -ErrorAction SilentlyContinue
+            $params = @{
+                Name        = $mdtModule
+                ErrorAction = "SilentlyContinue"
+                Force       = If ($Force) { $True } Else { $False }
             }
-            Else {
-                Import-Module -Name $mdtModule -ErrorAction SilentlyContinue
-            }
+            Import-Module @params
         }
         catch [System.Exception] {
             Write-Warning "$($MyInvocation.MyCommand): Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."
+            Throw $_.Exception.Message
             Write-Output -InputObject $False
             Break
         }
