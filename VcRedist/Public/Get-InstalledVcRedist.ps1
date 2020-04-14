@@ -36,18 +36,25 @@ Function Get-InstalledVcRedist {
     )
     
     # Get all installed Visual C++ Redistributables installed components
-    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -like "^Microsoft Visual C.*Redistributable.*" }
-
-    # If -ExportAll used, export everything instead of filtering for the primary Redistributable
-    If (-not $ExportAll) {
-        $VcRedists = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | `
-            Sort-Object -Property Name
-    }
+    $Filter = "(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*"
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Matching installed VcRedists with [$Filter]."
+    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match $Filter }
 
     # Add Architecture property to each entry
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Adding Architecture property."
     $VcRedists | ForEach-Object { If ($_.Name -contains "x64") `
         { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
-        
-    # Write the installed VcRedists to the pipeline
-    Write-Output -InputObject $VcRedists
+
+    # If -ExportAll used, export everything instead of filtering for the primary Redistributable
+    If ($ExportAll.IsPresent) {
+        # Write the installed VcRedists to the pipeline
+        Write-Output -InputObject $VcRedists
+    }
+    Else {
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering output."
+        $Output = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | `
+            Sort-Object -Property "Name"
+        # Write the filtered installed VcRedists to the pipeline
+        Write-Output -InputObject $Output
+    }
 }
