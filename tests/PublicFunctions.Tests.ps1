@@ -152,7 +152,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
     Context "Test pipeline support" {
         It "Should not throw when passed via pipeline with no parameters" {
             If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
-                New-Item -Path (Join-Path -Path $downloadDir -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+                New-Item -Path (Join-Path -Path $downloadDir -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue > $Null
                 Push-Location -Path (Join-Path -Path $downloadDir -ChildPath "VcTest")
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
                 { Get-VcList | Save-VcRedist } | Should -Not -Throw

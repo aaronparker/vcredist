@@ -73,8 +73,8 @@ Function Update-VcMdtBundle {
     If (Import-MdtModule) {
         If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
             try {
-                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
-                Restore-MDTPersistentDrive -Force | Out-Null
+                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                Restore-MDTPersistentDrive -Force > $Null
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
@@ -124,7 +124,7 @@ Function Update-VcMdtBundle {
                     ErrorAction = "SilentlyContinue"
                     Force       = $True
                 }
-                Set-ItemProperty @sipParams | Out-Null
+                Set-ItemProperty @sipParams > $Null
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
@@ -141,7 +141,7 @@ Function Update-VcMdtBundle {
                     ErrorAction = "SilentlyContinue"
                     Force       = $True
                 }
-                Set-ItemProperty @sipParams | Out-Null
+                Set-ItemProperty @sipParams > $Null
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."

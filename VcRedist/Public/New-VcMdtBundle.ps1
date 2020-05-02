@@ -78,8 +78,8 @@ Function New-VcMdtBundle {
     If (Import-MdtModule) {
         If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
             try {
-                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
-                Restore-MDTPersistentDrive -Force | Out-Null
+                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                Restore-MDTPersistentDrive -Force > $Null
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
@@ -154,7 +154,7 @@ Function New-VcMdtBundle {
                         Dependency = $dependencies
                         Bundle     = $True
                     }
-                    Import-MDTApplication @importMDTAppParams | Out-Null
+                    Import-MDTApplication @importMDTAppParams > $Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error importing the VcRedist bundle. If -Force was specified, the original bundle will have been removed."
