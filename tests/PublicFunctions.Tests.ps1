@@ -45,7 +45,7 @@ Else {
 }
 Write-Host -ForegroundColor Cyan "Download dir: $downloadDir."
 
-#region Pester tests
+#region Function tests
 Describe 'Get-VcList' -Tag "Get" {
     Context 'Return built-in manifest' {
         It 'Given no parameters, it returns supported Visual C++ Redistributables' {
@@ -223,6 +223,30 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
             { Uninstall-VcRedist -Release 2008, 2010 -Confirm:$False } | Should -Not -Throw
         }
     }
-
 }
 #endregion
+
+#region Manifest test
+# Get an array of VcRedists from the curernt manifest and the installed VcRedists
+$Version = "2019"
+$CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
+$InstalledVcRedists = Get-InstalledVcRedist
+
+Describe 'VcRedist manifest tests' -Tag "Manifest" {
+    Context 'Compare manifest version against installed version' {
+
+        # Filter the VcRedists for the target version and compare against what has been installed
+        ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Version })) {
+            $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
+
+            # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
+            It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
+                Write-Host -ForegroundColor Cyan "`tComparing: $($InstalledItem.Version). Against: $($ManifestVcRedist.Version)."
+                $InstalledItem.Version -gt $ManifestVcRedist.Version | Should -Not -Be $True
+            }
+        }
+
+    }
+}
+#endregion
+
