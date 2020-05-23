@@ -43,7 +43,7 @@ If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
 Else {
     $downloadDir = $env:TMPDIR
 }
-Write-Host -ForegroundColor Cyan "Download dir: $downloadDir."
+Write-Host -ForegroundColor Cyan "`tDownload dir: $downloadDir."
 
 #region Function tests
 Describe 'Get-VcList' -Tag "Get" {
@@ -241,7 +241,7 @@ Describe 'VcRedist manifest tests' -Tag "Manifest" {
 
             # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
             It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
-                Write-Host -ForegroundColor Cyan "`tComparing: $($InstalledItem.Version). Against: $($ManifestVcRedist.Version)."
+                Write-Host -ForegroundColor Cyan "`tComparing installed: $($InstalledItem.Version). Against manifest: $($ManifestVcRedist.Version)."
                 $InstalledItem.Version -gt $ManifestVcRedist.Version | Should -Not -Be $True
             }
         }
