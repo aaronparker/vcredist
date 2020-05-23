@@ -4,7 +4,7 @@
 #>
 [OutputType()]
 Param (
-    $Version = "2019"
+    $Release = "2019"
 )
 
 # Get an array of VcRedists from the curernt manifest and the installed VcRedists
@@ -12,7 +12,7 @@ $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
 $InstalledVcRedists = Get-InstalledVcRedist
 
 # Filter the VcRedists for the target version and compare against what has been installed
-ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Version })) {
+ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Release })) {
     $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
 
     # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
@@ -68,7 +68,7 @@ If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
             Invoke-Process -FilePath "git" -ArgumentList "checkout $env:APPVEYOR_REPO_BRANCH"
             git add --all
             git status
-            git commit -s -m "Manifest update VcRedist $Version - $FoundVersion"
+            git commit -s -m "Manifest update VcRedist $Release to $FoundVersion"
             Invoke-Process -FilePath "git" -ArgumentList "push origin $env:APPVEYOR_REPO_BRANCH"
             Write-Host "Manifest Update for $FoundVersion pushed to GitHub." -ForegroundColor Cyan
         }
@@ -78,4 +78,8 @@ If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
             Throw $_
         }
     }
+}
+Else {
+    Write-Host ""
+    Write-Host -ForegroundColor Cyan "Installed VcRedist matches manifest."
 }
