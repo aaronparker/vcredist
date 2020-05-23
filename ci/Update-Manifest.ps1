@@ -34,6 +34,8 @@ ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Re
 }
 
 # If a version was found and were aren't in the master branch
+Write-Host -ForegroundColor Cyan "`tFound new version $FoundNewVersion."
+Write-Host -ForegroundColor Cyan "`tBranch is: $env:APPVEYOR_REPO_BRANCH."
 If (($FoundNewVersion -eq $True) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
 
     # Convert to JSON and export to the module manifest
