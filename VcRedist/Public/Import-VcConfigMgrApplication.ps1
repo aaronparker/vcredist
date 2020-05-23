@@ -69,17 +69,13 @@ Function Import-VcConfigMgrApplication {
 
         [Parameter(Mandatory = $False, Position = 5)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
-        [System.String] $MdtDrive = "DS001",
-
-        [Parameter(Mandatory = $False, Position = 6)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft",
 
-        [Parameter(Mandatory = $False, Position = 7)]
+        <#[Parameter(Mandatory = $False, Position = 6)]
         [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US",
+        [System.String] $Language = "en-US",#>
 
-        [Parameter(Mandatory = $False, Position = 8)]
+        [Parameter(Mandatory = $False, Position = 6)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
         [System.String] $Keyword = "Visual C++ Redistributable"
     )

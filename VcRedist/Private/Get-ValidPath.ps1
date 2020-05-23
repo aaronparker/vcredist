@@ -17,17 +17,19 @@ Function Get-ValidPath {
         [System.String] $Path
     )
     
-    # Resolve the path, trim any trailing backslash and return the string
-    try {
-        $resolvedPath = Resolve-Path -Path $Path -ErrorAction SilentlyContinue
-    }
-    catch [System.Exception] {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to resolve: [$Path]."
-        Throw $_.Exception.Message
-    }
-    finally {
-        If ($resolvedPath) {
-            Write-Output -InputObject ($resolvedPath.Path.TrimEnd("\"))
+    Process {
+        # Resolve the path, trim any trailing backslash and return the string
+        try {
+            $resolvedPath = Resolve-Path -Path $Path -ErrorAction SilentlyContinue
+        }
+        catch [System.Exception] {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to resolve: [$Path]."
+            Throw $_.Exception.Message
+        }
+        finally {
+            If ($resolvedPath) {
+                Write-Output -InputObject ($resolvedPath.Path.TrimEnd("\"))
+            }
         }
     }
 }

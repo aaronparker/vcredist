@@ -42,20 +42,22 @@ Function Export-VcManifest {
         [System.String] $Path
     )
 
-    # Get the list of VcRedists from Get-VcList
-    [System.String] $Manifest = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json")
+    Process {
+        # Get the list of VcRedists from Get-VcList
+        [System.String] $Manifest = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json")
 
-    # Output the manifest to supplied path
-    try {
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Copying $Manifest to $Path."
-        Copy-Item -Path $Manifest -Destination $Path
-    }
-    catch {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy $Manifest to $Path."
-        Throw $_.Exception.Message
-        Break
-    }
-    finally {
-        Write-Output -InputObject (Resolve-Path -Path $Path)
+        # Output the manifest to supplied path
+        try {
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Copying $Manifest to $Path."
+            Copy-Item -Path $Manifest -Destination $Path
+        }
+        catch {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy $Manifest to $Path."
+            Throw $_.Exception.Message
+            Break
+        }
+        finally {
+            Write-Output -InputObject (Resolve-Path -Path $Path)
+        }
     }
 }

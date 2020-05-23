@@ -20,7 +20,8 @@ Describe 'VcRedist manifest tests' -Tag "Manifest" {
 
             # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
             It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
-                [Version]$InstalledItem.Version -gt [Version]$ManifestVcRedist.Version | Should -Not -Be $True
+                Write-Host -ForegroundColor Cyan "Comparing: $($InstalledItem.Version). Against: $($ManifestVcRedist.Version)."
+                $InstalledItem.Version -gt $ManifestVcRedist.Version | Should -Not -Be $True
             }
         }
 

@@ -13,7 +13,7 @@ Function Test-PSCore {
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     Param (
-        [Parameter(ValueFromPipeline)]
+        [Parameter(Position = 0)]
         [System.String] $Version = '6.0.0'
     )
 

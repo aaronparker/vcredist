@@ -55,11 +55,11 @@ Function Update-VcMdtBundle {
 
         [Parameter(Mandatory = $False, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
-        [System.String] $BundleName = "Visual C++ Redistributables",
+        [System.String] $BundleName = "Visual C++ Redistributables"
 
-        [Parameter(Mandatory = $False, Position = 4)]
+        <#[Parameter(Mandatory = $False, Position = 4)]
         [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US"
+        [System.String] $Language = "en-US"#>
     )
 
     # If running on PowerShell Core, error and exit.
