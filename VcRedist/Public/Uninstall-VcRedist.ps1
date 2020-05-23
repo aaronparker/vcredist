@@ -34,6 +34,7 @@ Function Uninstall-VcRedist {
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "High", 
         HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/uninstalling-the-redistributables")]
     [OutputType([System.Management.Automation.PSObject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $False, Position = 0)]
