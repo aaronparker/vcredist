@@ -248,11 +248,10 @@ Describe 'VcRedist manifest tests' -Tag "Manifest" {
             }
         }
 
-    }
-
-    # Call update manifest script
-    If ($UpdateManifest) {
-        . $ProjectRoot\ci\Update-Manifest.ps1
+        # Call update manifest script
+        If ($UpdateManifest) {
+            . $ProjectRoot\ci\Update-Manifest.ps1
+        }
     }
 }
 #endregion

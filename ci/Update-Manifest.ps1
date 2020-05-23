@@ -18,9 +18,9 @@ ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Re
     # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
     If (($InstalledItem.Count -gt 0) -and ($InstalledItem.Version -gt $ManifestVcRedist.Version)) {
         Write-Host " "
-        Write-Host -ForegroundColor Cyan "VcRedist manifest is out of date."
-        Write-Host -ForegroundColor Cyan "Installed version:`t$($InstalledItem.Version)"
-        Write-Host -ForegroundColor Cyan "Manifest version:`t$($ManifestVcRedist.Version)"
+        Write-Host -ForegroundColor Cyan "`tVcRedist manifest is out of date."
+        Write-Host -ForegroundColor Cyan "`tInstalled version:`t$($InstalledItem.Version)"
+        Write-Host -ForegroundColor Cyan "`tManifest version:`t$($ManifestVcRedist.Version)"
 
         # Find the index of the VcRedist in the manifest and update it's properties
         $Index = $CurrentManifest.Supported::IndexOf($CurrentManifest.Supported.ProductCode, $ManifestVcRedist.ProductCode)
@@ -38,7 +38,7 @@ If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
 
     # Convert to JSON and export to the module manifest
     try {
-        Write-Host -ForegroundColor Cyan "Updating module manifest with VcRedist $output."
+        Write-Host -ForegroundColor Cyan "`tUpdating module manifest with VcRedist $output."
         $CurrentManifest | ConvertTo-Json | Set-Content -Path $VcManifest -Force
     }
     catch {
@@ -70,16 +70,16 @@ If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
             git status
             git commit -s -m "Manifest update VcRedist $Release to $FoundVersion"
             Invoke-Process -FilePath "git" -ArgumentList "push origin $env:APPVEYOR_REPO_BRANCH"
-            Write-Host "Manifest Update for $FoundVersion pushed to GitHub." -ForegroundColor Cyan
+            Write-Host "`tManifest Update for $FoundVersion pushed to GitHub." -ForegroundColor Cyan
         }
         Catch {
             # Sad panda; it broke
-            Write-Warning "Push to GitHub failed."
+            Write-Warning "`tPush to GitHub failed."
             Throw $_
         }
     }
 }
 Else {
     Write-Host ""
-    Write-Host -ForegroundColor Cyan "Installed VcRedist matches manifest."
+    Write-Host -ForegroundColor Cyan "`tInstalled VcRedist matches manifest."
 }
