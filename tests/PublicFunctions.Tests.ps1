@@ -236,8 +236,10 @@ Describe 'VcRedist manifest tests' -Tag "Manifest" {
     Context 'Compare manifest version against installed version' {
 
         # Filter the VcRedists for the target version and compare against what has been installed
+        $UpdateManifest = $False
         ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Version })) {
             $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
+            If ($InstalledItem.Version -gt $ManifestVcRedist.Version) { $UpdateManifest = $True }
 
             # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
             It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
@@ -250,3 +252,8 @@ Describe 'VcRedist manifest tests' -Tag "Manifest" {
 }
 #endregion
 
+
+# Call update manifest script
+If ($UpdateManifest) {
+    . $ProjectRoot\ci\Update-Manifest.ps1
+}

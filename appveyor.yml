@@ -13,7 +13,6 @@ install:
 - ps: . .\ci\Install.ps1
 build_script:
 - ps: . .\ci\Build.ps1
-- ps: . .\ci\Update-Manifest.ps1
 test_script:
 - ps: . .\ci\Tests.ps1
 deploy_script:
