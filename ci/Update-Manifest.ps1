@@ -28,13 +28,13 @@ ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Re
         $CurrentManifest.Supported[$Index].Version = $InstalledItem.Version
 
         # Create output variable 
-        $output = $InstalledItem.Version
+        $NewVersion = $InstalledItem.Version
         $FoundNewVersion = $True
     }
 }
 
 # If a version was found and were aren't in the master branch
-If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
+If (($FoundNewVersion -eq $True) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
 
     # Convert to JSON and export to the module manifest
     try {
@@ -42,7 +42,7 @@ If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
         $CurrentManifest | ConvertTo-Json | Set-Content -Path $VcManifest -Force
     }
     catch {
-        Write-Error "Failed to conver to JSON and write back to the manifest."
+        Write-Error "Failed to convert to JSON and write back to the manifest."
         Break
     }
     finally {
@@ -68,9 +68,9 @@ If (($FoundNewVersion) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
             Invoke-Process -FilePath "git" -ArgumentList "checkout $env:APPVEYOR_REPO_BRANCH"
             git add --all
             git status
-            git commit -s -m "Manifest update VcRedist $Release to $FoundVersion"
+            git commit -s -m "Manifest update VcRedist $Release to $NewVersion"
             Invoke-Process -FilePath "git" -ArgumentList "push origin $env:APPVEYOR_REPO_BRANCH"
-            Write-Host "`tManifest Update for $FoundVersion pushed to GitHub." -ForegroundColor Cyan
+            Write-Host "`tManifest Update for $NewVersion pushed to GitHub." -ForegroundColor Cyan
         }
         Catch {
             # Sad panda; it broke

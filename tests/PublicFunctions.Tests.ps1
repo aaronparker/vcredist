@@ -228,16 +228,16 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
 
 #region Manifest test
 # Get an array of VcRedists from the curernt manifest and the installed VcRedists
-$Version = "2019"
+$Release = "2019"
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
 $InstalledVcRedists = Get-InstalledVcRedist
+$UpdateManifest = $False
 
 Describe 'VcRedist manifest tests' -Tag "Manifest" {
     Context 'Compare manifest version against installed version' {
 
         # Filter the VcRedists for the target version and compare against what has been installed
-        $UpdateManifest = $False
-        ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Version })) {
+        ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Release })) {
             $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
             If ($InstalledItem.Version -gt $ManifestVcRedist.Version) { $UpdateManifest = $True }
 
@@ -249,7 +249,7 @@ Describe 'VcRedist manifest tests' -Tag "Manifest" {
         }
 
         # Call update manifest script
-        If ($UpdateManifest) {
+        If ($UpdateManifest -eq $True) {
             . $ProjectRoot\ci\Update-Manifest.ps1
         }
     }
