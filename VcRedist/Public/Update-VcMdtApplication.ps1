@@ -70,15 +70,15 @@ Function Update-VcMdtApplication {
 
         [Parameter(Mandatory = $False, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
-        [System.String] $Publisher = "Microsoft",
+        [System.String] $Publisher = "Microsoft"
 
-        [Parameter(Mandatory = $False, Position = 4)]
+        <#[Parameter(Mandatory = $False, Position = 4)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
-        [System.String] $BundleName = "Visual C++ Redistributables",
+        [System.String] $BundleName = "Visual C++ Redistributables"
 
         [Parameter(Mandatory = $False, Position = 5)]
         [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US"
+        [System.String] $Language = "en-US"#>
     )
 
     Begin {
@@ -93,8 +93,8 @@ Function Update-VcMdtApplication {
         If (Import-MdtModule) {
             If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
-                    Restore-MDTPersistentDrive -Force | Out-Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
@@ -144,7 +144,7 @@ Function Update-VcMdtApplication {
                                         Name  = "CommandLine"
                                         Value = ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })"
                                     }
-                                    Set-ItemProperty @sipParams | Out-Null
+                                    Set-ItemProperty @sipParams > $Null
                                 }
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application command line."
@@ -179,7 +179,7 @@ Function Update-VcMdtApplication {
                                         Name  = "UninstallKey"
                                         Value = $Vc.ProductCode
                                     }
-                                    Set-ItemProperty @sipParams | Out-Null
+                                    Set-ItemProperty @sipParams > $Null
                                 }
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application dependencies."

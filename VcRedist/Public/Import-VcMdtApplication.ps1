@@ -102,8 +102,8 @@ Function Import-VcMdtApplication {
         If (Import-MdtModule) {
             If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue | Out-Null
-                    Restore-MDTPersistentDrive -Force | Out-Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
@@ -122,7 +122,7 @@ Function Import-VcMdtApplication {
         If ($AppFolder.Length -gt 0) {
             If ($pscmdlet.ShouldProcess($AppFolder, "Create")) {
                 try {
-                    New-MdtApplicationFolder -Drive $MdtDrive -Name $AppFolder -Description "Microsoft Visual C++ Redistributables" | Out-Null
+                    New-MdtApplicationFolder -Drive $MdtDrive -Name $AppFolder -Description "Microsoft Visual C++ Redistributables" > $Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$AppFolder]."
@@ -203,7 +203,7 @@ Function Import-VcMdtApplication {
                             UninstallKey          = $Vc.ProductCode
                             SupportedPlatform     = $supportedPlatform
                         }
-                        Import-MDTApplication @importMDTAppParams | Out-Null
+                        Import-MDTApplication @importMDTAppParams > $Null
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Error encountered importing the application: [$($Vc.Name) $($Vc.Architecture)]."

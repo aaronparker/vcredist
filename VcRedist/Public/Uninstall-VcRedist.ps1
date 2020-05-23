@@ -34,13 +34,14 @@ Function Uninstall-VcRedist {
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "High", 
         HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/uninstalling-the-redistributables")]
     [OutputType([System.Management.Automation.PSObject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $False, Position = 0)]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019")]
         [System.String[]] $Release = @("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019"),
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $False, Position = 1)]
         [ValidateSet("x86", "x64")]
         [System.String[]] $Architecture = @("x86", "x64")
     )

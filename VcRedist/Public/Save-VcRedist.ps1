@@ -109,7 +109,7 @@ Function Save-VcRedist {
             Else {
                 If ($pscmdlet.ShouldProcess($folder, "Create")) {
                     try {
-                        New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue | Out-Null
+                        New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue > $Null
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
