@@ -229,6 +229,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
 #region Manifest test
 # Get an array of VcRedists from the curernt manifest and the installed VcRedists
 $Release = "2019"
+Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
 $InstalledVcRedists = Get-InstalledVcRedist
 $UpdateManifest = $False

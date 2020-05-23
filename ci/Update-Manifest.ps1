@@ -8,6 +8,7 @@ Param (
 )
 
 # Get an array of VcRedists from the curernt manifest and the installed VcRedists
+Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
 $InstalledVcRedists = Get-InstalledVcRedist
 
