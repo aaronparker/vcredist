@@ -27,3 +27,4 @@ only_commits:
   files:
     - VcRedist/**/*
     - tests/**/*
+    - ci/**/*

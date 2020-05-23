@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-        Update manifest for newer VcRedist 2019 versions
+        Update manifest for newer VcRedist 2019 versions.
 #>
 [OutputType()]
 Param (
