@@ -8,6 +8,7 @@ Param (
 )
 
 # Get an array of VcRedists from the curernt manifest and the installed VcRedists
+Write-Host " "
 Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
 $InstalledVcRedists = Get-InstalledVcRedist
@@ -17,7 +18,7 @@ ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Re
     $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
 
     # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
-    If (($InstalledItem.Count -gt 0) -and ($InstalledItem.Version -gt $ManifestVcRedist.Version)) {
+    If ($InstalledItem.Version -gt $ManifestVcRedist.Version) {
         Write-Host " "
         Write-Host -ForegroundColor Cyan "`tVcRedist manifest is out of date."
         Write-Host -ForegroundColor Cyan "`tInstalled version:`t$($InstalledItem.Version)"
