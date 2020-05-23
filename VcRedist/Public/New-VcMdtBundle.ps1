@@ -67,112 +67,116 @@ Function New-VcMdtBundle {
         [System.String] $Language = "en-US"
     )
 
-    # If running on PowerShell Core, error and exit.
-    If (Test-PSCore) {
-        Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
-        Throw [System.Management.Automation.InvalidPowerShellStateException]
-        Exit
-    }
-
-    # Import the MDT module and create a PS drive to MdtPath
-    If (Import-MdtModule) {
-        If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
-            try {
-                New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
-                Restore-MDTPersistentDrive -Force > $Null
-            }
-            catch [System.Exception] {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
-                Throw $_.Exception.Message
-                Exit
-            }
+    Begin {
+        # If running on PowerShell Core, error and exit.
+        If (Test-PSCore) {
+            Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
+            Throw [System.Management.Automation.InvalidPowerShellStateException]
+            Exit
         }
     }
-    Else {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
-        Throw [System.Management.Automation.InvalidPowerShellStateException]
-        Exit
-    }
 
-    try {
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Getting existing Visual C++ Redistributables the deployment share"
-        $target = "$($MdtDrive):\Applications\$AppFolder"
-        $existingVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
-    }
-    catch [System.Exception] {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Failed when returning existing VcRedist packages."
-        Throw $_.Exception.Message
-        Exit
-    }
+    Process {
+        # Import the MDT module and create a PS drive to MdtPath
+        If (Import-MdtModule) {
+            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+                try {
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    Restore-MDTPersistentDrive -Force > $Null
+                }
+                catch [System.Exception] {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
+                    Throw $_.Exception.Message
+                    Exit
+                }
+            }
+        }
+        Else {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
+            Throw [System.Management.Automation.InvalidPowerShellStateException]
+            Exit
+        }
 
-    If ($Null -eq $existingVcRedists) {
-        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find existing VcRedist applications in the MDT share. Please import the VcRedists with Import-VcMdtApplication."
-        Exit
-    }
+        try {
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Getting existing Visual C++ Redistributables the deployment share"
+            $target = "$($MdtDrive):\Applications\$AppFolder"
+            $existingVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
+        }
+        catch [System.Exception] {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed when returning existing VcRedist packages."
+            Throw $_.Exception.Message
+            Exit
+        }
 
-    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-        # Remove the existing bundle if -Force was specified
-        If ($Force.IsPresent) {
+        If ($Null -eq $existingVcRedists) {
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find existing VcRedist applications in the MDT share. Please import the VcRedists with Import-VcMdtApplication."
+            Exit
+        }
+
+        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+            # Remove the existing bundle if -Force was specified
+            If ($Force.IsPresent) {
+                If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction SilentlyContinue) {
+                    If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Remove bundle")) {
+                        try {
+                            Remove-Item -Path $("$target\$Publisher $BundleName") -Force
+                        }
+                        catch [System.Exception] {
+                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$Publisher $BundleName)]."
+                            Throw $_.Exception.Message
+                            Continue
+                        }
+                    }
+                }
+            }
+
+            # Create the application bundle
             If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction SilentlyContinue) {
-                If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Remove bundle")) {
+                Write-Verbose "$($MyInvocation.MyCommand): '$($Publisher) $($BundleName)' exists. Use -Force to overwrite the exsiting bundle."
+            }
+            Else {
+                If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Create bundle")) {
+                    # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
+                    $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
+                    $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
+
+                    # Import the bundle
                     try {
-                        Remove-Item -Path $("$target\$Publisher $BundleName") -Force
+                        # Splat the Import-MDTApplication parameters
+                        $importMDTAppParams = @{
+                            Path       = $target
+                            Name       = "$($Publisher) $($BundleName)"
+                            Enable     = $True
+                            Reboot     = $False
+                            Hide       = $False
+                            Comments   = "Application bundle for installing Visual C++ Redistributables. Generated by $($MyInvocation.MyCommand)"
+                            ShortName  = $BundleName
+                            Version    = (Get-Date -Format "yyyy-MMM-dd")
+                            Publisher  = $Publisher
+                            Language   = $Language
+                            Dependency = $dependencies
+                            Bundle     = $True
+                        }
+                        Import-MDTApplication @importMDTAppParams > $Null
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$Publisher $BundleName)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Error importing the VcRedist bundle. If -Force was specified, the original bundle will have been removed."
                         Throw $_.Exception.Message
                         Continue
                     }
                 }
             }
         }
+        Else {
+            Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path $target."
+        }
 
-        # Create the application bundle
-        If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction SilentlyContinue) {
-            Write-Verbose "$($MyInvocation.MyCommand): '$($Publisher) $($BundleName)' exists. Use -Force to overwrite the exsiting bundle."
+        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+            # Return list of apps to the pipeline
+            Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" | Select-Object -Property *)
         }
         Else {
-            If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Create bundle")) {
-                # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
-                $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
-                $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
-
-                # Import the bundle
-                try {
-                    # Splat the Import-MDTApplication parameters
-                    $importMDTAppParams = @{
-                        Path       = $target
-                        Name       = "$($Publisher) $($BundleName)"
-                        Enable     = $True
-                        Reboot     = $False
-                        Hide       = $False
-                        Comments   = "Application bundle for installing Visual C++ Redistributables. Generated by $($MyInvocation.MyCommand)"
-                        ShortName  = $BundleName
-                        Version    = (Get-Date -format "yyyy-MMM-dd")
-                        Publisher  = $Publisher
-                        Language   = $Language
-                        Dependency = $dependencies
-                        Bundle     = $True
-                    }
-                    Import-MDTApplication @importMDTAppParams > $Null
-                }
-                catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Error importing the VcRedist bundle. If -Force was specified, the original bundle will have been removed."
-                    Throw $_.Exception.Message
-                    Continue
-                }
-            }
+            Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path $target."
         }
-    }
-    Else {
-        Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path $target."
-    }
-
-    If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
-        # Return list of apps to the pipeline
-        Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" | Select-Object -Property *)
-    }
-    Else {
-        Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path $target."
     }
 }

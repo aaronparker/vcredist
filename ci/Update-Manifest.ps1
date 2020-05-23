@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-        Private Pester function tests.
+        Update manifest for newer VcRedist 2019 versions
 #>
 [OutputType()]
 Param (
@@ -26,9 +26,27 @@ ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Re
         $Index = $CurrentManifest.Supported::IndexOf($CurrentManifest.Supported.ProductCode, $ManifestVcRedist.ProductCode)
         $CurrentManifest.Supported[$Index].ProductCode = $InstalledItem.ProductCode
         $CurrentManifest.Supported[$Index].Version = $InstalledItem.Version
+
+        # Create output variable 
+        $output = $InstalledItem.Version
+        $FoundNewVersion = $True
     }
 }
 
-# Convert to JSON and export to the module manifest
-#$VcManifest = "C:\Temp\VcRedists.json"
-$CurrentManifest | ConvertTo-Json | Set-Content -Path $VcManifest -Force
+If ($FoundNewVersion) {
+    # Convert to JSON and export to the module manifest
+    try {
+        Write-Host -ForegroundColor Cyan "Updating module manifest with VcRedist $output."
+        $CurrentManifest | ConvertTo-Json | Set-Content -Path $VcManifest -Force
+    }
+    catch {
+        Write-Output -InputObject $Null
+        Break
+    }
+    finally {
+        Write-Output -InputObject $output
+    }
+}
+Else {
+    Write-Output -InputObject $Null
+}

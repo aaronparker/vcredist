@@ -74,11 +74,11 @@ Function Update-VcMdtApplication {
 
         [Parameter(Mandatory = $False, Position = 4)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
-        [System.String] $BundleName = "Visual C++ Redistributables",
+        [System.String] $BundleName = "Visual C++ Redistributables"
 
-        [Parameter(Mandatory = $False, Position = 5)]
+        <#[Parameter(Mandatory = $False, Position = 5)]
         [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US"
+        [System.String] $Language = "en-US"#>
     )
 
     Begin {
