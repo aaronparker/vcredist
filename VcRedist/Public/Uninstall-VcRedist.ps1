@@ -64,7 +64,7 @@ Function Uninstall-VcRedist {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.QuietUninstallString)]."
             }
             Else {
-                $invokeProcessParams.ArgumentList = "/c $($VcRedist.UninstallString) /quiet"
+                $invokeProcessParams.ArgumentList = "/c $($VcRedist.UninstallString) /quiet /noreboot"
                 Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist does not have quiet uninstall string. Adding [/quiet]."
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.UninstallString)]."
             }
