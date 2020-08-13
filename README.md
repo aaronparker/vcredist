@@ -7,7 +7,7 @@
 [![Master build status][appveyor-badge]][appveyor-build]
 [![Development build status][appveyor-badge-dev]][appveyor-build]
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2f7df6d226c9404daad08890aa006ed7)](https://www.codacy.com/manual/aaronparker/VcRedist?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=aaronparker/VcRedist&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/556b5c464f6a4981b357cbb0cae230c5)](https://app.codacy.com/manual/aaronparker/VcRedist?utm_source=github.com&utm_medium=referral&utm_content=aaronparker/VcRedist&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
 
