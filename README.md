@@ -7,6 +7,8 @@
 [![Master build status][appveyor-badge]][appveyor-build]
 [![Development build status][appveyor-badge-dev]][appveyor-build]
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2f7df6d226c9404daad08890aa006ed7)](https://www.codacy.com/manual/aaronparker/VcRedist?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=aaronparker/VcRedist&amp;utm_campaign=Badge_Grade)
+
 ## About
 
 VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
@@ -34,7 +36,5 @@ Install-Module -Name VcRedist -Force
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
 [psgallery-version-badge]: https://img.shields.io/powershellgallery/v/vcredist.svg?logo=PowerShell&style=flat-square
 [psgallery-version]: https://www.powershellgallery.com/packages/vcredist
-[gitbooks-badge]: https://www.gitbook.com/button/status/book/aaronparker/vcredist/
-[gitbooks-build]: https://www.gitbook.com/book/aaronparker/vcredist
 [license-badge]: https://img.shields.io/github/license/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
 [license]: https://github.com/aaronparker/vcredist/blob/master/LICENSE
