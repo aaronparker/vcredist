@@ -3,10 +3,8 @@
 [![License][license-badge]][license]
 [![PowerShell Gallery Version][psgallery-version-badge]][psgallery]
 [![PowerShell Gallery][psgallery-badge]][psgallery]
-
 [![Master build status][appveyor-badge]][appveyor-build]
 [![Development build status][appveyor-badge-dev]][appveyor-build]
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/556b5c464f6a4981b357cbb0cae230c5)](https://app.codacy.com/manual/aaronparker/VcRedist?utm_source=github.com&utm_medium=referral&utm_content=aaronparker/VcRedist&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
