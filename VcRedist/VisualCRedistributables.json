@@ -122,8 +122,8 @@
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2017",
-                          "ProductCode":  "{fd9b6070-d13e-45dc-819b-41806bf45b6b}",
-                          "Version":  "14.16.27027.1",
+                          "ProductCode":  "{cc3a7c63-31fb-4129-9024-63ebefd86a95}",
+                          "Version":  "14.16.27033.0",
                           "URL":  "https://www.visualstudio.com/downloads/",
                           "Download":  "https://aka.ms/vs/15/release/vc_redist.x64.exe",
                           "Release":  "2017",
@@ -134,8 +134,8 @@
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2017",
-                          "ProductCode":  "{39e28474-b67b-4209-af1b-e9ad0a83d8ca}",
-                          "Version":  "14.16.27027.1",
+                          "ProductCode":  "{624ba875-fdfc-4efa-9c66-b170dfebc3ec}",
+                          "Version":  "14.16.27033.0",
                           "URL":  "https://www.visualstudio.com/downloads/",
                           "Download":  "https://aka.ms/vs/15/release/vc_redist.x86.exe",
                           "Release":  "2017",
