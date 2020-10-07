@@ -27,10 +27,10 @@ Author = 'Aaron Parker'
 CompanyName = 'stealthpuppy'
 
 # Copyright statement for this module
-Copyright = '(c) 2019 stealthpuppy. All rights reserved.'
+Copyright = '(c) 2020 stealthpuppy. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
+Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. VcRedist downloads the supported (and unsupported) Redistributables, for local install, main image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -104,13 +104,13 @@ PrivateData = @{
         Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','MEMCM'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/master/LICENSE'
+        LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/main/LICENSE'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/aaronparker/VcRedist/'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://raw.githubusercontent.com/aaronparker/VcRedist/master/img/VisualStudioLogo2019-256.png'
+        IconUri = 'https://raw.githubusercontent.com/aaronparker/VcRedist/main/img/VisualStudioLogo2019-256.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = 'https://docs.stealthpuppy.com/docs/vcredist/change-log'

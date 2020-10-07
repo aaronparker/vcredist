@@ -35,10 +35,10 @@ ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Re
     }
 }
 
-# If a version was found and were aren't in the master branch
+# If a version was found and were aren't in the main branch
 Write-Host -ForegroundColor Cyan "`tFound new version $FoundNewVersion."
 Write-Host -ForegroundColor Cyan "`tBranch is: $env:APPVEYOR_REPO_BRANCH."
-If (($FoundNewVersion -eq $True) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) {
+If (($FoundNewVersion -eq $True) -and ($env:APPVEYOR_REPO_BRANCH -ne 'main')) {
 
     # Convert to JSON and export to the module manifest
     try {
@@ -51,7 +51,7 @@ If (($FoundNewVersion -eq $True) -and ($env:APPVEYOR_REPO_BRANCH -ne 'master')) 
     }
     finally {
 
-        # Publish the new version back to Master on GitHub
+        # Publish the new version back to Main on GitHub
         Try {
             # Set up a path to the git.exe cmd, import posh-git to give us control over git
             $env:Path += ";$env:ProgramFiles\Git\cmd"

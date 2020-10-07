@@ -8,9 +8,9 @@ Param ()
 # Line break for readability in AppVeyor console
 Write-Host -Object ''
 
-# Make sure we're using the Master branch and that it's not a pull request
+# Make sure we're using the Main branch and that it's not a pull request
 # Environmental Variables Guide: https://www.appveyor.com/docs/environment-variables/
-If ($env:APPVEYOR_REPO_BRANCH -ne 'master') {
+If ($env:APPVEYOR_REPO_BRANCH -ne 'main') {
     Write-Warning -Message "Skipping version increment and push for branch $env:APPVEYOR_REPO_BRANCH"
 }
 ElseIf ($env:APPVEYOR_PULL_REQUEST_NUMBER -gt 0) {
@@ -25,7 +25,7 @@ Else {
     # Tests success, push to GitHub
     If ($res.FailedCount -eq 0) {
 
-        # We're going to add 1 to the revision value since a new commit has been merged to Master
+        # We're going to add 1 to the revision value since a new commit has been merged to Main
         # This means that the major / minor / build values will be consistent across GitHub and the Gallery
         Try {
             # This is where the module manifest lives
@@ -53,7 +53,7 @@ Else {
             Throw $_
         }
 
-        # Publish the new version back to Master on GitHub
+        # Publish the new version back to Main on GitHub
         Try {
             # Set up a path to the git.exe cmd, import posh-git to give us control over git
             $env:Path += ";$env:ProgramFiles\Git\cmd"
@@ -71,11 +71,11 @@ Else {
             git config --global core.safecrlf false
 
             # Push changes to GitHub
-            Invoke-Process -FilePath "git" -ArgumentList "checkout master"
+            Invoke-Process -FilePath "git" -ArgumentList "checkout main"
             git add --all
             git status
             git commit -s -m "AppVeyor validate: $newVersion"
-            Invoke-Process -FilePath "git" -ArgumentList "push origin master"
+            Invoke-Process -FilePath "git" -ArgumentList "push origin main"
             Write-Host "$module $newVersion pushed to GitHub." -ForegroundColor Cyan
         }
         Catch {

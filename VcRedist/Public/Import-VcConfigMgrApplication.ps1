@@ -102,7 +102,7 @@ Function Import-VcConfigMgrApplication {
                 try {
                     $invokeProcessParams = @{
                         FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                        ArgumentList = "*.exe $validPath $CMPath /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                        ArgumentList = "*.exe `"$validPath`" `"$CMPath`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
                     }
                     Invoke-Process @invokeProcessParams
                 }
@@ -148,7 +148,7 @@ Function Import-VcConfigMgrApplication {
                 }
             }
             Else {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr Console and PowerShell module installed?"
+                Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr console and PowerShell module installed?"
                 Break
             }
         }
