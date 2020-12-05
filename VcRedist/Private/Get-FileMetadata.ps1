@@ -100,7 +100,6 @@ Function Get-FileMetadata {
     }
     End {
         # Return the array of file paths and metadata
-        $StopWatch.Stop()
         Write-Verbose "$($MyInvocation.MyCommand): Metadata trawling complete."
     }
 }
