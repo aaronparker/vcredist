@@ -162,25 +162,25 @@ Function Save-VcRedist {
                             $iwrParams.ProxyCredential = $ProxyCredential
                         }
                         Invoke-WebRequest @iwrParams
-                        $return = $True
+                        #$return = $True
                     }
                     catch [System.Net.Http.HttpRequestException] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
                         Throw $_.Exception.Message
-                        $return = $False
+                        #$return = $False
                     }
                     catch [System.Net.WebException] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
                         Throw $_.Exception.Message
-                        $return = $False
+                        #$return = $False
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
                         Throw $_.Exception.Message
-                        $return = $False
+                        #$return = $False
                     }
                     finally {
-                        If ($return) {
+                        If (Test-Path -Path $target -PathType Leaf) {
                             # Return the $VcList array on the pipeline so that we can act on what was downloaded
                             Write-Output -InputObject $Vc
                         }

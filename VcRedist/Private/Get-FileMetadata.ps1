@@ -41,9 +41,6 @@ Function Get-FileMetadata {
     )
     Begin {
 
-        # Measure time taken to gather data
-        $StopWatch = [System.Diagnostics.Stopwatch]::StartNew()
-
         # RegEx to grab CN from certificates
         $FindCN = "(?:.*CN=)(.*?)(?:,\ O.*)"
         Write-Verbose -Message "$($MyInvocation.MyCommand): Beginning metadata trawling."
@@ -85,7 +82,7 @@ Function Get-FileMetadata {
                 # Create an array from what was returned for specific data and sort on file path
                 $Files = $items | Select-Object @{Name = "Path"; Expression = { $_.FullName } }, `
                 @{Name = "Owner"; Expression = { (Get-Acl -Path $_.FullName).Owner } }, `
-                @{Name = "Vendor"; Expression = { $(((Get-AcDigitalSignature -Path $_ -ErrorAction SilentlyContinue).Subject -replace $FindCN, '$1') -replace '"', "") } }, `
+                @{Name = "Vendor"; Expression = { $(((Get-DigitalSignature -Path $_ -ErrorAction SilentlyContinue).Subject -replace $FindCN, '$1') -replace '"', "") } }, `
                 @{Name = "Company"; Expression = { $_.VersionInfo.CompanyName } }, `
                 @{Name = "Description"; Expression = { $_.VersionInfo.FileDescription } }, `
                 @{Name = "Product"; Expression = { $_.VersionInfo.ProductName } }, `
@@ -103,7 +100,6 @@ Function Get-FileMetadata {
     }
     End {
         # Return the array of file paths and metadata
-        $StopWatch.Stop()
-        Write-Verbose "$($MyInvocation.MyCommand): Metadata trawling complete. Script took $($StopWatch.Elapsed.TotalMilliseconds) ms to complete."
+        Write-Verbose "$($MyInvocation.MyCommand): Metadata trawling complete."
     }
 }
