@@ -58,7 +58,7 @@ Function Get-FileMetadata {
                     # Target is a folder, so trawl the folder for .exe and .dll files in the target and sub-folders
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Getting metadata for files in folder: [$folder]."
                     try {
-                        $items = Get-ChildItem -Path $folder -Recurse -Include $Include -ErrorAction SilentlyContinue
+                        $items = Get-ChildItem -Path $folder -Recurse -Include $Include -ErrorAction "SilentlyContinue"
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve files in: [$folder]."
@@ -70,7 +70,7 @@ Function Get-FileMetadata {
                     # Target is a file, so just get metadata for the file
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Getting metadata for file: [$folder]."
                     try {
-                        $items = Get-Item -Path $folder -ErrorAction SilentlyContinue
+                        $items = Get-Item -Path $folder -ErrorAction "SilentlyContinue"
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve files in: [$folder]."
@@ -82,7 +82,7 @@ Function Get-FileMetadata {
                 # Create an array from what was returned for specific data and sort on file path
                 $Files = $items | Select-Object @{Name = "Path"; Expression = { $_.FullName } }, `
                 @{Name = "Owner"; Expression = { (Get-Acl -Path $_.FullName).Owner } }, `
-                @{Name = "Vendor"; Expression = { $(((Get-DigitalSignature -Path $_ -ErrorAction SilentlyContinue).Subject -replace $FindCN, '$1') -replace '"', "") } }, `
+                @{Name = "Vendor"; Expression = { $(((Get-DigitalSignature -Path $_ -ErrorAction "SilentlyContinue").Subject -replace $FindCN, '$1') -replace '"', "") } }, `
                 @{Name = "Company"; Expression = { $_.VersionInfo.CompanyName } }, `
                 @{Name = "Description"; Expression = { $_.VersionInfo.FileDescription } }, `
                 @{Name = "Product"; Expression = { $_.VersionInfo.ProductName } }, `

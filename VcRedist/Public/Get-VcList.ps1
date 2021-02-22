@@ -89,7 +89,7 @@ Function Get-VcList {
     Process {
         try {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Reading JSON document [$Path]."
-            $content = Get-Content -Raw -Path $Path -ErrorAction SilentlyContinue
+            $content = Get-Content -Raw -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to read manifest [$Path]."
@@ -100,12 +100,12 @@ Function Get-VcList {
         try {
             # Convert the JSON content to an object
             Write-Verbose -Message "$($MyInvocation.MyCommand): Converting JSON."
-            $json = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
+            $json = $content | ConvertFrom-Json -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to convert manifest JSON to required object. Please validate the input manifest."
             Throw $_.Exception.Message
-            Exit
+            Break
         }
 
         If ($Null -ne $json) {
@@ -138,7 +138,28 @@ Function Get-VcList {
                 [System.Management.Automation.PSObject] $release = $supported | Where-Object { $Release -contains $_.Release }
                 [System.Management.Automation.PSObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
             }
+
+            # Replace strings in the manifest
+            try {
+                $File = Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VcRedist.json"
+                $res = Get-Content -Path $File | ConvertFrom-Json
+            }
+            catch {
+                Write-Warning -Message "$($MyInvocation.MyCommand): $($_.Exception.Message)."
+            }
+            If ($res) {
+                For ($i = 0; $i -le ($output.Count - 1); $i++) {
+                    try {
+                        $output[$i].SilentUninstall = $output[$i].SilentUninstall `
+                            -replace $res.ReplaceText.Installer, $(Split-Path -Path $output[$i].Download -Leaf) `
+                            -replace $res.ReplaceText.ProductCode, $output[$i].ProductCode
+                    }
+                    catch {
+                        Write-Verbose -Message "Failed to replace strings in: $($json[$i].Name)."
+                    }
+                }
+            }
+            Write-Output -InputObject $output
         }
-        Write-Output -InputObject $output
     }
 }

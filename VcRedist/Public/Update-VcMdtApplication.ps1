@@ -93,7 +93,7 @@ Function Update-VcMdtApplication {
         If (Import-MdtModule) {
             If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -114,7 +114,7 @@ Function Update-VcMdtApplication {
     }
 
     Process {
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
             ForEach ($Vc in $VcList) {
                 # Set variables
                 $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
@@ -203,7 +203,7 @@ Function Update-VcMdtApplication {
     }
 
     End {
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
             # Get the imported Visual C++ Redistributables applications to return on the pipeline
             Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
             Write-Output -InputObject (Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })

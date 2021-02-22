@@ -37,7 +37,7 @@ Function Test-VcDownloads {
 #endregion
 
 # Target download directory
-If (Test-Path -Path env:Temp -ErrorAction SilentlyContinue) {
+If (Test-Path -Path env:Temp -ErrorAction "SilentlyContinue") {
     $downloadDir = $env:Temp
 }
 Else {
@@ -128,7 +128,7 @@ Describe 'Export-VcManifest' -Tag "Export" {
 Describe 'Save-VcRedist' -Tag "Save" {
     Context 'Download Redistributables' {
         It 'Downloads supported Visual C++ Redistributables' {
-            If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
+            If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
                 $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
                 If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
                 $VcList = Get-VcList
@@ -151,8 +151,8 @@ Describe 'Save-VcRedist' -Tag "Save" {
     }
     Context "Test pipeline support" {
         It "Should not throw when passed via pipeline with no parameters" {
-            If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
-                New-Item -Path (Join-Path -Path $downloadDir -ChildPath "VcTest") -ItemType Directory -ErrorAction SilentlyContinue > $Null
+            If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
+                New-Item -Path (Join-Path -Path $downloadDir -ChildPath "VcTest") -ItemType Directory -ErrorAction "SilentlyContinue" > $Null
                 Push-Location -Path (Join-Path -Path $downloadDir -ChildPath "VcTest")
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
                 { Get-VcList | Save-VcRedist } | Should -Not -Throw
@@ -172,7 +172,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
 
 Describe 'Install-VcRedist' -Tag "Install" {
     Context 'Test exception handling for invalid VcRedist download path' {
-        If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
             It "Should throw when passed via pipeline with no parameters" {
                 Push-Location -Path $downloadDir
                 { Get-VcList | Install-VcRedist } | Should -Throw
@@ -184,7 +184,7 @@ Describe 'Install-VcRedist' -Tag "Install" {
         }
     }
     Context 'Install Redistributables' {
-        If (Test-Path -Path $downloadDir -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
             $VcRedists = Get-VcList
             $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
             Write-Host "`tInstalling VcRedists." -ForegroundColor Cyan

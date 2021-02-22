@@ -1,10 +1,10 @@
 Function Save-VcRedist {
     <#
         .SYNOPSIS
-            Downloads the Visual C++ Redistributables from an array returned by Get-VcXml.
+            Downloads the Visual C++ Redistributables from an array returned by Get-VcList.
 
         .DESCRIPTION
-            Downloads the Visual C++ Redistributables from an array returned by Get-VcXml into a folder structure that represents release and processor architecture.
+            Downloads the Visual C++ Redistributables from an array returned by Get-VcList into a folder structure that represents release and processor architecture.
             If the redistributable exists in the specified path, it will not be re-downloaded.
 
         .NOTES
@@ -109,7 +109,7 @@ Function Save-VcRedist {
             Else {
                 If ($pscmdlet.ShouldProcess($folder, "Create")) {
                     try {
-                        New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue > $Null
+                        New-Item -Path $folder -Type Directory -Force -ErrorAction "SilentlyContinue" > $Null
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."

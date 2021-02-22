@@ -1,0 +1,6 @@
+{
+    "ReplaceText": {
+        "ProductCode": "#ProductCode",
+        "Installer": "#Installer"
+    }
+}

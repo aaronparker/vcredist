@@ -76,7 +76,7 @@ Function Update-VcMdtBundle {
         If (Import-MdtModule) {
             If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {

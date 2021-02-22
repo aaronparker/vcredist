@@ -20,7 +20,7 @@ Function Get-ValidPath {
     Process {
         # Resolve the path, trim any trailing backslash and return the string
         try {
-            $resolvedPath = Resolve-Path -Path $Path -ErrorAction SilentlyContinue
+            $resolvedPath = Resolve-Path -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to resolve: [$Path]."

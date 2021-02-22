@@ -81,7 +81,7 @@ Function New-VcMdtBundle {
         If (Import-MdtModule) {
             If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -113,10 +113,10 @@ Function New-VcMdtBundle {
             Exit
         }
 
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
             # Remove the existing bundle if -Force was specified
             If ($Force.IsPresent) {
-                If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction SilentlyContinue) {
+                If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction "SilentlyContinue") {
                     If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Remove bundle")) {
                         try {
                             Remove-Item -Path $("$target\$Publisher $BundleName") -Force
@@ -131,7 +131,7 @@ Function New-VcMdtBundle {
             }
 
             # Create the application bundle
-            If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction SilentlyContinue) {
+            If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction "SilentlyContinue") {
                 Write-Verbose "$($MyInvocation.MyCommand): '$($Publisher) $($BundleName)' exists. Use -Force to overwrite the exsiting bundle."
             }
             Else {
@@ -171,7 +171,7 @@ Function New-VcMdtBundle {
             Write-Error -Message "$($MyInvocation.MyCommand): Failed to find path $target."
         }
 
-        If (Test-Path -Path $target -ErrorAction SilentlyContinue) {
+        If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
             # Return list of apps to the pipeline
             Write-Output -InputObject (Get-ChildItem -Path "$target\$($Publisher) $($BundleName)" | Select-Object -Property *)
         }
