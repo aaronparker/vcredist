@@ -54,7 +54,7 @@ Function Uninstall-VcRedist {
 
     # Walk through each VcRedist and uninstall
     ForEach ($VcRedist in $VcRedistsToRemove) {
-        If ($pscmdlet.ShouldProcess("[$($VcRedist.Name), $($VcRedist.Architecture)]", "Uninstall")) {
+        If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name), $($VcRedist.Architecture)]", "Uninstall")) {
             $invokeProcessParams = @{
                 FilePath = "$env:SystemRoot\System32\cmd.exe"
             }

@@ -170,7 +170,7 @@ Function Import-VcConfigMgrApplication {
                 
                     # Create the ConfigMgr application with properties from the XML file
                     If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
-                        If ($pscmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
+                        If ($PSCmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
 
                             # Change to the SMS Application folder before importing the applications
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to $($DestFolder)"
@@ -184,7 +184,7 @@ Function Import-VcConfigMgrApplication {
                             }
                                                 
                             try {
-                                # Splat New-CMApplication parameters, add the application and move into the target golder
+                                # Splat New-CMApplication parameters, add the application and move into the target folder
                                 $cmAppParams = @{
                                     Name            = "$($Vc.Name) $($Vc.Architecture)"
                                     Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
@@ -199,7 +199,7 @@ Function Import-VcConfigMgrApplication {
                                 }
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture) with error: $CMAppError."
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture)."
                                 Throw $_.Exception.Message
                                 Break
                             }
@@ -220,7 +220,7 @@ Function Import-VcConfigMgrApplication {
                         }
 
                         # Add a deployment type to the application
-                        If ($pscmdlet.ShouldProcess($("$Vc.Name $($Vc.Architecture)"), "Adding deployment type")) {
+                        If ($PSCmdlet.ShouldProcess($("$Vc.Name $($Vc.Architecture)"), "Adding deployment type")) {
 
                             # Change to the SMS Application folder before importing the applications
                             try {

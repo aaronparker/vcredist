@@ -107,7 +107,7 @@ Function Save-VcRedist {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
             }
             Else {
-                If ($pscmdlet.ShouldProcess($folder, "Create")) {
+                If ($PSCmdlet.ShouldProcess($folder, "Create")) {
                     try {
                         New-Item -Path $folder -Type Directory -Force -ErrorAction "SilentlyContinue" > $Null
                     }
@@ -143,7 +143,7 @@ Function Save-VcRedist {
 
             # The VcRedist needs to be downloaded
             If ($download) {
-                If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
+                If ($PSCmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
                     # Use Invoke-WebRequest with no progress bar by default for best compatibility and speed
                     try {
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"

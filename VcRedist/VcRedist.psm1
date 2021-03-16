@@ -27,3 +27,6 @@ ForEach ($import in @($public + $private)) {
 # Export the public functions, aliases and variables
 [System.String] $VcManifest = Join-Path -Path $PSScriptRoot -ChildPath "VisualCRedistributables.json"
 Export-ModuleMember -Function $public.Basename -Alias * -Variable VcManifest
+
+# Get module strings
+$script:resourceStrings = Get-ModuleResource

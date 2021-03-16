@@ -1,34 +1,33 @@
-<#PSScriptInfo 
+Function Invoke-Process {
+    <#PSScriptInfo 
     .VERSION 1.4 
     .GUID b787dc5d-8d11-45e9-aeef-5cf3a1f690de 
     .AUTHOR Adam Bertram 
     .COMPANYNAME Adam the Automator, LLC 
     .TAGS Processes 
-#>
-
-<# 
-.DESCRIPTION 
-    Invoke-Process is a simple wrapper function that aims to "PowerShellyify" launching typical external processes. There 
-    are lots of ways to invoke processes in PowerShell with Start-Process, Invoke-Expression, & and others but none account 
-    well for the various streams and exit codes that an external process returns. Also, it's hard to write good tests 
-    when launching external proceses. 
- 
-    This function ensures any errors are sent to the error stream, standard output is sent via the Output stream and any 
-    time the process returns an exit code other than 0, treat it as an error. 
-#> 
-Function Invoke-Process {
+    #>
+    <# 
+        .DESCRIPTION 
+            Invoke-Process is a simple wrapper function that aims to "PowerShellyify" launching typical external processes. There 
+            are lots of ways to invoke processes in PowerShell with Start-Process, Invoke-Expression, & and others but none account 
+            well for the various streams and exit codes that an external process returns. Also, it's hard to write good tests 
+            when launching external proceses. 
+        
+            This function ensures any errors are sent to the error stream, standard output is sent via the Output stream and any 
+            time the process returns an exit code other than 0, treat it as an error. 
+    #> 
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
-        [string] $FilePath,
+        [System.String] $FilePath,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $ArgumentList
+        [System.String] $ArgumentList
     )
 
-    $ErrorActionPreference = 'Stop'
+    $ErrorActionPreference = "Stop"
 
     try {
         $stdOutTempFile = "$env:TEMP\$((New-Guid).Guid)"
@@ -56,7 +55,7 @@ Function Invoke-Process {
                 }
             }
             else {
-                if ([string]::IsNullOrEmpty($cmdOutput) -eq $false) {
+                if ([System.String]::IsNullOrEmpty($cmdOutput) -eq $false) {
                     Write-Output -InputObject $cmdOutput
                 }
             }
@@ -66,6 +65,6 @@ Function Invoke-Process {
         $PSCmdlet.ThrowTerminatingError($_)
     }
     finally {
-        Remove-Item -Path $stdOutTempFile, $stdErrTempFile -Force -ErrorAction Ignore
+        Remove-Item -Path $stdOutTempFile, $stdErrTempFile -Force -ErrorAction "Ignore"
     }
 }

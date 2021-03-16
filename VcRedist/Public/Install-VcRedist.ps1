@@ -84,7 +84,7 @@ Function Install-VcRedist {
 
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Install: [$($vc.Architecture), $($vc.Name)]."
                         If (Test-Path -Path $filename) {
-                            If ($pscmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
+                            If ($PSCmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
 
                                 try {
                                     # Create parameters with -ArgumentList set based on -Silent argument used in this function
@@ -103,7 +103,8 @@ Function Install-VcRedist {
                             }
                         }
                         Else {
-                            Throw "$($MyInvocation.MyCommand): Install Failure. Cannot find: [$filename]."
+                            Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find: [$filename]. Download with Save-VcRedist."
+                            Throw "$($MyInvocation.MyCommand): Install Failure. Missing installer: [$filename]."
                             Break
                         }
                     }

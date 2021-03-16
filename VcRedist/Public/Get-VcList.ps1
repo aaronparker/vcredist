@@ -140,23 +140,14 @@ Function Get-VcList {
             }
 
             # Replace strings in the manifest
-            try {
-                $File = Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VcRedist.json"
-                $res = Get-Content -Path $File | ConvertFrom-Json
-            }
-            catch {
-                Write-Warning -Message "$($MyInvocation.MyCommand): $($_.Exception.Message)."
-            }
-            If ($res) {
-                For ($i = 0; $i -le ($output.Count - 1); $i++) {
-                    try {
-                        $output[$i].SilentUninstall = $output[$i].SilentUninstall `
-                            -replace $res.ReplaceText.Installer, $(Split-Path -Path $output[$i].Download -Leaf) `
-                            -replace $res.ReplaceText.ProductCode, $output[$i].ProductCode
-                    }
-                    catch {
-                        Write-Verbose -Message "Failed to replace strings in: $($json[$i].Name)."
-                    }
+            For ($i = 0; $i -le ($output.Count - 1); $i++) {
+                try {
+                    $output[$i].SilentUninstall = $output[$i].SilentUninstall `
+                        -replace $script:resourceStrings.ReplaceText.Installer, $(Split-Path -Path $output[$i].Download -Leaf) `
+                        -replace $script:resourceStrings.ReplaceText.ProductCode, $output[$i].ProductCode
+                }
+                catch {
+                    Write-Verbose -Message "Failed to replace strings in: $($json[$i].Name)."
                 }
             }
             Write-Output -InputObject $output

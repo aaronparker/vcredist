@@ -2,5 +2,13 @@
     "ReplaceText": {
         "ProductCode": "#ProductCode",
         "Installer": "#Installer"
+    },
+    "UninstallKeys": {
+        "32": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
+        "64": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
+    },
+    "Filters": {
+        "Redist": "(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*",
+        "All": "Additional|Minimum"
     }
 }

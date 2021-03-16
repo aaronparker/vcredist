@@ -91,7 +91,7 @@ Function Update-VcMdtApplication {
 
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($MdtPath, "Mapping")) {
+            If ($PSCmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
                     New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null

@@ -79,7 +79,7 @@ Function New-VcMdtBundle {
     Process {
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+            If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
                     New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null
