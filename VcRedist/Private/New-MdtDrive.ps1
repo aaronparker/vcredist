@@ -31,7 +31,7 @@ Function New-MdtDrive {
         $output = $mdtDrives[0].Name
     }
     Else {
-        If ($pscmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
+        If ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
             try {
                 New-PSDrive -Name $Drive -PSProvider "MDTProvider" -Root $Path `
                     -NetworkPath $Path -Description $description | Add-MDTPersistentDrive

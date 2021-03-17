@@ -1,10 +1,10 @@
 Function Save-VcRedist {
     <#
         .SYNOPSIS
-            Downloads the Visual C++ Redistributables from an array returned by Get-VcXml.
+            Downloads the Visual C++ Redistributables from an array returned by Get-VcList.
 
         .DESCRIPTION
-            Downloads the Visual C++ Redistributables from an array returned by Get-VcXml into a folder structure that represents release and processor architecture.
+            Downloads the Visual C++ Redistributables from an array returned by Get-VcList into a folder structure that represents release and processor architecture.
             If the redistributable exists in the specified path, it will not be re-downloaded.
 
         .NOTES
@@ -15,7 +15,7 @@ Function Save-VcRedist {
             https://docs.stealthpuppy.com/docs/vcredist/usage/downloading-the-redistributables
 
         .PARAMETER VcList
-            Sepcifies the array that lists the Visual C++ Redistributables to download
+            Specifies the array that lists the Visual C++ Redistributables to download
 
         .PARAMETER Path
             Specify a target folder to download the Redistributables to, otherwise use the current folder.
@@ -101,15 +101,15 @@ Function Save-VcRedist {
         ForEach ($Vc in $VcList) {
 
             # Create the folder to store the downloaded file. Skip if it exists
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Test: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Test folder: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
             If (Test-Path -Path $folder) {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
             }
             Else {
-                If ($pscmdlet.ShouldProcess($folder, "Create")) {
+                If ($PSCmdlet.ShouldProcess($folder, "Create")) {
                     try {
-                        New-Item -Path $folder -Type Directory -Force -ErrorAction SilentlyContinue > $Null
+                        New-Item -Path $folder -Type Directory -Force -ErrorAction "SilentlyContinue" > $Null
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
@@ -143,7 +143,7 @@ Function Save-VcRedist {
 
             # The VcRedist needs to be downloaded
             If ($download) {
-                If ($pscmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
+                If ($PSCmdlet.ShouldProcess($Vc.Download, "Invoke-WebRequest")) {
                     # Use Invoke-WebRequest with no progress bar by default for best compatibility and speed
                     try {
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"

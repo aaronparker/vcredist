@@ -85,11 +85,11 @@ Function Get-VcList {
         [ValidateSet('Supported', 'All', 'Unsupported')]
         [System.String] $Export = "Supported"
     )
-    
+
     Process {
         try {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Reading JSON document [$Path]."
-            $content = Get-Content -Raw -Path $Path -ErrorAction SilentlyContinue
+            $content = Get-Content -Raw -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to read manifest [$Path]."
@@ -100,12 +100,12 @@ Function Get-VcList {
         try {
             # Convert the JSON content to an object
             Write-Verbose -Message "$($MyInvocation.MyCommand): Converting JSON."
-            $json = $content | ConvertFrom-Json -ErrorVariable convertError -ErrorAction SilentlyContinue
+            $json = $content | ConvertFrom-Json -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to convert manifest JSON to required object. Please validate the input manifest."
             Throw $_.Exception.Message
-            Exit
+            Break
         }
 
         If ($Null -ne $json) {
@@ -138,7 +138,24 @@ Function Get-VcList {
                 [System.Management.Automation.PSObject] $release = $supported | Where-Object { $Release -contains $_.Release }
                 [System.Management.Automation.PSObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
             }
+
+            # Get the count of items in $output; Because it's a PSCustomObject we can't use the .count property so need to measure th object
+            # Grab a NoteProperty and count how many of those there are to get the object count
+            $Property = $output | Get-Member | Where-Object { $_.MemberType -eq "NoteProperty" } | Select-Object -ExpandProperty "Name" | Select-Object -First 1
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Object count is: $($output.$Property.Count)."
+
+            # Replace strings in the manifest
+            For ($i = 0; $i -le ($output.$Property.Count - 1); $i++) {
+                try {
+                    $output[$i].SilentUninstall = $output[$i].SilentUninstall `
+                        -replace "#Installer", $(Split-Path -Path $output[$i].Download -Leaf) `
+                        -replace "#ProductCode", $output[$i].ProductCode
+                }
+                catch {
+                    Write-Verbose -Message "Failed to replace strings in: $($json[$i].Name)."
+                }
+            }
+            Write-Output -InputObject $output
         }
-        Write-Output -InputObject $output
     }
 }

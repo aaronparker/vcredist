@@ -10,7 +10,9 @@
                           "Architecture":  "x64",
                           "ShortName":  "SP1MFC",
                           "Install":  "/Q",
-                          "SilentInstall":  "/Q"
+                          "SilentInstall":  "/Q",
+                          "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                          "UninstallKey":  "64"
                       },
                       {
                           "Name":  "Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update",
@@ -22,7 +24,9 @@
                           "Architecture":  "x86",
                           "ShortName":  "SP1MFC",
                           "Install":  "/Q",
-                          "SilentInstall":  "/Q"
+                          "SilentInstall":  "/Q",
+                          "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
@@ -34,7 +38,9 @@
                           "Architecture":  "x64",
                           "ShortName":  "SP1",
                           "Install":  "/passive /norestart",
-                          "SilentInstall":  "/quiet /norestart"
+                          "SilentInstall":  "/quiet /norestart",
+                          "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                          "UninstallKey":  "64"
                       },
                       {
                           "Name":  "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
@@ -46,7 +52,9 @@
                           "Architecture":  "x86",
                           "ShortName":  "SP1",
                           "Install":  "/passive /norestart",
-                          "SilentInstall":  "/quiet /norestart"
+                          "SilentInstall":  "/quiet /norestart",
+                          "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2012 Update 4",
@@ -58,7 +66,9 @@
                           "Architecture":  "x64",
                           "ShortName":  "Update4",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/quiet /norestart"
+                          "SilentInstall":  "/quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2012 Update 4",
@@ -70,7 +80,9 @@
                           "Architecture":  "x86",
                           "ShortName":  "Update4",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ 2013 Update 5 Redistributable Package",
@@ -82,7 +94,9 @@
                           "Architecture":  "x64",
                           "ShortName":  "Update5",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ 2013 Update 5 Redistributable Package",
@@ -94,7 +108,9 @@
                           "Architecture":  "x86",
                           "ShortName":  "Update5",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ 2015 Redistributable Update 3",
@@ -106,7 +122,9 @@
                           "Architecture":  "x64",
                           "ShortName":  "Update3",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ 2015 Redistributable Update 3",
@@ -118,7 +136,9 @@
                           "Architecture":  "x86",
                           "ShortName":  "Update3",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2017",
@@ -130,7 +150,9 @@
                           "Architecture":  "x64",
                           "ShortName":  "RTM",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2017",
@@ -142,31 +164,37 @@
                           "Architecture":  "x86",
                           "ShortName":  "RTM",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2019",
-                          "ProductCode":  "{33628a12-6787-4b9f-95a1-92449f69fae0}",
-                          "Version":  "14.28.29325.2",
+                          "ProductCode":  "{855e31d2-9031-46e1-b06d-c9d7777deefb}",
+                          "Version":  "14.28.29913.0",
                           "URL":  "https://www.visualstudio.com/downloads/",
                           "Download":  "https://aka.ms/vs/16/release/VC_redist.x64.exe",
                           "Release":  "2019",
                           "Architecture":  "x64",
                           "ShortName":  "RTM",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2019",
-                          "ProductCode":  "{d7a6435f-ac9a-4af6-8fdc-ca130d13fac9}",
-                          "Version":  "14.28.29325.2",
+                          "ProductCode":  "{03d1453c-7d5c-479c-afea-8482f406e036}",
+                          "Version":  "14.28.29913.0",
                           "URL":  "https://www.visualstudio.com/downloads/",
                           "Download":  "https://aka.ms/vs/16/release/VC_redist.x86.exe",
                           "Release":  "2019",
                           "Architecture":  "x86",
                           "ShortName":  "RTM",
                           "Install":  "/install /passive /norestart",
-                          "SilentInstall":  "/install /quiet /norestart"
+                          "SilentInstall":  "/install /quiet /norestart",
+                          "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                          "UninstallKey":  "32"
                       }
                   ],
     "Unsupported":  [
@@ -180,7 +208,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "MFC",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update",
@@ -192,7 +222,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "ATL",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2005 SP1 Redistributable Package",
@@ -204,7 +236,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "SP1",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2005 Redistributable Package",
@@ -216,7 +250,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "RTM",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update",
@@ -228,7 +264,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "MFC",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update",
@@ -240,7 +278,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "ATL",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2005 SP1 Redistributable Package",
@@ -252,7 +292,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "SP1",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2005 Redistributable Package",
@@ -264,7 +306,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "RTM",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2008 Redistributable Package",
@@ -276,7 +320,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "RTM",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2008 Feature Pack Redistributable Package",
@@ -288,7 +334,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "FP",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2008 Redistributable Package ATL Security Update",
@@ -300,7 +348,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "ATL",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2008 SP1 Redistributable Package",
@@ -312,7 +362,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "SP1",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update",
@@ -324,7 +376,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "SP1ATL",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
                         },
                         {
                             "Name":  "Visual C++ 2008 Redistributable Package",
@@ -336,7 +390,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "RTM",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2008 Feature Pack Redistributable Package",
@@ -348,7 +404,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "FP",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2008 Redistributable Package ATL Security Update",
@@ -360,7 +418,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "ATL",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2008 SP1 Redistributable Package",
@@ -372,7 +432,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "SP1",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update",
@@ -384,7 +446,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "SP1ATL",
                             "Install":  "/Q",
-                            "SilentInstall":  "/Q"
+                            "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ Redistributable Packages for Visual Studio 2013",
@@ -396,7 +460,9 @@
                             "Architecture":  "x64",
                             "ShortName":  "RTM",
                             "Install":  "/install /passive /norestart",
-                            "SilentInstall":  "/install /quiet /norestart"
+                            "SilentInstall":  "/install /quiet /norestart",
+                            "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                            "UninstallKey":  "32"
                         },
                         {
                             "Name":  "Visual C++ Redistributable Packages for Visual Studio 2013",
@@ -408,7 +474,9 @@
                             "Architecture":  "x86",
                             "ShortName":  "RTM",
                             "Install":  "/install /passive /norestart",
-                            "SilentInstall":  "/install /quiet /norestart"
+                            "SilentInstall":  "/install /quiet /norestart",
+                            "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                            "UninstallKey":  "32"
                         }
                     ]
 }

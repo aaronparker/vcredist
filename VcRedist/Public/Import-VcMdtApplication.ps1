@@ -100,9 +100,9 @@ Function Import-VcMdtApplication {
 
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+            If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -120,7 +120,7 @@ Function Import-VcMdtApplication {
 
         # Create the Application folder
         If ($AppFolder.Length -gt 0) {
-            If ($pscmdlet.ShouldProcess($AppFolder, "Create")) {
+            If ($PSCmdlet.ShouldProcess($AppFolder, "Create")) {
                 try {
                     New-MdtApplicationFolder -Drive $MdtDrive -Name $AppFolder -Description "Microsoft Visual C++ Redistributables" > $Null
                 }
@@ -178,7 +178,7 @@ Function Import-VcMdtApplication {
             }
 
             # Import as an application into the MDT deployment share
-            If (Test-Path -Path $("$target\$($vcMatched.Name)") -ErrorAction SilentlyContinue) {
+            If (Test-Path -Path $("$target\$($vcMatched.Name)") -ErrorAction "SilentlyContinue") {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): '$("$target\$($vcMatched.Name)")' exists. Use -Force to overwrite the existing application."
             }
             Else {

@@ -74,9 +74,9 @@ Function Update-VcMdtBundle {
     Process {
         # Import the MDT module and create a PS drive to MdtPath
         If (Import-MdtModule) {
-            If ($pscmdlet.ShouldProcess($Path, "Mapping")) {
+            If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction SilentlyContinue > $Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -104,7 +104,7 @@ Function Update-VcMdtBundle {
             #Write-Verbose -Message "$($MyInvocation.MyCommand): Bundle is: $($bundle.PSPath)"
         }
         catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing Visual C++ Redistributables bundle."
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing Visual C++ Redistributables bundle."
             Throw $_.Exception.Message
             Exit
         }
