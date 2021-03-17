@@ -36,8 +36,8 @@ Function Get-InstalledVcRedist {
     )
 
     # Get all installed Visual C++ Redistributables installed components
-    Write-Verbose -Message "$($MyInvocation.MyCommand): Matching installed VcRedists with [$Filter]."
-    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match $script:resourceStrings.Filters.Redist }
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Matching installed VcRedists with: [$($res.Filters.Redist)]."
+    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match "(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*" }
 
     # Add Architecture property to each entry
     Write-Verbose -Message "$($MyInvocation.MyCommand): Adding Architecture property."
@@ -50,7 +50,7 @@ Function Get-InstalledVcRedist {
     }
     Else {
         Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering output."
-        $Output = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern $script:resourceStrings.Filters.All)) { $_ } } | Sort-Object -Property "Name"
+        $Output = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | Sort-Object -Property "Name"
 
         # Write the filtered installed VcRedists to the pipeline
         Write-Output -InputObject $Output
