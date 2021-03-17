@@ -132,7 +132,7 @@ Function New-VcMdtBundle {
 
             # Create the application bundle
             If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction "SilentlyContinue") {
-                Write-Verbose "$($MyInvocation.MyCommand): '$($Publisher) $($BundleName)' exists. Use -Force to overwrite the exsiting bundle."
+                Write-Verbose "$($MyInvocation.MyCommand): '$($Publisher) $($BundleName)' exists. Use -Force to overwrite the existing bundle."
             }
             Else {
                 If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Create bundle")) {

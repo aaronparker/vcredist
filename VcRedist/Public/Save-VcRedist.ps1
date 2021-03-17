@@ -15,7 +15,7 @@ Function Save-VcRedist {
             https://docs.stealthpuppy.com/docs/vcredist/usage/downloading-the-redistributables
 
         .PARAMETER VcList
-            Sepcifies the array that lists the Visual C++ Redistributables to download
+            Specifies the array that lists the Visual C++ Redistributables to download
 
         .PARAMETER Path
             Specify a target folder to download the Redistributables to, otherwise use the current folder.
@@ -101,7 +101,7 @@ Function Save-VcRedist {
         ForEach ($Vc in $VcList) {
 
             # Create the folder to store the downloaded file. Skip if it exists
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Test: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Test folder: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
             $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
             If (Test-Path -Path $folder) {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
@@ -143,7 +143,7 @@ Function Save-VcRedist {
 
             # The VcRedist needs to be downloaded
             If ($download) {
-                If ($PSCmdlet.ShouldProcess($Vc.Download, "WebDownload")) {
+                If ($PSCmdlet.ShouldProcess($Vc.Download, "Invoke-WebRequest")) {
                     # Use Invoke-WebRequest with no progress bar by default for best compatibility and speed
                     try {
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"

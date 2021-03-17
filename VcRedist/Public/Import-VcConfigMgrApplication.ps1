@@ -67,6 +67,9 @@ Function Import-VcConfigMgrApplication {
         [Parameter(Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $Silent,
 
+        [Parameter(Mandatory = $False)]
+        [System.Management.Automation.SwitchParameter] $NoCopy,
+
         [Parameter(Mandatory = $False, Position = 5)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft",
@@ -98,18 +101,24 @@ Function Import-VcConfigMgrApplication {
             $CMPath = $CMPath.TrimEnd("\")
 
             # Copy VcRedists to the network location. Use robocopy for robustness
-            If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
-                try {
-                    $invokeProcessParams = @{
-                        FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                        ArgumentList = "*.exe `"$validPath`" `"$CMPath`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+            If ($NoCopy) {
+                Write-Warning -Message "$($MyInvocation.MyCommand): NoCopy specified, skipping copy to $CMPath. Ensure VcRedists exist in the target."
+            }
+            Else {
+                If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
+                    try {
+                        $invokeProcessParams = @{
+                            FilePath     = "$env:SystemRoot\System32\robocopy.exe"
+                            ArgumentList = "*.exe `"$validPath`" `"$CMPath`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                        }
+                        $result = Invoke-Process @invokeProcessParams
                     }
-                    Invoke-Process @invokeProcessParams
-                }
-                catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$validPath] to [$CMPath]."
-                    Throw $_.Exception.Message
-                    Break        
+                    catch [System.Exception] {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$validPath] to [$CMPath]."
+                        $result
+                        Throw $_.Exception.Message
+                        Break        
+                    }
                 }
             }
 
@@ -159,18 +168,18 @@ Function Import-VcConfigMgrApplication {
     }
     
     Process {
-        ForEach ($Vc in $VcList) {
-            Write-Verbose -Message "Importing app: [$($Vc.Name)][$($Vc.Release)][$($Vc.Architecture)]"
+        ForEach ($VcRedist in $VcList) {
+            Write-Verbose -Message "Importing app: [$($VcRedist.Name)][$($VcRedist.Release)][$($VcRedist.Architecture)]"
 
             # If SMS_ADMIN_UI_PATH variable exists, assume module imported successfully earlier
             If (Test-Path -Path env:SMS_ADMIN_UI_PATH) {
 
                 # Import as an application into ConfigMgr
-                If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $CMPath", "Import ConfigMgr app")) {
+                If ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $CMPath", "Import ConfigMgr app")) {
                 
                     # Create the ConfigMgr application with properties from the XML file
                     If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
-                        If ($PSCmdlet.ShouldProcess($Vc.Name + " $($Vc.Architecture)", "Creating ConfigMgr application")) {
+                        If ($PSCmdlet.ShouldProcess($VcRedist.Name + " $($VcRedist.Architecture)", "Creating ConfigMgr application")) {
 
                             # Change to the SMS Application folder before importing the applications
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to $($DestFolder)"
@@ -185,13 +194,17 @@ Function Import-VcConfigMgrApplication {
                                                 
                             try {
                                 # Splat New-CMApplication parameters, add the application and move into the target folder
+                                $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
                                 $cmAppParams = @{
-                                    Name            = "$($Vc.Name) $($Vc.Architecture)"
-                                    Description     = "$($Publisher) $($Vc.Name) $($Vc.Architecture) imported by $($MyInvocation.MyCommand)"
-                                    SoftwareVersion = "$($Vc.Release) $($Vc.Architecture)"
-                                    LinkText        = $Vc.URL
-                                    Publisher       = $Publisher
-                                    Keyword         = $Keyword
+                                    Name              = $ApplicationName
+                                    Description       = "$($Publisher) $($VcRedist.Name) $($VcRedist.Architecture) imported by $($MyInvocation.MyCommand)"
+                                    SoftwareVersion   = $VcRedist.Version
+                                    LinkText          = $VcRedist.URL
+                                    Publisher         = $Publisher
+                                    Keyword           = $Keyword
+                                    ReleaseDate       = (Get-Date -Format dd/MM/yyyy)
+                                    PrivacyUrl        = "https://go.microsoft.com/fwlink/?LinkId=521839"
+                                    UserDocumentation = "https://visualstudio.microsoft.com/vs/support/"
                                 }
                                 $app = New-CMApplication @cmAppParams
                                 If ($AppFolder) {
@@ -199,7 +212,7 @@ Function Import-VcConfigMgrApplication {
                                 }
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($Vc.Name) $($Vc.Architecture)."
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($VcRedist.Name) $($VcRedist.Architecture)."
                                 Throw $_.Exception.Message
                                 Break
                             }
@@ -220,7 +233,7 @@ Function Import-VcConfigMgrApplication {
                         }
 
                         # Add a deployment type to the application
-                        If ($PSCmdlet.ShouldProcess($("$Vc.Name $($Vc.Architecture)"), "Adding deployment type")) {
+                        If ($PSCmdlet.ShouldProcess($("$VcRedist.Name $($VcRedist.Architecture)"), "Adding deployment type")) {
 
                             # Change to the SMS Application folder before importing the applications
                             try {
@@ -234,20 +247,28 @@ Function Import-VcConfigMgrApplication {
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$DestFolder]."
 
                             try {
+                                # Create the detection method
+                                $params = @{
+                                    Hive    = "LocalMachine"
+                                    Is64Bit = If ($VcRedist.UninstallKey -eq "64") { $True } Else { $False }
+                                    KeyName = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$($VcRedist.ProductCode)"  
+                                }
+                                $detectionClause = New-CMDetectionClauseRegistryKey @params
+
                                 # Splat Add-CMScriptDeploymentType parameters and add the application deployment type
                                 $cmScriptParams = @{
-                                    InstallCommand           = "$(Split-Path -Path $Vc.Download -Leaf) $(If($Silent) { $vc.SilentInstall } Else { $vc.Install })"
-                                    ContentLocation          = "$CMPath\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                                    ProductCode              = $Vc.ProductCode
-                                    SourceUpdateProductCode  = $Vc.ProductCode
-                                    DeploymentTypeName       = ("SCRIPT_" + $Vc.Name)
+                                    ApplicationName          = $ApplicationName
+                                    InstallCommand           = "$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })"
+                                    ContentLocation          = "$CMPath\$($VcRedist.Release)\$($VcRedist.Architecture)\$($VcRedist.ShortName)"
+                                    AddDetectionClause       = $detectionClause
+                                    DeploymentTypeName       = "SCRIPT_$($VcRedist.Name)"
                                     UserInteractionMode      = "Hidden"
-                                    UninstallCommand         = "$env:SystemRoot\System32\msiexec.exe /x $($Vc.ProductCode) /qn-"
+                                    UninstallCommand         = $VcRedist.SilentUninstall
                                     LogonRequirementType     = "WhetherOrNotUserLoggedOn"
                                     InstallationBehaviorType = "InstallForSystem"
                                     Comment                  = "Generated by $($MyInvocation.MyCommand)"
                                 }
-                                $app | Add-CMScriptDeploymentType @cmScriptParams > $Null
+                                Add-CMScriptDeploymentType @cmScriptParams > $Null
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to add script deployment type."

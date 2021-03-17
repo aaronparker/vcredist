@@ -128,7 +128,7 @@ Function Update-VcMdtApplication {
                     $existingVc = Get-ChildItem @gciParams
                 }
                 catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing application: [$vcName]."
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing application: [$vcName]."
                     Throw $_.Exception.Message
                     Break
                 }

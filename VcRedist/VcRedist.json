@@ -10,5 +10,9 @@
     "UninstallKeys": {
         "32": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
         "64": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
+    },
+    "Urls": {
+        "Privacy": "https://go.microsoft.com/fwlink/?LinkId=521839",
+        "Docs": "https://visualstudio.microsoft.com/vs/support/"
     }
 }

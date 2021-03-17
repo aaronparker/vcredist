@@ -104,7 +104,7 @@ Function Update-VcMdtBundle {
             #Write-Verbose -Message "$($MyInvocation.MyCommand): Bundle is: $($bundle.PSPath)"
         }
         catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retreive the existing Visual C++ Redistributables bundle."
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing Visual C++ Redistributables bundle."
             Throw $_.Exception.Message
             Exit
         }
