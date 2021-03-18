@@ -56,10 +56,6 @@ Function Update-VcMdtBundle {
         [Parameter(Mandatory = $False, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
         [System.String] $BundleName = "Visual C++ Redistributables"
-
-        <#[Parameter(Mandatory = $False, Position = 4)]
-        [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US"#>
     )
 
     Begin {
@@ -76,7 +72,12 @@ Function Update-VcMdtBundle {
         If (Import-MdtModule) {
             If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
+                    $params = @{
+                        Drive       = $MdtDrive
+                        Path        = $MdtPath
+                        ErrorAction = "SilentlyContinue"
+                    }
+                    New-MdtDrive @params > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -101,7 +102,6 @@ Function Update-VcMdtBundle {
                 ErrorAction = "SilentlyContinue"
             }
             $Bundles = Get-ChildItem @gciParams | Where-Object { $_.CommandLine -eq "" }
-            #Write-Verbose -Message "$($MyInvocation.MyCommand): Bundle is: $($bundle.PSPath)"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing Visual C++ Redistributables bundle."
@@ -112,9 +112,8 @@ Function Update-VcMdtBundle {
         # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
         $target = "$($MdtDrive):\Applications\$AppFolder"
         Write-Verbose -Message "$($MyInvocation.MyCommand): Gathering VcRedist applications in: $target"
-        $existingVcRedists = Get-ChildItem -Path $target | `
-            Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) -and ($_.CommandLine -ne "") }
-        $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
+        $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) -and ($_.CommandLine -ne "") }
+        $existingVcRedists = $existingVcRedists | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false }
         $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
 
         ForEach ($bundle in $Bundles) {

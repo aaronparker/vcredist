@@ -71,14 +71,6 @@ Function Update-VcMdtApplication {
         [Parameter(Mandatory = $False, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft"
-
-        <#[Parameter(Mandatory = $False, Position = 4)]
-        [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
-        [System.String] $BundleName = "Visual C++ Redistributables"
-
-        [Parameter(Mandatory = $False, Position = 5)]
-        [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US"#>
     )
 
     Begin {
@@ -115,34 +107,37 @@ Function Update-VcMdtApplication {
 
     Process {
         If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
-            ForEach ($Vc in $VcList) {
+            ForEach ($VcRedist in $VcList) {
+                
                 # Set variables
-                $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
+                $ApplicationName = "$Publisher $($VcRedist.Name) $($VcRedist.Architecture)"
+                $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
 
                 # Get the existing VcRedist applications in the MDT share
                 try {
                     $gciParams = @{
-                        Path        = (Join-Path -Path $target -ChildPath $vcName)
+                        Path        = (Join-Path -Path $target -ChildPath $ApplicationName)
                         ErrorAction = "SilentlyContinue"
                     }
                     $existingVc = Get-ChildItem @gciParams
                 }
                 catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing application: [$vcName]."
+                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing application: [$ApplicationName]."
                     Throw $_.Exception.Message
                     Break
                 }
     
                 If ($Null -ne $existingVc) {
                     try {
-                        If ($existingVc.CommandLine -ne ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })") {
+                        If ($existingVc.CommandLine -ne ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })") {
+                            
                             # Check the existing command line on the application and update
                             If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update CommandLine")) {
                                 try {
                                     $sipParams = @{
-                                        Path  = (Join-Path -Path $target -ChildPath $vcName)
+                                        Path  = (Join-Path -Path $target -ChildPath $ApplicationName)
                                         Name  = "CommandLine"
-                                        Value = ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent) { $vc.SilentInstall } Else { $vc.Install })"
+                                        Value = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })"
                                     }
                                     Set-ItemProperty @sipParams > $Null
                                 }
@@ -153,31 +148,38 @@ Function Update-VcMdtApplication {
                                 }
                             }
                         }
-                        If ($existingVc.UninstallKey -ne $Vc.ProductCode) {
+                        If ($existingVc.UninstallKey -ne $VcRedist.ProductCode) {
+                            
                             # Update the ProductCode value
                             If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update Exe & UninstallKey")) {
                                 try {
+                                    
                                     # Copy the updated executable
-                                    $Source = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $Vc.Release, $Vc.Architecture, $Vc.ShortName, "*.exe")
-                                    $Destination = [System.IO.Path]::Combine((Get-ValidPath -Path $MdtPath), "Applications", "$Publisher VcRedist", $Vc.Release, $Vc.Architecture, $Vc.ShortName)
-                                    $ciParams = @{
-                                        Path        = $Source
-                                        Destination = $Destination
-                                        Force       = $True
+                                    $folder = [System.IO.Path]::Combine((Get-ValidPath $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                    $ContentLocation = [System.IO.Path]::Combine((Get-ValidPath -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                    $invokeProcessParams = @{
+                                        FilePath     = "$env:SystemRoot\System32\robocopy.exe"
+                                        ArgumentList = "*.exe `"$folder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
                                     }
-                                    Write-Verbose -Message "Copying [$Source] to [$Destination]."
-                                    Copy-Item @ciParams
+                                    $result = Invoke-Process @invokeProcessParams
                                 }
                                 catch {
-                                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed copying in copy [$Source] to [$Destination]."
-                                    Throw $_.Exception.Message
-                                    Break
+                                    $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+                                    If (Test-Path -Path $Target) {
+                                        Write-Verbose -Message "$($MyInvocation.MyCommand): Copy successful: [$Target]."
+                                    }
+                                    Else {
+                                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$folder] to [$ContentLocation]."
+                                        Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                                        Throw $_.Exception.Message
+                                        Break
+                                    }
                                 }
                                 try {
                                     $sipParams = @{
-                                        Path  = (Join-Path -Path $target -ChildPath $vcName)
+                                        Path  = (Join-Path -Path $target -ChildPath $ApplicationName)
                                         Name  = "UninstallKey"
-                                        Value = $Vc.ProductCode
+                                        Value = $VcRedist.ProductCode
                                     }
                                     Set-ItemProperty @sipParams > $Null
                                 }
@@ -204,6 +206,7 @@ Function Update-VcMdtApplication {
 
     End {
         If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
+            
             # Get the imported Visual C++ Redistributables applications to return on the pipeline
             Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
             Write-Output -InputObject (Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })

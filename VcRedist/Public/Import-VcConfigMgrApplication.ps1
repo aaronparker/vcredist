@@ -74,55 +74,29 @@ Function Import-VcConfigMgrApplication {
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft",
 
-        <#[Parameter(Mandatory = $False, Position = 6)]
-        [ValidatePattern('^[a-zA-Z0-9-]+$')]
-        [System.String] $Language = "en-US",#>
-
         [Parameter(Mandatory = $False, Position = 6)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
         [System.String] $Keyword = "Visual C++ Redistributable"
     )
 
     Begin {
-        # CMPath will be the network location for copying the Visual C++ Redistributables to
-        $validPath = Get-ValidPath $Path
+        #region CMPath will be the network location for copying the Visual C++ Redistributables to
         try {
-            Set-Location -Path $validPath -ErrorAction "SilentlyContinue"
+            Set-Location -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
             Throw $_.Exception.Message
             Break
         }
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$Path]."
+        #endregion
         
-        # Validate $CMPath
+        #region Validate $CMPath
         If (Resolve-Path -Path $CMPath) {
             $CMPath = $CMPath.TrimEnd("\")
 
-            # Copy VcRedists to the network location. Use robocopy for robustness
-            If ($NoCopy) {
-                Write-Warning -Message "$($MyInvocation.MyCommand): NoCopy specified, skipping copy to $CMPath. Ensure VcRedists exist in the target."
-            }
-            Else {
-                If ($PSCmdlet.ShouldProcess("$($validPath) to $($CMPath)", "Copy")) {
-                    try {
-                        $invokeProcessParams = @{
-                            FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                            ArgumentList = "*.exe `"$validPath`" `"$CMPath`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
-                        }
-                        $result = Invoke-Process @invokeProcessParams
-                    }
-                    catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$validPath] to [$CMPath]."
-                        $result
-                        Throw $_.Exception.Message
-                        Break        
-                    }
-                }
-            }
-
-            # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
+            #region If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
             If (Test-Path -Path env:SMS_ADMIN_UI_PATH -ErrorAction "SilentlyContinue") {
                 try {            
                     # Import the ConfigurationManager.psd1 module
@@ -134,7 +108,7 @@ Function Import-VcConfigMgrApplication {
                         $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
                         If ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
                             try {
-                                New-Item -Path $DestFolder -ErrorAction "SilentlyContinue"
+                                New-Item -Path $DestFolder -ErrorAction "SilentlyContinue" > $Null
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
@@ -161,16 +135,18 @@ Function Import-VcConfigMgrApplication {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr console and PowerShell module installed?"
                 Break
             }
+            #endregion
         }
         Else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to confirm $CMPath exists. Please check that $CMPath is valid."
             Break
         }
+        #endregion
     }
     
     Process {
         ForEach ($VcRedist in $VcList) {
-            Write-Verbose -Message "Importing app: [$($VcRedist.Name)][$($VcRedist.Release)][$($VcRedist.Architecture)]"
+            Write-Verbose -Message "Importing VcRedist app: [Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)]"
 
             # If SMS_ADMIN_UI_PATH variable exists, assume module imported successfully earlier
             If (Test-Path -Path env:SMS_ADMIN_UI_PATH) {
@@ -178,9 +154,52 @@ Function Import-VcConfigMgrApplication {
                 # Import as an application into ConfigMgr
                 If ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $CMPath", "Import ConfigMgr app")) {
                 
-                    # Create the ConfigMgr application with properties from the XML file
+                    # Create the ConfigMgr application with properties from the manifest
                     If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
                         If ($PSCmdlet.ShouldProcess($VcRedist.Name + " $($VcRedist.Architecture)", "Creating ConfigMgr application")) {
+
+                            # Build paths
+                            $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                            $ContentLocation = [System.IO.Path]::Combine($CMPath, $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                            
+                            #region Copy VcRedists to the network location. Use robocopy for robustness
+                            If ($NoCopy) {
+                                Write-Warning -Message "$($MyInvocation.MyCommand): NoCopy specified, skipping copy to $ContentLocation. Ensure VcRedists exist in the target."
+                            }
+                            Else {
+                                If ($PSCmdlet.ShouldProcess("$($folder) to $($ContentLocation)", "Copy")) {
+                                    try {
+                                        If (!(Test-Path -Path $ContentLocation)) {
+                                            New-Item -Path $ContentLocation -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+                                        }
+                                    }
+                                    catch {
+                                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create: [$ContentLocation]."
+                                        Throw $_.Exception.Message
+                                        Break
+                                    }
+                                    try {
+                                        $invokeProcessParams = @{
+                                            FilePath     = "$env:SystemRoot\System32\robocopy.exe"
+                                            ArgumentList = "*.exe `"$folder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                                        }
+                                        $result = Invoke-Process @invokeProcessParams
+                                    }
+                                    catch [System.Exception] {
+                                        $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+                                        If (Test-Path -Path $Target) {
+                                            Write-Verbose -Message "$($MyInvocation.MyCommand): Copy successful: [$Target]."
+                                        }
+                                        Else {
+                                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$folder] to [$ContentLocation]."
+                                            Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                                            Throw $_.Exception.Message
+                                            Break
+                                        }
+                                    }
+                                }
+                            }
+                            #endregion
 
                             # Change to the SMS Application folder before importing the applications
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to $($DestFolder)"
@@ -198,7 +217,7 @@ Function Import-VcConfigMgrApplication {
                                 $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
                                 $cmAppParams = @{
                                     Name              = $ApplicationName
-                                    Description       = "$($Publisher) $($VcRedist.Name) $($VcRedist.Architecture) imported by $($MyInvocation.MyCommand)"
+                                    Description       = "$Publisher $ApplicationName imported by $($MyInvocation.MyCommand)"
                                     SoftwareVersion   = $VcRedist.Version
                                     LinkText          = $VcRedist.URL
                                     Publisher         = $Publisher
@@ -223,18 +242,18 @@ Function Import-VcConfigMgrApplication {
                             }
 
                             try {
-                                Set-Location -Path $validPath -ErrorAction "SilentlyContinue"
+                                Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to [$Path]."
+                                Set-Location -Path $Path -ErrorAction "SilentlyContinue"
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
                                 Throw $_.Exception.Message
                                 Continue
                             }
-                            Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
                         }
 
                         # Add a deployment type to the application
-                        If ($PSCmdlet.ShouldProcess($("$VcRedist.Name $($VcRedist.Architecture)"), "Adding deployment type")) {
+                        If ($PSCmdlet.ShouldProcess($("$($VcRedist.Name) $($VcRedist.Architecture) $($VcRedist.Version)"), "Adding deployment type")) {
 
                             # Change to the SMS Application folder before importing the applications
                             try {
@@ -260,7 +279,7 @@ Function Import-VcConfigMgrApplication {
                                 $cmScriptParams = @{
                                     ApplicationName          = $ApplicationName
                                     InstallCommand           = "$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })"
-                                    ContentLocation          = "$CMPath\$($VcRedist.Release)\$($VcRedist.Architecture)\$($VcRedist.ShortName)"
+                                    ContentLocation          = $ContentLocation
                                     AddDetectionClause       = $detectionClause
                                     DeploymentTypeName       = "SCRIPT_$($VcRedist.Name)"
                                     UserInteractionMode      = "Hidden"
@@ -278,14 +297,14 @@ Function Import-VcConfigMgrApplication {
                             }
 
                             try {
-                                Set-Location -Path $validPath -ErrorAction "SilentlyContinue"
+                                Write-Verbose -Message "$($MyInvocation.MyCommand): Setting location to [$Path]."
+                                Set-Location -Path $Path -ErrorAction "SilentlyContinue"
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
+                                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
                                 Throw $_.Exception.Message
                                 Break
                             }
-                            Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
                         }
                     }
                 }
@@ -295,12 +314,12 @@ Function Import-VcConfigMgrApplication {
 
     End {
         try {
-            Set-Location -Path $validPath -ErrorAction "SilentlyContinue"
+            Set-Location -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$validPath]."
+            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
             Throw $_.Exception.Message
         }
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$validPath]."
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$Path]."
     }
 }

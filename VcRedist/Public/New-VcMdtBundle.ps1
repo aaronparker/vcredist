@@ -81,7 +81,12 @@ Function New-VcMdtBundle {
         If (Import-MdtModule) {
             If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
+                    $params = @{
+                        Drive       = $MdtDrive
+                        Path        = $MdtPath
+                        ErrorAction = "SilentlyContinue"
+                    }
+                    New-MdtDrive @params > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -100,7 +105,7 @@ Function New-VcMdtBundle {
         try {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Getting existing Visual C++ Redistributables the deployment share"
             $target = "$($MdtDrive):\Applications\$AppFolder"
-            $existingVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
+            $existingVcRedists = Get-ChildItem -Path $target -ErrorAction "SilentlyContinue" | Where-Object { $_.Name -like "*Visual C++*" }
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed when returning existing VcRedist packages."
@@ -114,8 +119,9 @@ Function New-VcMdtBundle {
         }
 
         If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
+
             # Remove the existing bundle if -Force was specified
-            If ($Force.IsPresent) {
+            If ($PSBoundParameters.ContainsKey("Force")) {
                 If (Test-Path -Path $("$target\$Publisher $BundleName") -ErrorAction "SilentlyContinue") {
                     If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Remove bundle")) {
                         try {
@@ -136,8 +142,10 @@ Function New-VcMdtBundle {
             }
             Else {
                 If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Create bundle")) {
+                    
                     # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
-                    $existingVcRedists = $existingVcRedists | Sort-Object -Property Version
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Gathering VcRedist applications in: $target"
+                    $existingVcRedists = $existingVcRedists | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false }
                     $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
 
                     # Import the bundle
