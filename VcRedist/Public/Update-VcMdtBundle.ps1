@@ -48,7 +48,7 @@ Function Update-VcMdtBundle {
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False)]
@@ -70,6 +70,10 @@ Function Update-VcMdtBundle {
     )
 
     Begin {
+        # Variables
+        $Applications = "Applications"
+        Write-Warning -Message "$($MyInvocation.MyCommand): Attempting to update bundle: [$Publisher $BundleName]."
+
         # If running on PowerShell Core, error and exit.
         If (Test-PSCore) {
             Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
@@ -107,7 +111,7 @@ Function Update-VcMdtBundle {
         # Get properties from the existing bundle/s
         try {
             $gciParams = @{
-                Path        = "$($MdtDrive):\Applications"
+                Path        = "$($MdtDrive):\$Applications"
                 Recurse     = $True
                 ErrorAction = "SilentlyContinue"
             }
@@ -123,7 +127,7 @@ Function Update-VcMdtBundle {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Found bundle: [$($Bundle.Name)]."
 
             # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
-            $target = "$($MdtDrive):\Applications\$AppFolder"
+            $target = "$($MdtDrive):\$Applications\$AppFolder"
             Write-Verbose -Message "$($MyInvocation.MyCommand): Gathering VcRedist applications in: $target"
             $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) -and ($_.CommandLine -ne "") }
             $existingVcRedists = $existingVcRedists | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false }

@@ -39,7 +39,7 @@ Function Import-MdtModule {
 
     # Attempt to load the module
     $mdtModule = "$mdtInstallDir\bin\MicrosoftDeploymentToolkit.psd1"
-    If (Test-Path -Path $mdtModule) {
+    If (Test-Path -Path $mdtModule -ErrorAction "SilentlyContinue") {
         Write-Verbose "$($MyInvocation.MyCommand): Loading MDT module from: [$mdtInstallDir]."
         try {
             $params = @{

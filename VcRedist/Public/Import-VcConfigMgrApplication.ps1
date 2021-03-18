@@ -74,7 +74,7 @@ Function Import-VcConfigMgrApplication {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_." } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_." } })]
         [System.String] $Path,
 
         [Parameter(Mandatory = $True, Position = 2)]
@@ -140,7 +140,7 @@ Function Import-VcConfigMgrApplication {
                                 Break
                             }
                         }
-                        If (Test-Path -Path $DestFolder) {
+                        If (Test-Path -Path $DestFolder -ErrorAction "SilentlyContinue") {
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Importing into: [$DestFolder]."
                         }
                     }
@@ -173,7 +173,7 @@ Function Import-VcConfigMgrApplication {
             Write-Verbose -Message "Importing VcRedist app: [Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)]"
 
             # If SMS_ADMIN_UI_PATH variable exists, assume module imported successfully earlier
-            If (Test-Path -Path env:SMS_ADMIN_UI_PATH) {
+            If (Test-Path -Path env:SMS_ADMIN_UI_PATH -ErrorAction "SilentlyContinue") {
 
                 # Import as an application into ConfigMgr
                 If ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $CMPath", "Import ConfigMgr app")) {
@@ -193,7 +193,7 @@ Function Import-VcConfigMgrApplication {
                             Else {
                                 If ($PSCmdlet.ShouldProcess("$($folder) to $($ContentLocation)", "Copy")) {
                                     try {
-                                        If (!(Test-Path -Path $ContentLocation)) {
+                                        If (!(Test-Path -Path $ContentLocation -ErrorAction "SilentlyContinue")) {
                                             New-Item -Path $ContentLocation -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
                                         }
                                     }
@@ -211,7 +211,7 @@ Function Import-VcConfigMgrApplication {
                                     }
                                     catch [System.Exception] {
                                         $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
-                                        If (Test-Path -Path $Target) {
+                                        If (Test-Path -Path $Target -ErrorAction "SilentlyContinue") {
                                             Write-Verbose -Message "$($MyInvocation.MyCommand): Copy successful: [$Target]."
                                         }
                                         Else {

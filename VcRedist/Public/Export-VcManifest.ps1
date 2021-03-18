@@ -38,7 +38,7 @@ Function Export-VcManifest {
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [ValidateScript( { If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
+        [ValidateScript( { If (Test-Path -Path $(Split-Path -Path $_ -Parent) -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [System.String] $Path
     )
 

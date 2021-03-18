@@ -51,7 +51,7 @@ Function Install-VcRedist {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
@@ -79,9 +79,6 @@ Function Install-VcRedist {
                     }
                     Else {
                         
-                        # Construct full path to VcRedist installer
-                        # $folder = Join-Path -Path (Join-Path -Path (Join-Path -Path $(Resolve-Path -Path $Path) -ChildPath $VcRedist.Release) -ChildPath $VcRedist.Architecture) -ChildPath $VcRedist.ShortName
-                        
                         # Target folder structure
                         $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
 
@@ -89,7 +86,7 @@ Function Install-VcRedist {
                         $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
 
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
-                        If (Test-Path -Path $filename) {
+                        If (Test-Path -Path $filename -ErrorAction "SilentlyContinue") {
                             If ($PSCmdlet.ShouldProcess("$filename $($VcRedist.Install)'", "Install")) {
 
                                 try {

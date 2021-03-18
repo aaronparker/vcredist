@@ -62,7 +62,7 @@ Function Get-DigitalSignature {
     Process {
         # For each path in $Path, check that the path exists
         ForEach ($Loc in $Path) {
-            If (Test-Path -Path $Loc -IsValid) {
+            If (Test-Path -Path $Loc -IsValid -ErrorAction "SilentlyContinue") {
 
                 # Get the item to determine whether it's a file or folder
                 If ((Get-Item -Path $Loc -Force).PSIsContainer) {

@@ -64,11 +64,11 @@ Function Update-VcMdtApplication {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
         [System.String] $Path,
 
         [Parameter(Mandatory = $True)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False)]
@@ -188,7 +188,7 @@ Function Update-VcMdtApplication {
                                 }
                                 catch {
                                     $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
-                                    If (Test-Path -Path $Target) {
+                                    If (Test-Path -Path $Target -ErrorAction "SilentlyContinue") {
                                         Write-Verbose -Message "$($MyInvocation.MyCommand): Copy successful: [$Target]."
                                     }
                                     Else {

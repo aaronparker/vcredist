@@ -1,11 +1,22 @@
 Function Save-VcRedist {
     <#
         .SYNOPSIS
-            Downloads the Visual C++ Redistributables from an array returned by Get-VcList.
+            Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList.
 
         .DESCRIPTION
-            Downloads the Visual C++ Redistributables from an array returned by Get-VcList into a folder structure that represents release and processor architecture.
+            Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList into a folder structure that represents release, version and processor architecture.
             If the redistributable exists in the specified path, it will not be re-downloaded.
+
+            For example, the following folder structure will be created when downloading the 2010, 2012, 2013 and 2019 Redistributables to C:\VcRedist:
+
+                C:\VcRedist\2010\10.0.40219.325\x64
+                C:\VcRedist\2010\10.0.40219.325\x86
+                C:\VcRedist\2012\11.0.61030.0\x64
+                C:\VcRedist\2012\11.0.61030.0\x86
+                C:\VcRedist\2013\12.0.40664.0\x64
+                C:\VcRedist\2013\12.0.40664.0\x86
+                C:\VcRedist\2019\14.28.29913.0\x64
+                C:\VcRedist\2019\14.28.29913.0\x86
 
         .NOTES
             Author: Aaron Parker
@@ -69,7 +80,7 @@ Function Save-VcRedist {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
@@ -114,7 +125,7 @@ Function Save-VcRedist {
 
             # Create the folder to store the downloaded file. Skip if it exists
             Write-Verbose -Message "$($MyInvocation.MyCommand): Test folder: [$folder]."
-            If (Test-Path -Path $folder) {
+            If (Test-Path -Path $folder -ErrorAction "SilentlyContinue") {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Folder [$folder] exists. Skipping."
             }
             Else {
@@ -140,7 +151,7 @@ Function Save-VcRedist {
             $target = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
             Write-Verbose -Message "$($MyInvocation.MyCommand): Testing target: $($target)"
 
-            If (Test-Path -Path $target -PathType "Leaf") {
+            If (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
                 $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
                 
                 # If the target Redistributable is already downloaded, compare the version
@@ -198,7 +209,7 @@ Function Save-VcRedist {
                     finally {
 
                         # Return the $VcList array on the pipeline so that we can act on what was downloaded
-                        If (Test-Path -Path $target -PathType "Leaf") {
+                        If (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
                             Write-Output -InputObject $VcRedist
                         }
                     }
