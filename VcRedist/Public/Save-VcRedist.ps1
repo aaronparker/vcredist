@@ -26,6 +26,9 @@ Function Save-VcRedist {
         .PARAMETER ProxyCredential
             Specifies a user account that has permission to use the proxy server that is specified by the Proxy parameter. The default is the current user.
 
+        .PARAMETER NoProgress
+            Specify this switch with -Verbose to show verbose output but also suppress Invoke-WebRequest progress to speed downloads.
+
         .EXAMPLE
             Save-VcRedist -VcList (Get-VcList) -Path C:\Redist
 
@@ -73,7 +76,7 @@ Function Save-VcRedist {
         [System.ObsoleteAttribute("This parameter should no longer be used. Invoke-WebRequest is used for all download operations.")]
         [System.Management.Automation.SwitchParameter] $ForceWebRequest,
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $False)]
         [System.ObsoleteAttribute("This parameter should no longer be used. Invoke-WebRequest is used for all download operations.")]
         [ValidateSet('Foreground', 'High', 'Normal', 'Low')]
         [System.String] $Priority = "Foreground",
@@ -83,12 +86,16 @@ Function Save-VcRedist {
 
         [Parameter(Mandatory = $False, Position = 4)]
         [System.Management.Automation.PSCredential]
-        $ProxyCredential = [System.Management.Automation.PSCredential]::Empty
+        $ProxyCredential = [System.Management.Automation.PSCredential]::Empty,
+
+        [Parameter(Mandatory = $False)]
+        [System.Management.Automation.SwitchParameter] $NoProgress
     )
 
     Begin { 
+
         # Disable the Invoke-WebRequest progress bar for faster downloads
-        If ($PSBoundParameters.ContainsKey('Verbose')) {
+        If ($PSBoundParameters.ContainsKey("Verbose") -and !($PSBoundParameters.ContainsKey("NoProgress"))) {
             $ProgressPreference = "Continue"
         }
         Else {
@@ -97,19 +104,29 @@ Function Save-VcRedist {
     }
 
     Process {
+
         # Loop through each Redistributable and download to the target path
-        ForEach ($Vc in $VcList) {
+        ForEach ($VcRedist in $VcList) {
+
+            # Build the path to save the VcRedist into
+            # Target folder structure
+            $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
 
             # Create the folder to store the downloaded file. Skip if it exists
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Test folder: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
-            $folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Test folder: [$folder]."
             If (Test-Path -Path $folder) {
-                Write-Verbose -Message "$($MyInvocation.MyCommand): Folder '$folder' exists. Skipping."
+                Write-Verbose -Message "$($MyInvocation.MyCommand): Folder [$folder] exists. Skipping."
             }
             Else {
                 If ($PSCmdlet.ShouldProcess($folder, "Create")) {
                     try {
-                        New-Item -Path $folder -Type Directory -Force -ErrorAction "SilentlyContinue" > $Null
+                        $params = @{
+                            Path        = $folder
+                            Type        = "Directory"
+                            Force       = $True
+                            ErrorAction = "SilentlyContinue"
+                        }
+                        New-Item @params > $Null
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
@@ -120,20 +137,21 @@ Function Save-VcRedist {
             }
             
             # Test whether the VcRedist is already on disk
-            $target = Join-Path $folder $(Split-Path -Path $Vc.Download -Leaf)
+            $target = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
             Write-Verbose -Message "$($MyInvocation.MyCommand): Testing target: $($target)"
 
-            If (Test-Path -Path $target -PathType Leaf) {
+            If (Test-Path -Path $target -PathType "Leaf") {
                 $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
                 
                 # If the target Redistributable is already downloaded, compare the version
-                If (($Vc.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion)) {
+                If (($VcRedist.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion)) {
+                    
                     # Download the newer version
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): $($Vc.Version) > $ProductVersion."
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: [$($VcRedist.Version)] > file version: [$ProductVersion]."
                     $download = $True
                 }
                 Else {
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: $($Vc.Version) matches file version: $ProductVersion."
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: [$($VcRedist.Version)] matches file version: [$ProductVersion]."
                     $download = $False
                 }
             }
@@ -143,52 +161,51 @@ Function Save-VcRedist {
 
             # The VcRedist needs to be downloaded
             If ($download) {
-                If ($PSCmdlet.ShouldProcess($Vc.Download, "Invoke-WebRequest")) {
-                    # Use Invoke-WebRequest with no progress bar by default for best compatibility and speed
+                If ($PSCmdlet.ShouldProcess($VcRedist.Download, "Invoke-WebRequest")) {
+                    
                     try {
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Download: [$($Vc.Name), $($Vc.Release), $($Vc.Architecture)]"
                         # Enable TLS 1.2
                         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+                        # Download the file
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
                         $iwrParams = @{
-                            Uri             = $Vc.Download
+                            Uri             = $VcRedist.Download
                             OutFile         = $target
                             UseBasicParsing = $True
                             ErrorAction     = "SilentlyContinue"
                         }
-                        If ($PSBoundParameters.ContainsKey('Proxy')) {
+                        If ($PSBoundParameters.ContainsKey("Proxy")) {
                             $iwrParams.Proxy = $Proxy
                         }
-                        If ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+                        If ($PSBoundParameters.ContainsKey("ProxyCredential")) {
                             $iwrParams.ProxyCredential = $ProxyCredential
                         }
                         Invoke-WebRequest @iwrParams
-                        #$return = $True
                     }
                     catch [System.Net.Http.HttpRequestException] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($Vc.Download)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($VcRedist.Download)]."
                         Throw $_.Exception.Message
-                        #$return = $False
                     }
                     catch [System.Net.WebException] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
                         Throw $_.Exception.Message
-                        #$return = $False
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($Vc.Download)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($VcRedist.Download)]."
                         Throw $_.Exception.Message
-                        #$return = $False
                     }
                     finally {
-                        If (Test-Path -Path $target -PathType Leaf) {
-                            # Return the $VcList array on the pipeline so that we can act on what was downloaded
-                            Write-Output -InputObject $Vc
+
+                        # Return the $VcList array on the pipeline so that we can act on what was downloaded
+                        If (Test-Path -Path $target -PathType "Leaf") {
+                            Write-Output -InputObject $VcRedist
                         }
                     }
                 }
             }
             Else {
-                Write-Verbose -Message "$($MyInvocation.MyCommand): $($target) exists."
+                Write-Verbose -Message "$($MyInvocation.MyCommand): [$($target)] exists."
             }
         }
     }

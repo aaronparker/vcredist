@@ -156,12 +156,12 @@ Function Update-VcMdtApplication {
                         If ($existingVc.UninstallKey -ne $Vc.ProductCode) {
                             # Update the ProductCode value
                             If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update Exe & UninstallKey")) {
-                                # Copy the updated executable
                                 try {
-                                    $Source = "$(Get-ValidPath $Path)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)\*.exe"
-                                    $Destination = "$(Get-ValidPath -Path $MdtPath)\Applications\$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
+                                    # Copy the updated executable
+                                    $Source = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $Vc.Release, $Vc.Architecture, $Vc.ShortName, "*.exe")
+                                    $Destination = [System.IO.Path]::Combine((Get-ValidPath -Path $MdtPath), "Applications", "$Publisher VcRedist", $Vc.Release, $Vc.Architecture, $Vc.ShortName)
                                     $ciParams = @{
-                                        Path       = $Source
+                                        Path        = $Source
                                         Destination = $Destination
                                         Force       = $True
                                     }

@@ -21,7 +21,7 @@ Function Test-VcDownloads {
     )
     $Output = $False
     ForEach ($Vc in $VcList) {
-        $Folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
+        $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $Vc.Release, $Vc.Architecture, $Vc.ShortName)
         $Target = Join-Path $Folder $(Split-Path -Path $Vc.Download -Leaf)
         If (Test-Path -Path $Target -PathType Leaf) {
             Write-Verbose "$($Target) - exists."

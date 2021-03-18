@@ -102,7 +102,12 @@ Function Import-VcMdtApplication {
         If (Import-MdtModule) {
             If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
+                    $params = @{
+                        Drive       = $MdtDrive
+                        Path        = $MdtPath
+                        ErrorAction = "SilentlyContinue"
+                    }
+                    New-MdtDrive @params > $Null
                     Restore-MDTPersistentDrive -Force > $Null
                 }
                 catch [System.Exception] {
@@ -122,7 +127,12 @@ Function Import-VcMdtApplication {
         If ($AppFolder.Length -gt 0) {
             If ($PSCmdlet.ShouldProcess($AppFolder, "Create")) {
                 try {
-                    New-MdtApplicationFolder -Drive $MdtDrive -Name $AppFolder -Description "Microsoft Visual C++ Redistributables" > $Null
+                    $params = @{
+                        Drive       = $MdtDrive
+                        Name        = $AppFolder
+                        Description = "Microsoft Visual C++ Redistributables"
+                    }
+                    New-MdtApplicationFolder @params > $Null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$AppFolder]."
@@ -139,7 +149,7 @@ Function Import-VcMdtApplication {
 
         try {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Retrieving existing Visual C++ Redistributables from the deployment share"
-            $existingVcRedists = Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" }
+            $existingVcRedists = Get-ChildItem -Path $target -ErrorAction "SilentlyContinue" | Where-Object { $_.Name -like "*Visual C++*" }
         }
         catch {
             Write-Error -Message "$($MyInvocation.MyCommand): Failed when returning existing VcRedist packages."
@@ -147,29 +157,31 @@ Function Import-VcMdtApplication {
     }
 
     Process {
-        ForEach ($Vc in $VcList) {
+        ForEach ($VcRedist in $VcList) {
 
             # Set variables
-            Write-Verbose -Message "$($MyInvocation.MyCommand): processing: [$($Vc.Name) $($Vc.Architecture)]."
-            $supportedPlatform = If ($Vc.Architecture -eq "x86") {
+            Write-Verbose -Message "$($MyInvocation.MyCommand): processing: [$($VcRedist.Name) $($VcRedist.Architecture)]."
+            $supportedPlatform = If ($VcRedist.Architecture -eq "x86") {
                 @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer")
             }
             Else {
                 @("All x64 Windows 7 and Newer")
             }
-            $vcName = "$Publisher $($Vc.Name) $($Vc.Architecture)"
 
             # Check for existing application by matching current VcRedist
-            $vcMatched = $existingVcRedists | Where-Object { $_.Name -eq $vcName }
+            $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
+            $VcMatched = $existingVcRedists | Where-Object { $_.Name -eq $ApplicationName }
 
-            If ($Force.IsPresent) {
-                If ($vcMatched.UninstallKey -eq $Vc.ProductCode) {
-                    If ($PSCmdlet.ShouldProcess($vcMatched.Name, "Remove")) {
+            
+            # Remove the matched VcRedist application
+            If ($PSBoundParameters.ContainsKey("Force")) {
+                If ($VcMatched.UninstallKey -eq $VcRedist.ProductCode) {
+                    If ($PSCmdlet.ShouldProcess($VcMatched.Name, "Remove")) {
                         try {
-                            Remove-Item -Path $("$target\$($vcMatched.Name)") -Force
+                            Remove-Item -Path $("$target\$($VcMatched.Name)") -Force
                         }
                         catch [System.Exception] {
-                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$($vcMatched.Name)]."
+                            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$($VcMatched.Name)]."
                             Throw $_.Exception.Message
                             Continue
                         }
@@ -178,35 +190,36 @@ Function Import-VcMdtApplication {
             }
 
             # Import as an application into the MDT deployment share
-            If (Test-Path -Path $("$target\$($vcMatched.Name)") -ErrorAction "SilentlyContinue") {
-                Write-Verbose -Message "$($MyInvocation.MyCommand): '$("$target\$($vcMatched.Name)")' exists. Use -Force to overwrite the existing application."
+            If (Test-Path -Path $("$target\$($VcMatched.Name)") -ErrorAction "SilentlyContinue") {
+                Write-Verbose -Message "$($MyInvocation.MyCommand): '$("$target\$($VcMatched.Name)")' exists. Use -Force to overwrite the existing application."
             }
             Else {
-                If ($PSCmdlet.ShouldProcess("$($Vc.Name) in $MdtPath", "Import")) {
+                If ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $MdtPath", "Import")) {
                     try {
+
                         # Splat the Import-MDTApplication arguments
                         $importMDTAppParams = @{
                             Path                  = $target
-                            Name                  = $vcName
+                            Name                  = $ApplicationName
                             Enable                = $True
                             Reboot                = $False
                             Hide                  = $(If ($DontHide.IsPresent) { "False" } Else { "True" })
                             Comments              = "Generated by $($MyInvocation.MyCommand)"
-                            ShortName             = "$($Vc.Name) $($Vc.Architecture)"
-                            Version               = $Vc.Release
+                            ShortName             = "$($VcRedist.Name) $($VcRedist.Architecture)"
+                            Version               = $VcRedist.Release
                             Publisher             = $Publisher
                             Language              = $Language
-                            CommandLine           = ".\$(Split-Path -Path $Vc.Download -Leaf) $(If ($Silent.IsPresent) { $vc.SilentInstall } Else { $vc.Install })"
-                            WorkingDirectory      = ".\Applications\$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
-                            ApplicationSourcePath = "$(Get-ValidPath $Path)\$($Vc.Release)\$($Vc.Architecture)\$($Vc.ShortName)"
-                            DestinationFolder     = "$Publisher VcRedist\$($Vc.Release) $($Vc.ShortName) $($Vc.Architecture)"
-                            UninstallKey          = $Vc.ProductCode
+                            CommandLine           = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent.IsPresent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })"
+                            ApplicationSourcePath = [System.IO.Path]::Combine((Get-ValidPath $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                            DestinationFolder     = "$Publisher VcRedist\$($VcRedist.Release) $($VcRedist.Version) $($VcRedist.Architecture)"
+                            WorkingDirectory      = ".\Applications\$Publisher VcRedist\$($VcRedist.Release) $($VcRedist.Version) $($VcRedist.Architecture)"
+                            UninstallKey          = $VcRedist.ProductCode
                             SupportedPlatform     = $supportedPlatform
                         }
                         Import-MDTApplication @importMDTAppParams > $Null
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Error encountered importing the application: [$($Vc.Name) $($Vc.Architecture)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Error encountered importing the application: [$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)]."
                         Throw $_.Exception.Message
                         Continue
                     }

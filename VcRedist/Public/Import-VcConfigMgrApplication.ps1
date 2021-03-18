@@ -123,10 +123,11 @@ Function Import-VcConfigMgrApplication {
             }
 
             # If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
-            If (Test-Path -Path env:SMS_ADMIN_UI_PATH) {
+            If (Test-Path -Path env:SMS_ADMIN_UI_PATH -ErrorAction "SilentlyContinue") {
                 try {            
                     # Import the ConfigurationManager.psd1 module
-                    Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" > $Null
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Importing module: $($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1."
+                    Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$False > $Null
 
                     # Create the folder for importing the Redistributables into
                     If ($AppFolder) {
