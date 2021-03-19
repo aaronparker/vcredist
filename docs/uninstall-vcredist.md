@@ -1,7 +1,7 @@
 ---
 title: "Uninstall the Redistributables"
 keywords: vcredist
-tags: [getting_started]
+tags: [install]
 sidebar: home_sidebar
 permalink: uninstall-vcredist.html
 summary: 

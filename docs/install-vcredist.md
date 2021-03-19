@@ -1,7 +1,7 @@
 ---
 title: "Install the Redistributables"
 keywords: vcredist
-tags: [getting_started]
+tags: [install]
 sidebar: home_sidebar
 permalink: install-vcredist.html
 summary: 
@@ -36,4 +36,4 @@ Fully silent install command line arguments can be specified with the `-Silent` 
 Install-VcRedist -Path C:\Temp\VcRedist -VcList (Get-VcList) -Silent
 ```
 
-![Microsoft Visual C++ Redistributables installed on the local PC](https://raw.githubusercontent.com/aaronparker/docs/master/images/VisualCPrograms.PNG)
+![Microsoft Visual C++ Redistributables installed on the local PC](/images/VisualCPrograms.PNG)

@@ -1,7 +1,7 @@
 ---
 title: "Import Redistributables into ConfigMgr"
 keywords: vcredist
-tags: [getting_started]
+tags: [configmgr]
 sidebar: home_sidebar
 permalink: import-vcconfigmgrapplication.html
 summary: 
@@ -45,4 +45,4 @@ Get-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
 Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB -Silent
 ```
 
-![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](https://raw.githubusercontent.com/aaronparker/docs/master/images/VcRedistConfigMgr.PNG)
+![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](/images/VcRedistConfigMgr.PNG)

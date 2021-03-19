@@ -1,7 +1,7 @@
 ---
 title: "Create a Redistributables bundle in MDT"
 keywords: vcredist
-tags: [getting_started]
+tags: [mdt]
 sidebar: home_sidebar
 permalink: new-vcmdtbundle.html
 summary: 

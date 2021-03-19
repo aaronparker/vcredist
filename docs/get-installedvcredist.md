@@ -1,7 +1,7 @@
 ---
 title: "Get the Installed Redistributables"
 keywords: vcredist
-tags: [getting_started]
+tags: [install]
 sidebar: home_sidebar
 permalink: get-installedvcredist.html
 summary: 
@@ -42,7 +42,7 @@ Output can be filtered for specific properties:
 Get-InstalledVcRedist | Select Name, Version, ProductCode
 ```
 
-![Microsoft Visual C++ Redistributables installed on the local PC](https://raw.githubusercontent.com/aaronparker/docs/master/images/installed-vcredist.png)
+![Microsoft Visual C++ Redistributables installed on the local PC](/images/installed-vcredist.png)
 
 This list won't include the Additional and Minimum Runtimes by default. These can be returned with the `-ExportAll` switch:
 

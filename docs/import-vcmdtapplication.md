@@ -1,7 +1,7 @@
 ---
 title: "Import Redistributables into MDT"
 keywords: vcredist
-tags: [getting_started]
+tags: [mdt]
 sidebar: home_sidebar
 permalink: import-vcmdtapplication.html
 summary: 
@@ -38,11 +38,11 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
 
 Each Redistributable will be imported into the deployment share with application properties required for a successful deployment.
 
-![Microsoft Visual C++ Redistributables applications imported into an MDT share](https://raw.githubusercontent.com/aaronparker/docs/master/images/MdtVisualCApplications.png)
+![Microsoft Visual C++ Redistributables applications imported into an MDT share](/images/MdtVisualCApplications.png)
 
 The folder structure in the deployment share, will look thus:
 
-![Visual C++ Redistributables in the deployment share Application folder](https://raw.githubusercontent.com/aaronparker/docs/master/images/MdtVisualCApplicationsFolder.PNG)
+![Visual C++ Redistributables in the deployment share Application folder](/images/MdtVisualCApplicationsFolder.PNG)
 
 The install command line arguments used by default are passive. Fully silent install command line arguments can be specified with the `-Silent` parameter when importing the applications into an MDT deployment share.
 

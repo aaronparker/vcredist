@@ -1,7 +1,7 @@
 ---
 title: "Update the Redistributables bundle in MDT"
 keywords: vcredist
-tags: [getting_started]
+tags: [mdt]
 sidebar: home_sidebar
 permalink: update-vcmdtbundle.html
 summary: 
