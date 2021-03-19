@@ -7,7 +7,7 @@ toc: false
 permalink: changelog.html
 summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 ---
-## VERSION
+## 3.0.238
 
 * Updates the major version to 3 due to the introduction of a breaking change
 * Changes the folder structure used when downloading VcRedists and importing into MDT or ConfigMgr. Structure is now: `Release\Version\Architecture`. For example: `2019\14.28.29913.0\x64`. This change has been introduced to allow importing VcRedist installers into ConfigMgr and Microsoft Intune as distinct application versions that can be used to supersede earlier versions and upgrade target PCs
