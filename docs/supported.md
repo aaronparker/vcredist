@@ -3,7 +3,7 @@ title: "Supported Platforms"
 keywords: vcredist
 tags: [getting_started]
 sidebar: home_sidebar
-permalink: support-platforms.html
+permalink: supported.html
 summary: 
 ---
 ## Windows Versions
