@@ -11,7 +11,7 @@ Function Install-VcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables
+            https://stealthpuppy.com/VcRedist/install-vcredist.html
 
         .PARAMETER VcList
             An array containing details of the Visual C++ Redistributables from Get-VcList.
@@ -43,7 +43,7 @@ Function Install-VcRedist {
             Description:
             Installs all supported Visual C++ Redistributables using a completely silent install.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/install-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
@@ -51,7 +51,7 @@ Function Install-VcRedist {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1)]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Container') { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
@@ -68,37 +68,47 @@ Function Install-VcRedist {
             # Get currently installed VcRedist versions
             $currentInstalled = Get-InstalledVcRedist
 
-            ForEach ($vc in $VcList) {
-                If ($currentInstalled | Where-Object { $vc.ProductCode -contains $_.ProductCode }) {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Already installed: [$($vc.Architecture), $($vc.Name)]."
+            ForEach ($VcRedist in $VcList) {
+                If ($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) {
+                    Write-Warning -Message "$($MyInvocation.MyCommand): VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                 }
                 Else {
                     # Avoid installing 64-bit Redistributable on x86 Windows 
-                    If ((Get-Bitness -Architecture 'x86') -and ($vc.Architecture -eq 'x64')) {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Incompatible architecture: [$($vc.Architecture), $($vc.Name)]."
+                    If ((Get-Bitness -Architecture 'x86') -and ($VcRedist.Architecture -eq 'x64')) {
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Incompatible architecture: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                     }
                     Else {
-                        # Construct full path to VcRedist installer
-                        $folder = Join-Path -Path (Join-Path -Path (Join-Path -Path $(Resolve-Path -Path $Path) -ChildPath $vc.Release) -ChildPath $vc.Architecture) -ChildPath $vc.ShortName
-                        $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $vc.Download -Leaf)
+                        
+                        # Target folder structure
+                        $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
 
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Install: [$($vc.Architecture), $($vc.Name)]."
-                        If (Test-Path -Path $filename) {
-                            If ($PSCmdlet.ShouldProcess("$filename $($vc.Install)'", "Install")) {
+                        # VcRedist setup file
+                        $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+
+                        Write-Verbose -Message "$($MyInvocation.MyCommand): Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
+                        If (Test-Path -Path $filename -ErrorAction "SilentlyContinue") {
+                            If ($PSCmdlet.ShouldProcess("$filename $($VcRedist.Install)'", "Install")) {
 
                                 try {
-                                    # Create parameters with -ArgumentList set based on -Silent argument used in this function
+                                    # Create parameters with -ArgumentList set based on Install/SilentInstall properties in the manifest
                                     # Install the VcRedist using the Invoke-Process private function
                                     $invokeProcessParams = @{
                                         FilePath     = $filename
-                                        ArgumentList = If ($Silent) { $vc.SilentInstall } Else { $vc.Install }
+                                        ArgumentList = If ($Silent) { $VcRedist.SilentInstall } Else { $VcRedist.Install }
                                     }
-                                    Invoke-Process @invokeProcessParams
+                                    $result = Invoke-Process @invokeProcessParams
                                 }
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Failure in installing Visual C++ Redistributable."
-                                    Throw $_.Exception.Message
-                                    Continue
+                                    Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                                    Throw "Failed to install VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
+                                    Break
+                                }
+                                finally {
+                                    $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
+                                    If ($Installed) {
+                                        Write-Verbose -Message "Installed successfully: VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
+                                    }
                                 }
                             }
                         }

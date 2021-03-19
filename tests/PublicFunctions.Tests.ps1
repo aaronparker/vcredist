@@ -20,9 +20,9 @@ Function Test-VcDownloads {
         [string] $Path
     )
     $Output = $False
-    ForEach ($Vc in $VcList) {
-        $Folder = Join-Path (Join-Path (Join-Path $(Resolve-Path -Path $Path) $Vc.Release) $Vc.Architecture) $Vc.ShortName
-        $Target = Join-Path $Folder $(Split-Path -Path $Vc.Download -Leaf)
+    ForEach ($VcRedist in $VcList) {
+        $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+        $Target = Join-Path $Folder $(Split-Path -Path $VcRedist.Download -Leaf)
         If (Test-Path -Path $Target -PathType Leaf) {
             Write-Verbose "$($Target) - exists."
             $Output = $True
@@ -67,18 +67,20 @@ Describe 'Get-VcList' -Tag "Get" {
     }
     Context 'Validate Get-VcList array properties' {
         $VcList = Get-VcList
-        ForEach ($vc in $VcList) {
-            It "VcRedist [$($vc.Name), $($vc.Architecture)] has expected properties" {
-                $vc.Name.Length | Should -BeGreaterThan 0
-                $vc.ProductCode.Length | Should -BeGreaterThan 0
-                $vc.Version.Length | Should -BeGreaterThan 0
-                $vc.URL.Length | Should -BeGreaterThan 0
-                $vc.Download.Length | Should -BeGreaterThan 0
-                $vc.Release.Length | Should -BeGreaterThan 0
-                $vc.Architecture.Length | Should -BeGreaterThan 0
-                $vc.ShortName.Length | Should -BeGreaterThan 0
-                $vc.Install.Length | Should -BeGreaterThan 0
-                $vc.SilentInstall.Length | Should -BeGreaterThan 0
+        ForEach ($VcRedist in $VcList) {
+            It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] has expected properties" {
+                $VcRedist.Name.Length | Should -BeGreaterThan 0
+                $VcRedist.ProductCode.Length | Should -BeGreaterThan 0
+                $VcRedist.Version.Length | Should -BeGreaterThan 0
+                $VcRedist.URL.Length | Should -BeGreaterThan 0
+                $VcRedist.Download.Length | Should -BeGreaterThan 0
+                $VcRedist.Release.Length | Should -BeGreaterThan 0
+                $VcRedist.Architecture.Length | Should -BeGreaterThan 0
+                $VcRedist.ShortName.Length | Should -BeGreaterThan 0
+                $VcRedist.Install.Length | Should -BeGreaterThan 0
+                $VcRedist.SilentInstall.Length | Should -BeGreaterThan 0
+                $VcRedist.SilentUninstall.Length | Should -BeGreaterThan 0
+                $VcRedist.UninstallKey.Length | Should -BeGreaterThan 0
             }
         }
     }
@@ -189,9 +191,9 @@ Describe 'Install-VcRedist' -Tag "Install" {
             $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
             Write-Host "`tInstalling VcRedists." -ForegroundColor Cyan
             $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent
-            ForEach ($Vc in $VcRedists) {
-                It "Installed the VcRedist: '$($vc.Name)'" {
-                    $vc.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
+            ForEach ($VcRedist in $VcRedists) {
+                It "Installed the VcRedist: '$($VcRedist.Name)'" {
+                    $VcRedist.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
                 }
             }
         }
@@ -206,12 +208,12 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     Describe 'Get-InstalledVcRedist' -Tag "Install" {
         Context 'Validate Get-InstalledVcRedist array properties' {
             $VcList = Get-InstalledVcRedist
-            ForEach ($vc in $VcList) {
-                It "VcRedist '$($vc.Name)' has expected properties" {
-                    $vc.Name.Length | Should -BeGreaterThan 0
-                    $vc.Version.Length | Should -BeGreaterThan 0
-                    $vc.ProductCode.Length | Should -BeGreaterThan 0
-                    $vc.UninstallString.Length | Should -BeGreaterThan 0
+            ForEach ($VcRedist in $VcList) {
+                It "VcRedist '$($VcRedist.Name)' has expected properties" {
+                    $VcRedist.Name.Length | Should -BeGreaterThan 0
+                    $VcRedist.Version.Length | Should -BeGreaterThan 0
+                    $VcRedist.ProductCode.Length | Should -BeGreaterThan 0
+                    $VcRedist.UninstallString.Length | Should -BeGreaterThan 0
                 }
             }
         }

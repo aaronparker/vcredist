@@ -11,7 +11,7 @@ Function Get-InstalledVcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-installed-redistributables
+            https://stealthpuppy.com/VcRedist/get-installedvcredist.html
 
         .PARAMETER ExportAll
             Export all installed Redistributables including the Additional and Minimum Runtimes typically hidden from Programs and Features
@@ -28,7 +28,7 @@ Function Get-InstalledVcRedist {
             Description:
             Returns the installed Microsoft Visual C++ Redistributables from the current system including the Additional and Minimum Runtimes.
     #>
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-installed-redistributables")]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/get-installedvcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $False)]
@@ -36,7 +36,7 @@ Function Get-InstalledVcRedist {
     )
 
     # Get all installed Visual C++ Redistributables installed components
-    Write-Verbose -Message "$($MyInvocation.MyCommand): Matching installed VcRedists with: [$($res.Filters.Redist)]."
+    Write-Verbose -Message "$($MyInvocation.MyCommand): Matching installed VcRedists with: [(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*]."
     $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match "(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*" }
 
     # Add Architecture property to each entry

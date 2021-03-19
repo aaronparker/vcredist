@@ -13,7 +13,7 @@ Function Get-VcList {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list
+            https://stealthpuppy.com/VcRedist/get-vclist.html
 
         .PARAMETER Manifest
             The JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format.
@@ -65,11 +65,11 @@ Function Get-VcList {
             Returns a list of the Visual C++ Redistributables listed in the external manifest VisualCRedistributables.json.
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(DefaultParameterSetName = 'Manifest', HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/getting-the-vcredist-list")]
+    [CmdletBinding(DefaultParameterSetName = 'Manifest', HelpURI = "https://stealthpuppy.com/VcRedist/get-vclist.html")]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline, ParameterSetName = 'Manifest')]
         [ValidateNotNull()]
-        [ValidateScript( { If (Test-Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
+        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Leaf' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find file $_" } })]
         [Alias("Xml")]
         [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 

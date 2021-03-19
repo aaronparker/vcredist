@@ -1,38 +1,38 @@
 Function Uninstall-VcRedist {
     <#
         .SYNOPSIS
-            Uninstall all of the installed Visual C++ Redistributables on the local system
+            Uninstall the installed Visual C++ Redistributables on the local system
         
         .DESCRIPTION
-            Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
+            Uninstall the specified Release and/or Architecture of the installed Visual C++ Redistributables on the local system.
 
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables
+            https://stealthpuppy.com/VcRedist/install-vcredist.html
 
         .PARAMETER Release
-            Specifies the release (or version) of the redistributables to uninstall.
+            Specifies the release of the redistributables to uninstall.
 
         .PARAMETER Architecture
             Specifies the processor architecture to of the redistributables to uninstall. Can be x86 or x64.
 
         .EXAMPLE
-            Uninstall-VcRedist
+            Uninstall-VcRedist -Confirm:$True
 
             Description:
-            Uninstalls installs all installed x64, x86 2005-2019 Visual C++ Redistributables.
+            Uninstalls all installed x64, x86 2005-2019 Visual C++ Redistributables.
 
         .EXAMPLE
-            Uninstall-VcRedist -Release 2008, 2010
+            Uninstall-VcRedist -Release 2008, 2010 -Confirm:$True
 
             Description:
-            Uninstalls installs all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
+            Uninstalls all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
     #>
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "High", 
-        HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/uninstalling-the-redistributables")]
+        HelpURI = "https://stealthpuppy.com/VcRedist/uninstall-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     [CmdletBinding()]
@@ -49,12 +49,11 @@ Function Uninstall-VcRedist {
     # Get the installed VcRedists and filter
     Write-Warning -Message "$($MyInvocation.MyCommand): Uninstalling Visual C++ Redistributables"
     Write-Verbose -Message "$($MyInvocation.MyCommand): Getting locally installed Visual C++ Redistributables"
-    $VcRedistsToRemove = Get-InstalledVcRedist | Where-Object { $Release -contains $_.Release }
-    $VcRedistsToRemove = $VcRedistsToRemove | Where-Object { $Architecture -contains $_.Architecture }
+    $VcRedistsToRemove = Get-InstalledVcRedist | Where-Object { $Release -contains $_.Release } | Where-Object { $Architecture -contains $_.Architecture }
 
     # Walk through each VcRedist and uninstall
     ForEach ($VcRedist in $VcRedistsToRemove) {
-        If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name), $($VcRedist.Architecture)]", "Uninstall")) {
+        If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name)]", "Uninstall")) {
             $invokeProcessParams = @{
                 FilePath = "$env:SystemRoot\System32\cmd.exe"
             }
@@ -69,11 +68,12 @@ Function Uninstall-VcRedist {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.UninstallString)]."
             }
             try {
-                Invoke-Process @invokeProcessParams
+                $result = Invoke-Process @invokeProcessParams
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failure in uninstalling Visual C++ Redistributable."
-                Throw $_.Exception.Message
+                Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                Throw "Failed to uninstall VcRedist $($VcRedist.Name)"
                 Continue
             }
         }

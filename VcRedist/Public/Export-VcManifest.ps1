@@ -33,12 +33,12 @@ Function Export-VcManifest {
             Export the full list of Visual C++ Redistributables, including unsupported, to C:\Temp\VisualCRedistributables.json
     #>
     [Alias("Export-VcXml")]
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/export-manifests")]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/export-vcmanifest.html")]
     [OutputType([System.String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [ValidateScript( { If (Test-Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
+        [ValidateScript( { If (Test-Path -Path $(Split-Path -Path $_ -Parent) -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [System.String] $Path
     )
 

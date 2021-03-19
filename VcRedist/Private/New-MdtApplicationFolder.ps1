@@ -33,7 +33,7 @@ Function New-MdtApplicationFolder {
     # Create a sub-folder below Applications to import the Redistributables into
     $target = "$($Drive):\Applications\$($Name)"
 
-    If (Test-Path -Path $target) {
+    If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
         Write-Verbose "$($MyInvocation.MyCommand): MDT folder exists: $target"
         Write-Output -InputObject $True
     }

@@ -50,7 +50,7 @@ Function Get-FileMetadata {
         # For each path in $Path, check that the path exists
         ForEach ($folder in $Path) {
 
-            If (Test-Path -Path $folder -IsValid) {
+            If (Test-Path -Path $folder -IsValid -ErrorAction "SilentlyContinue") {
 
                 # Get the item to determine whether it's a file or folder
                 If ((Get-Item -Path $folder).PSIsContainer) {
