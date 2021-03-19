@@ -3,7 +3,7 @@ title: "Install the Module"
 keywords: vcredist
 tags: [getting_started]
 sidebar: home_sidebar
-permalink: install-module.html
+permalink: install.html
 summary: 
 ---
 ## Install from the PowerShell Gallery

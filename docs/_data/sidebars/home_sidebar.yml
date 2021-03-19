@@ -51,7 +51,7 @@ entries:
       url: /known-issues.html
       output: web
     - title: Change log
-      url: /change-log.md
+      url: /changelog.html
       output: web
     - title: Understanding VcRedist Versioning
       url: /versioning.html

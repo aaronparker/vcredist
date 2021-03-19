@@ -3,8 +3,8 @@
 topnav:
 - title: Topnav
   items:
-    - title: Evergreen on GitHub
-      external_url: https://github.com/aaronparker/Evergreen/
+    - title: VcRedist on GitHub
+      external_url: https://github.com/aaronparker/VcRedist/
 
 #Topnav dropdowns
 #topnav_dropdowns:
