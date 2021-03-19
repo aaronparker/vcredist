@@ -14,25 +14,25 @@ Function Uninstall-VcRedist {
             https://stealthpuppy.com/VcRedist/install-vcredist.html
 
         .PARAMETER Release
-            Specifies the release (or version) of the redistributables to uninstall.
+            Specifies the release of the redistributables to uninstall.
 
         .PARAMETER Architecture
             Specifies the processor architecture to of the redistributables to uninstall. Can be x86 or x64.
 
         .EXAMPLE
-            Uninstall-VcRedist
+            Uninstall-VcRedist -Confirm:$True
 
             Description:
-            Uninstalls installs all installed x64, x86 2005-2019 Visual C++ Redistributables.
+            Uninstalls all installed x64, x86 2005-2019 Visual C++ Redistributables.
 
         .EXAMPLE
-            Uninstall-VcRedist -Release 2008, 2010
+            Uninstall-VcRedist -Release 2008, 2010 -Confirm:$True
 
             Description:
-            Uninstalls installs all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
+            Uninstalls all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
     #>
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "High", 
-        HelpURI = "https://stealthpuppy.com/VcRedist/install-vcredist.html")]
+        HelpURI = "https://stealthpuppy.com/VcRedist/uninstall-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     [CmdletBinding()]
@@ -53,7 +53,7 @@ Function Uninstall-VcRedist {
 
     # Walk through each VcRedist and uninstall
     ForEach ($VcRedist in $VcRedistsToRemove) {
-        If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name), $($VcRedist.Architecture), $($VcRedist.Version)]", "Uninstall")) {
+        If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name)]", "Uninstall")) {
             $invokeProcessParams = @{
                 FilePath = "$env:SystemRoot\System32\cmd.exe"
             }
@@ -73,7 +73,7 @@ Function Uninstall-VcRedist {
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failure in uninstalling Visual C++ Redistributable."
                 Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
-                Throw "Failed to uninstall VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
+                Throw "Failed to uninstall VcRedist $($VcRedist.Name)"
                 Continue
             }
         }

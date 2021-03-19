@@ -26,6 +26,9 @@ entries:
     - title: Install the Redistributables
       url: /install-vcredist.html
       output: web
+    - title: Uninstall the Redistributables
+      url: /uninstall-vcredist.html
+      output: web
     - title: Import Redistributables into MDT
       url: /import-vcmdtapplication.html
       output: web
