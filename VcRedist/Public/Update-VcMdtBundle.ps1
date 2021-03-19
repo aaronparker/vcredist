@@ -22,7 +22,7 @@ Function Update-VcMdtBundle {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/update-vcmdtbundle
+            https://stealthpuppy.com/VcRedist/update-vcmdtbundle.html
 
         .PARAMETER MdtPath
             The local or network path to the MDT deployment share.
@@ -44,7 +44,7 @@ Function Update-VcMdtBundle {
             Description:
             Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and updates each Redistributable in the MDT deployment share at \\server\deployment.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/update-vcmdtbundle")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/update-vcmdtbundle.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

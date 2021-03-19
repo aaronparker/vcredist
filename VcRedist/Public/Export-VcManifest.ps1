@@ -33,7 +33,7 @@ Function Export-VcManifest {
             Export the full list of Visual C++ Redistributables, including unsupported, to C:\Temp\VisualCRedistributables.json
     #>
     [Alias("Export-VcXml")]
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/export-manifests")]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/export-vcmanifest.html")]
     [OutputType([System.String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

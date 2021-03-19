@@ -37,7 +37,7 @@ Function Import-VcConfigMgrApplication {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-configmgr
+            https://stealthpuppy.com/VcRedist/import-vcconfigmgrapplication.html
 
         .PARAMETER VcList
             An array containing details of the Visual C++ Redistributables from Get-VcList.
@@ -66,7 +66,7 @@ Function Import-VcConfigMgrApplication {
             Download the supported Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.
     #>
     [Alias('Import-VcCmApp')]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/importing-into-configmgr")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/import-vcconfigmgrapplication.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

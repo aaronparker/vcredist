@@ -129,7 +129,7 @@ summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 * Rename `Import-VcCmApp` to `Import-VcConfigMgrApplication`
 * Rename function `Export-VcXml` to `Export-VcManifest`
 * Rename `Import-VcMdtApp` to `Import-VcMdtApplication`
-* Split function `Import-VcMdtApplication` into `Import-VcMdtApplication`, `Update-VcMdtApplication`, `New-VcMdtBundle`, `Update-VcMdtBundle` to simplfy code and provide more robust functions
+* Split function `Import-VcMdtApplication` into `Import-VcMdtApplication`, `Update-VcMdtApplication`, `New-VcMdtBundle`, `Update-VcMdtBundle` to simplify code and provide more robust functions
 * Update HelpUri property on each function
 * Update `Get-InstalledVcRedist` to export additional properties including `Release` and `Architecture`
 * Add private functions `New-MdtApplicationFolder`, `New-MdtDrive`

@@ -11,7 +11,7 @@ Function Uninstall-VcRedist {
             Twitter: @stealthpuppy
 
         .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/installing-the-redistributables
+            https://stealthpuppy.com/VcRedist/install-vcredist.html
 
         .PARAMETER Release
             Specifies the release (or version) of the redistributables to uninstall.
@@ -32,7 +32,7 @@ Function Uninstall-VcRedist {
             Uninstalls installs all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
     #>
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = "High", 
-        HelpURI = "https://docs.stealthpuppy.com/docs/vcredist/usage/uninstalling-the-redistributables")]
+        HelpURI = "https://stealthpuppy.com/VcRedist/install-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     [CmdletBinding()]
