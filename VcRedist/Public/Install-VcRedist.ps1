@@ -61,6 +61,7 @@ Function Install-VcRedist {
     Begin {
         # Get script elevation status
         [System.Boolean] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator") 
+        $OrderedVcList = $VcList | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false }
     }
 
     Process {
@@ -68,7 +69,7 @@ Function Install-VcRedist {
             # Get currently installed VcRedist versions
             $currentInstalled = Get-InstalledVcRedist
 
-            ForEach ($VcRedist in $VcList) {
+            ForEach ($VcRedist in $OrderedVcList) {
                 If ($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) {
                     Write-Warning -Message "$($MyInvocation.MyCommand): VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                 }
@@ -101,8 +102,6 @@ Function Install-VcRedist {
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Failure in installing Visual C++ Redistributable."
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
-                                    Throw "Failed to install VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
-                                    Break
                                 }
                                 finally {
                                     $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
@@ -114,8 +113,6 @@ Function Install-VcRedist {
                         }
                         Else {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find: [$filename]. Download with Save-VcRedist."
-                            Throw "$($MyInvocation.MyCommand): Install Failure. Missing installer: [$filename]."
-                            Break
                         }
                     }
                 }

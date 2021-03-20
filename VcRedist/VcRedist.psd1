@@ -113,7 +113,7 @@ PrivateData = @{
         IconUri = 'https://raw.githubusercontent.com/aaronparker/VcRedist/main/img/VisualStudioLogo2019-256.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://docs.stealthpuppy.com/docs/vcredist/change-log'
+        ReleaseNotes = 'https://stealthpuppy.com/VcRedist/changelog.html'
 
         # Prerelease string of this module
         # Prerelease = ''

@@ -194,17 +194,10 @@ Function Save-VcRedist {
                         }
                         Invoke-WebRequest @iwrParams
                     }
-                    catch [System.Net.Http.HttpRequestException] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): HttpRequestException: Check URL is valid: [$($VcRedist.Download)]."
-                        Throw $_.Exception.Message
-                    }
-                    catch [System.Net.WebException] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): WebException."
-                        Throw $_.Exception.Message
-                    }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download VcRedist from: [$($VcRedist.Download)]."
-                        Throw $_.Exception.Message
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download: [$($VcRedist.Name)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): URL: [$($VcRedist.Download)]."
+                        Write-Warning -Message "$($MyInvocation.MyCommand): Download failed with: [$($_.Exception.Message)]"
                     }
                     finally {
 

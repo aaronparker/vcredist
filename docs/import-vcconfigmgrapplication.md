@@ -45,4 +45,4 @@ Get-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
 Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB -Silent
 ```
 
-![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](/images/VcRedistConfigMgr.PNG)
+![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](/images/vcredistconfigmgr.png)
