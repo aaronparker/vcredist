@@ -9,7 +9,7 @@ Param ()
 Function Test-VcDownloads {
     <#
         .SYNOPSIS
-            Tests downloads from Get-VcList are sucessful.
+            Tests downloads from Get-VcList are successful.
     #>
     [CmdletBinding()]
     Param (
@@ -173,18 +173,6 @@ Describe 'Save-VcRedist' -Tag "Save" {
 }
 
 Describe 'Install-VcRedist' -Tag "Install" {
-    Context 'Test exception handling for invalid VcRedist download path' {
-        If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
-            It "Should throw when passed via pipeline with no parameters" {
-                Push-Location -Path $downloadDir
-                { Get-VcList | Install-VcRedist } | Should -Throw
-                Pop-Location
-            }
-        }
-        Else {
-            Write-Warning -Message "$downloadDir does not exist."
-        }
-    }
     Context 'Install Redistributables' {
         If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
             $VcRedists = Get-VcList
@@ -229,7 +217,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
 #endregion
 
 #region Manifest test
-# Get an array of VcRedists from the curernt manifest and the installed VcRedists
+# Get an array of VcRedists from the current manifest and the installed VcRedists
 $Release = "2019"
 Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json

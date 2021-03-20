@@ -86,15 +86,13 @@ Function Install-VcRedist {
                     }
                     Else {
                         
-                        # Target folder structure
+                        # Target folder structure; VcRedist setup file
                         $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-
-                        # VcRedist setup file
                         $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
 
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                         If (Test-Path -Path $filename -ErrorAction "SilentlyContinue") {
-                            If ($PSCmdlet.ShouldProcess("$filename $($VcRedist.Install)'", "Install")) {
+                            If ($PSCmdlet.ShouldProcess("$filename $($VcRedist.Install)", "Install")) {
 
                                 try {
                                     # Create parameters with -ArgumentList set based on Install/SilentInstall properties in the manifest
