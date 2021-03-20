@@ -45,3 +45,5 @@ Once installation is complete, you can validate that the module exists by runnin
 ```powershell
 Import-Module VcRedist
 ```
+
+{% include links.html %}

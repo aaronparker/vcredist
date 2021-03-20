@@ -33,3 +33,5 @@ Update the 2008, 2010, 2012, 2013 and 2019 supported Redistributables in an MDT 
 $VcList = Get-VcList
 Update-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Silent
 ```
+
+{% include links.html %}

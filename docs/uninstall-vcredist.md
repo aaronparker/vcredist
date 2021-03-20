@@ -35,3 +35,5 @@ This command will uninstall any 2008 release of the installed Visual C++ Redistr
 ```powershell
 Uninstall-VcRedist -Release 2008 -Confirm:$True
 ```
+
+{% include links.html %}

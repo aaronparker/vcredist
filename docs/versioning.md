@@ -19,3 +19,5 @@ Minor releases typically add new features such as additional public functions. M
 ## Build
 
 New builds will introduce improvements in code quality, fixes or improved output. The build number in a release tracks the number of builds performed by [AppVeyor](https://ci.appveyor.com/project/aaronparker/install-visualcredistributables).
+
+{% include links.html %}

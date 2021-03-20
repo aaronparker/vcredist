@@ -44,7 +44,8 @@ Function Get-InstalledVcRedist {
     $VcRedists | ForEach-Object { If ($_.Name -contains "x64") { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
 
     # If -ExportAll used, export everything instead of filtering for the primary Redistributable
-    If ($ExportAll.IsPresent) {
+    If ($PSBoundParameters.ContainsKey("ExportAll")) {
+        
         # Write the installed VcRedists to the pipeline
         Write-Output -InputObject $VcRedists
     }

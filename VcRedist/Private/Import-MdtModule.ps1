@@ -29,7 +29,7 @@ Function Import-MdtModule {
     }
     finally {
         If ($Null -ne $mdtReg.Install_Dir) {
-            $mdtInstallDir = Get-ValidPath $mdtReg.Install_Dir
+            $mdtInstallDir = Resolve-Path -Path $mdtReg.Install_Dir
             Write-Verbose "$($MyInvocation.MyCommand): MDT Workbench install directory is: [$mdtInstallDir]."
         }
         Else {

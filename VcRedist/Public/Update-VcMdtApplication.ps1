@@ -178,8 +178,8 @@ Function Update-VcMdtApplication {
                                 # Copy the updated executable
                                 try {
                                     Write-Verbose -Message "$($MyInvocation.MyCommand): Copy VcRedist installer."
-                                    $folder = [System.IO.Path]::Combine((Get-ValidPath $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-                                    $ContentLocation = [System.IO.Path]::Combine((Get-ValidPath -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                    $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                    $ContentLocation = [System.IO.Path]::Combine((Resolve-Path -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                     $invokeProcessParams = @{
                                         FilePath     = "$env:SystemRoot\System32\robocopy.exe"
                                         ArgumentList = "*.exe `"$folder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"

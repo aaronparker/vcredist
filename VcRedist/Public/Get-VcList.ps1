@@ -6,7 +6,7 @@ Function Get-VcList {
         .DESCRIPTION
             This function reads the Visual C++ Redistributables listed in an internal manifest or an external JSON file into an array that can be passed to other VcRedist functions.
 
-            A complete listing of the supported and all known redistributables is included in the module. These internal manifests can be exported with Export-VcManifest.
+            A complete listing of the supported and all known redistributables is included in the module. The internal manifest can be exported with Export-VcManifest.
         
         .NOTES
             Author: Aaron Parker
@@ -67,21 +67,21 @@ Function Get-VcList {
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(DefaultParameterSetName = 'Manifest', HelpURI = "https://stealthpuppy.com/VcRedist/get-vclist.html")]
     Param (
-        [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline, ParameterSetName = 'Manifest')]
+        [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Manifest')]
+        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
+        [System.String[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
+
+        [Parameter(Mandatory = $False, Position = 1, ParameterSetName = 'Manifest')]
+        [ValidateSet('x86', 'x64')]
+        [System.String[]] $Architecture = @("x86", "x64"),
+
+        [Parameter(Mandatory = $False, Position = 2, ValueFromPipeline, ParameterSetName = 'Manifest')]
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path -Path $_ -PathType 'Leaf' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find file $_" } })]
         [Alias("Xml")]
         [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 
-        [Parameter(Mandatory = $False, ParameterSetName = 'Manifest')]
-        [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
-        [System.String[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
-
-        [Parameter(Mandatory = $False, ParameterSetName = 'Manifest')]
-        [ValidateSet('x86', 'x64')]
-        [System.String[]] $Architecture = @("x86", "x64"),
-
-        [Parameter(Mandatory = $False, ParameterSetName = 'Export')]
+        [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Export')]
         [ValidateSet('Supported', 'All', 'Unsupported')]
         [System.String] $Export = "Supported"
     )
@@ -94,9 +94,7 @@ Function Get-VcList {
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to read manifest [$Path]."
             Throw $_.Exception.Message
-            Exit
         }
-    
         try {
             # Convert the JSON content to an object
             Write-Verbose -Message "$($MyInvocation.MyCommand): Converting JSON."
@@ -105,7 +103,6 @@ Function Get-VcList {
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to convert manifest JSON to required object. Please validate the input manifest."
             Throw $_.Exception.Message
-            Break
         }
 
         If ($Null -ne $json) {
@@ -135,17 +132,23 @@ Function Get-VcList {
                 Else {
                     [System.Management.Automation.PSObject] $supported = $json
                 }
-                [System.Management.Automation.PSObject] $release = $supported | Where-Object { $Release -contains $_.Release }
-                [System.Management.Automation.PSObject] $output = $release | Where-Object { $Architecture -contains $_.Architecture }
+                [System.Management.Automation.PSObject] $output = $supported | Where-Object { $Release -contains $_.Release } | `
+                    Where-Object { $Architecture -contains $_.Architecture }
             }
 
             # Get the count of items in $output; Because it's a PSCustomObject we can't use the .count property so need to measure th object
             # Grab a NoteProperty and count how many of those there are to get the object count
-            $Property = $output | Get-Member | Where-Object { $_.MemberType -eq "NoteProperty" } | Select-Object -ExpandProperty "Name" | Select-Object -First 1
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Object count is: $($output.$Property.Count)."
+            try {
+                $Property = $output | Get-Member -ErrorAction "SilentlyContinue" | Where-Object { $_.MemberType -eq "NoteProperty" } | Select-Object -ExpandProperty "Name" | Select-Object -First 1
+                $Count = $output.$Property.Count - 1
+            }
+            catch {
+                $Count = 0
+            }
 
             # Replace strings in the manifest
-            For ($i = 0; $i -le ($output.$Property.Count - 1); $i++) {
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Object count is: $($output.$Property.Count)."
+            For ($i = 0; $i -le $Count; $i++) {
                 try {
                     $output[$i].SilentUninstall = $output[$i].SilentUninstall `
                         -replace "#Installer", $(Split-Path -Path $output[$i].Download -Leaf) `
