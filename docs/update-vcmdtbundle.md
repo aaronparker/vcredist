@@ -31,3 +31,5 @@ To create the bundle in the target deployment share, run `Update-VcMdtBundle`. T
 ```powershell
 Update-VcMdtBundle -MdtPath \\server\deployment
 ```
+
+{% include links.html %}

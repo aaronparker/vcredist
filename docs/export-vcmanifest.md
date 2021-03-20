@@ -43,3 +43,5 @@ Export the manifest of all unsupported Redistributables:
 ```powershell
 Export-VcManifest -Path .\VcRedists.json -Export Unsupported
 ```
+
+{% include links.html %}

@@ -49,3 +49,5 @@ This list won't include the Additional and Minimum Runtimes by default. These ca
 ```powershell
 Get-InstalledVcRedist -ExportAll
 ```
+
+{% include links.html %}

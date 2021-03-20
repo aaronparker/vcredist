@@ -22,6 +22,9 @@ Function Install-VcRedist {
         .PARAMETER Silent
             Perform a completely silent install of the VcRedist with no UI. The default install is passive.
 
+        .PARAMETER Force
+            Perform an installation of a Visual C++ Redistributable even if it is already installed on the local system.
+
         .EXAMPLE
             $VcRedists = Get-VcList -Release 2013, 2019 -Architecture x64
             Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
@@ -55,7 +58,10 @@ Function Install-VcRedist {
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
-        [System.Management.Automation.SwitchParameter] $Silent
+        [System.Management.Automation.SwitchParameter] $Silent,
+
+        [Parameter(Mandatory = $False)]
+        [System.Management.Automation.SwitchParameter] $Force
     )
 
     Begin {
@@ -70,7 +76,7 @@ Function Install-VcRedist {
             $currentInstalled = Get-InstalledVcRedist
 
             ForEach ($VcRedist in $OrderedVcList) {
-                If ($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) {
+                If (($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) -and !($PSBoundParameters.ContainsKey("Force"))) {
                     Write-Warning -Message "$($MyInvocation.MyCommand): VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                 }
                 Else {

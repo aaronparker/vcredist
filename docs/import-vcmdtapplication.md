@@ -50,3 +50,5 @@ The install command line arguments used by default are passive. Fully silent ins
 $VcList = Get-VcList
 Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Silent
 ```
+
+{% include links.html %}

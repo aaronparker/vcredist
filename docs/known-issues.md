@@ -14,3 +14,5 @@ summary:
   * Visual C++ 2005 Redistributable Package, version 8.0.50727.42
   * Visual C++ 2005 SP1 Redistributable Package, version 8.0.56336
   * Visual C++ 2008 SP1 Redistributable Package, version 9.0.30729
+
+{% include links.html %}

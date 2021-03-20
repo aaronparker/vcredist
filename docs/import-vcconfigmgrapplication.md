@@ -46,3 +46,5 @@ Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "
 ```
 
 ![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](/images/vcredistconfigmgr.png)
+
+{% include links.html %}

@@ -37,3 +37,5 @@ Install-VcRedist -Path C:\Temp\VcRedist -VcList (Get-VcList) -Silent
 ```
 
 ![Microsoft Visual C++ Redistributables installed on the local PC](/images/visualcprograms.png)
+
+{% include links.html %}

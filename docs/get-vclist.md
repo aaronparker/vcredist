@@ -89,3 +89,5 @@ Get-VcList -Export All | Where-Object { $_.Architecture -eq "x64" }
 ```powershell
 Get-VcList -Release 2010, 2012, 2013, 2017 -Architecture x64
 ```
+
+{% include links.html %}

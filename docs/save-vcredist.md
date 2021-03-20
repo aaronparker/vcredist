@@ -53,3 +53,5 @@ Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redis
 ```powershell
 Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
 ```
+
+{% include links.html %}

@@ -21,3 +21,5 @@ Some testing has been performed on Windows 7 with WMF 5.1. If you are running an
 Most functions support PowerShell Core, thus `Get-VcList`, `Save-VcRedist`, `Export-VcManifest` will work on macOS and Linux; however, because the remaining functions (`Get-InstalledVcRedist`, `Import-VcConfigMgrApplication`, `Import-VcMdtApplication`, `Install-VcRedist`, `New-VcMdtBundle`, `Update-VcMdtApplication`, `Update-VcMdtBundle`) either require Windows, the MDT Workbench or the ConfigMgr console, they will work best under Windows PowerShell.
 
 Full support for PowerShell Core on Windows will depend on Microsoft updating the MDT and ConfigMgr PowerShell modules to support it. Testing with the `WindowsCompatibility` module has not yet been completed.
+
+{% include links.html %}
