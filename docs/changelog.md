@@ -7,7 +7,7 @@ toc: false
 permalink: changelog.html
 summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 ---
-## VERSION
+## 3.0.243
 
 * Fix an issue in `Get-VcList` where it fails when exporting an unsupported Visual C++ Redistributable
 * Sort the list of Visual C++ Redistributables passed to `Install-VcRedist` by version number so that Redistributables are installed in order from oldest to newest
