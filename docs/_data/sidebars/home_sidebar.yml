@@ -54,7 +54,7 @@ entries:
       url: /import-vcconfigmgrapplication.html
       output: web
     - title: Import Redistributables into Intune
-      url: /import-vcintuneapplication.html
+      url: /new-vcintuneapplication.html
       output: web
     - title: Export the Manifests
       url: /export-vcmanifest.html
