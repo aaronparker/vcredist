@@ -64,6 +64,7 @@ Creating an application with the IntuneWin32App module involves several steps:
 Although it's unlikely you'll make the Redistributables available in the Company Portal for end-users to install themselves, let's create an icon for that application for completeness with `New-IntuneWin32AppIcon`. The icon can be downloaded from the icon repository maintained here: [Insentra/intune-icons](https://github.com/Insentra/intune-icons).
 
 ```powershell
+# Download the icon image and turn into an Intune application icon
 $IconSource = "https://raw.githubusercontent.com/Insentra/intune-icons/main/icons/Microsoft-VisualStudio.png"
 $ImageFile = "$Path\$(Split-Path -Path $IconSource)"
 Invoke-WebRequest -Uri $IconSource -OutFile $ImageFile -UseBasicParsing
@@ -77,6 +78,9 @@ Let's create a simple registry detection rule with `New-IntuneWin32AppDetectionR
 ```powershell
 $KeyPath = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
 ForEach ($VcRedist in $VcRedists) {
+    
+    # Configure detection for each application
+    # Enable 'Associated with a 32-bit app on 64-bit clients' as required
     $params = @{
         Existence            = $true
         KeyPath              = "$KeyPath\$($VcRedist.ProductCode)"
