@@ -26,9 +26,6 @@ entries:
     - title: Get the VcRedist list
       url: /get-vclist.html
       output: web
-    - title: Export the Manifests
-      url: /export-vcmanifest.html
-      output: web
     - title: Download the Redistributables
       url: /save-vcredist.html
       output: web
@@ -55,6 +52,12 @@ entries:
       output: web
     - title: Import Redistributables into ConfigMgr
       url: /import-vcconfigmgrapplication.html
+      output: web
+    - title: Import Redistributables into Intune
+      url: /import-vcintuneapplication.html
+      output: web
+    - title: Export the Manifests
+      url: /export-vcmanifest.html
       output: web
     - title: Understanding VcRedist Versioning
       url: /versioning.html
