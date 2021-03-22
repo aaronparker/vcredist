@@ -7,7 +7,7 @@ toc: false
 permalink: changelog.html
 summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 ---
-## VERSION
+## 3.0.251
 
 * IMPORTANT: This release moves the Visual C++ Redistributable 2008 to the list of unsupported Redistributables and therefore will not be returned by default by `Get-VcList`. See the documentation on [how to retrieve the supported and unsupported list of Redistributables](https://stealthpuppy.com/VcRedist/get-vclist.html)
 * Fixes an issue when passing the list of Redistributables to `Install-VcRedist` via the pipeline [#77](https://github.com/aaronparker/VcRedist/issues/77)
