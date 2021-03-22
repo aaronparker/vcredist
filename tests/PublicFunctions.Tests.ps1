@@ -132,7 +132,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
         It 'Downloads supported Visual C++ Redistributables' {
             If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
                 $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
-                If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
+                If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force > $Null }
                 $VcList = Get-VcList
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
                 Save-VcRedist -VcList $VcList -Path $Path
@@ -144,12 +144,12 @@ Describe 'Save-VcRedist' -Tag "Save" {
         }
         It 'Returns an expected object type to the pipeline' {
             $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
-            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
-            $VcList = Get-VcList
+            If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
+            New-Item -Path $Path -ItemType Directory -Force > $Null
+            
             Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
-            # $DownloadedRedists | Should -BeOfType PSCustomObject
-            $DownloadedRedists | Should -BeOfType System.Array
+            $DownloadedRedists | Should -BeOfType PSCustomObject
         }
     }
     Context "Test pipeline support" {

@@ -200,17 +200,15 @@ Function Save-VcRedist {
                         Write-Warning -Message "$($MyInvocation.MyCommand): URL: [$($VcRedist.Download)]."
                         Write-Warning -Message "$($MyInvocation.MyCommand): Download failed with: [$($_.Exception.Message)]"
                     }
-                    finally {
-
-                        # Return the $VcList array on the pipeline so that we can act on what was downloaded
-                        If (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
-                            Write-Output -InputObject $VcRedist
-                        }
-                    }
                 }
             }
             Else {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): [$($target)] exists."
+            }
+
+            # Return the $VcList array on the pipeline so that we can act on what was downloaded
+            If (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
+                Write-Output -InputObject $VcRedist
             }
         }
     }
