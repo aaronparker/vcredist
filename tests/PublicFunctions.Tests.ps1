@@ -50,7 +50,7 @@ Describe 'Get-VcList' -Tag "Get" {
     Context 'Return built-in manifest' {
         It 'Given no parameters, it returns supported Visual C++ Redistributables' {
             $VcList = Get-VcList
-            $VcList | Should -HaveCount 10
+            $VcList | Should -HaveCount 8
         }
         It 'Given valid parameter -Export All, it returns all Visual C++ Redistributables' {
             $VcList = Get-VcList -Export All
@@ -58,11 +58,11 @@ Describe 'Get-VcList' -Tag "Get" {
         }
         It 'Given valid parameter -Export Supported, it returns all Visual C++ Redistributables' {
             $VcList = Get-VcList -Export Supported
-            $VcList | Should -HaveCount 14
+            $VcList | Should -HaveCount 12
         }
         It 'Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables' {
             $VcList = Get-VcList -Export Unsupported
-            $VcList | Should -HaveCount 20
+            $VcList | Should -HaveCount 22
         }
     }
     Context 'Validate Get-VcList array properties' {
