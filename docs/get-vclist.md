@@ -1,5 +1,5 @@
 ---
-title: "Get the VcRedist List"
+title: "Get the list of Visual C++ Redistributables"
 keywords: vcredist
 tags: [getting_started]
 sidebar: home_sidebar
