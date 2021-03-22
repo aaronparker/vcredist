@@ -89,7 +89,7 @@ Describe 'Get-VcList' -Tag "Get" {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
             Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList.Count | Should -BeGreaterOrEqual 10
+            $VcList.Count | Should -BeGreaterOrEqual 8
         }
     }
     Context 'Test fail scenarios' {
@@ -117,7 +117,7 @@ Describe 'Export-VcManifest' -Tag "Export" {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
             Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList.Count | Should -BeGreaterOrEqual 10
+            $VcList.Count | Should -BeGreaterOrEqual 8
         }
     }
     Context 'Test fail scenarios' {
@@ -148,7 +148,8 @@ Describe 'Save-VcRedist' -Tag "Save" {
             $VcList = Get-VcList
             Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
-            $DownloadedRedists | Should -BeOfType PSCustomObject
+            # $DownloadedRedists | Should -BeOfType PSCustomObject
+            $DownloadedRedists | Should -BeOfType System.Array
         }
     }
     Context "Test pipeline support" {

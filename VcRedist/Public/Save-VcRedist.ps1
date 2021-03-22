@@ -112,6 +112,9 @@ Function Save-VcRedist {
         Else {
             $ProgressPreference = "SilentlyContinue"
         }
+        
+        # Enable TLS 1.2
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     }
 
     Process {
@@ -175,9 +178,7 @@ Function Save-VcRedist {
                 If ($PSCmdlet.ShouldProcess($VcRedist.Download, "Invoke-WebRequest")) {
                     
                     try {
-                        # Enable TLS 1.2
-                        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
+                        
                         # Download the file
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
                         $iwrParams = @{
