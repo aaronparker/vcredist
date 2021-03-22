@@ -210,7 +210,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     Describe 'Uninstall-VcRedist' -Tag "Uninstall" {
         Context 'Uninstall VcRedists' {
             Write-Host "`tUninstalling VcRedists." -ForegroundColor Cyan
-            { Uninstall-VcRedist -Release 2008, 2010 -Confirm:$False } | Should -Not -Throw
+            { Uninstall-VcRedist -Release 2010, 2013 -Confirm:$False } | Should -Not -Throw
         }
     }
 }
