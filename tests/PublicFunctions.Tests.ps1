@@ -148,6 +148,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
             New-Item -Path $Path -ItemType Directory -Force > $Null
             
             Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
+            $VcList = Get-VcList
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
             $DownloadedRedists | Should -BeOfType PSCustomObject
         }

@@ -68,18 +68,18 @@ Function Get-DigitalSignature {
                 If ((Get-Item -Path $Loc -Force).PSIsContainer) {
 
                     # Target is a folder, so trawl the folder for .exe and .dll files in the target and sub-folders
-                    Write-Verbose "Scanning files in folder: $Loc"
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Scanning files in folder: $Loc"
                     $items = Get-ChildItem -Path $Loc -Recurse -File -Include $Include
                 }
                 Else {
 
                     # Target is a file, so just get metadata for the file
-                    Write-Verbose "Scanning file: $Loc"
+                    Write-Verbose -Message "$($MyInvocation.MyCommand): Scanning file: $Loc"
                     $items = Get-Item -Path $Loc
                 }
 
                 # Get Exe and Dll files from the target path (inc. subfolders), find signatures and return certain properties in a grid view
-                Write-Verbose "Getting digital signatures for: $Loc"
+                Write-Verbose -Message "$($MyInvocation.MyCommand): Getting digital signatures for: $Loc"
                 $Signatures += $items | Get-AuthenticodeSignature | `
                     Select-Object @{Name = "Thumbprint"; Expression = { $_.SignerCertificate.Thumbprint } }, `
                 @{Name = "Subject"; Expression = { $_.SignerCertificate.Subject } }, `
@@ -96,15 +96,15 @@ Function Get-DigitalSignature {
         # If -Unique is specified, filter the signatures list and return the first item of each unique certificate
         # If -Export is specified, we also only want unique certificate files
         If ($Export -or $Unique) { 
-            Write-Verbose "Filtering for unique signatures."
+            Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering for unique signatures."
             $Signatures = $Signatures | Where-Object { $_.Status -eq "Valid" -or $_.Status -eq "UnknownError" } | `
                 Group-Object -Property Thumbprint | `
                 ForEach-Object { $_.Group | Select-Object -First 1 }
-            Write-Verbose "$($Signatures.Count) unique signature/s found in $Path"
+            Write-Verbose -Message "$($MyInvocation.MyCommand): $($Signatures.Count) unique signature/s found in $Path"
         }
 
         # Return output
-        Write-Verbose "Digital signature trawling complete."
+        Write-Verbose -Message "$($MyInvocation.MyCommand): Digital signature trawling complete."
         Write-Object -InputObject $Signatures
     }
 }

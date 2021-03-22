@@ -70,7 +70,7 @@ Function Save-VcRedist {
 
             Description:
             Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
-        #>
+    #>
     [Alias("Get-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/save-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
