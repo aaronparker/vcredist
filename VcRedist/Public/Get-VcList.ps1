@@ -1,12 +1,14 @@
 Function Get-VcList {
     <#
         .SYNOPSIS
-            Returns an array of Visual C++ Redistributables.
+            Returns an object of Microsoft Visual C++ Redistributables for use with other VcRedist functions.
 
         .DESCRIPTION
-            This function reads the Visual C++ Redistributables listed in an internal manifest or an external JSON file into an array that can be passed to other VcRedist functions.
+            This function reads the Visual C++ Redistributables listed in an internal manifest (or an external JSON file) into an object that can be passed to other VcRedist functions.
 
-            A complete listing of the supported and all known redistributables is included in the module. The internal manifest can be exported with Export-VcManifest.
+            A complete listing of the supported and all known redistributables is included in the module. By default, Get-VcList will only return a list of the supported Visual C++ Redistributables. To return any of the unsupported Redistributables, the -Export parameter is required with the output filtered with Where-Object. 
+            
+            The internal manifest can be exported with Export-VcManifest.
         
         .NOTES
             Author: Aaron Parker
@@ -32,13 +34,13 @@ Function Get-VcList {
             Get-VcList
 
             Description:
-            Return an array of the supported Visual C++ Redistributables from the embedded manifest.
+            Return an object of the supported Visual C++ Redistributables from the embedded manifest.
 
         .EXAMPLE
             Get-VcList
 
             Description:
-            Returns the 2008, 2010, 2012, 2013 and 2019, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.
+            Returns the supported 2010, 2012, 2013 and 2019, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.
 
         .EXAMPLE
             Get-VcList -Export All
@@ -50,13 +52,19 @@ Function Get-VcList {
             Get-VcList -Export Supported
 
             Description:
-            Returns the full list of supported Visual C++ Redistributables from the embedded manifest.
+            Returns the full list of supported Visual C++ Redistributables from the embedded manifest. This is the same as running Get-VcList with no parameters.
+
+        .EXAMPLE
+            Get-VcList -Export Unsupported | Where-Object { $_.Release -eq "2008" }
+
+            Description:
+            Returns the full list of unsupported Visual C++ Redistributables from the embedded manifest and filters for the 2008 versions of the Redistributables.
 
         .EXAMPLE
             Get-VcList -Release 2013, 2019 -Architecture x86
 
             Description:
-            Returns the 2013 and 2019 x64 Visual C++ Redistributables from the list of supported Redistributables in the embedded manifest.
+            Returns the 2013 and 2019 x86 Visual C++ Redistributables from the list of supported Redistributables in the embedded manifest.
 
         .EXAMPLE
             Get-VcList -Path ".\VisualCRedistributables.json"
@@ -69,7 +77,7 @@ Function Get-VcList {
     Param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Manifest')]
         [ValidateSet('2005', '2008', '2010', '2012', '2013', '2015', '2017', '2019')]
-        [System.String[]] $Release = @("2008", "2010", "2012", "2013", "2019"),
+        [System.String[]] $Release = @("2010", "2012", "2013", "2019"),
 
         [Parameter(Mandatory = $False, Position = 1, ParameterSetName = 'Manifest')]
         [ValidateSet('x86', 'x64')]

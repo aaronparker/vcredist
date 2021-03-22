@@ -1,5 +1,5 @@
 ---
-title: "Get the Installed Redistributables"
+title: "Get the locally installed Redistributables"
 keywords: vcredist
 tags: [install]
 sidebar: home_sidebar

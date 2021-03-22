@@ -70,7 +70,7 @@ Function Save-VcRedist {
 
             Description:
             Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
-        #>
+    #>
     [Alias("Get-VcRedist")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/save-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
@@ -112,6 +112,9 @@ Function Save-VcRedist {
         Else {
             $ProgressPreference = "SilentlyContinue"
         }
+        
+        # Enable TLS 1.2
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     }
 
     Process {
@@ -175,9 +178,7 @@ Function Save-VcRedist {
                 If ($PSCmdlet.ShouldProcess($VcRedist.Download, "Invoke-WebRequest")) {
                     
                     try {
-                        # Enable TLS 1.2
-                        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
+                        
                         # Download the file
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
                         $iwrParams = @{
@@ -193,23 +194,23 @@ Function Save-VcRedist {
                             $iwrParams.ProxyCredential = $ProxyCredential
                         }
                         Invoke-WebRequest @iwrParams
+                        $Downloaded = $True
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download: [$($VcRedist.Name)]."
                         Write-Warning -Message "$($MyInvocation.MyCommand): URL: [$($VcRedist.Download)]."
                         Write-Warning -Message "$($MyInvocation.MyCommand): Download failed with: [$($_.Exception.Message)]"
+                        $Downloaded = $False
                     }
-                    finally {
 
-                        # Return the $VcList array on the pipeline so that we can act on what was downloaded
-                        If (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
-                            Write-Output -InputObject $VcRedist
-                        }
-                    }
+                    # Return the $VcList array on the pipeline so that we can act on what was downloaded
+                    If ($Downloaded) { Write-Output -InputObject $VcRedist }
                 }
             }
             Else {
+                # Return the $VcList array on the pipeline so that we can act on what was downloaded
                 Write-Verbose -Message "$($MyInvocation.MyCommand): [$($target)] exists."
+                Write-Output -InputObject $VcRedist
             }
         }
     }

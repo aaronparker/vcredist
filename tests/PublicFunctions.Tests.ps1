@@ -50,7 +50,7 @@ Describe 'Get-VcList' -Tag "Get" {
     Context 'Return built-in manifest' {
         It 'Given no parameters, it returns supported Visual C++ Redistributables' {
             $VcList = Get-VcList
-            $VcList | Should -HaveCount 10
+            $VcList | Should -HaveCount 8
         }
         It 'Given valid parameter -Export All, it returns all Visual C++ Redistributables' {
             $VcList = Get-VcList -Export All
@@ -58,11 +58,11 @@ Describe 'Get-VcList' -Tag "Get" {
         }
         It 'Given valid parameter -Export Supported, it returns all Visual C++ Redistributables' {
             $VcList = Get-VcList -Export Supported
-            $VcList | Should -HaveCount 14
+            $VcList | Should -HaveCount 12
         }
         It 'Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables' {
             $VcList = Get-VcList -Export Unsupported
-            $VcList | Should -HaveCount 20
+            $VcList | Should -HaveCount 22
         }
     }
     Context 'Validate Get-VcList array properties' {
@@ -89,7 +89,7 @@ Describe 'Get-VcList' -Tag "Get" {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
             Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList.Count | Should -BeGreaterOrEqual 10
+            $VcList.Count | Should -BeGreaterOrEqual 8
         }
     }
     Context 'Test fail scenarios' {
@@ -117,7 +117,7 @@ Describe 'Export-VcManifest' -Tag "Export" {
             $Json = Join-Path -Path $ProjectRoot -ChildPath "Redists.json"
             Export-VcManifest -Path $Json
             $VcList = Get-VcList -Path $Json
-            $VcList.Count | Should -BeGreaterOrEqual 10
+            $VcList.Count | Should -BeGreaterOrEqual 8
         }
     }
     Context 'Test fail scenarios' {
@@ -132,7 +132,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
         It 'Downloads supported Visual C++ Redistributables' {
             If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
                 $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
-                If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
+                If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force > $Null }
                 $VcList = Get-VcList
                 Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
                 Save-VcRedist -VcList $VcList -Path $Path
@@ -144,9 +144,11 @@ Describe 'Save-VcRedist' -Tag "Save" {
         }
         It 'Returns an expected object type to the pipeline' {
             $Path = Join-Path -Path $downloadDir -ChildPath "VcDownload"
-            If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force }
-            $VcList = Get-VcList
+            If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
+            New-Item -Path $Path -ItemType Directory -Force > $Null
+            
             Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
+            $VcList = Get-VcList
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
             $DownloadedRedists | Should -BeOfType PSCustomObject
         }
@@ -210,7 +212,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     Describe 'Uninstall-VcRedist' -Tag "Uninstall" {
         Context 'Uninstall VcRedists' {
             Write-Host "`tUninstalling VcRedists." -ForegroundColor Cyan
-            { Uninstall-VcRedist -Release 2008, 2010 -Confirm:$False } | Should -Not -Throw
+            { Uninstall-VcRedist -Release 2010, 2013 -Confirm:$False } | Should -Not -Throw
         }
     }
 }
