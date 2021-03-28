@@ -43,8 +43,8 @@ Each of the Redistributables will need to be turned into a `intunewin` package w
 ForEach ($VcRedist in $VcRedists) {
     
     # Create variables for the package source and output folders
-    $Package = [System.IO.Path]::Combine($Path, "Package", $VcRedist.Release, $VcRedist.Architecture, $VcRedist.Version)
-    $Output = [System.IO.Path]::Combine($Path, "Output", $VcRedist.Release, $VcRedist.Architecture, $VcRedist.Version)
+    $Package = [System.IO.Path]::Combine($Path, "Package", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+    $Output = [System.IO.Path]::Combine($Path, "Output", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
     New-Item -Path $Output -ItemType "Directory"
 
     # Find the Redistributable setup.exe
@@ -122,8 +122,8 @@ $Publisher = "Microsoft"
 ForEach ($VcRedist in $VcRedists) {
     $params = @{
         FilePath                 = $IntuneWinFile.FullName
-        DisplayName              = "$Publisher Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
-        Description              = "$Publisher $($VcRedist.Name) $($VcRedist.Architecture) $($VcRedist.Version)."
+        DisplayName              = "$Publisher Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Version) $($VcRedist.Architecture)"
+        Description              = "$Publisher $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)."
         Publisher                = $Publisher
         InformationURL           = $VcRedist.URL
         PrivacyURL               = "https://go.microsoft.com/fwlink/?LinkId=521839"
