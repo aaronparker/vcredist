@@ -76,7 +76,6 @@ Describe 'Get-VcList' -Tag "Get" {
                 $VcRedist.Download.Length | Should -BeGreaterThan 0
                 $VcRedist.Release.Length | Should -BeGreaterThan 0
                 $VcRedist.Architecture.Length | Should -BeGreaterThan 0
-                $VcRedist.ShortName.Length | Should -BeGreaterThan 0
                 $VcRedist.Install.Length | Should -BeGreaterThan 0
                 $VcRedist.SilentInstall.Length | Should -BeGreaterThan 0
                 $VcRedist.SilentUninstall.Length | Should -BeGreaterThan 0

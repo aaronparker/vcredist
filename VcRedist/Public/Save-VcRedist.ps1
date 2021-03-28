@@ -204,12 +204,18 @@ Function Save-VcRedist {
                     }
 
                     # Return the $VcList array on the pipeline so that we can act on what was downloaded
-                    If ($Downloaded) { Write-Output -InputObject $VcRedist }
+                    # Add the Path property pointing to the downloaded file
+                    If ($Downloaded) {
+                        $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $target
+                        Write-Output -InputObject $VcRedist
+                    }
                 }
             }
             Else {
                 # Return the $VcList array on the pipeline so that we can act on what was downloaded
+                # Add the Path property pointing to the downloaded file
                 Write-Verbose -Message "$($MyInvocation.MyCommand): [$($target)] exists."
+                $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $target
                 Write-Output -InputObject $VcRedist
             }
         }
