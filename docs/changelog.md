@@ -7,7 +7,7 @@ toc: false
 permalink: changelog.html
 summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 ---
-## VERSION
+## 3.0.255
 
 * Updates the VcRedist manifest for VcRedist 2019 `14.28.29914.0`
 * Adds `Path` property to output from `Save-VcRedist` that includes the path to the downloaded VcRedist
