@@ -15,36 +15,53 @@ Here's a sample of what's returned:
 ```powershell
 PS C:\> Get-VcList
 
-Name         : Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update
-ProductCode  : {5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}
-URL          : https://www.microsoft.com/en-us/download/details.aspx?id=26368
-Download     : https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe
-Release      : 2008
-Architecture : x64
-ShortName    : SP1MFC
-Install      : /Q
+Name            : Visual C++ 2013 Update 5 Redistributable Package
+ProductCode     : {042d26ef-3dbe-4c25-95d3-4c1b11b235a7}
+Version         : 12.0.40664.0
+URL             : https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package
+Download        : https://download.visualstudio.microsoft.com/download/pr/10912041/cee5d6bca2ddbcd039da727bf4acb48a/vcredist_x64.exe
+Release         : 2013
+Architecture    : x64
+Install         : /install /passive /norestart
+SilentInstall   : /install /quiet /norestart
+SilentUninstall : "%ProgramData%\Package Cache\{042d26ef-3dbe-4c25-95d3-4c1b11b235a7}\vcredist_x64.exe" /uninstall /quiet /noreboot
+UninstallKey    : 32
 
-Name          : Visual C++ 2013 Update 5 Redistributable Package
-ProductCode   : {9dff3540-fc85-4ed5-ac84-9e3c7fd8bece}
-Version       : 12.0.40664.0
-URL           : https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package
-Download      : https://download.visualstudio.microsoft.com/download/pr/10912113/5da66ddebb0ad32ebd4b922fd82e8e25/vcredist_x86.exe
-Release       : 2013
-Architecture  : x86
-ShortName     : Update5
-Install       : /install /passive /norestart
-SilentInstall : /install /quiet /norestart
+Name            : Visual C++ 2013 Update 5 Redistributable Package
+ProductCode     : {9dff3540-fc85-4ed5-ac84-9e3c7fd8bece}
+Version         : 12.0.40664.0
+URL             : https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package
+Download        : https://download.visualstudio.microsoft.com/download/pr/10912113/5da66ddebb0ad32ebd4b922fd82e8e25/vcredist_x86.exe
+Release         : 2013
+Architecture    : x86
+Install         : /install /passive /norestart
+SilentInstall   : /install /quiet /norestart
+SilentUninstall : "%ProgramData%\Package Cache\{9dff3540-fc85-4ed5-ac84-9e3c7fd8bece}\vcredist_x86.exe" /uninstall /quiet /noreboot
+UninstallKey    : 32
 
-Name          : Visual C++ Redistributable for Visual Studio 2019
-ProductCode   : {7b178cda-9740-4701-a92a-f168d213b343}
-Version       : 14.20.27508.1
-URL           : https://www.visualstudio.com/downloads/
-Download      : https://aka.ms/vs/16/release/VC_redist.x64.exe
-Release       : 2019
-Architecture  : x64
-ShortName     : RTM
-Install       : /install /passive /norestart
-SilentInstall : /install /quiet /norestart
+Name            : Visual C++ Redistributable for Visual Studio 2019
+ProductCode     : {855e31d2-9031-46e1-b06d-c9d7777deefb}
+Version         : 14.28.29913.0
+URL             : https://www.visualstudio.com/downloads/
+Download        : https://aka.ms/vs/16/release/VC_redist.x64.exe
+Release         : 2019
+Architecture    : x64
+Install         : /install /passive /norestart
+SilentInstall   : /install /quiet /norestart
+SilentUninstall : "%ProgramData%\Package Cache\{855e31d2-9031-46e1-b06d-c9d7777deefb}\VC_redist.x64.exe" /uninstall /quiet /noreboot
+UninstallKey    : 32
+
+Name            : Visual C++ Redistributable for Visual Studio 2019
+ProductCode     : {03d1453c-7d5c-479c-afea-8482f406e036}
+Version         : 14.28.29913.0
+URL             : https://www.visualstudio.com/downloads/
+Download        : https://aka.ms/vs/16/release/VC_redist.x86.exe
+Release         : 2019
+Architecture    : x86
+Install         : /install /passive /norestart
+SilentInstall   : /install /quiet /norestart
+SilentUninstall : "%ProgramData%\Package Cache\{03d1453c-7d5c-479c-afea-8482f406e036}\VC_redist.x86.exe" /uninstall /quiet /noreboot
+UninstallKey    : 32
 ```
 
 Output from `Get-VcList` can be piped to `Save-VcRedist`, `Install-VcRedist`, `Import-VcMdtApplication`, `Update-VcMdtApplication`, `Import-VcConfigMgrApplication` and `Update-VcConfigMgrApplication`. Additionally, output from `Get-VcList` can be filtered using `Where-Object`. This approach is useful where you want to export the full list of Redistributables but filter for specific processor architectures.
