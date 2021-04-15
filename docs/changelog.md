@@ -7,6 +7,11 @@ toc: false
 permalink: changelog.html
 summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 ---
+## VERSION
+
+* Updates the VcRedist manifest for VcRedist 2019 `14.28.29914.0`
+* Adds `Path` property to output from `Save-VcRedist` that includes the path to the downloaded VcRedist
+
 ## 3.0.251
 
 * IMPORTANT: This release moves the Visual C++ Redistributable 2008 to the list of unsupported Redistributables and therefore will not be returned by default by `Get-VcList`. See the documentation on [how to retrieve the supported and unsupported list of Redistributables](https://stealthpuppy.com/VcRedist/get-vclist.html)
