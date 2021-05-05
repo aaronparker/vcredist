@@ -1,32 +1,6 @@
 Function Get-InstalledVcRedist {
     <#
-        .SYNOPSIS
-            Returns the installed Visual C++ Redistributables.
-
-        .DESCRIPTION
-            Returns the installed Visual C++ Redistributables.
-        
-        .NOTES
-            Author: Aaron Parker
-            Twitter: @stealthpuppy
-
-        .LINK
-            https://stealthpuppy.com/VcRedist/get-installedvcredist.html
-
-        .PARAMETER ExportAll
-            Export all installed Redistributables including the Additional and Minimum Runtimes typically hidden from Programs and Features
-
-        .EXAMPLE
-            Get-InstalledVcRedist
-
-            Description:
-            Returns the installed Microsoft Visual C++ Redistributables from the current system
-
-        .EXAMPLE
-            Get-InstalledVcRedist -ExportAll
-
-            Description:
-            Returns the installed Microsoft Visual C++ Redistributables from the current system including the Additional and Minimum Runtimes.
+        .EXTERNALHELP VcRedist-help.xml
     #>
     [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/get-installedvcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]

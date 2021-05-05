@@ -1,50 +1,6 @@
 Function Install-VcRedist {
     <#
-        .SYNOPSIS
-            Installs the Visual C++ Redistributables.
-
-        .DESCRIPTION
-            Installs the Visual C++ Redistributables from a list created by Get-VcList and downloaded locally with Get-VcRedist.
-
-        .NOTES
-            Author: Aaron Parker
-            Twitter: @stealthpuppy
-
-        .LINK
-            https://stealthpuppy.com/VcRedist/install-vcredist.html
-
-        .PARAMETER VcList
-            An array containing details of the Visual C++ Redistributables from Get-VcList.
-
-        .PARAMETER Path
-            A folder containing the downloaded Visual C++ Redistributables.
-
-        .PARAMETER Silent
-            Perform a completely silent install of the VcRedist with no UI. The default install is passive.
-
-        .PARAMETER Force
-            Perform an installation of a Visual C++ Redistributable even if it is already installed on the local system.
-
-        .EXAMPLE
-            $VcRedists = Get-VcList -Release 2013, 2019 -Architecture x64
-            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
-
-            Description:
-            Installs the 2013 and 2019 64-bit Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
-
-        .EXAMPLE
-            $VcRedists = Get-VcList -Release "2012","2013",2017" -Architecture x64
-            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists
-
-            Description:
-            Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.
-
-        .EXAMPLE
-            $VcRedists = Get-VcList -Release "2012","2013",2017" -Architecture x64    
-            Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent
-
-            Description:
-            Installs all supported Visual C++ Redistributables using a completely silent install.
+        .EXTERNALHELP VcRedist-help.xml
     #>
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/install-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]

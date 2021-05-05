@@ -1,41 +1,6 @@
 Function Uninstall-VcRedist {
     <#
-        .SYNOPSIS
-            Uninstall the installed Visual C++ Redistributables on the local system
-        
-        .DESCRIPTION
-            Uninstall the specified Release and/or Architecture of the installed Visual C++ Redistributables on the local system.
-
-        .NOTES
-            Author: Aaron Parker
-            Twitter: @stealthpuppy
-
-        .LINK
-            https://stealthpuppy.com/VcRedist/install-vcredist.html
-
-        .PARAMETER Release
-            Specifies the release of the redistributables to uninstall.
-
-        .PARAMETER Architecture
-            Specifies the processor architecture to of the redistributables to uninstall. Can be x86 or x64.
-
-        .EXAMPLE
-            Uninstall-VcRedist -Confirm:$True
-
-            Description:
-            Uninstalls all installed x64, x86 2005-2019 Visual C++ Redistributables.
-
-        .EXAMPLE
-            Uninstall-VcRedist -Release 2008, 2010 -Confirm:$True
-
-            Description:
-            Uninstalls all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
-
-        .EXAMPLE
-            Uninstall-VcRedist -Release 2008, 2010 -Confirm:$True
-
-            Description:
-            Uninstalls all installed x64, x86 2008 and 2010 Visual C++ Redistributables.
+        .EXTERNALHELP VcRedist-help.xml
     #>
     [CmdletBinding(DefaultParameterSetName = 'Manual', SupportsShouldProcess = $True, ConfirmImpact = "High", 
         HelpURI = "https://stealthpuppy.com/VcRedist/uninstall-vcredist.html")]

@@ -1,27 +1,6 @@
 Function Export-VcManifest {
     <#
-        .SYNOPSIS
-            Exports the Visual C++ Redistributables JSON to an external file.
-
-        .DESCRIPTION
-            Reads the Visual C++ Redistributables JSON manifests included in the VcRedist module and exports the JSON to an external file.
-            This enables editing of the JSON manifest for custom scenarios.
-        
-        .NOTES
-            Author: Aaron Parker
-            Twitter: @stealthpuppy
-
-        .LINK
-            https://docs.stealthpuppy.com/docs/vcredist/usage/export-manifests
-
-        .PARAMETER Path
-            Path to the JSON file the content will be exported to.
-
-        .EXAMPLE
-            Export-VcManifest -Path "C:\Temp\VisualCRedistributablesSupported.json"
-
-            Description:
-            Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.json
+        .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Export-VcXml")]
     [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/export-vcmanifest.html")]
