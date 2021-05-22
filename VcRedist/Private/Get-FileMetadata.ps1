@@ -63,7 +63,6 @@ Function Get-FileMetadata {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve files in: [$folder]."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
                 Else {
@@ -75,7 +74,6 @@ Function Get-FileMetadata {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve files in: [$folder]."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
 

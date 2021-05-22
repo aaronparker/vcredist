@@ -66,7 +66,6 @@ Function Uninstall-VcRedist {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failure in uninstalling Visual C++ Redistributable."
                     Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
                     Throw "Failed to uninstall VcRedist $($VcRedist.Name)"
-                    Continue
                 }
             }
         }

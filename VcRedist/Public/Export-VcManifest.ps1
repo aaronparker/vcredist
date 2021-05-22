@@ -24,7 +24,6 @@ Function Export-VcManifest {
         catch {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy $Manifest to $Path."
             Throw $_.Exception.Message
-            Break
         }
         finally {
             Write-Output -InputObject (Resolve-Path -Path $Path)

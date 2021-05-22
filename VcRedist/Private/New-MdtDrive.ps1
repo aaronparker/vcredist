@@ -40,7 +40,6 @@ Function New-MdtDrive {
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT drive at: [$Path]."
                 Throw $_.Exception.Message
-                Continue
             }
             finally {
                 Write-Verbose "$($MyInvocation.MyCommand): Found: $($psDrive.Name)"

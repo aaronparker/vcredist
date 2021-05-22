@@ -59,14 +59,12 @@ Function New-VcMdtBundle {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
                     Throw $_.Exception.Message
-                    Exit
                 }
             }
         }
         Else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
             Throw [System.Management.Automation.InvalidPowerShellStateException]
-            Exit
         }
 
         try {
@@ -77,12 +75,11 @@ Function New-VcMdtBundle {
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed when returning existing VcRedist packages."
             Throw $_.Exception.Message
-            Exit
         }
 
         If ($Null -eq $existingVcRedists) {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find existing VcRedist applications in the MDT share. Please import the VcRedists with Import-VcMdtApplication."
-            Exit
+            Break
         }
 
         If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
@@ -97,7 +94,6 @@ Function New-VcMdtBundle {
                         catch [System.Exception] {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$Publisher $BundleName)]."
                             Throw $_.Exception.Message
-                            Continue
                         }
                     }
                 }
@@ -137,7 +133,6 @@ Function New-VcMdtBundle {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Error importing the VcRedist bundle. If -Force was specified, the original bundle will have been removed."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
             }

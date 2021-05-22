@@ -50,7 +50,6 @@ Function Import-VcMdtApplication {
         If (Test-PSCore) {
             Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
             Throw [System.Management.Automation.InvalidPowerShellStateException]
-            Exit
         }
 
         # Import the MDT module and create a PS drive to MdtPath
@@ -68,14 +67,12 @@ Function Import-VcMdtApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
                     Throw $_.Exception.Message
-                    Exit
                 }
             }
         }
         Else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
             Throw [System.Management.Automation.InvalidPowerShellStateException]
-            Exit
         }
 
         # Create the Application folder
@@ -92,7 +89,6 @@ Function Import-VcMdtApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$AppFolder]."
                     Throw $_.Exception.Message
-                    Exit
                 }
             }
             $target = "$($MdtDrive):\Applications\$AppFolder"
@@ -138,7 +134,6 @@ Function Import-VcMdtApplication {
                         catch [System.Exception] {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$($VcMatched.Name)]."
                             Throw $_.Exception.Message
-                            Continue
                         }
                     }
                 }
@@ -176,7 +171,6 @@ Function Import-VcMdtApplication {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Error encountered importing the application: [$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)]."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
             }

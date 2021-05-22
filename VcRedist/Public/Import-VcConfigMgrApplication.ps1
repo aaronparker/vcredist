@@ -48,7 +48,6 @@ Function Import-VcConfigMgrApplication {
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
             Throw $_.Exception.Message
-            Break
         }
         Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$Path]."
         #endregion
@@ -74,7 +73,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$DestFolder]."
                                 Throw $_.Exception.Message
-                                Break
                             }
                         }
                         If (Test-Path -Path $DestFolder -ErrorAction "SilentlyContinue") {
@@ -89,7 +87,6 @@ Function Import-VcConfigMgrApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
                     Throw $_.Exception.Message
-                    Break
                 }
             }
             Else {
@@ -137,7 +134,6 @@ Function Import-VcConfigMgrApplication {
                                     catch {
                                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create: [$ContentLocation]."
                                         Throw $_.Exception.Message
-                                        Break
                                     }
                                     try {
                                         $invokeProcessParams = @{
@@ -155,7 +151,6 @@ Function Import-VcConfigMgrApplication {
                                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$folder] to [$ContentLocation]."
                                             Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
                                             Throw $_.Exception.Message
-                                            Break
                                         }
                                     }
                                 }
@@ -170,7 +165,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
                                 Throw $_.Exception.Message
-                                Continue
                             }
                                                 
                             try {
@@ -195,7 +189,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create application $($VcRedist.Name) $($VcRedist.Architecture)."
                                 Throw $_.Exception.Message
-                                Break
                             }
                             finally {
                                 # Write app detail to the pipeline
@@ -209,7 +202,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
                                 Throw $_.Exception.Message
-                                Continue
                             }
                         }
 
@@ -223,7 +215,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
                                 Throw $_.Exception.Message
-                                Break
                             }
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$DestFolder]."
 
@@ -254,7 +245,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to add script deployment type."
                                 Throw $_.Exception.Message
-                                Break
                             }
 
                             try {
@@ -264,7 +254,6 @@ Function Import-VcConfigMgrApplication {
                             catch [System.Exception] {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$Path]."
                                 Throw $_.Exception.Message
-                                Break
                             }
                         }
                     }

@@ -39,7 +39,6 @@ Function Update-VcMdtApplication {
         If (Test-PSCore) {
             Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
             Throw [System.Management.Automation.InvalidPowerShellStateException]
-            Exit
         }
 
         # Import the MDT module and create a PS drive to MdtPath
@@ -52,14 +51,12 @@ Function Update-VcMdtApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
                     Throw $_.Exception.Message
-                    Exit
                 }
             }
         }
         Else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
             Throw [System.Management.Automation.InvalidPowerShellStateException]
-            Exit
         }
 
         $target = "$($MdtDrive):\Applications\$AppFolder"
@@ -85,7 +82,6 @@ Function Update-VcMdtApplication {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing application: [$ApplicationName]."
                     Throw $_.Exception.Message
-                    Break
                 }
     
                 If ($Null -ne $existingVc) {
@@ -107,7 +103,6 @@ Function Update-VcMdtApplication {
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application command line."
                                     Throw $_.Exception.Message
-                                    Continue
                                 }
                             }
                         }
@@ -141,7 +136,6 @@ Function Update-VcMdtApplication {
                                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$folder] to [$ContentLocation]."
                                         Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
                                         Throw $_.Exception.Message
-                                        Break
                                     }
                                 }
 
@@ -158,7 +152,6 @@ Function Update-VcMdtApplication {
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist UninstallKey."
                                     Throw $_.Exception.Message
-                                    Continue
                                 }
 
                                 # Update Version number
@@ -174,7 +167,6 @@ Function Update-VcMdtApplication {
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist Version."
                                     Throw $_.Exception.Message
-                                    Continue
                                 }
 
                                 # Update CommandLine
@@ -190,7 +182,6 @@ Function Update-VcMdtApplication {
                                 catch [System.Exception] {
                                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist CommandLine."
                                     Throw $_.Exception.Message
-                                    Continue
                                 }
                             }
                         }
@@ -198,7 +189,6 @@ Function Update-VcMdtApplication {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist application."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
             }

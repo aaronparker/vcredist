@@ -48,10 +48,10 @@ Function Invoke-Process {
             $cmdError = Get-Content -Path $stdErrTempFile -Raw
             if ($cmd.ExitCode -ne 0) {
                 if ($cmdError) {
-                    throw $cmdError.Trim()
+                    Throw $cmdError.Trim()
                 }
                 if ($cmdOutput) {
-                    throw $cmdOutput.Trim()
+                    Throw $cmdOutput.Trim()
                 }
             }
             else {

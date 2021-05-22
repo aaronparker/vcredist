@@ -32,8 +32,8 @@ Function Compare-VersionNumber {
     )
     Begin {
         # Convert parameters to version numbers
-        $low = New-Object -TypeName System.Version -ArgumentList $LowVersion
-        $high = New-Object -TypeName System.Version -ArgumentList $HighVersion
+        $low = New-Object -TypeName "System.Version" -ArgumentList $LowVersion
+        $high = New-Object -TypeName "System.Version" -ArgumentList $HighVersion
     }
     Process {
         # Compare versions

@@ -74,7 +74,7 @@ Function Get-VcList {
                     Where-Object { $Architecture -contains $_.Architecture }
             }
 
-            # Get the count of items in $output; Because it's a PSCustomObject we can't use the .count property so need to measure th object
+            # Get the count of items in $output; Because it's a PSCustomObject we can't use the .count property so need to measure the object
             # Grab a NoteProperty and count how many of those there are to get the object count
             try {
                 $Property = $output | Get-Member -ErrorAction "SilentlyContinue" | Where-Object { $_.MemberType -eq "NoteProperty" } | Select-Object -ExpandProperty "Name" | Select-Object -First 1

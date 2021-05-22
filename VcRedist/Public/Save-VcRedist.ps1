@@ -76,7 +76,6 @@ Function Save-VcRedist {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
             }

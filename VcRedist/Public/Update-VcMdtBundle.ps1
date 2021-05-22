@@ -56,14 +56,12 @@ Function Update-VcMdtBundle {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
                     Throw $_.Exception.Message
-                    Exit
                 }
             }
         }
         Else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
             Throw [System.Management.Automation.InvalidPowerShellStateException]
-            Exit
         }
 
         # Get properties from the existing bundle/s
@@ -78,7 +76,6 @@ Function Update-VcMdtBundle {
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing Visual C++ Redistributables bundle."
             Throw $_.Exception.Message
-            Exit
         }
         
         ForEach ($Bundle in $Bundles) {
@@ -105,7 +102,6 @@ Function Update-VcMdtBundle {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
                     Throw $_.Exception.Message
-                    Continue
                 }
             }
             If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update version")) {
@@ -122,7 +118,6 @@ Function Update-VcMdtBundle {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."
                     Throw $_.Exception.Message
-                    Continue
                 }
             }
         
