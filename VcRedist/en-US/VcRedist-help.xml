@@ -75,7 +75,7 @@
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Export the Redistributable Manifests:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/export-vcmanifest.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/export-vcmanifest.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -156,7 +156,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Get the locally installed Redistributables:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/get-installedvcredist.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/get-installedvcredist.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -350,7 +350,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Get the list of Visual C++ Redistributables:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/get-vclist.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/get-vclist.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -667,7 +667,7 @@ Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Import Redistributables into ConfigMgr:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/import-vcconfigmgrapplication.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/import-vcconfigmgrapplication.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1013,7 +1013,7 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Import Redistributables into MDT</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/import-vcmdtapplication.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/import-vcmdtapplication.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1221,7 +1221,7 @@ Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Install the Redistributables:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/install-vcredist.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/install-vcredist.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1497,11 +1497,11 @@ Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deploym
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/import-vcmdtapplication.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/import-vcmdtapplication.html</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Create a Redistributables bundle in MDT:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/new-vcmdtbundle.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/new-vcmdtbundle.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1795,7 +1795,7 @@ Save-VcRedist -VcList $VcList -Path C:\Redist</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Download the Redistributables:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/save-vcredist.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/save-vcredist.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2003,11 +2003,11 @@ Save-VcRedist -VcList $VcList -Path C:\Redist</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/install-vcredist.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/install-vcredist.html</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Uninstall the Redistributables:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/uninstall-vcredist.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/uninstall-vcredist.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2283,7 +2283,7 @@ Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deploym
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Update Redistributables in MDT:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/update-vcmdtapplication.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/update-vcmdtapplication.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2504,7 +2504,7 @@ Update-VcMdtBundle -MdtPath \\server\deployment</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Update the Redistributables bundle in MDT:</maml:linkText>
-        <maml:uri>https://stealthpuppy.com/VcRedist/update-vcmdtbundle.html</maml:uri>
+        <maml:uri>https://stealthpuppy.com/vcredist/update-vcmdtbundle.html</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

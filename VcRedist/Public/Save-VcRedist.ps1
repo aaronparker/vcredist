@@ -3,7 +3,7 @@ Function Save-VcRedist {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Get-VcRedist")]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/save-vcredist.html")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/save-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

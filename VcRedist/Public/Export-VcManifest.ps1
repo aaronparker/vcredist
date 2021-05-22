@@ -3,7 +3,7 @@ Function Export-VcManifest {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Export-VcXml")]
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/export-vcmanifest.html")]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/vcredist/export-vcmanifest.html")]
     [OutputType([System.String])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com/VcRedist/update-vcmdtbundle.html
+online version: https://stealthpuppy.com/vcredist/update-vcmdtbundle.html
 schema: 2.0.0
 ---
 
@@ -181,4 +181,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Update the Redistributables bundle in MDT:](https://stealthpuppy.com/VcRedist/update-vcmdtbundle.html)
+[Update the Redistributables bundle in MDT:](https://stealthpuppy.com/vcredist/update-vcmdtbundle.html)

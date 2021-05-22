@@ -2,7 +2,7 @@ Function Install-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/install-vcredist.html")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/install-vcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

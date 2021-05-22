@@ -68,4 +68,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Export the Redistributable Manifests:](https://stealthpuppy.com/VcRedist/export-vcmanifest.html)
+[Export the Redistributable Manifests:](https://stealthpuppy.com/vcredist/export-vcmanifest.html)

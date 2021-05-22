@@ -2,7 +2,7 @@ Function Get-InstalledVcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/VcRedist/get-installedvcredist.html")]
+    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://stealthpuppy.com/vcredist/get-installedvcredist.html")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $False)]
