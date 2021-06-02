@@ -3,7 +3,7 @@ Function Import-VcConfigMgrApplication {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias('Import-VcCmApp')]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/import-vcconfigmgrapplication.html")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/import-vcconfigmgrapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

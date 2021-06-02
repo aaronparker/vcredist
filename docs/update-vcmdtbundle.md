@@ -1,11 +1,5 @@
----
-title: "Update the Redistributables bundle in MDT"
-keywords: vcredist
-tags: [mdt]
-sidebar: home_sidebar
-permalink: update-vcmdtbundle.html
-summary: 
----
+# Update the Redistributables bundle in MDT
+
 Where the Visual C++ Redistributables bundle in an MDT deployment requires updating for the Visual C++ Redistributable applications that are currently in the share, `Update-VcMdtBundle` will scan the deployment share and replace any dependencies on the existing bundle with the current Visual C++ Redistributable applications.
 
 The Version property of the bundle is updated with the current date making it easy to see when the bundle was last updated.
@@ -31,5 +25,3 @@ To create the bundle in the target deployment share, run `Update-VcMdtBundle`. T
 ```powershell
 Update-VcMdtBundle -MdtPath \\server\deployment
 ```
-
-{% include links.html %}

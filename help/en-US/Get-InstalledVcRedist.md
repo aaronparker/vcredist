@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com/vcredist/get-installedvcredist.html
+online version: https://stealthpuppy.com/vcredist/get-installedvcredist/
 schema: 2.0.0
 ---
 
@@ -76,4 +76,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Get the locally installed Redistributables:](https://stealthpuppy.com/vcredist/get-installedvcredist.html)
+[Get the locally installed Redistributables:](https://stealthpuppy.com/vcredist/get-installedvcredist/)

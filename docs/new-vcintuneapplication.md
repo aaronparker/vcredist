@@ -1,14 +1,8 @@
----
-title: "Import Visual C++ Redistributables into Microsoft Intune"
-keywords: vcredist
-tags: [intune]
-sidebar: home_sidebar
-permalink: new-vcintuneapplication.html
-summary: 
----
+# Import Redistributables into Intune
+
 VcRedist can be used to create new applications in Microsoft Intune for the Visual C++ Redistributables using the [IntuneWin32App](https://github.com/MSEndpointMgr/IntuneWin32App) module. This approach allows you to create Win32 applications for each of the Redistributables versions and processor architecture including importing new versions as they are available and superseding older versions for upgrades.
 
-![Microsoft Visual C++ Redistributables applications imported into Microsoft Intune](/images/vcredist-intune.png)
+![Microsoft Visual C++ Redistributables applications imported into Microsoft Intune](assets/images/vcredist-intune.png)
 
 ## Initial Setup
 
@@ -152,4 +146,4 @@ ForEach ($VcRedist in $VcRedists) {
 
 Once imported, the Redistributable applications should look similar to the following:
 
-![Microsoft Visual C++ Redistributables applications properties in Microsoft Intune](/images/vcredist-intune2.png)
+![Microsoft Visual C++ Redistributables applications properties in Microsoft Intune](assets/images/vcredist-intune2.png)

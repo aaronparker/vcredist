@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://docs.stealthpuppy.com/docs/vcredist/usage/export-manifests
+online version: https://stealthpuppy.com/vcredist/export-vcmanifest/
 schema: 2.0.0
 ---
 
@@ -68,4 +68,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Export the Redistributable Manifests:](https://stealthpuppy.com/vcredist/export-vcmanifest.html)
+[Export the Redistributable Manifests:](https://stealthpuppy.com/vcredist/export-vcmanifest/)

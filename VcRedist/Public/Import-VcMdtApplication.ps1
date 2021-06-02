@@ -3,7 +3,7 @@ Function Import-VcMdtApplication {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Import-VcMdtApp")]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/import-vcmdtapplication.html")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/import-vcmdtapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

@@ -1,13 +1,9 @@
----
-title: "VcRedist change log"
-keywords: vcredist
-tags: [changelog]
-sidebar: home_sidebar
-toc: false
-permalink: changelog.html
-summary: Changes, updates, fixes and breaking changes in each VcRedist version.
----
+# Changelog
+
 ## VERSION
+
+* Updates module to use external help MAML-based help with platyPS to make updating help content easier
+* General code improvements across various functions
 
 ## 3.0.255
 
@@ -261,5 +257,3 @@ summary: Changes, updates, fixes and breaking changes in each VcRedist version.
 ## 1.3.0.0
 
 * Refactored into a PowerShell module to simplify coding and publishing to the PowerShell Gallery.
-
-{% include links.html %}

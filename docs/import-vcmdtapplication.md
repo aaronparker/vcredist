@@ -1,11 +1,5 @@
----
-title: "Import Redistributables into MDT"
-keywords: vcredist
-tags: [mdt]
-sidebar: home_sidebar
-permalink: import-vcmdtapplication.html
-summary: 
----
+# Import Redistributables into MDT
+
 To install the Visual C++ Redistributables as a part of a reference image or for use with a deployment solution based on the Microsoft Deployment Toolkit (MDT), `Import-VcMdtApplication` will import each of the Visual C++ Redistributables as separate applications that includes the passive or silent command lines, platform support and the UninstallKey for detecting whether the Visual C++ Redistributable is already installed.
 
 Visual C++ Redistributables can be filtered for release and processor architecture by `Get-VcList` before passing to `Import-VcMdtApplication`.
@@ -38,11 +32,11 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
 
 Each Redistributable will be imported into the deployment share with application properties required for a successful deployment.
 
-![Microsoft Visual C++ Redistributables applications imported into an MDT share](/images/mdtvisualcapplications.png)
+![Microsoft Visual C++ Redistributables applications imported into an MDT share](assets/images/mdtvisualcapplications.png)
 
 The folder structure in the deployment share, will look thus:
 
-![Visual C++ Redistributables in the deployment share Application folder](/images/mdtvisualcapplicationsfolder.png)
+![Visual C++ Redistributables in the deployment share Application folder](assets/images/mdtvisualcapplicationsfolder.png)
 
 The install command line arguments used by default are passive. Fully silent install command line arguments can be specified with the `-Silent` parameter when importing the applications into an MDT deployment share.
 
@@ -50,5 +44,3 @@ The install command line arguments used by default are passive. Fully silent ins
 $VcList = Get-VcList
 Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Silent
 ```
-
-{% include links.html %}

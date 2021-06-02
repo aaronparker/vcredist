@@ -1,11 +1,5 @@
----
-title: "Uninstall the Redistributables"
-keywords: vcredist
-tags: [install]
-sidebar: home_sidebar
-permalink: uninstall-vcredist.html
-summary: 
----
+# Uninstall the Redistributables
+
 To uninstall the Visual C++ Redistributables on the local machine, use `Uninstall-VcRedist`. This function accepts the release and architecture of the Visual C++ Redistributables and will attempt to perform a silent uninstall of the targeted Visual C++ Redistributables.
 
 `Uninstall-VcRedist` requires elevated access to be able to uninstall the Redistributables.
@@ -35,5 +29,3 @@ This command will uninstall any 2008 release of the installed Visual C++ Redistr
 ```powershell
 Uninstall-VcRedist -Release 2008 -Confirm:$True
 ```
-
-{% include links.html %}

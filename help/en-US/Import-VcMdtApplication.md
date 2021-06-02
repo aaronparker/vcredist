@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com/vcredist/import-vcmdtapplication.html
+online version: https://stealthpuppy.com/vcredist/import-vcmdtapplication/
 schema: 2.0.0
 ---
 
@@ -276,4 +276,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Import Redistributables into MDT](https://stealthpuppy.com/vcredist/import-vcmdtapplication.html)
+[Import Redistributables into MDT](https://stealthpuppy.com/vcredist/import-vcmdtapplication/)

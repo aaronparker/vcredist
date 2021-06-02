@@ -1,11 +1,5 @@
----
-title: "Get the list of Visual C++ Redistributables"
-keywords: vcredist
-tags: [getting_started]
-sidebar: home_sidebar
-permalink: get-vclist.html
-summary: 
----
+# Get the VcRedist list
+
 `Get-VcList` returns the list of Visual C++ Redistributables. The VcRedist module includes the full list of available supported and unsupported  Redistributables and returns only the supported list by default. Unless you have a specific requirement, it is highly recommend that you install only [the supported Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads).
 
 Running `Get-VcList` with no parameters will return an array of the supported Redistributables by reading the internal manifest. Output can then be manipulated to filter the results. Note though, the default behaviour of `Get-VcList` is currently to return only the 2010, 2012, 2013 and 2019 Redistributables. This is because the 2015, 2017 and 2019 Redistributables are all the same major version and will be upgraded to the 2019 release and can't be installed side-by-side.
@@ -120,5 +114,3 @@ To return a specific release and architecture from the list of unsupported Visua
 ```powershell
 Get-VcList -Export Unsupported | Where-Object { $_.Release -eq "2008" -and $_.Architecture -eq "x64" }
 ```
-
-{% include links.html %}

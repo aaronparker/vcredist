@@ -14,15 +14,15 @@ VcRedist is a PowerShell module for lifecycle management of the Microsoft Visual
 
 Review the list of supported Microsoft Visual C++ Redistributables: https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads.
 
-Review the VcRedist documentation: https://stealthpuppy.com/vcredist/index.html.
+Review the VcRedist documentation: https://stealthpuppy.com/vcredist/.
 
 # TROUBLESHOOTING NOTE
 
-Review the known issues: https://stealthpuppy.com/vcredist/known-issues.html.
+Review the known issues: https://stealthpuppy.com/vcredist/known-issues.
 
 # SEE ALSO
 
-Evergreen: https://stealthpuppy.com/Evergreen/index.html.
+Evergreen: https://stealthpuppy.com/Evergreen/index.
 
 # KEYWORDS
 

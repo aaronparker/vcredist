@@ -1,11 +1,5 @@
----
-title: "Update Redistributables in MDT"
-keywords: vcredist
-tags: [mdt]
-sidebar: home_sidebar
-permalink: update-vcmdtapplication.html
-summary: 
----
+# Update Redistributables in MDT
+
 Use `Update-VcMdtApplication` to update the Visual C++ Redistributables that have previously been imported into the Microsoft Deployment Toolkit by `Import-VcMdtApplication`. As updates Visual C++ Redistributables are released (typically updates to existing versions), the existing applications may require updating. While `Import-VcMdtApplication` supports the `-Force` parameter, it will first delete the existing application and re-import it. `Update-VcMdtApplication` will update the properties of the existing application, keeping the application GUID intact.
 
 ## Parameters
@@ -33,5 +27,3 @@ Update the 2008, 2010, 2012, 2013 and 2019 supported Redistributables in an MDT 
 $VcList = Get-VcList
 Update-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Silent
 ```
-
-{% include links.html %}
