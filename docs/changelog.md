@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 3.0.263
 
 * Updates module to use external help MAML-based help with platyPS to make updating help content easier
 * General code improvements across various functions
