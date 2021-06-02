@@ -2,8 +2,10 @@
 
 ## 3.0.263
 
+* Update for VcRedist 2019 version `14.29.30037.0`
 * Updates module to use external help MAML-based help with platyPS to make updating help content easier
 * General code improvements across various functions
+* Update module for documentation site updates
 
 ## 3.0.255
 
