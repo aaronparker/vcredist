@@ -1,11 +1,5 @@
----
-title: "Download the Redistributables"
-keywords: vcredist
-tags: [getting_started]
-sidebar: home_sidebar
-permalink: save-vcredist.html
-summary: 
----
+# Download the Redistributables
+
 To download the Visual C++ Redistributables to a local folder, use `Save-VcRedist`. This will read the array of Visual C++ Redistributables returned from `Get-VcList` and download each one to a local folder specified in `-Path`. Use the `-Release` or `-Architecture` parameters in `Get-VcList` to filter for specific Visual C++ Redistributables.
 
 Save-VcRedist downloads the Redistributables and returns the array passed from Get-VcList to the pipeline so that it can be passed to other functions `Install-VcRedist`.
@@ -33,7 +27,7 @@ Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist
 
 Redistributables are downloaded into the target folder:
 
-![Microsoft Visual C++ Redistributables installed on the local PC](/images/vcredist-folder.png)
+![Microsoft Visual C++ Redistributables installed on the local PC](assets/images/vcredist-folder.png)
 
 Pass the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
 
@@ -53,5 +47,3 @@ Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redis
 ```powershell
 Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
 ```
-
-{% include links.html %}

@@ -1,11 +1,5 @@
----
-title: "Install the Module"
-keywords: vcredist
-tags: [getting_started]
-sidebar: home_sidebar
-permalink: install.html
-summary: 
----
+# Installing VcRedist
+
 ## Install from the PowerShell Gallery
 
 The VcRedist module is published to the PowerShell Gallery and can be found here: [VcRedist](https://www.powershellgallery.com/packages/VcRedist/). The module can be installed from the gallery with:
@@ -45,5 +39,3 @@ Once installation is complete, you can validate that the module exists by runnin
 ```powershell
 Import-Module VcRedist
 ```
-
-{% include links.html %}

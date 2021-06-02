@@ -50,10 +50,9 @@ Function Import-MdtModule {
             Import-Module @params
         }
         catch [System.Exception] {
+            Write-Output -InputObject $False
             Write-Warning "$($MyInvocation.MyCommand): Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."
             Throw $_.Exception.Message
-            Write-Output -InputObject $False
-            Break
         }
         finally {
             Write-Output -InputObject $True

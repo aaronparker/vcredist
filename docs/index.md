@@ -1,11 +1,5 @@
----
-title: "Getting started with VcRedist"
-keywords: vcredist
-tags: [getting_started]
-sidebar: home_sidebar
-permalink: index.html
-summary: These instructions will help you get started with using VcRedist to manage the Microsoft Visual C++ Redistributables.
----
+# Introduction
+
 VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads).
 
 VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
@@ -20,7 +14,7 @@ The module includes two manifests that list the supported Redistributables or al
 
 It is important to understand that Microsoft no longer supports and provides security updates for certain Redistributables. The list of supported Redistributables is maintained here [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). Deployment of unsupported Redistributables should be done at your own risk.
 
-### Unsupported Redistributables
+## Unsupported Redistributables
 
 As at March 2021, the Unsupported list of Redistributables includes the following versions:
 
@@ -37,5 +31,3 @@ As at March 2021, the Unsupported list of Redistributables includes the followin
 |Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update|9.0.30729.4148|
 |Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update|9.0.30729.6161|
 |Visual C++ Redistributable Packages for Visual Studio 2013                |12.0.30501.0  |
-
-{% include links.html %}

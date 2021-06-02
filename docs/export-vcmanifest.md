@@ -1,11 +1,5 @@
----
-title: "Export the Redistributable Manifests"
-keywords: vcredist
-tags: [getting_started]
-sidebar: home_sidebar
-permalink: export-vcmanifest.html
-summary: 
----
+# Export the Manifests
+
 `Export-VcManifest` will export the internal Redistributable manifests if you want to store an external copy for creating a custom manifest. Both the supported and unsupported Redistributable manifests can be exported to a specified file in [JSON](https://www.json.org/) format.
 
 ## Parameters
@@ -43,5 +37,3 @@ Export the manifest of all unsupported Redistributables:
 ```powershell
 Export-VcManifest -Path .\VcRedists.json -Export Unsupported
 ```
-
-{% include links.html %}

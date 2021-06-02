@@ -1,11 +1,5 @@
----
-title: "Get the locally installed Redistributables"
-keywords: vcredist
-tags: [install]
-sidebar: home_sidebar
-permalink: get-installedvcredist.html
-summary: 
----
+# Get the Installed Redistributables
+
 `Get-InstalledVcRedist` is used to return the list of Visual C++ Redistributables installed on the current system. This function can assist in performing various functions including, comparing the installed list of Redistributables against that listed in the manifests included in the module, or uninstalling the installed Redistributables.
 
 Running the `Get-InstalledVcRedist` command returns the list of installed Redistributables with various properties, including the display name, product code, version and uninstall strings.
@@ -42,12 +36,10 @@ Output can be filtered for specific properties:
 Get-InstalledVcRedist | Select Name, Version, ProductCode
 ```
 
-![Microsoft Visual C++ Redistributables installed on the local PC](/images/installed-vcredist.png)
+![Microsoft Visual C++ Redistributables installed on the local PC](assets/images/installed-vcredist.png)
 
 This list won't include the Additional and Minimum Runtimes by default. These can be returned with the `-ExportAll` switch:
 
 ```powershell
 Get-InstalledVcRedist -ExportAll
 ```
-
-{% include links.html %}

@@ -1,78 +1,9 @@
 Function Save-VcRedist {
     <#
-        .SYNOPSIS
-            Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList.
-
-        .DESCRIPTION
-            Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList into a folder structure that represents release, version and processor architecture.
-            If the redistributable exists in the specified path, it will not be re-downloaded.
-
-            For example, the following folder structure will be created when downloading the 2010, 2012, 2013 and 2019 Redistributables to C:\VcRedist:
-
-                C:\VcRedist\2010\10.0.40219.325\x64
-                C:\VcRedist\2010\10.0.40219.325\x86
-                C:\VcRedist\2012\11.0.61030.0\x64
-                C:\VcRedist\2012\11.0.61030.0\x86
-                C:\VcRedist\2013\12.0.40664.0\x64
-                C:\VcRedist\2013\12.0.40664.0\x86
-                C:\VcRedist\2019\14.28.29913.0\x64
-                C:\VcRedist\2019\14.28.29913.0\x86
-
-        .NOTES
-            Author: Aaron Parker
-            Twitter: @stealthpuppy
-
-        .LINK
-            https://stealthpuppy.com/VcRedist/save-vcredist.html
-
-        .PARAMETER VcList
-            Specifies the array that lists the Visual C++ Redistributables to download
-
-        .PARAMETER Path
-            Specify a target folder to download the Redistributables to, otherwise use the current folder.
-
-        .PARAMETER Proxy
-            Specifies a proxy server for the request, rather than connecting directly to the internet resource. Enter the URI of a network proxy server.
-
-        .PARAMETER ProxyCredential
-            Specifies a user account that has permission to use the proxy server that is specified by the Proxy parameter. The default is the current user.
-
-        .PARAMETER NoProgress
-            Specify this switch with -Verbose to show verbose output but also suppress Invoke-WebRequest progress to speed downloads.
-
-        .EXAMPLE
-            Save-VcRedist -VcList (Get-VcList) -Path C:\Redist
-
-            Description:
-            Downloads the supported Visual C++ Redistributables to C:\Redist.
-            
-        .EXAMPLE
-            Get-VcList | Save-VcRedist -Path C:\Redist
-
-            Description:
-            Passes the list of supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
-
-        .EXAMPLE
-            $VcList = Get-VcList -Release 2013, 2019 -Architecture x86
-            Save-VcRedist -VcList $VcList -Path C:\Redist
-
-            Description:
-            Passes the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
-
-        .EXAMPLE
-            Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist
-
-            Description:
-            Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist.
-
-        .EXAMPLE
-            Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
-
-            Description:
-            Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
+        .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Get-VcRedist")]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/VcRedist/save-vcredist.html")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/save-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
@@ -145,7 +76,6 @@ Function Save-VcRedist {
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
                         Throw $_.Exception.Message
-                        Continue
                     }
                 }
             }
