@@ -50,7 +50,7 @@ theme:
   favicon: assets/favicon.png
   #icon:
     #logo: logo
-  logo: assets/images/VisualStudioLogo2019-256.png
+  logo: assets/images/visualstudiologo2019-256.png
 
 # Plugins
 plugins:
@@ -101,6 +101,17 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
 
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aaronparker
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/stealthpuppy
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/aaronedwardparker/
+  generator: false
+
 # Page tree
 nav:
   - Getting started:
@@ -110,7 +121,7 @@ nav:
     - Get the VcRedist list: get-vclist.md
     - Download the Redistributables: save-vcredist.md
     - Export the Manifests: export-vcmanifest.md
-    - Understanding VcRedist Versioning: versioning.md
+    - VcRedist Versioning: versioning.md
   - Windows:
     - Install the Redistributables: install-vcredist.md
     - Get the Installed Redistributables: get-installedvcredist.md
@@ -126,14 +137,17 @@ nav:
     - Import Redistributables into Intune: new-vcintuneapplication.md
   - Known issues: issues.md
   - Changelog: changelog.md
-
-# Customization
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/aaronparker
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/stealthpuppy
-    - icon: fontawesome/brands/linkedin
-      link: https://linkedin.com/in/aaronedwardparker/
-  generator: false
+  - Module help:
+    - en-US:
+      - about_VcRedist: help/en-US/about_VcRedist.md
+      - Get-VcList: help/en-US/Get-VcList.md
+      - Save-VcRedist: help/en-US/Save-VcRedist.md
+      - Export-VcManifest: help/en-US/Export-VcManifest.md
+      - Get-InstalledVcRedist: help/en-US/Get-InstalledVcRedist.md
+      - Import-VcConfigMgrApplication: help/en-US/Import-VcConfigMgrApplication.md
+      - Import-VcMdtApplication: help/en-US/Import-VcMdtApplication.md
+      - Install-VcRedist: help/en-US/Install-VcRedist.md
+      - New-VcMdtBundle: help/en-US/New-VcMdtBundle.md
+      - Uninstall-VcRedist: help/en-US/Uninstall-VcRedist.md
+      - Update-VcMdtApplication: help/en-US/Update-VcMdtApplication.md
+      - Update-VcMdtBundle: help/en-US/Update-VcMdtBundle.md

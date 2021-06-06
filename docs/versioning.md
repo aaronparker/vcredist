@@ -1,6 +1,6 @@
 # Understanding VcRedist Versioning
 
-VcRedist uses a major.minor[.build] versioning scheme.
+VcRedist uses a `major.minor[.build]` versioning scheme.
 
 ## Major release
 
