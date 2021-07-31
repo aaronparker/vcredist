@@ -32,17 +32,20 @@ Write-Host "PowerShell Version:" $PSVersionTable.PSVersion.ToString()
 
 # Install packages
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208
-If (Get-PSRepository -Name PSGallery | Where-Object { $_.InstallationPolicy -ne "Trusted" }) {
-    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+If (Get-PSRepository -Name "PSGallery" | Where-Object { $_.InstallationPolicy -ne "Trusted" }) {
+    Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 }
-If ([Version]((Find-Module -Name Pester).Version) -gt (Get-Module -Name Pester).Version) {
-    Install-Module -Name Pester -SkipPublisherCheck -RequiredVersion 4.10.1 -Force
+If ([Version]((Find-Module -Name Pester).Version) -gt (Get-Module -Name "Pester").Version) {
+    Install-Module -Name "Pester" -SkipPublisherCheck -RequiredVersion 4.10.1 -Force
 }
-If ([Version]((Find-Module -Name PSScriptAnalyzer).Version) -gt (Get-Module -Name PSScriptAnalyzer).Version) {
-    Install-Module -Name PSScriptAnalyzer -SkipPublisherCheck -Force
+If ([Version]((Find-Module -Name PSScriptAnalyzer).Version) -gt (Get-Module -Name "PSScriptAnalyzer").Version) {
+    Install-Module -Name "PSScriptAnalyzer" -SkipPublisherCheck -Force
 }
-If ([Version]((Find-Module -Name posh-git).Version) -gt (Get-Module -Name posh-git).Version) {
-    Install-Module -Name posh-git -Force
+If ([Version]((Find-Module -Name posh-git).Version) -gt (Get-Module -Name "posh-git").Version) {
+    Install-Module -Name "posh-git" -Force
+}
+If ([Version]((Find-Module -Name posh-git).Version) -gt (Get-Module -Name "MarkdownPS").Version) {
+    Install-Module -Name "MarkdownPS" -Force
 }
 
 # Import module
