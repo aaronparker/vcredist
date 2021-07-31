@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 3.0.273
 
 * Update for VcRedist 2019 version `14.29.30040.0`
 
