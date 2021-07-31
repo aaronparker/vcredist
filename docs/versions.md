@@ -1,6 +1,6 @@
-﻿# Supported applications
+﻿# Included Redistributables
 
-VcRedist `3.0.273` supports the following Redistributables:
+VcRedist `3.0.273` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
@@ -37,4 +37,5 @@ VcRedist `3.0.273` supports the following Redistributables:
 | 8.0.56336      | x86          | Visual C++ 2005 SP1 Redistributable Package                                |
 | 8.0.56336      | x64          | Visual C++ 2005 SP1 Redistributable Package                                |
 | 8.0.50727.42   | x86          | Visual C++ 2005 Redistributable Package                                    |
-| 8.0.50727.42   | x64          | Visual C++ 2005 Redistributable Package                                    |
+| 8.0.50727.42   | x64          | Visual C++ 2005 Redistributable Package                                    |
+
