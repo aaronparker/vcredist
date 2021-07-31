@@ -5,7 +5,14 @@
         "Runtimes",
         "Snapins",
         "VcRedist",
+        "installedvcredist",
         "noreboot",
-        "robocopy"
+        "robocopy",
+        "vcconfigmgrapplication",
+        "vcintuneapplication",
+        "vclist",
+        "vcmanifest",
+        "vcmdtapplication",
+        "vcmdtbundle"
     ]
 }

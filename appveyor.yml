@@ -5,7 +5,7 @@ image: WMF 5
 clone_folder: C:\Projects\VcRedist
 environment:
   GitHubKey:
-    secure: unWb9ORoL3oo22K6z2U2fZ+AdBmv75laNb7jibBwQCMGv9u8Cs2GayQBGjkqfPro
+    secure: bGxozoCJoYVeoQCF1W+tLhKbjvFoyr7zGcc2A57UiP356gpE7k8/fhqH6NPi8eQ2
   NuGetApiKey:
     secure: /YPozcX4yV1XCrZuS8DAhOmH/OOjkg6+zrCTT3lHR3a7/SY7S83JNNgYBsROlLq3
   Module: VcRedist

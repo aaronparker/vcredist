@@ -27,7 +27,7 @@ Else {
 
         # We're going to add 1 to the revision value since a new commit has been merged to Main
         # This means that the major / minor / build values will be consistent across GitHub and the Gallery
-        Try {
+        try {
             # This is where the module manifest lives
             $modulePath = Join-Path -Path $projectRoot -ChildPath $module
             Write-Host "Module path: $modulePath" -ForegroundColor Cyan
@@ -48,7 +48,13 @@ Else {
             (Get-Content -Path $manifestPath) -replace 'NewManifest', $module | Set-Content -Path $manifestPath
             (Get-Content -Path $manifestPath) -replace 'FunctionsToExport = ', 'FunctionsToExport = @(' | Set-Content -Path $manifestPath -Force
             (Get-Content -Path $manifestPath) -replace "$($functionList[-1])'", "$($functionList[-1])')" | Set-Content -Path $manifestPath -Force
+        }
+        catch {
+            Write-Warning "Update of module manifest failed."
+            Throw $_
+        }
 
+        try {
             # Update version number for latest release in CHANGELOG.md
             #$changeLog = Join-Path -Path $env:APPVEYOR_BUILD_FOLDER -ChildPath "CHANGELOG.md"
             $changeLog = [System.IO.Path]::Combine($env:APPVEYOR_BUILD_FOLDER, "docs", "changelog.md")
@@ -61,12 +67,32 @@ Else {
                 Write-Host "No match in $changeLog for '## VERSION'. Manual update of CHANGELOG required." -ForegroundColor Cyan
             }
         }
-        Catch {
+        catch {
+            Write-Warning "Update of change log failed."
+            Throw $_
+        }
+
+        try {
+            # Update the list of supported apps in APPS.md
+            $VcRedists = Get-Vclist -Export All | `
+                Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | `
+                Select-Object Version, Architecture, Name
+            $OutFile = [System.IO.Path]::Combine($env:APPVEYOR_BUILD_FOLDER, "docs", "versions.md")
+            $markdown = New-MDHeader -Text "Supported applications" -Level 1
+            $markdown += "`n"
+            $line = "VcRedist " + '`' + $newVersion + '`' + " supports the following Redistributables:"
+            $markdown += $line
+            $markdown += "`n`n"
+            $markdown += $VcRedists | New-MDTable
+            ($markdown.TrimEnd("`n")) | Out-File -FilePath $OutFile -Force -Encoding "Utf8"
+        }
+        catch {
+            Write-Warning "Update versions.md failed."
             Throw $_
         }
 
         # Publish the new version back to Main on GitHub
-        Try {
+        try {
             # Set up a path to the git.exe cmd, import posh-git to give us control over git
             $env:Path += ";$env:ProgramFiles\Git\cmd"
             Import-Module posh-git -ErrorAction Stop
@@ -90,7 +116,7 @@ Else {
             Invoke-Process -FilePath "git" -ArgumentList "push origin main"
             Write-Host "$module $newVersion pushed to GitHub." -ForegroundColor Cyan
         }
-        Catch {
+        catch {
             # Sad panda; it broke
             Write-Warning "Push to GitHub failed."
             Throw $_
@@ -98,7 +124,7 @@ Else {
 
 
         # Publish the new version to the PowerShell Gallery
-        Try {
+        try {
             # Build a splat containing the required details and make sure to Stop for errors which will trigger the catch
             $PM = @{
                 Path        = (Join-Path $projectRoot $module)
@@ -108,7 +134,7 @@ Else {
             Publish-Module @PM
             Write-Host "$module $newVersion published to the PowerShell Gallery." -ForegroundColor Cyan
         }
-        Catch {
+        catch {
             # Sad panda; it broke
             Write-Warning -Message "Publishing $module $newVersion to the PowerShell Gallery failed."
             throw $_
