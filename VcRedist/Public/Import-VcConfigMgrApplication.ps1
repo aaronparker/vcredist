@@ -177,7 +177,7 @@ Function Import-VcConfigMgrApplication {
                                     LinkText          = $VcRedist.URL
                                     Publisher         = $Publisher
                                     Keyword           = $Keyword
-                                    ReleaseDate       = (Get-Date -Format dd/MM/yyyy)
+                                    ReleaseDate       = $(Get-Date -Format (([System.Globalization.CultureInfo]::CurrentUICulture.DateTimeFormat).ShortDatePattern))
                                     PrivacyUrl        = "https://go.microsoft.com/fwlink/?LinkId=521839"
                                     UserDocumentation = "https://visualstudio.microsoft.com/vs/support/"
                                 }

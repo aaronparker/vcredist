@@ -107,9 +107,9 @@ Function Update-VcMdtBundle {
             If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update version")) {
                 try {
                     $sipParams = @{
-                        Path        = ($bundle.PSPath.Replace($bundle.PSProvider, "")).Trim(":")
+                        Path        = $($bundle.PSPath.Replace($bundle.PSProvider, "")).Trim(":")
                         Name        = "Version"
-                        Value       = (Get-Date -Format "yyyy-MMM-dd")
+                        Value       = $(Get-Date -Format (([System.Globalization.CultureInfo]::CurrentUICulture.DateTimeFormat).ShortDatePattern))
                         ErrorAction = "SilentlyContinue"
                         Force       = $True
                     }
