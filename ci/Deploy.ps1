@@ -73,14 +73,14 @@ Else {
         }
 
         try {
-            # Update the list of supported apps in APPS.md
+            # Update the list of supported Redistributables in VERSIONS.md
             $VcRedists = Get-Vclist -Export All | `
                 Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | `
                 Select-Object Version, Architecture, Name
             $OutFile = [System.IO.Path]::Combine($env:APPVEYOR_BUILD_FOLDER, "docs", "versions.md")
-            $markdown = New-MDHeader -Text "Supported applications" -Level 1
+            $markdown = New-MDHeader -Text "Included Redistributables" -Level 1
             $markdown += "`n"
-            $line = "VcRedist " + '`' + $newVersion + '`' + " supports the following Redistributables:"
+            $line = "VcRedist " + '`' + $newVersion + '`' + " includes the following Redistributables (supported and unsupported):"
             $markdown += $line
             $markdown += "`n`n"
             $markdown += $VcRedists | New-MDTable
