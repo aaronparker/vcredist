@@ -2,6 +2,12 @@
 
 ## 3.0.273
 
+* Update for VcRedist 2019 version `14.29.30133.0`
+* Fixes an issue with `Import-VcConfigMgrApplication` that produces an error `String was not recognized as a valid DateTime`. Function now uses the short date/time format of the current session when importing the application
+* Updated `New-VcMdtBundle` and `Update-VcMdtBundle` to use the short date/time format of the current session when creating or updating the bundle
+
+## 3.0.273
+
 * Update for VcRedist 2019 version `14.29.30040.0`
 
 ## 3.0.263
