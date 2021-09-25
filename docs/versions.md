@@ -1,11 +1,11 @@
 ﻿# Included Redistributables
 
-VcRedist `3.0.273` includes the following Redistributables (supported and unsupported):
+VcRedist `3.0.278` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
-| 14.29.30040.0  | x64          | Visual C++ Redistributable for Visual Studio 2019                          |
-| 14.29.30040.0  | x86          | Visual C++ Redistributable for Visual Studio 2019                          |
+| 14.29.30133.0  | x64          | Visual C++ Redistributable for Visual Studio 2019                          |
+| 14.29.30133.0  | x86          | Visual C++ Redistributable for Visual Studio 2019                          |
 | 14.16.27033.0  | x64          | Visual C++ Redistributable for Visual Studio 2017                          |
 | 14.16.27033.0  | x86          | Visual C++ Redistributable for Visual Studio 2017                          |
 | 14.0.24215.1   | x64          | Visual C++ 2015 Redistributable Update 3                                   |
@@ -37,5 +37,4 @@ VcRedist `3.0.273` includes the following Redistributables (supported and unsupp
 | 8.0.56336      | x86          | Visual C++ 2005 SP1 Redistributable Package                                |
 | 8.0.56336      | x64          | Visual C++ 2005 SP1 Redistributable Package                                |
 | 8.0.50727.42   | x86          | Visual C++ 2005 Redistributable Package                                    |
-| 8.0.50727.42   | x64          | Visual C++ 2005 Redistributable Package                                    |
-
+| 8.0.50727.42   | x64          | Visual C++ 2005 Redistributable Package                                    |
