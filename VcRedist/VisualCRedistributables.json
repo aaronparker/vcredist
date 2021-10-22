@@ -1,32 +1,6 @@
 {
     "Supported":  [
                       {
-                          "Name":  "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
-                          "ProductCode":  "{1D8E6291-B0D5-35EC-8441-6616F567A0F7}",
-                          "Version":  "10.0.40219.325",
-                          "URL":  "https://www.microsoft.com/en-us/download/details.aspx?id=26999",
-                          "Download":  "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe",
-                          "Release":  "2010",
-                          "Architecture":  "x64",
-                          "Install":  "/passive /norestart",
-                          "SilentInstall":  "/quiet /norestart",
-                          "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
-                          "UninstallKey":  "64"
-                      },
-                      {
-                          "Name":  "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
-                          "ProductCode":  "{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}",
-                          "Version":  "10.0.40219.325",
-                          "URL":  "https://www.microsoft.com/en-us/download/details.aspx?id=26999",
-                          "Download":  "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe",
-                          "Release":  "2010",
-                          "Architecture":  "x86",
-                          "Install":  "/passive /norestart",
-                          "SilentInstall":  "/quiet /norestart",
-                          "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
-                          "UninstallKey":  "32"
-                      },
-                      {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2012 Update 4",
                           "ProductCode":  "{ca67548a-5ebe-413a-b50c-4b9ceb6d66c6}",
                           "Version":  "11.0.61030.0",
@@ -415,6 +389,32 @@
                             "Architecture":  "x86",
                             "Install":  "/Q",
                             "SilentInstall":  "/Q",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "32"
+                        },
+                        {
+                            "Name":  "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
+                            "ProductCode":  "{1D8E6291-B0D5-35EC-8441-6616F567A0F7}",
+                            "Version":  "10.0.40219.325",
+                            "URL":  "https://www.microsoft.com/en-us/download/details.aspx?id=26999",
+                            "Download":  "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x64.exe",
+                            "Release":  "2010",
+                            "Architecture":  "x64",
+                            "Install":  "/passive /norestart",
+                            "SilentInstall":  "/quiet /norestart",
+                            "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
+                            "UninstallKey":  "64"
+                        },
+                        {
+                            "Name":  "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
+                            "ProductCode":  "{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}",
+                            "Version":  "10.0.40219.325",
+                            "URL":  "https://www.microsoft.com/en-us/download/details.aspx?id=26999",
+                            "Download":  "https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe",
+                            "Release":  "2010",
+                            "Architecture":  "x86",
+                            "Install":  "/passive /norestart",
+                            "SilentInstall":  "/quiet /norestart",
                             "SilentUninstall":  "MsiExec.exe /X#ProductCode /QB-",
                             "UninstallKey":  "32"
                         },
