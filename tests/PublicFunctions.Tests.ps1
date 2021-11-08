@@ -49,7 +49,7 @@ Write-Host -ForegroundColor Cyan "`tDownload dir: $downloadDir."
 $VcCount = @{
     "Default"     = 8
     "All"         = 36
-    "Supported"   = 10
+    "Supported"   = 12
     "Unsupported" = 24
 }
 
@@ -227,7 +227,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
 
 #region Manifest test
 # Get an array of VcRedists from the current manifest and the installed VcRedists
-$Release = "2019"
+$Release = "2022"
 Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
 $InstalledVcRedists = Get-InstalledVcRedist
