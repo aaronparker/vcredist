@@ -19,18 +19,31 @@ It is important to understand that Microsoft no longer supports and provides sec
 
 ## Unsupported Redistributables
 
-As at March 2021, the Unsupported list of Redistributables includes the following versions:
+As at November 2022, the Unsupported list of Redistributables includes the following versions:
 
-|Name                                                                      |Version       |
-|--------------------------------------------------------------------------|--------------|
-|Visual C++ 2005 Redistributable Package                                   |8.0.50727.42  |
-|Visual C++ 2005 SP1 Redistributable Package                               |8.0.56336     |
-|Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update|8.0.59192     |
-|Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update|8.0.61000     |
-|Visual C++ 2008 Redistributable Package                                   |9.0.21022     |
-|Visual C++ 2008 Feature Pack Redistributable Package                      |9.0.21022.218 |
-|Visual C++ 2008 Redistributable Package ATL Security Update               |9.0.30411     |
-|Visual C++ 2008 SP1 Redistributable Package                               |9.0.30729     |
-|Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update|9.0.30729.4148|
-|Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update|9.0.30729.6161|
-|Visual C++ Redistributable Packages for Visual Studio 2013                |12.0.30501.0  |
+| Name                                                                       | Version        |
+| -------------------------------------------------------------------------- | -------------- |
+| Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update | 9.0.30729.6161 |
+| Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update | 9.0.30729.6161 |
+| Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update | 8.0.61000      |
+| Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update | 8.0.59192      |
+| Visual C++ 2005 SP1 Redistributable Package                                | 8.0.56336      |
+| Visual C++ 2005 Redistributable Package                                    | 8.0.50727.42   |
+| Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update | 8.0.61000      |
+| Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update | 8.0.59192      |
+| Visual C++ 2005 SP1 Redistributable Package                                | 8.0.56336      |
+| Visual C++ 2005 Redistributable Package                                    | 8.0.50727.42   |
+| Visual C++ 2008 Redistributable Package                                    | 9.0.21022      |
+| Visual C++ 2008 Feature Pack Redistributable Package                       | 9.0.21022.218  |
+| Visual C++ 2008 Redistributable Package ATL Security Update                | 9.0.30411      |
+| Visual C++ 2008 SP1 Redistributable Package                                | 9.0.30729      |
+| Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update | 9.0.30729.4148 |
+| Visual C++ 2008 Redistributable Package                                    | 9.0.21022      |
+| Visual C++ 2008 Feature Pack Redistributable Package                       | 9.0.21022.218  |
+| Visual C++ 2008 Redistributable Package ATL Security Update                | 9.0.30411      |
+| Visual C++ 2008 SP1 Redistributable Package                                | 9.0.30729      |
+| Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update | 9.0.30729.4148 |
+| Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update | 10.0.40219.325 |
+| Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update | 10.0.40219.325 |
+| Visual C++ Redistributable Packages for Visual Studio 2013                 | 12.0.30501.0   |
+| Visual C++ Redistributable Packages for Visual Studio 2013                 | 12.0.30501.0   |

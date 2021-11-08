@@ -37,4 +37,4 @@ VcRedist `3.0.281` includes the following Redistributables (supported and unsupp
 | 8.0.56336      | x86          | Visual C++ 2005 SP1 Redistributable Package                                |
 | 8.0.56336      | x64          | Visual C++ 2005 SP1 Redistributable Package                                |
 | 8.0.50727.42   | x86          | Visual C++ 2005 Redistributable Package                                    |
-| 8.0.50727.42   | x64          | Visual C++ 2005 Redistributable Package                                    |
+| 8.0.50727.42   | x64          | Visual C++ 2005 Redistributable Package                                    |

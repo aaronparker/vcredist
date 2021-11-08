@@ -2,6 +2,7 @@
 
 ## VERSION
 
+* Adds support for Visual C++ Redistributable for Visual Studio 2022, version `14.30.30704.0`
 * Moves the `Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update` to the unsupported list of Redistributables
 
 ## 3.0.281

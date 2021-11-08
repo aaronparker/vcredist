@@ -13,7 +13,7 @@ None. If `Uninstall-VcRedist` is run without parameters, you will be prompted to
 ### Optional parameters
 
 * `Confirm` - `Uninstall-VcRedist` will not uninstall Redistributables by default. `-Confirm:$True` is required to enable `Uninstall-VcRedist` to uninstall the Redistributables.
-* `Release` - Specifies the release (or version) of the redistributables to uninstall (e.g. 2019, 2010, 2012, etc.)
+* `Release` - Specifies the release (or version) of the redistributables to uninstall (e.g. 2022, 2019, 2012, etc.)
 * `Architecture` - Specifies the processor architecture to of the redistributables to uninstall. Can be x86 or x64
 
 ## Examples

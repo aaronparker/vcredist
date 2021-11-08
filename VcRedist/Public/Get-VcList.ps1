@@ -7,7 +7,7 @@ Function Get-VcList {
     Param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName = "Manifest")]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]
-        [System.String[]] $Release = @("2010", "2012", "2013", "2019", "2022"),
+        [System.String[]] $Release = @("2012", "2013", "2022"),
 
         [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "Manifest")]
         [ValidateSet("x86", "x64")]

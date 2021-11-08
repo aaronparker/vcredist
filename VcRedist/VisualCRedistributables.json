@@ -144,7 +144,7 @@
                           "UninstallKey":  "32"
                       },
                       {
-                          "Name":  "Visual C++ Redistributable for Visual Studio 2019",
+                          "Name":  "Visual C++ Redistributable for Visual Studio 2022",
                           "ProductCode":  "{4d8dcf8c-a72a-43e1-9833-c12724db736e}",
                           "Version":  "14.30.30704.0",
                           "URL":  "https://www.visualstudio.com/downloads/",

@@ -36,14 +36,14 @@ $VcList = Get-VcList -Release 2013, 2019 -Architecture x86
 Save-VcRedist -VcList $VcList -Path C:\Redist
 ```
 
-Download the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist.
+Download the 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist.
 
 ```powershell
-Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist
+Save-VcRedist -VcList (Get-VcList -Release 2012, 2013, 2019) -Path C:\Redist
 ```
 
-Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
+Downloads the 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
 
 ```powershell
-Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
+Save-VcRedist -VcList (Get-VcList -Release 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
 ```
