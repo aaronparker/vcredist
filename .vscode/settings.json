@@ -2,17 +2,18 @@
     "cSpell.words": [
         "Bitness",
         "GUIDs",
-        "Runtimes",
-        "Snapins",
-        "VcRedist",
         "installedvcredist",
+        "MAML",
         "noreboot",
         "robocopy",
+        "Runtimes",
+        "Snapins",
         "vcconfigmgrapplication",
         "vcintuneapplication",
         "vclist",
         "vcmanifest",
         "vcmdtapplication",
-        "vcmdtbundle"
+        "vcmdtbundle",
+        "VcRedist"
     ]
 }

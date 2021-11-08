@@ -1,5 +1,10 @@
 # Changelog
 
+## VERSION
+
+* Adds support for Visual C++ Redistributable for Visual Studio 2022, version `14.30.30704.0`
+* Moves the `Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update` to the unsupported list of Redistributables
+
 ## 3.0.281
 
 * Update for VcRedist 2019 version `14.29.30135.0`
@@ -10,7 +15,7 @@
 * Fixes an issue with `Import-VcConfigMgrApplication` that produces an error `String was not recognized as a valid DateTime`. Function now uses the short date/time format of the current session when importing the application
 * Updated `New-VcMdtBundle` and `Update-VcMdtBundle` to use the short date/time format of the current session when creating or updating the bundle
 
-## 3.0.273
+## 3.0.271
 
 * Update for VcRedist 2019 version `14.29.30040.0`
 
