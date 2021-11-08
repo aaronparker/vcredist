@@ -129,7 +129,33 @@
                           "SilentInstall":  "/install /quiet /norestart",
                           "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
                           "UninstallKey":  "32"
-                      }
+                      },
+                      {
+                        "Name":  "Visual C++ Redistributable for Visual Studio 2022",
+                        "ProductCode":  "{fa7f6d52-f85e-48ef-8f56-a37268aa5773}",
+                        "Version":  "14.30.30135.0",
+                        "URL":  "https://www.visualstudio.com/downloads/",
+                        "Download":  "https://aka.ms/vs/17/release/VC_redist.x64.exe",
+                        "Release":  "2022",
+                        "Architecture":  "x64",
+                        "Install":  "/install /passive /norestart",
+                        "SilentInstall":  "/install /quiet /norestart",
+                        "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                        "UninstallKey":  "32"
+                    },
+                    {
+                        "Name":  "Visual C++ Redistributable for Visual Studio 2019",
+                        "ProductCode":  "{b7a2b241-3f54-4d7d-94d1-8ce0146e03c8}",
+                        "Version":  "14.30.30135.0",
+                        "URL":  "https://www.visualstudio.com/downloads/",
+                        "Download":  "https://aka.ms/vs/17/release/VC_redist.x86.exe",
+                        "Release":  "2022",
+                        "Architecture":  "x86",
+                        "Install":  "/install /passive /norestart",
+                        "SilentInstall":  "/install /quiet /norestart",
+                        "SilentUninstall":  "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+                        "UninstallKey":  "32"
+                    }
                   ],
     "Unsupported":  [
                         {

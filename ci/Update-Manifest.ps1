@@ -4,10 +4,10 @@
 #>
 [OutputType()]
 Param (
-    $Release = "2019"
+    $Release = "2022"
 )
 
-# Get an array of VcRedists from the curernt manifest and the installed VcRedists
+# Get an array of VcRedists from the current manifest and the installed VcRedists
 Write-Host " "
 Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
 $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json

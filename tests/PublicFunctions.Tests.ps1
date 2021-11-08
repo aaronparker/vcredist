@@ -47,8 +47,8 @@ Write-Host -ForegroundColor Cyan "`tDownload dir: $downloadDir."
 
 # VcRedist manifest counts
 $VcCount = @{
-    "Default"     = 6
-    "All"         = 34
+    "Default"     = 8
+    "All"         = 36
     "Supported"   = 10
     "Unsupported" = 24
 }
