@@ -3,7 +3,7 @@
         Public Pester function tests.
 #>
 [CmdletBinding()]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUserDeclaredVarsMoreThanAssignments')]
+#[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUserDeclaredVarsMoreThanAssignments')]
 Param ()
 
 #region Functions used in tests
