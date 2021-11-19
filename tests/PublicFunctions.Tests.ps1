@@ -47,6 +47,7 @@ Else {
 Write-Host -ForegroundColor "Cyan" "`tDownload dir: $downloadDir."
 
 # VcRedist manifest counts
+$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 $VcCount = @{
     "Default"     = 6
     "Supported"   = 12
@@ -75,7 +76,7 @@ Describe 'Get-VcList' -Tag "Get" {
         }
     }
     Context 'Validate Get-VcList array properties' {
-        $VcList = Get-VcList
+        $VcList = Get-VcList -Release $TestReleases
         ForEach ($VcRedist in $VcList) {
             It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] has expected properties" {
                 $VcRedist.Name.Length | Should -BeGreaterThan 0
@@ -141,7 +142,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
             If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
                 $Path = [System.IO.Path]::Combine($downloadDir, "VcDownload")
                 If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force > $Null }
-                $VcList = Get-VcList
+                $VcList = Get-VcList -Release $TestReleases
                 Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
                 Save-VcRedist -VcList $VcList -Path $Path
                 Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
@@ -156,7 +157,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
             New-Item -Path $Path -ItemType Directory -Force > $Null
             
             Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
-            $VcList = Get-VcList
+            $VcList = Get-VcList -Release $TestReleases
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
             $DownloadedRedists | Should -BeOfType PSCustomObject
         }
@@ -167,7 +168,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
                 New-Item -Path ([System.IO.Path]::Combine($downloadDir, "VcTest")) -ItemType Directory -ErrorAction "SilentlyContinue" > $Null
                 Push-Location -Path ([System.IO.Path]::Combine($downloadDir, "VcTest"))
                 Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
-                { Get-VcList | Save-VcRedist } | Should -Not -Throw
+                { Get-VcList -Release $TestReleases | Save-VcRedist } | Should -Not -Throw
                 Pop-Location
             }
             Else {
@@ -221,7 +222,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     Describe 'Uninstall-VcRedist' -Tag "Uninstall" {
         Context 'Uninstall VcRedists' {
             Write-Host "`tUninstalling VcRedists." -ForegroundColor "Cyan"
-            ForEach ($Release in "2012", "2013", "2015", "2017", "2019", "2022") {
+            ForEach ($Release in $TestReleases) {
                 Write-Host "`tUninstall: VcRedist $Release." -ForegroundColor "Cyan"
                 { Uninstall-VcRedist -Release $Release -Confirm:$False } | Should -Not -Throw
             }
