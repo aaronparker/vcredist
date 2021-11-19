@@ -2,7 +2,7 @@
     .SYNOPSIS
         Private Pester function tests.
 #>
-[OutputType()]
+[CmdletBinding()]
 Param ()
 
 InModuleScope VcRedist {

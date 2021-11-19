@@ -2,11 +2,11 @@
     .SYNOPSIS
         Main Pester function tests.
 #>
-[OutputType()]
+[CmdletBinding()]
 Param ()
 
 # Set variables
-If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
+If (Test-Path -Path 'env:APPVEYOR_BUILD_FOLDER') {
     # AppVeyor Testing
     $projectRoot = Resolve-Path -Path $env:APPVEYOR_BUILD_FOLDER
     $module = $env:Module
@@ -43,7 +43,7 @@ Describe "General project validation" {
         ForEach ($rule in $scriptAnalyzerRules) {
             If ($analysis.RuleName -contains $rule) {
                 $analysis |
-                Where-Object RuleName -EQ $rule -outvariable failures |
+                Where-Object RuleName -EQ $rule -OutVariable failures |
                 Out-Default
                 $failures.Count | Should Be 0
             }
