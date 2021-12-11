@@ -66,7 +66,7 @@ Function Update-VcMdtApplication {
     Process {
         If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
             ForEach ($VcRedist in $VcList) {
-                
+
                 # Set variables
                 $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Update application: [$ApplicationName]."
@@ -83,12 +83,12 @@ Function Update-VcMdtApplication {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing application: [$ApplicationName]."
                     Throw $_.Exception.Message
                 }
-    
+
                 If ($Null -ne $existingVc) {
                     try {
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Found application: [$ApplicationName]."
                         If ($existingVc.CommandLine -ne ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })") {
-                            
+
                             # Check the existing command line on the application and update
                             Write-Verbose -Message "$($MyInvocation.MyCommand): Updating command line."
                             If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Update CommandLine")) {
@@ -106,7 +106,7 @@ Function Update-VcMdtApplication {
                                 }
                             }
                         }
-                        
+
                         # Determine whether update is required
                         $Update = $False
                         If ($existingVc.UninstallKey -ne $VcRedist.ProductCode) { $Update = $True }
@@ -115,7 +115,7 @@ Function Update-VcMdtApplication {
 
                         If ($Update -eq $True) {
                             If ($PSCmdlet.ShouldProcess($existingVc.PSPath, "Updating VcRedist application")) {
-                                
+
                                 # Copy the updated executable
                                 try {
                                     Write-Verbose -Message "$($MyInvocation.MyCommand): Copy VcRedist installer."
@@ -200,7 +200,7 @@ Function Update-VcMdtApplication {
 
     End {
         If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
-            
+
             # Get the imported Visual C++ Redistributables applications to return on the pipeline
             Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
             Write-Output -InputObject (Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })

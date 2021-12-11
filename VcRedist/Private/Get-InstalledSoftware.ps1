@@ -5,9 +5,9 @@ Function Get-InstalledSoftware {
 
         .EXAMPLE
             Get-InstalledSoftware
-            
+
             This example retrieves all software installed on the local computer
-            
+
         .PARAMETER Name
             The software title you"d like to limit the query to.
 

@@ -25,7 +25,7 @@ Function New-MdtDrive {
         [System.String] $Path
     )
     $description = "MDT drive created by $($MyInvocation.MyCommand)"
-    
+
     If ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
         Write-Verbose "$($MyInvocation.MyCommand): Found MDT drive: $($mdtDrives[0].Name)"
         $output = $mdtDrives[0].Name

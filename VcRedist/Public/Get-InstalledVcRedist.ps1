@@ -19,7 +19,7 @@ Function Get-InstalledVcRedist {
 
     # If -ExportAll used, export everything instead of filtering for the primary Redistributable
     If ($PSBoundParameters.ContainsKey("ExportAll")) {
-        
+
         # Write the installed VcRedists to the pipeline
         Write-Output -InputObject $VcRedists
     }

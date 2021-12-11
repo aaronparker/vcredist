@@ -1,7 +1,7 @@
 <#
     .SYNOPSIS
         AppVeyor pre-deploy script.
-#> 
+#>
 [OutputType()]
 Param ()
 

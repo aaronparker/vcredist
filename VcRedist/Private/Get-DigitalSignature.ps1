@@ -2,7 +2,7 @@ Function Get-DigitalSignature {
     <#
         .SYNOPSIS
             Get digital signatures from files in a target folder.
-        
+
         .DESCRIPTION
             Gets digital signatures from .exe and .dll files from a specified path and sub-folders.
             Retreives the certificate thumbprint, certificate name, certificate expiry, certificate validity and file path and outputs the results.
@@ -11,7 +11,7 @@ Function Get-DigitalSignature {
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy
-        
+
         .LINK
             https://github.com/Insentra/ApplicationControl
 
@@ -55,7 +55,7 @@ Function Get-DigitalSignature {
         [Parameter(ParameterSetName = 'Base', Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $Unique
     )
-    Begin {        
+    Begin {
         # Initialise $Signatures as an array
         $Signatures = @()
     }
@@ -95,7 +95,7 @@ Function Get-DigitalSignature {
     End {
         # If -Unique is specified, filter the signatures list and return the first item of each unique certificate
         # If -Export is specified, we also only want unique certificate files
-        If ($Export -or $Unique) { 
+        If ($Export -or $Unique) {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering for unique signatures."
             $Signatures = $Signatures | Where-Object { $_.Status -eq "Valid" -or $_.Status -eq "UnknownError" } | `
                 Group-Object -Property Thumbprint | `

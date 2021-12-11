@@ -2,7 +2,7 @@ Function Get-FileMetadata {
     <#
         .SYNOPSIS
             Get file metadata from files in a target folder.
-        
+
         .DESCRIPTION
             Retreives file metadata from files in a target path, or file paths, to display information on the target files.
             Useful for understanding application files and identifying metadata stored in them. Enables the administrator to view metadata for application control scenarios.
@@ -10,7 +10,7 @@ Function Get-FileMetadata {
         .NOTES
             Author: Aaron Parker
             Twitter: @stealthpuppy
-        
+
         .OUTPUTS
             [System.Array]
 

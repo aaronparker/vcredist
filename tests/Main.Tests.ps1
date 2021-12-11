@@ -12,7 +12,7 @@ If (Test-Path -Path 'env:APPVEYOR_BUILD_FOLDER') {
     $module = $env:Module
 }
 Else {
-    # Local Testing 
+    # Local Testing
     $projectRoot = Resolve-Path -Path (((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName)
     $module = "VcRedist"
 }
@@ -38,8 +38,8 @@ Describe "General project validation" {
     $scriptAnalyzerRules = Get-ScriptAnalyzerRule
     It "<file> should pass ScriptAnalyzer" -TestCases $testCase {
         param($file)
-        $analysis = Invoke-ScriptAnalyzer -Path  $file.fullname -ExcludeRule @('PSAvoidGlobalVars', 'PSAvoidUsingConvertToSecureStringWithPlainText', 'PSAvoidUsingWMICmdlet') -Severity @('Warning', 'Error')   
-        
+        $analysis = Invoke-ScriptAnalyzer -Path  $file.fullname -ExcludeRule @('PSAvoidGlobalVars', 'PSAvoidUsingConvertToSecureStringWithPlainText', 'PSAvoidUsingWMICmdlet') -Severity @('Warning', 'Error')
+
         ForEach ($rule in $scriptAnalyzerRules) {
             If ($analysis.RuleName -contains $rule) {
                 $analysis |
@@ -55,11 +55,11 @@ Describe "Module Function validation" {
     $scripts = Get-ChildItem -Path (Join-Path $projectRoot $module) -Recurse -Include *.ps1
     $testCase = $scripts | ForEach-Object { @{file = $_ } }
     It "Script <file> should only contain one function" -TestCases $testCase {
-        param($file)   
+        param($file)
         $file.fullname | Should Exist
         $contents = Get-Content -Path $file.fullname -ErrorAction Stop
         $describes = [Management.Automation.Language.Parser]::ParseInput($contents, [ref]$null, [ref]$null)
-        $test = $describes.FindAll( { $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true) 
+        $test = $describes.FindAll( { $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true)
         $test.Count | Should Be 1
     }
     It "<file> should match function name" -TestCases $testCase {
@@ -67,7 +67,7 @@ Describe "Module Function validation" {
         $file.fullname | Should Exist
         $contents = Get-Content -Path $file.fullname -ErrorAction Stop
         $describes = [Management.Automation.Language.Parser]::ParseInput($contents, [ref]$null, [ref]$null)
-        $test = $describes.FindAll( { $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true) 
+        $test = $describes.FindAll( { $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true)
         $test[0].name | Should Be $file.basename
     }
 }
@@ -76,7 +76,7 @@ Describe "Module Function validation" {
 Describe 'Module Metadata validation' {
     It 'Script fileinfo should be OK' {
         { Test-ModuleManifest -Path $manifestPath -ErrorAction Stop } | Should Not Throw
-    }   
+    }
     It 'Import module should be OK' {
         { Import-Module $modulePath -Force -ErrorAction Stop } | Should Not Throw
     }

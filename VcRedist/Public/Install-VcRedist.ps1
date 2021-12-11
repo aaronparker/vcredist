@@ -22,35 +22,35 @@ Function Install-VcRedist {
 
     Begin {
         # Get script elevation status
-        [System.Boolean] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator") 
+        [System.Boolean] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
         If ($Elevated) {}
         Else {
             $Message =  "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again"
             Write-Warning -Message "$($MyInvocation.MyCommand): $Message."
             Throw [System.Management.Automation.ScriptRequiresException]
         }
-        
+
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
     }
 
     Process {
-        
+
         # Sort $VcList by version number from oldest to newest
         ForEach ($VcRedist in ($VcList | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false })) {
 
-            # If already installed or the -Force parameter is not specified, skip 
+            # If already installed or the -Force parameter is not specified, skip
             If (($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) -and !($PSBoundParameters.ContainsKey("Force"))) {
                 Write-Warning -Message "$($MyInvocation.MyCommand): VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
             }
             Else {
-                
-                # Avoid installing 64-bit Redistributable on x86 Windows 
+
+                # Avoid installing 64-bit Redistributable on x86 Windows
                 If ((Get-Bitness -Architecture 'x86') -and ($VcRedist.Architecture -eq 'x64')) {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Incompatible architecture: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                 }
                 Else {
-                        
+
                     # Target folder structure; VcRedist setup file
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Construct target installer folder and filename."
                     $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
@@ -88,7 +88,7 @@ Function Install-VcRedist {
             }
         }
     }
- 
+
     End {
         # Get the installed Visual C++ Redistributables applications to return on the pipeline
         Write-Output -InputObject (Get-InstalledVcRedist)

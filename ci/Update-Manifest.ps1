@@ -45,7 +45,7 @@ ForEach ($Item in $Release) {
             $CurrentManifest.Supported[$Index].ProductCode = $InstalledItem.ProductCode
             $CurrentManifest.Supported[$Index].Version = $InstalledItem.Version
 
-            # Create output variable 
+            # Create output variable
             $NewVersion = $InstalledItem.Version
             $FoundNewVersion = $True
             $Output += $Item

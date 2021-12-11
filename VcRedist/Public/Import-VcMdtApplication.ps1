@@ -123,7 +123,7 @@ Function Import-VcMdtApplication {
             $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
             $VcMatched = $existingVcRedists | Where-Object { $_.Name -eq $ApplicationName }
 
-            
+
             # Remove the matched VcRedist application
             If ($PSBoundParameters.ContainsKey("Force")) {
                 If ($VcMatched.UninstallKey -eq $VcRedist.ProductCode) {

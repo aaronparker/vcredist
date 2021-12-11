@@ -155,7 +155,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
             $Path = [System.IO.Path]::Combine($downloadDir, "VcDownload")
             If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
             New-Item -Path $Path -ItemType Directory -Force > $Null
-            
+
             Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
             $VcList = Get-VcList -Release $TestReleases
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
