@@ -26,6 +26,7 @@ Function Get-FileMetadata {
             Description:
             Scans the folder specified in the Path variable and returns the metadata for each file.
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding(SupportsShouldProcess = $False)]
     [OutputType([Array])]
     Param (

@@ -9,7 +9,7 @@
 Param ()
 
 #region Functions used in tests
-Function Test-VcDownloads {
+Function Test-VcDownload {
     <#
         .SYNOPSIS
             Tests downloads from Get-VcList are successful.
@@ -147,7 +147,7 @@ Describe 'Save-VcRedist' -Tag "Save" {
                 $VcList = Get-VcList -Release $TestReleases
                 Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
                 Save-VcRedist -VcList $VcList -Path $Path
-                Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
+                Test-VcDownload -VcList $VcList -Path $Path | Should -Be $True
             }
             Else {
                 Write-Warning -Message "$downloadDir does not exist."
