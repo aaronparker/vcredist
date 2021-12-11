@@ -2,6 +2,9 @@
     .SYNOPSIS
         Update manifest for newer VcRedist versions.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUserDeclaredVarsMoreThanAssignments')]
 [CmdletBinding()]
 Param (
     [System.String[]] $Release,
