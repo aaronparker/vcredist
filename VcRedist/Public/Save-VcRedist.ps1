@@ -34,7 +34,7 @@ Function Save-VcRedist {
         [System.Management.Automation.SwitchParameter] $NoProgress
     )
 
-    Begin { 
+    Begin {
 
         # Disable the Invoke-WebRequest progress bar for faster downloads
         If ($PSBoundParameters.ContainsKey("Verbose") -and !($PSBoundParameters.ContainsKey("NoProgress"))) {
@@ -43,7 +43,7 @@ Function Save-VcRedist {
         Else {
             $ProgressPreference = "SilentlyContinue"
         }
-        
+
         # Enable TLS 1.2
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     }
@@ -79,17 +79,17 @@ Function Save-VcRedist {
                     }
                 }
             }
-            
+
             # Test whether the VcRedist is already on disk
             $target = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
             Write-Verbose -Message "$($MyInvocation.MyCommand): Testing target: $($target)"
 
             If (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
                 $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
-                
+
                 # If the target Redistributable is already downloaded, compare the version
                 If (($VcRedist.Version -gt $ProductVersion) -or ($Null -eq $ProductVersion)) {
-                    
+
                     # Download the newer version
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: [$($VcRedist.Version)] > file version: [$ProductVersion]."
                     $download = $True
@@ -106,9 +106,9 @@ Function Save-VcRedist {
             # The VcRedist needs to be downloaded
             If ($download) {
                 If ($PSCmdlet.ShouldProcess($VcRedist.Download, "Invoke-WebRequest")) {
-                    
+
                     try {
-                        
+
                         # Download the file
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
                         $iwrParams = @{

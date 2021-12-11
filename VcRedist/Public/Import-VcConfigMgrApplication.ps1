@@ -51,14 +51,14 @@ Function Import-VcConfigMgrApplication {
         }
         Write-Verbose -Message "$($MyInvocation.MyCommand): Set location to [$Path]."
         #endregion
-        
+
         #region Validate $CMPath
         If (Resolve-Path -Path $CMPath) {
             $CMPath = $CMPath.TrimEnd("\")
 
             #region If the ConfigMgr console is installed, load the PowerShell module; Requires PowerShell module to be installed
             If (Test-Path -Path env:SMS_ADMIN_UI_PATH -ErrorAction "SilentlyContinue") {
-                try {            
+                try {
                     # Import the ConfigurationManager.psd1 module
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Importing module: $($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1."
                     Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$False > $Null
@@ -101,7 +101,7 @@ Function Import-VcConfigMgrApplication {
         }
         #endregion
     }
-    
+
     Process {
         ForEach ($VcRedist in $VcList) {
             Write-Verbose -Message "Importing VcRedist app: [Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)]"
@@ -111,7 +111,7 @@ Function Import-VcConfigMgrApplication {
 
                 # Import as an application into ConfigMgr
                 If ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $CMPath", "Import ConfigMgr app")) {
-                
+
                     # Create the ConfigMgr application with properties from the manifest
                     If ((Get-Item -Path $DestFolder).PSDrive.Name -eq $SMSSiteCode) {
                         If ($PSCmdlet.ShouldProcess($VcRedist.Name + " $($VcRedist.Architecture)", "Creating ConfigMgr application")) {
@@ -119,7 +119,7 @@ Function Import-VcConfigMgrApplication {
                             # Build paths
                             $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                             $ContentLocation = [System.IO.Path]::Combine($CMPath, $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-                            
+
                             #region Copy VcRedists to the network location. Use robocopy for robustness
                             If ($NoCopy) {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): NoCopy specified, skipping copy to $ContentLocation. Ensure VcRedists exist in the target."
@@ -166,7 +166,7 @@ Function Import-VcConfigMgrApplication {
                                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to set location to [$DestFolder]."
                                 Throw $_.Exception.Message
                             }
-                                                
+
                             try {
                                 # Splat New-CMApplication parameters, add the application and move into the target folder
                                 $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
@@ -223,7 +223,7 @@ Function Import-VcConfigMgrApplication {
                                 $params = @{
                                     Hive    = "LocalMachine"
                                     Is64Bit = If ($VcRedist.UninstallKey -eq "64") { $True } Else { $False }
-                                    KeyName = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$($VcRedist.ProductCode)"  
+                                    KeyName = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$($VcRedist.ProductCode)"
                                 }
                                 $detectionClause = New-CMDetectionClauseRegistryKey @params
 

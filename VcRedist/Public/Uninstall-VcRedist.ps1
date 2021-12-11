@@ -2,7 +2,7 @@ Function Uninstall-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Manual', SupportsShouldProcess = $True, ConfirmImpact = "High", 
+    [CmdletBinding(DefaultParameterSetName = 'Manual', SupportsShouldProcess = $True, ConfirmImpact = "High",
         HelpURI = "https://stealthpuppy.com/vcredist/uninstall-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
@@ -37,7 +37,7 @@ Function Uninstall-VcRedist {
                 $VcRedistsToRemove = $VcList
             }
         }
-        
+
         # Walk through each VcRedist and uninstall
         ForEach ($VcRedist in $VcRedistsToRemove) {
             If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name)]", "Uninstall")) {

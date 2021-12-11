@@ -2,6 +2,9 @@
     .SYNOPSIS
         AppVeyor install script.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUserDeclaredVarsMoreThanAssignments", "")]
 [OutputType()]
 Param ()
 
@@ -12,7 +15,7 @@ If (Test-Path 'env:APPVEYOR_BUILD_FOLDER') {
     $module = $env:Module
 }
 Else {
-    # Local Testing 
+    # Local Testing
     $projectRoot = Resolve-Path -Path (((Get-Item (Split-Path -Parent -Path $MyInvocation.MyCommand.Definition)).Parent).FullName)
     $module = "VcRedist"
 }

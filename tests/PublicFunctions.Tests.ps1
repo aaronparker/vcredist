@@ -2,11 +2,14 @@
     .SYNOPSIS
         Public Pester function tests.
 #>
-[OutputType()]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUserDeclaredVarsMoreThanAssignments", "")]
+[CmdletBinding()]
 Param ()
 
 #region Functions used in tests
-Function Test-VcDownloads {
+Function Test-VcDownload {
     <#
         .SYNOPSIS
             Tests downloads from Get-VcList are successful.
@@ -43,9 +46,10 @@ If (Test-Path -Path env:Temp -ErrorAction "SilentlyContinue") {
 Else {
     $downloadDir = $env:TMPDIR
 }
-Write-Host -ForegroundColor Cyan "`tDownload dir: $downloadDir."
+Write-Host -ForegroundColor "Cyan" "`tDownload dir: $downloadDir."
 
 # VcRedist manifest counts
+$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 $VcCount = @{
     "Default"     = 6
     "Supported"   = 12
@@ -74,7 +78,7 @@ Describe 'Get-VcList' -Tag "Get" {
         }
     }
     Context 'Validate Get-VcList array properties' {
-        $VcList = Get-VcList
+        $VcList = Get-VcList -Release $TestReleases
         ForEach ($VcRedist in $VcList) {
             It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] has expected properties" {
                 $VcRedist.Name.Length | Should -BeGreaterThan 0
@@ -140,10 +144,10 @@ Describe 'Save-VcRedist' -Tag "Save" {
             If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
                 $Path = [System.IO.Path]::Combine($downloadDir, "VcDownload")
                 If (!(Test-Path $Path)) { New-Item $Path -ItemType Directory -Force > $Null }
-                $VcList = Get-VcList
-                Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
+                $VcList = Get-VcList -Release $TestReleases
+                Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
                 Save-VcRedist -VcList $VcList -Path $Path
-                Test-VcDownloads -VcList $VcList -Path $Path | Should -Be $True
+                Test-VcDownload -VcList $VcList -Path $Path | Should -Be $True
             }
             Else {
                 Write-Warning -Message "$downloadDir does not exist."
@@ -153,9 +157,9 @@ Describe 'Save-VcRedist' -Tag "Save" {
             $Path = [System.IO.Path]::Combine($downloadDir, "VcDownload")
             If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
             New-Item -Path $Path -ItemType Directory -Force > $Null
-            
-            Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
-            $VcList = Get-VcList
+
+            Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
+            $VcList = Get-VcList -Release $TestReleases
             $DownloadedRedists = Save-VcRedist -VcList $VcList -Path $Path
             $DownloadedRedists | Should -BeOfType PSCustomObject
         }
@@ -165,8 +169,8 @@ Describe 'Save-VcRedist' -Tag "Save" {
             If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
                 New-Item -Path ([System.IO.Path]::Combine($downloadDir, "VcTest")) -ItemType Directory -ErrorAction "SilentlyContinue" > $Null
                 Push-Location -Path ([System.IO.Path]::Combine($downloadDir, "VcTest"))
-                Write-Host "`tDownloading VcRedists." -ForegroundColor Cyan
-                { Get-VcList | Save-VcRedist } | Should -Not -Throw
+                Write-Host "`tDownloading VcRedists." -ForegroundColor "Cyan"
+                { Get-VcList -Release $TestReleases | Save-VcRedist } | Should -Not -Throw
                 Pop-Location
             }
             Else {
@@ -181,26 +185,27 @@ Describe 'Save-VcRedist' -Tag "Save" {
     }
 }
 
-Describe 'Install-VcRedist' -Tag "Install" {
-    Context 'Install Redistributables' {
-        If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
-            $VcRedists = Get-VcList
-            $Path = [System.IO.Path]::Combine($downloadDir, "VcDownload")
-            Write-Host "`tInstalling VcRedists." -ForegroundColor Cyan
-            $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent
-            ForEach ($VcRedist in $VcRedists) {
-                It "Installed the VcRedist: '$($VcRedist.Name)'" {
-                    $VcRedist.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
+# Run the following tests only if we're running on Windows
+If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
+
+    Describe 'Install-VcRedist' -Tag "Install" {
+        Context 'Install Redistributables' {
+            If (Test-Path -Path $downloadDir -ErrorAction "SilentlyContinue") {
+                $VcRedists = Get-VcList
+                $Path = [System.IO.Path]::Combine($downloadDir, "VcDownload")
+                Write-Host "`tInstalling VcRedists." -ForegroundColor "Cyan"
+                $Installed = Install-VcRedist -VcList $VcRedists -Path $Path -Silent
+                ForEach ($VcRedist in $VcRedists) {
+                    It "Installed the VcRedist: '$($VcRedist.Name)'" {
+                        $VcRedist.ProductCode -match $Installed.ProductCode | Should -Not -BeNullOrEmpty
+                    }
                 }
             }
-        }
-        Else {
-            Write-Warning -Message "$downloadDir does not exist."
+            Else {
+                Write-Warning -Message "$downloadDir does not exist."
+            }
         }
     }
-}
-
-If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
 
     Describe 'Get-InstalledVcRedist' -Tag "Install" {
         Context 'Validate Get-InstalledVcRedist array properties' {
@@ -218,40 +223,54 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
 
     Describe 'Uninstall-VcRedist' -Tag "Uninstall" {
         Context 'Uninstall VcRedists' {
-            Write-Host "`tUninstalling VcRedists." -ForegroundColor Cyan
-            { Uninstall-VcRedist -Release "2012", "2013" -Confirm:$False } | Should -Not -Throw
-        }
-    }
-}
-#endregion
-
-#region Manifest test
-# Get an array of VcRedists from the current manifest and the installed VcRedists
-$Release = "2022"
-Write-Host -ForegroundColor Cyan "`tGetting manifest from: $VcManifest."
-$CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
-$InstalledVcRedists = Get-InstalledVcRedist
-$UpdateManifest = $False
-
-Describe 'VcRedist manifest tests' -Tag "Manifest" {
-    Context 'Compare manifest version against installed version' {
-
-        # Filter the VcRedists for the target version and compare against what has been installed
-        ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Release })) {
-            $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
-            If ($InstalledItem.Version -gt $ManifestVcRedist.Version) { $UpdateManifest = $True }
-
-            # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
-            It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
-                Write-Host -ForegroundColor Cyan "`tComparing installed: $($InstalledItem.Version). Against manifest: $($ManifestVcRedist.Version)."
-                $InstalledItem.Version -gt $ManifestVcRedist.Version | Should -Be $False
+            Write-Host "`tUninstalling VcRedists." -ForegroundColor "Cyan"
+            ForEach ($Release in $TestReleases) {
+                Write-Host "`tUninstall: VcRedist $Release." -ForegroundColor "Cyan"
+                { Uninstall-VcRedist -Release $Release -Confirm:$False } | Should -Not -Throw
             }
         }
+    }
 
-        # Call update manifest script
-        If ($UpdateManifest -eq $True) {
-            . $ProjectRoot\ci\Update-Manifest.ps1
+    #region Manifest test
+    # Get an array of VcRedists from the current manifest and the installed VcRedists
+    Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."
+    $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
+
+    $ValidateReleases = @("2017", "2019", "2022")
+    $UpdateManifest = $False
+
+    Describe 'VcRedist manifest tests' -Tag "Manifest" {
+        Context 'Compare manifest version against installed version' {
+
+            # Filter the VcRedists for the target version and compare against what has been installed
+            ForEach ($Release in $ValidateReleases) {
+
+                Write-Host "`tInstalling VcRedist $Release." -ForegroundColor "Cyan"
+                Install-VcRedist -VcList (Get-VcList -Release $Release) -Path $([System.IO.Path]::Combine($downloadDir, "VcDownload")) -Silent
+                $InstalledVcRedists = Get-InstalledVcRedist
+
+                ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Release })) {
+                    $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
+                    If ($InstalledItem.Version -gt $ManifestVcRedist.Version) { $UpdateManifest = $True }
+
+                    # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
+                    It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
+                        Write-Host -ForegroundColor "Cyan" "`tComparing installed: $($InstalledItem.Version). Against manifest: $($ManifestVcRedist.Version)."
+                        $InstalledItem.Version -gt $ManifestVcRedist.Version | Should -Be $False
+                    }
+                }
+            }
         }
+    }
+    #endregion
+
+    If ($UpdateManifest -eq $True) {
+        # Call update manifest script
+        $params = @{
+            Release = $ValidateReleases
+            Path    = $([System.IO.Path]::Combine($downloadDir, "VcDownload"))
+        }
+        . $ProjectRoot\ci\Update-Manifest.ps1 @params
     }
 }
 #endregion

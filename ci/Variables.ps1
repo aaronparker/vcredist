@@ -2,6 +2,7 @@
     .SYNOPSIS
         Output variables for testing.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [OutputType()]
 Param ()
 

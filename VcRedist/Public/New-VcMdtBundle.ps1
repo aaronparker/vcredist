@@ -105,7 +105,7 @@ Function New-VcMdtBundle {
             }
             Else {
                 If ($PSCmdlet.ShouldProcess("$($Publisher) $($BundleName)", "Create bundle")) {
-                    
+
                     # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Gathering VcRedist applications in: $target"
                     $existingVcRedists = $existingVcRedists | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false }

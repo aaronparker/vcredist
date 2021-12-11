@@ -77,7 +77,7 @@ Function Update-VcMdtBundle {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing Visual C++ Redistributables bundle."
             Throw $_.Exception.Message
         }
-        
+
         ForEach ($Bundle in $Bundles) {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Found bundle: [$($Bundle.Name)]."
 
@@ -120,7 +120,7 @@ Function Update-VcMdtBundle {
                     Throw $_.Exception.Message
                 }
             }
-        
+
             # Write the bundle to the pipeline
             Write-Output -InputObject ($bundle | Select-Object -Property * )
         }
