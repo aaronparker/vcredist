@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.302
+
+* Maintenance release - addresses issues identified by PSScriptAnalyzer and code style improvements
+
 ## 3.0.292
 
 * Adds support for Visual C++ Redistributable for Visual Studio 2022, version `14.30.30704.0`
