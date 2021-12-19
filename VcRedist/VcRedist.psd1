@@ -69,9 +69,9 @@ PowerShellVersion = '3.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 
-               'Import-VcConfigMgrApplication', 'Import-VcMdtApplication', 
-               'Install-VcRedist', 'New-VcMdtBundle', 'Save-VcRedist', 
+FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList',
+               'Import-VcConfigMgrApplication', 'Import-VcMdtApplication',
+               'Install-VcRedist', 'New-VcMdtBundle', 'Save-VcRedist',
                'Uninstall-VcRedist', 'Update-VcMdtApplication', 'Update-VcMdtBundle')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -107,13 +107,13 @@ PrivateData = @{
         LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://stealthpuppy.com/vcredist/'
+        ProjectUri = 'https://vcredist.com/'
 
         # A URL to an icon representing this module.
         IconUri = 'https://raw.githubusercontent.com/aaronparker/VcRedist/main/img/VisualStudioLogo2019-256.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://stealthpuppy.com/vcredist/changelog/'
+        ReleaseNotes = 'https://vcredist.com/changelog/'
 
         # Prerelease string of this module
         # Prerelease = ''

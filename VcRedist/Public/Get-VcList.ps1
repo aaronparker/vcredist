@@ -3,7 +3,7 @@ Function Get-VcList {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(DefaultParameterSetName = "Manifest", HelpURI = "https://stealthpuppy.com/vcredist/get-vclist/")]
+    [CmdletBinding(DefaultParameterSetName = "Manifest", HelpURI = "https://vcredist.com/get-vclist/")]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName = "Manifest")]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]
