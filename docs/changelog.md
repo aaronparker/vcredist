@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Updated online help pages to [https://vcredist.com/](https://vcredist.com/)
+
 ## 3.0.302
 
 * Maintenance release - addresses issues identified by PSScriptAnalyzer and code style improvements
