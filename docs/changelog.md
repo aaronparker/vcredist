@@ -37,7 +37,7 @@
 
 ## 3.0.251
 
-* IMPORTANT: This release moves the Visual C++ Redistributable 2008 to the list of unsupported Redistributables and therefore will not be returned by default by `Get-VcList`. See the documentation on [how to retrieve the supported and unsupported list of Redistributables](https://stealthpuppy.com/vcredist/get-vclist.html)
+* IMPORTANT: This release moves the Visual C++ Redistributable 2008 to the list of unsupported Redistributables and therefore will not be returned by default by `Get-VcList`. See the documentation on [how to retrieve the supported and unsupported list of Redistributables](https://vcredist.com/get-vclist.html)
 * Fixes an issue when passing the list of Redistributables to `Install-VcRedist` via the pipeline [#77](https://github.com/aaronparker/VcRedist/issues/77)
 * Fixes an issue with the output from `Save-VcRedist` where it would fail to return the list of Redistributables to the pipeline when run a second time
 
@@ -45,7 +45,7 @@
 
 * Fix an issue in `Get-VcList` where it fails when exporting an unsupported Visual C++ Redistributable
 * Sort the list of Visual C++ Redistributables passed to `Install-VcRedist` by version number so that Redistributables are installed in order from oldest to newest
-* Update `Save-VcRedist` to not throw when attempting to download a Visual C++ Redistributable URL that returns a 404, so that it will continue to download the remaining Redistributables. See the [known issues](https://stealthpuppy.com/vcredist/known-issues.html) for Redistributables that are no longer available for download
+* Update `Save-VcRedist` to not throw when attempting to download a Visual C++ Redistributable URL that returns a 404, so that it will continue to download the remaining Redistributables. See the [known issues](https://vcredist.com/known-issues.html) for Redistributables that are no longer available for download
 * Update `Install-VcRedist` to not throw when a Redistributable installer is unavailable in the target path and continue to install the remaining Redistributables. This allows this function to continue the install process when specific Redistributables are not downloaded by `Save-VcRedist`
 * Update `Uninstall-VcRedist` for pipeline support correctly. This enables commands such as `Get-InstalledVcRedist | Uninstall-VcRedist`
 
@@ -254,7 +254,7 @@
 ## 1.3.3.39
 
 * Update manifests with 2017 \(14.13.26020\) release
-* Update module `ReleaseNotes` property with a link to changelog [https://docs.stealthpuppy.com/vcredist/change-log](https://docs.stealthpuppy.com/vcredist/change-log)
+* Update module `ReleaseNotes` property with a link to changelog [https://docs.vcredist/change-log](https://docs.vcredist/change-log)
 * Update functions with explicit `Write-Output`
 
 ## 1.3.2.35

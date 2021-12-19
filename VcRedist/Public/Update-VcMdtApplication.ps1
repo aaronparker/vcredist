@@ -2,7 +2,7 @@ Function Update-VcMdtApplication {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/update-vcmdtapplication/")]
+    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/update-vcmdtapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     Param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]

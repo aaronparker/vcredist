@@ -1,19 +1,33 @@
 {
     "cSpell.words": [
+        "aaronparker",
+        "arithmatex",
+        "betterem",
         "Bitness",
+        "fontawesome",
+        "globbing",
         "GUIDs",
+        "inlinehilite",
         "installedvcredist",
+        "magiclink",
         "MAML",
+        "mkdocs",
         "noreboot",
+        "pymdownx",
         "robocopy",
+        "Roboto",
         "Runtimes",
+        "smartsymbols",
         "Snapins",
+        "squidfunk",
+        "superfences",
         "vcconfigmgrapplication",
         "vcintuneapplication",
         "vclist",
         "vcmanifest",
         "vcmdtapplication",
         "vcmdtbundle",
-        "VcRedist"
+        "VcRedist",
+        "visualstudiologo"
     ]
 }

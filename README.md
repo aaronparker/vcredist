@@ -17,7 +17,7 @@ The Microsoft Visual C++ Redistributables are a core component of any Windows de
 
 ### Documentation
 
-Full documentation for the module is located at [https://stealthpuppy.com/vcredist/](https://stealthpuppy.com/vcredist/)
+Full documentation for the module is located at [https://vcredist.com/](https://vcredist.com/)
 
 ### PowerShell Gallery
 

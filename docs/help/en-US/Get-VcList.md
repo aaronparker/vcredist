@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com/vcredist/get-vclist/
+online version: https://vcredist.com/get-vclist/
 schema: 2.0.0
 ---
 
@@ -185,4 +185,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Get the list of Visual C++ Redistributables:](https://stealthpuppy.com/vcredist/get-vclist/)
+[Get the list of Visual C++ Redistributables:](https://vcredist.com/get-vclist/)

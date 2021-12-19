@@ -1,7 +1,7 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://stealthpuppy.com/vcredist/import-vcconfigmgrapplication/
+online version: https://vcredist.com/import-vcconfigmgrapplication/
 schema: 2.0.0
 ---
 
@@ -260,4 +260,4 @@ Twitter: @stealthpuppy
 
 ## RELATED LINKS
 
-[Import Redistributables into ConfigMgr:](https://stealthpuppy.com/vcredist/import-vcconfigmgrapplication/)
+[Import Redistributables into ConfigMgr:](https://vcredist.com/import-vcconfigmgrapplication/)

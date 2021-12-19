@@ -107,13 +107,13 @@ PrivateData = @{
         LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://stealthpuppy.com/vcredist/'
+        ProjectUri = 'https://vcredist.com/'
 
         # A URL to an icon representing this module.
         IconUri = 'https://raw.githubusercontent.com/aaronparker/VcRedist/main/img/VisualStudioLogo2019-256.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://stealthpuppy.com/vcredist/changelog/'
+        ReleaseNotes = 'https://vcredist.com/changelog/'
 
         # Prerelease string of this module
         # Prerelease = ''
