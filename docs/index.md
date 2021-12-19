@@ -4,12 +4,12 @@ VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visua
 
 VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
 
-![PowerShell Gallery version](https://img.shields.io/powershellgallery/v/vcredist.svg?style=flat-square)
-![PowerShell Gallery downloads](https://img.shields.io/powershellgallery/dt/vcredist.svg?style=flat-square)
+![PowerShell Gallery version](https://img.shields.io/powershellgallery/v/vcredist.svg?style=for-the-badge&logo=powershell&logoColor=white&labelColor=7e56c2)
+![PowerShell Gallery downloads](https://img.shields.io/powershellgallery/dt/vcredist.svg?style=for-the-badge&logo=powershell&logoColor=white&labelColor=7e56c2&color=009485)
 
 ## Why
 
-The Microsoft Visual C++ Redistributables are a core component of any Windows desktop deployment (physical PCs or virtual desktops). Multiple versions are commonly deployed to support various applications, thus they need to be imported into your deployment solution or installed locally. The aim of this module is to simplify obtaining, deploying an updating to the current versions of the Redistributables.
+The Microsoft Visual C++ Redistributables are a core component of any Windows desktop deployment (physical PCs or virtual desktops). Multiple versions are commonly deployed to support various applications, thus they need to be imported into your deployment solution or installed locally. The aim of this module is to simplify obtaining, deploying, and updating to the current versions of the Redistributables.
 
 ## Supported vs. Unsupported Redistributables
 
