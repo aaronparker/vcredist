@@ -4,8 +4,8 @@ VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visua
 
 VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
 
-![PowerShell Gallery version](https://img.shields.io/powershellgallery/v/vcredist.svg?style=for-the-badge&logo=powershell&logoColor=white&labelColor=7e56c2)
-![PowerShell Gallery downloads](https://img.shields.io/powershellgallery/dt/vcredist.svg?style=for-the-badge&logo=powershell&logoColor=white&labelColor=7e56c2&color=009485)
+![PowerShell Gallery version](https://img.shields.io/powershellgallery/v/vcredist.svg?style=flat&logo=powershell&logoColor=white&labelColor=7e56c2)
+![PowerShell Gallery downloads](https://img.shields.io/powershellgallery/dt/vcredist.svg?style=flat&logo=powershell&logoColor=white&labelColor=7e56c2&color=009485)
 
 ## Why
 
