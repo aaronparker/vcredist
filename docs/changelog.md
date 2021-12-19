@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 3.0.307
 
 * Updated online help pages to [https://vcredist.com/](https://vcredist.com/)
 
