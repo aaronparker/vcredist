@@ -89,7 +89,7 @@ Output from `Get-VcList` can be piped to `Save-VcRedist`, `Install-VcRedist`, `I
 ### Optional parameters
 
 * `Release` - Specifies the release (or version) of the redistributables to return (e.g. `2022`, `2019`, `2010`, `2012`, etc.)
-* `Architecture` - Specifies the processor architecture to of the redistributables to return. Can be x86 or x64
+* `Architecture` - Specifies the processor architecture to of the redistributables to return. Can be `x86` or `x64`
 * `Export` - Defines the list of Visual C++ Redistributables to export - All, Supported or Unsupported Redistributables. Defaults to exporting the Supported Redistributables.
 * `Manifest` - An external JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format
 
@@ -103,7 +103,7 @@ To return Redistributables from the list of unsupported Redistributables or the 
 
 ## Filtering Output
 
-The output from `Get-VcList` can be filtered before sending to other functions. `Get-VcList` has the `-Release` parameter for filtering on the 2005, 2008, 2010, 2012, 2013, 2015, 2017, 2019 and 2022 releases of the Redistributables. Additionally, the `-Architecture` parameter can filter on x86 and x64 processor architectures.
+The output from `Get-VcList` can be filtered before sending to other functions. `Get-VcList` has the `-Release` parameter for filtering on the `2005`, `2008`, `2010`, `2012`, `2013`, `2015`, `2017`, `2019` and `2022` releases of the Redistributables. Additionally, the `-Architecture` parameter can filter on `x86` and `x64` processor architectures.
 
 These parameters cannot be used with the `-Export` parameter. If you require filtering when exporting All, Supported or Unsuppported Redistributables, pipe the output to the `Where-Object` function.
 
