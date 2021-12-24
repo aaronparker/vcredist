@@ -2,7 +2,7 @@
 
 !!! info
 
-    'English - United States' is the only supported language. The module will only download the en-US versions of the Visual C++ Redistributables.
+    **English - United States** is the only supported language. The module will only download the `en-US` versions of the Visual C++ Redistributables.
 
 !!! info
 
@@ -14,7 +14,7 @@
 
 !!! info
 
-    Visual C++ Redistributable 2008 9.0.30729.7523 is available; however, only [as a private hotfix](https://support.microsoft.com/en-us/help/2834565/fix-visual-c-2008-mfc-application-that-was-created-by-using-visual-stu) and not publicly downloadable from Microsoft.
+    Visual C++ Redistributable 2008 `9.0.30729.7523` is available; however, only [as a private hotfix](https://support.microsoft.com/en-us/help/2834565/fix-visual-c-2008-mfc-application-that-was-created-by-using-visual-stu) and not publicly downloadable from Microsoft.
 
 !!! info
 
