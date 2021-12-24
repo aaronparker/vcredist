@@ -258,7 +258,7 @@
 ## 1.3.3.39
 
 * Update manifests with `2017` `14.13.26020` release
-* Update module `ReleaseNotes` property with a link to changelog [https://docs.vcredist/change-log](https://docs.vcredist/change-log)
+* Update module `ReleaseNotes` property with a link to changelog [https://vcredist.com/change-log](https://vcredist.com/change-log)
 * Update functions with explicit `Write-Output`
 
 ## 1.3.2.35
