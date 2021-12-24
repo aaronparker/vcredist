@@ -12,11 +12,11 @@ The Version property of the bundle is stamped with the current date making it ea
 
 ### Optional parameters
 
-* `AppFolder` - imports the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists"
-* `MdtDrive` - the drive letter that will be mapped to the MDT deployment share. Not required and defaults to "DS001"
-* `Publisher` - the publisher that will be assigned to the Visual C++ Redistributables bundle. Not required and defaults to "Microsoft"
-* `BundleName` - the bundle short name assigned to the Visual C++ Redistributables bundle. Not required and defaults to "Visual C++ Redistributables"
-* `Language` - defaults to "en-US"
+* `AppFolder` - imports the Visual C++ Redistributables into a sub-folder. Defaults to `VcRedists`
+* `MdtDrive` - the drive letter that will be mapped to the MDT deployment share. Not required and defaults to `DS001`
+* `Publisher` - the publisher that will be assigned to the Visual C++ Redistributables bundle. Not required and defaults to `Microsoft`
+* `BundleName` - the bundle short name assigned to the Visual C++ Redistributables bundle. Not required and defaults to `Visual C++ Redistributables`
+* `Language` - defaults to `en-US`
 
 ## Examples
 

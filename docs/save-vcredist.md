@@ -29,20 +29,20 @@ Redistributables are downloaded into the target folder:
 
 ![Microsoft Visual C++ Redistributables installed on the local PC](assets/images/vcredist-folder.png)
 
-Pass the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
+Pass the list of `2013` and `2019` x86 supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
 
 ```powershell
 $VcList = Get-VcList -Release 2013, 2019 -Architecture x86
 Save-VcRedist -VcList $VcList -Path C:\Redist
 ```
 
-Download the 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist.
+Download the `2012`, `2013`, and `2019` Visual C++ Redistributables to C:\Redist.
 
 ```powershell
 Save-VcRedist -VcList (Get-VcList -Release 2012, 2013, 2019) -Path C:\Redist
 ```
 
-Downloads the 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
+Downloads the `2012`, `2013`, and `2019` Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
 
 ```powershell
 Save-VcRedist -VcList (Get-VcList -Release 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local

@@ -14,14 +14,14 @@ Use `Update-VcMdtApplication` to update the Visual C++ Redistributables that hav
 
 * `Silent` - Configures the MDT application quiet install command to be completely silent instead of using the default passive install command line
 * `Force` - Forces overwrite of an existing Visual C++ Redistributable application
-* `AppFolder` - Imports the Visual C++ Redistributables into a sub-folder. Defaults to "VcRedists"
-* `MdtDrive` - The drive letter that will be mapped to the MDT deployment share. Not required and defaults to "DS001"
+* `AppFolder` - Imports the Visual C++ Redistributables into a sub-folder. Defaults to `VcRedists`
+* `MdtDrive` - The drive letter that will be mapped to the MDT deployment share. Not required and defaults to `DS001`
 * `Publisher` - The publisher that will be assigned to the Visual C++ Redistributables bundle. Not required and defaults to "Microsoft"
-* `Language` - The language assigned to the Visual C++ Redistributables bundle. Defaults to "en-US"
+* `Language` - The language assigned to the Visual C++ Redistributables bundle. Defaults to `en-US`
 
 ## Examples
 
-Update the 2008, 2010, 2012, 2013 and 2019 supported Redistributables in an MDT deployment share with the fully silent install command line:
+Update the `2012`, `2013` and `2022` supported Redistributables in an MDT deployment share with the fully silent install command line:
 
 ```powershell
 $VcList = Get-VcList

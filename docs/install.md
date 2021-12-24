@@ -37,5 +37,5 @@ To install from the repository
 Once installation is complete, you can validate that the module exists by running `Get-Module -ListAvailable VcRedist`. To use the module, load it with:
 
 ```powershell
-Import-Module VcRedist
+Import-Module -Name VcRedist
 ```

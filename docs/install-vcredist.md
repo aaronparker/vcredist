@@ -1,6 +1,6 @@
 # Install the Redistributables
 
-To install the Visual C++ Redistributables on the local machine, use `Install-VcRedist`. This function accepts the array of Visual C++ Redistributables passed from `Get-VcList` and installs the Visual C++ Redistributables downloaded to a local path with `Save-VcRedist`.
+A [quick install option](https://vcredist.com/quick/) is provided; however for a custom install of the Visual C++ Redistributables on a local machine, use `Install-VcRedist`. This function accepts the array of Visual C++ Redistributables passed from `Get-VcList` and installs the Visual C++ Redistributables downloaded to a local path with `Save-VcRedist`.
 
 `Install-VcRedist` supports both passive installs (default) or silent installs with the `-Silent` parameter.
 

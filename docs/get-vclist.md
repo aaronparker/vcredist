@@ -2,7 +2,7 @@
 
 `Get-VcList` returns the list of Visual C++ Redistributables. The VcRedist module includes the full list of available supported and unsupported  Redistributables and returns only the supported list by default. Unless you have a specific requirement, it is highly recommend that you install only [the supported Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads).
 
-Running `Get-VcList` with no parameters will return an array of the supported Redistributables by reading the internal manifest. Output can then be manipulated to filter the results. Note though, the default behaviour of `Get-VcList` is currently to return only the 2012, 2013 and 2022 Redistributables. This is because the 2015, 2017, 2019 and 2022 Redistributables are all the same major version and will be upgraded to the 2022 release and can't be installed side-by-side.
+Running `Get-VcList` with no parameters will return an array of the supported Redistributables by reading the internal manifest. Output can then be manipulated to filter the results. Note though, the default behaviour of `Get-VcList` is to return only the `2012`, `2013` and `2022` Redistributables. This is because the `2015`, `2017`, `2019` and `2022` Redistributables are all the same major version and will be upgraded to the `2022` release and can't be installed side-by-side.
 
 Here's a sample of what's returned:
 
@@ -88,7 +88,7 @@ Output from `Get-VcList` can be piped to `Save-VcRedist`, `Install-VcRedist`, `I
 
 ### Optional parameters
 
-* `Release` - Specifies the release (or version) of the redistributables to return (e.g. 2022, 2019, 2010, 2012, etc.)
+* `Release` - Specifies the release (or version) of the redistributables to return (e.g. `2022`, `2019`, `2010`, `2012`, etc.)
 * `Architecture` - Specifies the processor architecture to of the redistributables to return. Can be x86 or x64
 * `Export` - Defines the list of Visual C++ Redistributables to export - All, Supported or Unsupported Redistributables. Defaults to exporting the Supported Redistributables.
 * `Manifest` - An external JSON file that contains the details about the Visual C++ Redistributables. This must be in the expected format
@@ -115,7 +115,7 @@ Return the current list of supported Redistributables:
 Get-VcList
 ```
 
-`Get-VcList` does not return the 2015, 2017 and 2019 releases by default. To return specific releases and processor architectures from the supported list of Redistributables, the following example can be used:
+`Get-VcList` does not return the `2015`, `2017` or `2019` releases by default. To return specific releases and processor architectures from the supported list of Redistributables, the following example can be used:
 
 ```powershell
 Get-VcList -Release 2012, 2013, 2017 -Architecture x64
@@ -133,7 +133,7 @@ You may want to export the complete list of available supported and unsupported 
 Get-VcList -Export All | Where-Object { $_.Architecture -eq "x64" }
 ```
 
-To return a specific release and architecture from the list of unsupported Visual C++ Redistributables from the embedded manifest, the following can be used to filter for the 2008, 64-bit versions of the Redistributables.
+To return a specific release and architecture from the list of unsupported Visual C++ Redistributables from the embedded manifest, the following can be used to filter for the `2008`, 64-bit versions of the Redistributables.
 
 ```powershell
 Get-VcList -Export Unsupported | Where-Object { $_.Release -eq "2008" -and $_.Architecture -eq "x64" }

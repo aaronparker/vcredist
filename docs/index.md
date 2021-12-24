@@ -2,7 +2,7 @@
 
 VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads).
 
-VcRedist downloads the supported (and unsupported) Redistributables, for local install, master image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
+VcRedist downloads the supported (and unsupported) Redistributables, for local install, gold image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager, or other solutions including Microsoft Intune. VcRedist supports passive and silent installs, and uninstalls of the Visual C++ Redistributables.
 
 ![PowerShell Gallery version](https://img.shields.io/powershellgallery/v/vcredist.svg?style=flat&logo=powershell&logoColor=white&labelColor=7e56c2)
 ![PowerShell Gallery downloads](https://img.shields.io/powershellgallery/dt/vcredist.svg?style=flat&logo=powershell&logoColor=white&labelColor=7e56c2&color=009485)
@@ -19,7 +19,7 @@ It is important to understand that Microsoft no longer supports and provides sec
 
 ## Unsupported Redistributables
 
-As at November 2022, the Unsupported list of Redistributables includes the following versions:
+As at November 2021, the unsupported list of Redistributables includes the following versions:
 
 | Name                                                                       | Version        |
 | -------------------------------------------------------------------------- | -------------- |
