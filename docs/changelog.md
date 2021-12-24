@@ -128,7 +128,7 @@
 
 ## 2.0.163
 
-* Update the manifest for VcRedist 2019 version `14.23.27820.0` for Visual Studio 2019 16.3
+* Update the manifest for VcRedist 2019 version `14.23.27820.0` for Visual Studio 2019 `16.3`
 
 ## 2.0.161
 
@@ -137,8 +137,8 @@
 
 ## 2.0.158
 
-* Add default path for `-Path` parameter in `Save-VcRedist` and `Install-VcRedist` to address #53 and ensure function works when parameter is not specified
-* Add Begin,Process,End to fix pipeline support in `Save-VcRedist`, `Install-VcRedist`, `Import-VcConfigMgrApplication`, `Import-VcMdtApplication`, `Update-VcMdtApplication` and `Update-VcMdtBundle` and address #53
+* Add default path for `-Path` parameter in `Save-VcRedist` and `Install-VcRedist` to address [#53](https://github.com/aaronparker/vcredist/issues/53) and ensure function works when parameter is not specified
+* Add Begin,Process,End to fix pipeline support in `Save-VcRedist`, `Install-VcRedist`, `Import-VcConfigMgrApplication`, `Import-VcMdtApplication`, `Update-VcMdtApplication` and `Update-VcMdtBundle` and address [#53](https://github.com/aaronparker/vcredist/issues/53)
 * Add function `Uninstall-VcRedist` to manage uninstalling VcRedists
 * Update Pester tests for Public functions
 
@@ -156,7 +156,7 @@
 
 ## 2.0.140
 
-* Update the manifest for VcRedist `2019` version `14.21.27702.2` for Visual Studio 2019 16.1
+* Update the manifest for VcRedist `2019` version `14.21.27702.2` for Visual Studio 2019 `16.1`
 
 ## 2.0.138
 
@@ -186,11 +186,11 @@
 
 ## 1.5.2.98
 
-* Update manifests with correct details for VcRedist 2017 `v14.16.27027.1`. v1.5.1.95 included the incorrect manifest commit.
+* Update manifests with correct details for VcRedist 2017 `14.16.27027.1`. v1.5.1.95 included the incorrect manifest commit.
 
 ## 1.5.1.95
 
-* Update manifests with VcRedist 2017 `v14.16.27024.1`
+* Update manifests with VcRedist 2017 `14.16.27024.1`
 * Update module to export alias `Save-VcRedist` for `Get-VcRedist`. Next major version will rename `Get-VcRedist` to `Save-VcRedist`
 * Change `-VcList` to use `[PSCustomObject]` instead of `[array]` in `Import-VcCmApp` and `Import-VcMdtApp`
 * Update module icon to use new Visual Studio 2019 icon
@@ -215,7 +215,7 @@
 * Add private function `Invoke-Process` (by Adam Bertram)
 * Update `Install-VcRedist` to use `Invoke-Process` for better `Start-Process` handling
 * Fix Resolve-Path / TrimEnd in private function `Get-ValidPath`
-* Fix relative path issue in `Import-VcCmApp` * closes issue \#24
+* Fix relative path issue in `Import-VcCmApp` * closes issue [#24](https://github.com/aaronparker/vcredist/issues/24)
 * Bundle added to MDT now adds Redistributables as dependencies in order from oldest to newest
 * Splatting arguments in `Install-VcRedist`, `Import-VcMdtApp`, `Import-VcCmApp`
 * Code formatting updates
@@ -241,23 +241,23 @@
 
 ## 1.3.6.56
 
-* Add `Get-InstalledVcRedist`, using private function `Get-InstalledSoftware`. Closing issue \#18 with feature request for this function. `Get-InstallSoftware` function by [Adam Bertram](https://4sysops.com/archives/find-the-product-guid-of-installed-software-with-powershell/)
+* Add `Get-InstalledVcRedist`, using private function `Get-InstalledSoftware`. Closing issue [#18](https://github.com/aaronparker/vcredist/issues/18) with feature request for this function. `Get-InstallSoftware` function by [Adam Bertram](https://4sysops.com/archives/find-the-product-guid-of-installed-software-with-powershell/)
 * Update manifests with correct ProductCodes
 * Update documentation
 
 ## 1.3.5.48
 
 * Update manifests with `2017`, version `14.14`
-* Update manifests with `<Version></Version>` to enable better install logic e.g. skipping installing 2015 over 2017 \(same 14.x version\)
+* Update manifests with `<Version></Version>` to enable better install logic e.g. skipping installing `2015` over `2017`
 
 ## 1.3.4.45
 
-* Fix import of Redistributables with correct x86, x64 platform selection in MDT application in `Import-VcMdtApp`
+* Fix import of Redistributables with correct `x86`, `x64` platform selection in MDT application in `Import-VcMdtApp`
 * Fix import of Redistributables into a folder specified by -AppFolder where the folder already exists in `Import-VcMdtApp`
 
 ## 1.3.3.39
 
-* Update manifests with 2017 \(14.13.26020\) release
+* Update manifests with `2017` `14.13.26020` release
 * Update module `ReleaseNotes` property with a link to changelog [https://docs.vcredist/change-log](https://docs.vcredist/change-log)
 * Update functions with explicit `Write-Output`
 
