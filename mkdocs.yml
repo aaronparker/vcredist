@@ -116,19 +116,21 @@ extra:
 nav:
   - Getting started:
     - Introduction: index.md
+    - Included Redistributables: versions.md
+    - Supported platforms: supported.md
     - Quick install: quick.md
     - Installing VcRedist: install.md
-    - Supported platforms: supported.md
     - Get the VcRedist list: get-vclist.md
     - Download the Redistributables: save-vcredist.md
     - Export the Manifests: export-vcmanifest.md
-    - Redistributables versions: versions.md
+    - Known issues: issues.md
+    - Changelog: changelog.md
     - VcRedist Versioning: versioning.md
   - Windows:
     - Install the Redistributables: install-vcredist.md
     - Get the Installed Redistributables: get-installedvcredist.md
     - Uninstall the Redistributables: uninstall-vcredist.md
-  - MDT:
+  - Microsoft Deployment Toolkit:
     - Import Redistributables into MDT: import-vcmdtapplication.md
     - Create a Redistributables bundle in MDT: new-vcmdtbundle.md
     - Update Redistributables in MDT: update-vcmdtapplication.md
@@ -137,8 +139,6 @@ nav:
     - Import Redistributables into ConfigMgr: import-vcconfigmgrapplication.md
   - Intune:
     - Import Redistributables into Intune: new-vcintuneapplication.md
-  - Known issues: issues.md
-  - Changelog: changelog.md
   - Module help:
     - en-US:
       - about_VcRedist: help/en-US/about_VcRedist.md
