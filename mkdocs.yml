@@ -3,7 +3,7 @@ site_name: VcRedist docs
 site_url: https://vcredist.com
 site_author: Aaron Parker
 site_description: >-
-  Documentation for the VcRedist PowerShell module
+  Download and install the latest Microsoft Visual C++ Redistributables
 
 # Repository
 repo_name: aaronparker/vcredist
@@ -11,7 +11,7 @@ repo_url: https://github.com/aaronparker/vcredist
 edit_uri: ""
 
 # Copyright
-copyright: Copyright &copy; 2021 Aaron Parker
+copyright: Copyright &copy; 2022 [Aaron Parker](https://stealthpuppy.com)
 
 # Configuration
 theme:
