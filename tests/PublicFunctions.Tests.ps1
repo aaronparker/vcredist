@@ -250,13 +250,14 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
                 $InstalledVcRedists = Get-InstalledVcRedist
 
                 ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Release })) {
+                    
                     $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
-                    If ($InstalledItem.Version -gt $ManifestVcRedist.Version) { $UpdateManifest = $True }
+                    If ([System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version) { $UpdateManifest = $True }
 
                     # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
                     It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
                         Write-Host -ForegroundColor "Cyan" "`tComparing installed: $($InstalledItem.Version). Against manifest: $($ManifestVcRedist.Version)."
-                        $InstalledItem.Version -gt $ManifestVcRedist.Version | Should -Be $False
+                        [System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version | Should -Be $False
                     }
                 }
             }
@@ -264,8 +265,12 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     }
     #endregion
 
+    # $UpdateManifest = $True
+    Write-Host -ForegroundColor "Cyan" "UpdateManifest = $UpdateManifest."
     If ($UpdateManifest -eq $True) {
+
         # Call update manifest script
+        Write-Host -ForegroundColor "Cyan" "Updating manifests."
         $params = @{
             Release = $ValidateReleases
             Path    = $([System.IO.Path]::Combine($downloadDir, "VcDownload"))

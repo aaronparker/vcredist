@@ -1,5 +1,10 @@
 # Changelog
 
+## VERSION
+
+* Update for VcRedist 2022 version `14.30.30708.0`
+* Update for VcRedist 2019 version `14.29.30139.0`
+
 ## 3.0.307
 
 * Updated online help pages to [https://vcredist.com/](https://vcredist.com/)
