@@ -265,7 +265,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     }
     #endregion
 
-    $UpdateManifest = $True
+    # $UpdateManifest = $True
     Write-Host -ForegroundColor "Cyan" "UpdateManifest = $UpdateManifest."
     If ($UpdateManifest -eq $True) {
 
