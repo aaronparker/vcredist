@@ -264,8 +264,11 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     }
     #endregion
 
+    Write-Host -ForegroundColor "Cyan" "UpdateManifest = $UpdateManifest."
     If ($UpdateManifest -eq $True) {
+
         # Call update manifest script
+        Write-Host -ForegroundColor "Cyan" "Updating manifests."
         $params = @{
             Release = $ValidateReleases
             Path    = $([System.IO.Path]::Combine($downloadDir, "VcDownload"))
