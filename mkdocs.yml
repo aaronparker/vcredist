@@ -28,9 +28,12 @@ theme:
   # Default values, taken from mkdocs_theme.yml
   language: en
   features:
-    # - navigation.instant
+    - navigation.instant
+    - navigation.tracking
     - navigation.sections
     - navigation.tabs
+    - navigation.tabs.sticky
+    - toc.integrate
   palette:
     - scheme: default
       primary: deep purple
