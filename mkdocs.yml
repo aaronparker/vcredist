@@ -28,9 +28,12 @@ theme:
   # Default values, taken from mkdocs_theme.yml
   language: en
   features:
-    # - navigation.instant
+    - navigation.instant
+    - navigation.tracking
     - navigation.sections
     - navigation.tabs
+    - navigation.tabs.sticky
+    - toc.integrate
   palette:
     - scheme: default
       primary: deep purple
@@ -122,7 +125,7 @@ nav:
     - Installing VcRedist: install.md
     - Get the VcRedist list: get-vclist.md
     - Download the Redistributables: save-vcredist.md
-#    - Export the Manifests: export-vcmanifest.md
+    - Export the Manifest: export-vcmanifest.md
     - More:
       - Known issues: issues.md
       - Changelog: changelog.md
