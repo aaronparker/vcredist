@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 3.0.320
 
 * Update for VcRedist 2022 version `14.31.31103.0`
 
