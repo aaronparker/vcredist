@@ -1,4 +1,4 @@
-# Export the Manifests
+# Export the Manifest
 
 `Export-VcManifest` will export the internal Redistributable manifests if you want to store an external copy for creating a custom manifest. Both the supported and unsupported Redistributable manifests can be exported to a specified file in [JSON](https://www.json.org/) format.
 

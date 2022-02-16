@@ -125,7 +125,7 @@ nav:
     - Installing VcRedist: install.md
     - Get the VcRedist list: get-vclist.md
     - Download the Redistributables: save-vcredist.md
-#    - Export the Manifests: export-vcmanifest.md
+    - Export the Manifest: export-vcmanifest.md
     - More:
       - Known issues: issues.md
       - Changelog: changelog.md
