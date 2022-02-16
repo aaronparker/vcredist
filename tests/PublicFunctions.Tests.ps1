@@ -235,10 +235,7 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     # Get an array of VcRedists from the current manifest and the installed VcRedists
     Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."
     $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
-
     $ValidateReleases = @("2017", "2019", "2022")
-    $UpdateManifest = $False
-
     Describe 'VcRedist manifest tests' -Tag "Manifest" {
         Context 'Compare manifest version against installed version' {
 
@@ -257,9 +254,6 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
                         Write-Host -ForegroundColor "Cyan" "`tComparing installed: $($InstalledItem.Version). Against manifest: $($ManifestVcRedist.Version)."
                         [System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version | Should -Be $False
                     }
-
-                    # Ensure we update the manifest with the new version
-                    If ([System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version) { $UpdateManifest = $True }
                 }
             }
         }
@@ -267,16 +261,27 @@ If (($Null -eq $PSVersionTable.OS) -or ($PSVersionTable.OS -like "*Windows*")) {
     #endregion
 
     # $UpdateManifest = $True
+    # Ensure we update the manifest with the new version
+    <#
+    $UpdateManifest = $False
+    $InstalledVcRedists = Get-InstalledVcRedist
+    $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
+    $ValidateReleases = @("2017", "2019", "2022")
+    ForEach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Release })) {
+        If ([System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version) { $UpdateManifest = $True }
+    }
     Write-Host -ForegroundColor "Cyan" "UpdateManifest = $UpdateManifest."
     If ($UpdateManifest -eq $True) {
+    #>
 
-        # Call update manifest script
-        Write-Host -ForegroundColor "Cyan" "Updating manifests."
-        $params = @{
-            Release = $ValidateReleases
-            Path    = $([System.IO.Path]::Combine($downloadDir, "VcDownload"))
-        }
-        . $ProjectRoot\ci\Update-Manifest.ps1 @params
+    # Call update manifest script
+    Write-Host -ForegroundColor "Cyan" "Updating manifests."
+    $ValidateReleases = @("2017", "2019", "2022")
+    $params = @{
+        Release = $ValidateReleases
+        Path    = $([System.IO.Path]::Combine($downloadDir, "VcDownload"))
     }
+    . $ProjectRoot\ci\Update-Manifest.ps1 @params
+    #}
 }
 #endregion
