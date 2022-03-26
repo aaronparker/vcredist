@@ -1,0 +1,39 @@
+name: update-vcredist
+
+on:  
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      # Run PowerShell commands
+      - name: Import VcRedist module
+        shell: powershell
+        run: |
+          Import-Module -Path . ${{ github.workspace }}\VcRedist -Force
+
+      - name: Uninstall VcRedists
+        shell: powershell
+        run: |
+          Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -Verbose
