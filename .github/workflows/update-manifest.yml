@@ -1,0 +1,113 @@
+name: update-manifest
+
+on:
+  workflow_dispatch:
+    branches:
+        - development
+  schedule:
+    - cron: '0 18 * * *'
+      branches:
+        - development
+
+env:
+  MANIFEST_FILE: ${{ github.workspace }}\VcRedist\VisualCRedistributables.json
+
+jobs:
+  validate-versions:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      # Uninstall existing VcRedists
+      - name: Uninstall VcRedists
+        shell: powershell
+        run: |
+          Import-Module ${{ github.workspace }}\VcRedist -Force
+          Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -Verbose
+
+      # Validate VcRedist 2017 and update the manifest
+      - name: Validate VcRedist 2017
+        shell: powershell
+        run: |
+          $Release = "2017"
+          Import-Module "${{ github.workspace }}\VcRedist" -Force
+          New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+          Save-VcRedist -VcList (Get-VcList -Release $Release) -Path "$env:RUNNER_TEMP\VcRedist" -Verbose | Install-VcRedist
+          $params = @{
+              Release    = $Release
+              Path       = "$env:RUNNER_TEMP\VcRedist"
+              VcManifest = "${{ env.MANIFEST_FILE }}"
+          }
+          . ${{ github.workspace }}\ci\Update-Manifest.ps1 @params
+
+      # Validate VcRedist 2019 and update the manifest
+      - name: Validate VcRedist 2019
+        shell: powershell
+        run: |
+          $Release = "2019"
+          Import-Module "${{ github.workspace }}\VcRedist" -Force
+          New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+          Save-VcRedist -VcList (Get-VcList -Release $Release) -Path "$env:RUNNER_TEMP\VcRedist" -Verbose | Install-VcRedist
+          $params = @{
+              Release    = $Release
+              Path       = "$env:RUNNER_TEMP\VcRedist"
+              VcManifest = "${{ env.MANIFEST_FILE }}"
+          }
+          . ${{ github.workspace }}\ci\Update-Manifest.ps1 @params
+
+      # Validate VcRedist 2022 and update the manifest
+      - name: Validate VcRedist 2022
+        shell: powershell
+        run: |
+          $Release = "2022"
+          Import-Module "${{ github.workspace }}\VcRedist" -Force
+          New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+          Save-VcRedist -VcList (Get-VcList -Release $Release) -Path "$env:RUNNER_TEMP\VcRedist" -Verbose | Install-VcRedist
+          $params = @{
+              Release    = $Release
+              Path       = "$env:RUNNER_TEMP\VcRedist"
+              VcManifest = "${{ env.MANIFEST_FILE }}"
+          }
+          . ${{ github.workspace }}\ci\Update-Manifest.ps1 @params
+
+      # Format the date number for the commit message
+      - name: Get date
+        id: get-date
+        shell: powershell
+        run: |
+          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
+
+      # Commit changes to the manifest
+      - name: Commit changes
+        id: commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update manifest ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
+          commit_user_name: ${{ secrets.COMMIT_NAME }}
+          commit_user_email: ${{ secrets.COMMIT_EMAIL }}
+
+      - name: "Run if changes have been detected"
+        if: steps.commit.outputs.changes_detected == 'true'
+        run: echo "Changes committed."
+
+      - name: "Run if no changes have been detected"
+        if: steps.commit.outputs.changes_detected == 'false'
+        run: echo "No changes detected."

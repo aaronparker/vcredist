@@ -1,0 +1,154 @@
+name: update-module
+
+on:  
+  workflow_dispatch:
+    branches:
+        - main
+
+env:
+  BUILD_NUMBER: "320"
+
+jobs:
+  update-module:
+    runs-on: windows-latest
+    outputs:
+      output1: ${{ steps.commit.outputs.changes_detected }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install and cache PowerShell modules
+        id: psmodulecache
+        uses: potatoqualitee/psmodulecache@v4.5
+        with:
+          modules-to-cache: MarkdownPS
+          shell: powershell
+
+      # Update the version number in the module manifest
+      - name: Update module version number
+        id: update-version
+        shell: powershell
+        run: |
+            $modulePath = "${{ github.workspace }}\VcRedist"
+            $manifestPath = "${{ github.workspace }}\VcRedist\VcRedist.psd1"
+
+            # Importing the manifest to determine the version
+            $manifest = Test-ModuleManifest -Path $manifestPath
+            [System.Version]$version = $manifest.Version
+            [System.String]$newVersion = New-Object -TypeName "System.Version" -ArgumentList ($version.Major, $version.Minor, ([System.Int32]$env:GITHUB_RUN_NUMBER + [System.Int32]${{ env.BUILD_NUMBER }} ))
+            Write-Host "New version is: $newVersion"
+
+            # Update the manifest with the new version value and fix the weird string replace bug
+            $functionList = ((Get-ChildItem -Path (Join-Path -Path $modulePath -ChildPath "Public")).BaseName)
+            Update-ModuleManifest -Path $manifestPath -ModuleVersion $newVersion -FunctionsToExport $functionList
+            (Get-Content -Path $manifestPath) -replace 'PSGet_$module', $module | Set-Content -Path $manifestPath
+            (Get-Content -Path $manifestPath) -replace 'NewManifest', $module | Set-Content -Path $manifestPath
+            (Get-Content -Path $manifestPath) -replace 'FunctionsToExport = ','FunctionsToExport = @(' | Set-Content -Path $manifestPath -Force
+            (Get-Content -Path $manifestPath) -replace "$($functionList[-1])'", "$($functionList[-1])')" | Set-Content -Path $manifestPath -Force
+            echo "::set-output name=newversion::$($newVersion)"
+
+      # Update the change log with the new version number
+      - name: Update CHANGELOG.md
+        id: update-changelog
+        shell: powershell
+        run: |
+            $changeLog = "${{ github.workspace }}\docs\changelog.md"
+            $replaceString = "^## VERSION$"
+            $content = Get-Content -Path $changeLog
+            if ($content -match $replaceString) {
+                $content -replace $replaceString, "## ${{steps.update-version.outputs.newversion}}" | Set-Content -Path $changeLog
+            }
+            else {
+                Write-Host "No match in $changeLog for '## VERSION'. Manual update of CHANGELOG required." -ForegroundColor Cyan
+            }
+
+      # Update the docs with the new version number and supported VcRedists
+      - name: Update VERSIONS.md
+        id: update-versions
+        shell: powershell
+        run: |
+          Import-Module "${{ github.workspace }}\VcRedist" -Force
+          $VcRedists = Get-Vclist -Export All | `
+            Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | `
+            Select-Object Version, Architecture, Name
+          $OutFile = "${{ github.workspace }}\docs\versions.md"
+          $markdown = New-MDHeader -Text "Included Redistributables" -Level 1
+          $markdown += "`n"
+          $line = "VcRedist " + '`' + "${{steps.update-version.outputs.newversion}}" + '`' + " includes the following Redistributables (supported and unsupported):"
+          $markdown += $line
+          $markdown += "`n`n"
+          $markdown += $VcRedists | New-MDTable
+          ($markdown.TrimEnd("`n")) | Out-File -FilePath $OutFile -Force -Encoding "Utf8"
+
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      - name: Commit changes
+        id: commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update module ${{steps.update-version.outputs.newversion}}"
+          commit_user_name: ${{ secrets.COMMIT_NAME }}
+          commit_user_email: ${{ secrets.COMMIT_EMAIL }}
+
+      - name: "Run if changes have been detected"
+        if: steps.commit.outputs.changes_detected == 'true'
+        run: echo "Changes committed."
+
+      - name: "Run if no changes have been detected"
+        if: steps.commit.outputs.changes_detected == 'false'
+        run: echo "No changes detected."
+
+  tag-repo:
+    needs: update-module
+    if: needs.update-module.outputs.output1 == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: aaronparker/vcredist-test
+
+      - name: Get module version number
+        id: get-version
+        shell: pwsh
+        run: |
+            $manifestPath = "${{ github.workspace }}/VcRedist/VcRedist.psd1"
+            $manifest = Test-ModuleManifest -Path $manifestPath
+            echo "::set-output name=version::$($manifest.Version)"
+
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      # Push tag
+      - name: Push tag
+        shell: bash
+        run: |
+          git tag -a "v${{steps.get-version.outputs.version}}" -m "v${{steps.get-version.outputs.version}}"
+          git push origin "v${{steps.get-version.outputs.version}}"

@@ -1,3 +1,3 @@
-# AppVeyor Contiuous Integration scripts
+# Continuous Integration scripts
 
-The scripts are run by AppVeyor when an update is pushed to this repository.
+Scripts used during workflows to validate this project.

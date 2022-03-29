@@ -3,13 +3,12 @@
 [![License][license-badge]][license]
 [![PowerShell Gallery Version][psgallery-version-badge]][psgallery]
 [![PowerShell Gallery][psgallery-badge]][psgallery]
-[![Main build status][appveyor-badge]][appveyor-build]
-[![Development build status][appveyor-badge-dev]][appveyor-build]
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/556b5c464f6a4981b357cbb0cae230c5)](https://app.codacy.com/manual/aaronparker/VcRedist?utm_source=github.com&utm_medium=referral&utm_content=aaronparker/VcRedist&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
 
 VcRedist is a PowerShell module for lifecycle management of the [Microsoft Visual C++ Redistributables](https://support.microsoft.com/en-au/help/2977003/the-latest-supported-visual-c-downloads). VcRedist downloads the supported (and unsupported) Redistributables, for local install, gold image deployment or importing as applications into the Microsoft Deployment Toolkit, Microsoft Endpoint Configuration Manager or Microsoft Intune. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.
+
+[![validate-module](https://github.com/aaronparker/vcredist-test/actions/workflows/validate-module.yml/badge.svg)](https://github.com/aaronparker/vcredist-test/actions/workflows/validate-module.yml) [![analyse-powershell](https://github.com/aaronparker/vcredist-test/actions/workflows/analyse-powershell.yml/badge.svg)](https://github.com/aaronparker/vcredist-test/actions/workflows/analyse-powershell.yml)
 
 ### Visual C++ Redistributables
 
@@ -24,12 +23,9 @@ Full documentation for the module is located at [https://vcredist.com/](https://
 The VcRedist module is published to the PowerShell Gallery and can be found here: [VcRedist](https://www.powershellgallery.com/packages/VcRedist/). Install the module from the gallery with:
 
 ```powershell
-Install-Module -Name VcRedist -Force
+Install-Module -Name "VcRedist" -Force
 ```
 
-[appveyor-badge]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/main.svg?style=flat-square&logo=appveyor&label=main
-[appveyor-badge-dev]: https://img.shields.io/appveyor/ci/aaronparker/Install-VisualCRedistributables/development.svg?style=flat-square&logo=appveyor&label=development
-[appveyor-build]: https://ci.appveyor.com/project/aaronparker/install-visualcredistributables
 [psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg?logo=PowerShell&style=flat-square
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
 [psgallery-version-badge]: https://img.shields.io/powershellgallery/v/vcredist.svg?logo=PowerShell&style=flat-square
