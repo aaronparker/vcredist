@@ -9,12 +9,17 @@
 param ()
 
 BeforeDiscovery {
-
+    If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+        $WorkingPath = $env:APPVEYOR_BUILD_FOLDER
+    }
+    Else {
+        $WorkingPath = $env:GITHUB_WORKSPACE
+    }
 }
 
 Describe "General module validation" {
     BeforeAll {
-        $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
+        $scripts = Get-ChildItem -Path "$WorkingPath\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
 
         # TestCases are splatted to the script so we need hashtables
         $testCase = $scripts | ForEach-Object { @{file = $_ } }
@@ -37,7 +42,7 @@ Describe "General module validation" {
 Describe "Function validation" {
 
     BeforeEach {
-        $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1"
+        $scripts = Get-ChildItem -Path "$WorkingPath\VcRedist" -Recurse -Include "*.ps1"
         $testCase = $scripts | ForEach-Object { @{file = $_ } }
     }
 
@@ -61,10 +66,10 @@ Describe "Function validation" {
 # Test module and manifest
 Describe 'Module Metadata validation' {
     It 'Script fileinfo should be OK' {
-        { Test-ModuleManifest -Path "$env:GITHUB_WORKSPACE\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
+        { Test-ModuleManifest -Path "$WorkingPath\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
     }
 
     It 'Import module should be OK' {
-        { Import-Module "$env:GITHUB_WORKSPACE\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
+        { Import-Module "$WorkingPath\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
     }
 }

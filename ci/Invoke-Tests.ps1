@@ -28,4 +28,4 @@ Invoke-Pester -Configuration $Config
 
 # Upload test results
 $wc = New-Object -TypeName "System.Net.WebClient"
-$wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path -Path $Config.TestResult.OutputPath))
+$wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", "$env:APPVEYOR_BUILD_FOLDER\tests\TestResults.xml")
