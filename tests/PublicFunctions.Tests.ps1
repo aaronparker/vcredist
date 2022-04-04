@@ -11,12 +11,6 @@ param ()
 BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 	$TestVcRedists = Get-VcList -Release $TestReleases
-	If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-        $WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-    }
-    Else {
-        $WorkingPath = $env:GITHUB_WORKSPACE
-    }
 }
 
 Describe -Name "Validate Get-VcList for <VcRedist.Name>" -Foreach $TestVcRedists {
@@ -97,6 +91,12 @@ Describe -Name "Validate manifest counts" {
 
 Describe -Name "Validate manifest scenarios" {
 	BeforeAll {
+		If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+			$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
+		}
+		Else {
+			$WorkingPath = $env:GITHUB_WORKSPACE
+		}
 		$Json = [System.IO.Path]::Combine($WorkingPath, "Redists.json")
 		Export-VcManifest -Path $Json
 		$VcList = Get-VcList -Path $Json
@@ -125,6 +125,12 @@ Describe -Name "Validate manifest scenarios" {
 
 Describe "Export-VcManifest" {
 	BeforeAll {
+		If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+			$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
+		}
+		Else {
+			$WorkingPath = $env:GITHUB_WORKSPACE
+		}
 		$Json = [System.IO.Path]::Combine($WorkingPath, "Redists.json")
 		Export-VcManifest -Path $Json
 		$VcList = Get-VcList -Path $Json
@@ -221,10 +227,22 @@ Describe "Save-VcRedist" {
 
 Describe "Save-VcRedist pipeline" {
 	BeforeAll {
+		If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+			$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
+		}
+		Else {
+			$WorkingPath = $env:GITHUB_WORKSPACE
+		}
 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 		New-Item -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest")) -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
 		Push-Location -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest"))
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+		If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+			$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
+		}
+		Else {
+			$WorkingPath = $env:GITHUB_WORKSPACE
+		}
 	}
 
 	Context "Test pipeline support" {
