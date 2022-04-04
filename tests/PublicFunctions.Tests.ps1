@@ -11,9 +11,15 @@ param ()
 BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 	$TestVcRedists = Get-VcList -Release $TestReleases
+	If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+		[System.Environment]::SetEnvironmentVariable("WorkingPath",$env:GITHUB_WORKSPACE)
+	}
+	Else {
+		[System.Environment]::SetEnvironmentVariable("WorkingPath",$env:APPVEYOR_BUILD_FOLDER)
+	}
 }
 
-Describe -Name "Validate Get-VcList for <VcRedist.Name>" -Foreach $TestVcRedists {
+Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists {
 	BeforeAll {
 		$VcRedist = $_
 	}
@@ -58,7 +64,7 @@ Describe "Uninstall-VcRedist" {
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 	}
 
-	Context "Uninstall VcRedist <_.Name>" -Foreach $TestReleases {
+	Context "Uninstall VcRedist <_.Name>" -ForEach $TestReleases {
 		{ Uninstall-VcRedist -Release $_ -Confirm:$False } | Should -Not -Throw
 	}
 }
@@ -90,59 +96,53 @@ Describe -Name "Validate manifest counts" {
 }
 
 Describe -Name "Validate manifest scenarios" {
-	BeforeAll {
-		$Json = [System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "Redists.json")
-		Export-VcManifest -Path $Json
-		$VcList = Get-VcList -Path $Json
-		$VcCount = @{
-			"Default"     = 6
-			"Supported"   = 12
-			"Unsupported" = 24
-			"All"         = 36
+	Context 'Validation' {
+		BeforeAll {
+			$Json = [System.IO.Path]::Combine($env:WorkingPath, "Redists.json")
+			Export-VcManifest -Path $Json
+			$VcList = Get-VcList -Path $Json
+			$VcCount = @{
+				"Default"     = 6
+				"Supported"   = 12
+				"Unsupported" = 24
+				"All"         = 36
+			}
 		}
-	}
 
-	Context "Return external manifest" {
 		It "Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest" {
 			$VcList.Count | Should -BeGreaterOrEqual $VcCount.Default
 		}
-	}
-	Context "Test fail scenarios" {
 		It "Given an JSON file that does not exist, it should throw an error" {
-			{ Get-VcList -Path $([System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "RedistsFail.json")) } | Should -Throw
+			{ Get-VcList -Path $([System.IO.Path]::Combine($env:WorkingPath, "RedistsFail.json")) } | Should -Throw
 		}
 		It "Given an invalid JSON file, should throw an error on read" {
-			{ Get-VcList -Path $([System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "README.MD")) } | Should -Throw
+			{ Get-VcList -Path $([System.IO.Path]::Combine($env:WorkingPath, "README.MD")) } | Should -Throw
 		}
 	}
 }
 
 Describe "Export-VcManifest" {
-	BeforeAll {
-		$Json = [System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "Redists.json")
-		Export-VcManifest -Path $Json
-		$VcList = Get-VcList -Path $Json
-		$VcCount = @{
-			"Default"     = 6
-			"Supported"   = 12
-			"Unsupported" = 24
-			"All"         = 36
+	Context 'Validation' {
+		BeforeAll {
+			$Json = [System.IO.Path]::Combine($env:WorkingPath, "Redists.json")
+			Export-VcManifest -Path $Json
+			$VcList = Get-VcList -Path $Json
+			$VcCount = @{
+				"Default"     = 6
+				"Supported"   = 12
+				"Unsupported" = 24
+				"All"         = 36
+			}
 		}
-	}
 
-	Context "Export manifest" {
 		It "Given valid parameter -Path, it exports an JSON file" {
 			Test-Path -Path $Json | Should -BeTrue
 		}
-	}
-	Context "Export and read manifest" {
 		It "Given valid parameter -Path, it exports an JSON file" {
 			$VcList.Count | Should -BeGreaterOrEqual $VcCount.Default
 		}
-	}
-	Context "Test fail scenarios" {
 		It "Given an invalid path, it should throw an error" {
-			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "Temp", "Temp.json")) } | Should -Throw
+			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:WorkingPath, "Temp", "Temp.json")) } | Should -Throw
 		}
 	}
 }
@@ -229,7 +229,7 @@ Describe "Save-VcRedist pipeline" {
 
 	Context "Test fail scenarios" {
 		It "Given an invalid path, it should throw an error" {
-			{ Save-VcRedist -Path ([System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "Temp")) } | Should -Throw
+			{ Save-VcRedist -Path ([System.IO.Path]::Combine($env:WorkingPath, "Temp")) } | Should -Throw
 		}
 	}
 
@@ -243,7 +243,7 @@ Describe "Get-InstalledVcRedist" {
 		$VcList = Get-InstalledVcRedist
 	}
 
-	Context "Validate Get-InstalledVcRedist array properties" -Foreach $VcList {
+	Context "Validate Get-InstalledVcRedist array properties" -ForEach $VcList {
 		It "VcRedist "\<_.Name\>" has expected properties" {
 			$_.Name.Length | Should -BeGreaterThan 0
 			$_.Version.Length | Should -BeGreaterThan 0

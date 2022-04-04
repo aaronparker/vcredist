@@ -9,20 +9,9 @@ only_commits:
   files:
     - VcRedist/**
     - tests/**
+    - ci/Invoke-Tests.ps1
 image: Visual Studio 2022
 build: off
 test_script:
-- ps: >-
-    Import-Module "$APPVEYOR_BUILD_FOLDER\VcRedist" -Force
-    Install-Module -Name "Pester"
-    Import-Module -Name "Pester" -Force
-    $Config = [PesterConfiguration]::Default
-    $Config.Run.Path = "$APPVEYOR_BUILD_FOLDER\tests"
-    $Config.Run.PassThru = $True
-    $Config.TestResult.Enabled = $True
-    $Config.TestResult.OutputFormat = "NUnitXml"
-    $Config.TestResult.OutputPath = "$APPVEYOR_BUILD_FOLDER\tests\TestResults.xml"
-    Invoke-Pester -Configuration $Config
-    $wc = New-Object -TypeName "System.Net.WebClient"
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path -Path $Config.TestResult.OutputPath))
+- ps: . .\ci\Invoke-Tests.ps1
 deploy: off
