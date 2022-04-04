@@ -7,6 +7,7 @@ on:
     paths:
       - 'VcRedist/**'
       - 'tests/**'
+      - '.github/workflows/validate-module.yml'
     tags-ignore:
       - '*'
   pull_request:
@@ -20,7 +21,10 @@ on:
 jobs:
   run-pester:
     name: run-pester
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2016, windows-2019, windows-2022]
 
     steps:
       - uses: actions/checkout@v2
@@ -79,23 +83,6 @@ jobs:
         shell: powershell
         run: |
           echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
-
-      # Commit the TestResults.xml and CodeCoverage.xml
-      - name: Commit changes
-        id: commit
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Validate module ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
-          commit_user_name: ${{ secrets.COMMIT_NAME }}
-          commit_user_email: ${{ secrets.COMMIT_EMAIL }}
-
-      - name: "Run if changes have been detected"
-        if: steps.commit.outputs.changes_detected == 'true'
-        run: echo "Changes committed."
-
-      - name: "Run if no changes have been detected"
-        if: steps.commit.outputs.changes_detected == 'false'
-        run: echo "No changes detected."
 
   analyse-powershell:
     name: run-psscriptanalyzer
