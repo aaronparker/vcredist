@@ -15,6 +15,7 @@ build: off
 before_test:
 - ps: >-
     Import-Module "$env:APPVEYOR_BUILD_FOLDER\VcRedist" -Force
+
     Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
 test_script:
 - ps: . .\ci\Invoke-Tests.ps1
