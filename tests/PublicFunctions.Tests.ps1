@@ -11,6 +11,12 @@ param ()
 BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 	$TestVcRedists = Get-VcList -Release $TestReleases
+	If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+		[System.Environment]::SetEnvironmentVariable("WorkingPath",$env:GITHUB_WORKSPACE)
+	}
+	Else {
+		[System.Environment]::SetEnvironmentVariable("WorkingPath",$env:APPVEYOR_BUILD_FOLDER)
+	}
 }
 
 Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists {
@@ -92,13 +98,7 @@ Describe -Name "Validate manifest counts" {
 Describe -Name "Validate manifest scenarios" {
 	Context 'Validation' {
 		BeforeAll {
-			If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-				$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-			}
-			Else {
-				$WorkingPath = $env:GITHUB_WORKSPACE
-			}
-			$Json = [System.IO.Path]::Combine($WorkingPath, "Redists.json")
+			$Json = [System.IO.Path]::Combine($env:WorkingPath, "Redists.json")
 			Export-VcManifest -Path $Json
 			$VcList = Get-VcList -Path $Json
 			$VcCount = @{
@@ -113,10 +113,10 @@ Describe -Name "Validate manifest scenarios" {
 			$VcList.Count | Should -BeGreaterOrEqual $VcCount.Default
 		}
 		It "Given an JSON file that does not exist, it should throw an error" {
-			{ Get-VcList -Path $([System.IO.Path]::Combine($WorkingPath, "RedistsFail.json")) } | Should -Throw
+			{ Get-VcList -Path $([System.IO.Path]::Combine($env:WorkingPath, "RedistsFail.json")) } | Should -Throw
 		}
 		It "Given an invalid JSON file, should throw an error on read" {
-			{ Get-VcList -Path $([System.IO.Path]::Combine($WorkingPath, "README.MD")) } | Should -Throw
+			{ Get-VcList -Path $([System.IO.Path]::Combine($env:WorkingPath, "README.MD")) } | Should -Throw
 		}
 	}
 }
@@ -124,13 +124,7 @@ Describe -Name "Validate manifest scenarios" {
 Describe "Export-VcManifest" {
 	Context 'Validation' {
 		BeforeAll {
-			If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-				$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-			}
-			Else {
-				$WorkingPath = $env:GITHUB_WORKSPACE
-			}
-			$Json = [System.IO.Path]::Combine($WorkingPath, "Redists.json")
+			$Json = [System.IO.Path]::Combine($env:WorkingPath, "Redists.json")
 			Export-VcManifest -Path $Json
 			$VcList = Get-VcList -Path $Json
 			$VcCount = @{
@@ -148,7 +142,7 @@ Describe "Export-VcManifest" {
 			$VcList.Count | Should -BeGreaterOrEqual $VcCount.Default
 		}
 		It "Given an invalid path, it should throw an error" {
-			{ Export-VcManifest -Path $([System.IO.Path]::Combine($WorkingPath, "Temp", "Temp.json")) } | Should -Throw
+			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:WorkingPath, "Temp", "Temp.json")) } | Should -Throw
 		}
 	}
 }
@@ -221,22 +215,10 @@ Describe "Save-VcRedist" {
 
 Describe "Save-VcRedist pipeline" {
 	BeforeAll {
-		If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-			$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-		}
-		Else {
-			$WorkingPath = $env:GITHUB_WORKSPACE
-		}
 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 		New-Item -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest")) -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
 		Push-Location -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest"))
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
-		If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-			$WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-		}
-		Else {
-			$WorkingPath = $env:GITHUB_WORKSPACE
-		}
 	}
 
 	Context "Test pipeline support" {
@@ -247,7 +229,7 @@ Describe "Save-VcRedist pipeline" {
 
 	Context "Test fail scenarios" {
 		It "Given an invalid path, it should throw an error" {
-			{ Save-VcRedist -Path ([System.IO.Path]::Combine($WorkingPath, "Temp")) } | Should -Throw
+			{ Save-VcRedist -Path ([System.IO.Path]::Combine($env:WorkingPath, "Temp")) } | Should -Throw
 		}
 	}
 

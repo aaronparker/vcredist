@@ -11,18 +11,18 @@ param ()
 BeforeDiscovery {
     Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
     $ValidateReleases = @("2017", "2019", "2022")
+    If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+        [System.Environment]::SetEnvironmentVariable("WorkingPath",$env:GITHUB_WORKSPACE)
+    }
+    Else {
+        [System.Environment]::SetEnvironmentVariable("WorkingPath",$env:APPVEYOR_BUILD_FOLDER)
+    }
 }
 
 Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
     Context "Validate manifest" {
         BeforeAll {
-            If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-                $WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-            }
-            Else {
-                $WorkingPath = $env:GITHUB_WORKSPACE
-            }
-            $VcManifest = "$WorkingPath\VcRedist\VisualCRedistributables.json"
+            $VcManifest = "$env:WorkingPath\VcRedist\VisualCRedistributables.json"
             Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."
             $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
             $VcRedist = $_

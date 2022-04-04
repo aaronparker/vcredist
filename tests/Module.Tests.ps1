@@ -9,19 +9,18 @@
 param ()
 
 BeforeDiscovery {
-
+    If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+        [System.Environment]::SetEnvironmentVariable("WorkingPath", $env:GITHUB_WORKSPACE)
+    }
+    Else {
+        [System.Environment]::SetEnvironmentVariable("WorkingPath", $env:APPVEYOR_BUILD_FOLDER)
+    }
 }
 
 Describe "General module validation" {
     Context 'Validation' {
         BeforeAll {
-            If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-                $WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-            }
-            Else {
-                $WorkingPath = $env:GITHUB_WORKSPACE
-            }
-            $scripts = Get-ChildItem -Path "$WorkingPath\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
+            $scripts = Get-ChildItem -Path "$env:WorkingPath\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
 
             # TestCases are splatted to the script so we need hashtables
             $testCase = $scripts | ForEach-Object { @{file = $_ } }
@@ -45,13 +44,7 @@ Describe "General module validation" {
 Describe "Function validation" {
     Context 'Validation' {
         BeforeEach {
-            If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-                $WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-            }
-            Else {
-                $WorkingPath = $env:GITHUB_WORKSPACE
-            }
-            $scripts = Get-ChildItem -Path "$WorkingPath\VcRedist" -Recurse -Include "*.ps1"
+            $scripts = Get-ChildItem -Path "$env:WorkingPath\VcRedist" -Recurse -Include "*.ps1"
             $testCase = $scripts | ForEach-Object { @{file = $_ } }
         }
 
@@ -77,20 +70,14 @@ Describe "Function validation" {
 Describe 'Module Metadata validation' {
     Context 'File info' {
         BeforeAll {
-            If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-                $WorkingPath = $env:APPVEYOR_BUILD_FOLDER
-            }
-            Else {
-                $WorkingPath = $env:GITHUB_WORKSPACE
-            }
         }
 
         It 'Script fileinfo should be OK' {
-            { Test-ModuleManifest -Path "$WorkingPath\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
+            { Test-ModuleManifest -Path "$env:WorkingPath\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
         }
 
         It 'Import module should be OK' {
-            { Import-Module "$WorkingPath\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
+            { Import-Module "$env:WorkingPath\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
         }
     }
 }
