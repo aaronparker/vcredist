@@ -8,7 +8,7 @@ catch {
 
 try {
     Write-Host "Install Pester." -ForegroundColor "Cyan"
-    Install-PackageProvider -Name "NuGet" -MinimumVersion "2.8.5.208" -Verbose
+    Install-PackageProvider -Name "NuGet" -MinimumVersion "2.8.5.208"
     Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted" -Verbose
     Install-Module -Name "Pester" -SkipPublisherCheck -Force
     Import-Module -Name "Pester" -Force
@@ -24,7 +24,8 @@ $Config.Run.PassThru = $True
 $Config.TestResult.Enabled = $True
 $Config.TestResult.OutputFormat = "NUnitXml"
 $Config.TestResult.OutputPath = "$env:APPVEYOR_BUILD_FOLDER\tests\TestResults.xml"
-Invoke-Pester -Configuration $Config
+$res = Invoke-Pester -Configuration $Config
+If ($res.FailedCount -gt 0) { Throw "$($res.FailedCount) tests failed." }
 
 # Upload test results
 $wc = New-Object -TypeName "System.Net.WebClient"
