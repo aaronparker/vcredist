@@ -10,6 +10,7 @@ only_commits:
     - VcRedist/**
     - tests/**
     - ci/Invoke-Tests.ps1
+    - appveyor.yml
 image: Visual Studio 2022
 build: off
 before_test:
