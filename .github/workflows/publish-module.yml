@@ -1,10 +1,12 @@
-name: new-release
+name: publish-module
 
 on:
-  workflow_dispatch:
-    branches:
-        - main
+#  workflow_dispatch:
+#    branches:
+#        - main
   push:
+    branches:
+      - main
     tags:
       - "v*.*.*"
 
@@ -51,6 +53,7 @@ jobs:
               Path        = "${{ github.workspace }}/VcRedist"
               NuGetApiKey = "${{ secrets.NUGETAPIKEY }}"
               ErrorAction = "Stop"
-              WhatIf      = $True
+              #WhatIf      = $True
+              Verbose     = $True
           }
           Publish-Module @params

@@ -1,4 +1,4 @@
-name: update-module
+name: update-module-version
 
 on:  
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
         - main
 
 env:
-  BUILD_NUMBER: "320"
+  BUILD_NUMBER: "332"
 
 jobs:
   update-module:
