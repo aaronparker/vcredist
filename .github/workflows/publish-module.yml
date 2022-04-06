@@ -1,17 +1,15 @@
 name: publish-module
 
 on:
-#  workflow_dispatch:
-#    branches:
-#        - main
-  push:
+  workflow_dispatch:
     branches:
-      - main
+        - main
+  push:
     tags:
       - "v*.*.*"
 
 jobs:
-  new-release:
+  publish-module:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
