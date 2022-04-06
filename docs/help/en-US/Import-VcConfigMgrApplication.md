@@ -23,7 +23,7 @@ Import-VcConfigMgrApplication [-VcList] <PSObject> [-Path] <String> [-CMPath] <S
 
 Creates an application in a Configuration Manager site for each Visual C++ Redistributable and includes setting whether the Redistributable can run on 32-bit or 64-bit Windows and the Uninstall key for detecting whether the Redistributable is installed.
 
-Use Get-VcList and Get-VcRedist to download the Redistributable and create the array of Redistributables for importing into ConfigMgr.
+Use Get-VcList and Save-VcRedist to download the Redistributable and create the array of Redistributables for importing into ConfigMgr.
 
 Applications will be imported into the ConfigMgr with the default properties similar to the following:
 

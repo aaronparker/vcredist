@@ -23,7 +23,7 @@ Import-VcMdtApplication [-VcList] <PSObject> [-Path] <String> [-MdtPath] <String
 
 Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.
 
-Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
+Use Get-VcList and Save-VcRedist to download the Redistributables and create the array for importing into MDT.
 
 Applications will be imported into the MDT Deployment share with the default properties similar to the following:
 

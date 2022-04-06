@@ -1,6 +1,6 @@
 # Import Redistributables into ConfigMgr
 
-To install the Visual C++ Redistributables with System Center Configuration Manager, `Import-VcConfigMgrApplication` will import each of the Visual C++ Redistributables as a separate application that includes the application and a single deployment type.
+To install the Visual C++ Redistributables with Microsoft Endpoint Configuration Manager, use `Import-VcConfigMgrApplication` to import each of the Visual C++ Redistributables as a separate application that includes the application and a single deployment type.
 
 Visual C++ Redistributables can be filtered for release and processor architecture by `Get-VcList` before passing to `Import-VcConfigMgrApplication`.
 
@@ -27,7 +27,7 @@ To import the Visual C++ Redistributables as applications with a single deployme
 
 ```powershell
 $VcList = Get-VcList
-Get-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
+Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
 Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 ```
 
@@ -35,7 +35,7 @@ The install command line arguments used by default are passive. Fully silent ins
 
 ```powershell
 $VcList = Get-VcList
-Get-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
+Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
 Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB -Silent
 ```
 

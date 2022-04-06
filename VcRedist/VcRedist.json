@@ -13,6 +13,7 @@
     },
     "Urls": {
         "Privacy": "https://go.microsoft.com/fwlink/?LinkId=521839",
-        "Docs": "https://visualstudio.microsoft.com/vs/support/"
+        "Docs": "https://visualstudio.microsoft.com/vs/support/",
+        "IntuneWinAppUtil": "https://raw.githubusercontent.com/microsoft/Microsoft-Win32-Content-Prep-Tool/master/IntuneWinAppUtil.exe"
     }
 }

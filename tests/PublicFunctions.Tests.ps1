@@ -11,11 +11,17 @@ param ()
 BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 	$TestVcRedists = Get-VcList -Release $TestReleases
+
+	if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
+	$Path = [System.IO.Path]::Combine($DownloadDir, "VcDownload")
+	New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+	#Save-VcRedist -VcList (Get-VcList) -Path $Path
+
 	If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-		[System.Environment]::SetEnvironmentVariable("WorkingPath",$env:GITHUB_WORKSPACE)
+		[System.Environment]::SetEnvironmentVariable("WorkingPath", $env:GITHUB_WORKSPACE)
 	}
 	Else {
-		[System.Environment]::SetEnvironmentVariable("WorkingPath",$env:APPVEYOR_BUILD_FOLDER)
+		[System.Environment]::SetEnvironmentVariable("WorkingPath", $env:APPVEYOR_BUILD_FOLDER)
 	}
 }
 
@@ -41,24 +47,6 @@ Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists
 	}
 }
 
-# Describe "Install-VcRedist <VcRedist.Name>" -Foreach $TestVcRedists {
-# 	BeforeAll {
-# 		$VcRedist = $_
-# 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
-# 		$Path = [System.IO.Path]::Combine($DownloadDir, "VcDownload")
-# 		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
-# 		Save-VcRedist -VcList (Get-VcList) -Path $Path
-# 		$Installed = Install-VcRedist -VcList (Get-VcList) -Path $Path -Silent
-# 		$Installed = Get-InstalledVcRedist
-# 	}
-
-# 	Context "Install Redistributables" {
-# 		It "Installed the VcRedist: $($VcRedist.Name)" {
-# 			$VcRedist.ProductCode | Should -BeIn $Installed.ProductCode
-# 		}
-# 	}
-# }
-
 Describe "Uninstall-VcRedist" {
 	BeforeAll {
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
@@ -66,6 +54,38 @@ Describe "Uninstall-VcRedist" {
 
 	Context "Uninstall VcRedist <_.Name>" -ForEach $TestReleases {
 		{ Uninstall-VcRedist -Release $_ -Confirm:$False } | Should -Not -Throw
+	}
+}
+
+Describe "Install-VcRedist" {
+	BeforeAll {
+		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	}
+
+	Context "Install Redistributables" -Foreach $TestReleases {
+		BeforeAll {
+			$VcRedist = $_
+
+			if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
+			$Path = [System.IO.Path]::Combine($DownloadDir, "VcDownload")
+			New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+
+			$VcList = Get-VcList -Release $VcRedist | Save-VcRedist -Path $Path
+			$Installed = Install-VcRedist -VcList $VcList -Path $Path -Silent
+
+			$Architectures = @("x86", "x64")
+		}
+
+		Context "Test architecture" -ForEach $Architectures {
+			BeforeAll {
+				$Architecture = $_
+				$List = $VcList | Where-Object { $_.Architecture -match $Architecture }
+			}
+
+			It "Installed the VcRedist: <VcRedist.Name>" {
+				$List.ProductCode | Should -BeIn $Installed.ProductCode
+			}
+		}
 	}
 }
 
@@ -182,7 +202,9 @@ Describe "Test-Downloads" {
 
 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 		$Path = $([System.IO.Path]::Combine($DownloadDir, "VcDownload"))
-		If (!(Test-Path $Path)) { New-Item $Path -ItemType "Directory" -Force > $Null }
+		If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
+		New-Item -Path $Path -ItemType "Directory" -Force > $Null
+
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 		$VcList = Get-VcList -Release $TestReleases
 		Save-VcRedist -VcList $VcList -Path $Path
@@ -249,6 +271,28 @@ Describe "Get-InstalledVcRedist" {
 			$_.Version.Length | Should -BeGreaterThan 0
 			$_.ProductCode.Length | Should -BeGreaterThan 0
 			$_.UninstallString.Length | Should -BeGreaterThan 0
+		}
+	}
+}
+
+Describe "Import-VcIntuneApplication without IntuneWin32App" {
+	BeforeAll {
+
+	}
+	Context "Validate Import-VcIntuneApplication fail scenarios" {
+		It "Should fail without IntuneWin32App" {
+			{ Get-VcList | Import-VcIntuneApplication } | Should -Throw
+		}
+	}
+}
+
+Describe "Import-VcIntuneApplication without authentication" {
+	BeforeAll {
+		Install-Module -Name "IntuneWin32App"
+	}
+	Context "Validate Import-VcIntuneApplication fail scenarios" {
+		It "Should fail without an authentication token" {
+			{ Get-VcList | Import-VcIntuneApplication } | Should -Throw
 		}
 	}
 }

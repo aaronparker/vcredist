@@ -5,6 +5,7 @@
         "betterem",
         "Bitness",
         "codeql",
+        "contoso",
         "Donath",
         "Dont",
         "fontawesome",
@@ -14,6 +15,7 @@
         "GPGPASSPHRASE",
         "gpgsign",
         "GUIDs",
+        "HKEY",
         "inlinehilite",
         "installedvcredist",
         "magiclink",
@@ -46,5 +48,6 @@
         "vcmdtbundle",
         "VcRedist",
         "visualstudiologo"
-    ]
+    ],
+    "pester.autoRunOnSave": false
 }
