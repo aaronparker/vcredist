@@ -71,7 +71,7 @@ PowerShellVersion = '3.0'
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 
                'Import-VcConfigMgrApplication', 'Import-VcMdtApplication', 
-               'Install-VcRedist', 'New-VcMdtBundle', 'Save-VcRedist', 
+               'Install-VcRedist', 'New-VcMdtBundle', 'Save-VcRedist', 'Import-VcIntuneApplication',
                'Uninstall-VcRedist', 'Update-VcMdtApplication', 'Update-VcMdtBundle')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -101,7 +101,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','MEMCM','Intune'
+        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','MEMCM','MEM', 'Intune'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/main/LICENSE'

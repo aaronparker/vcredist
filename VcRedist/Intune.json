@@ -1,0 +1,39 @@
+{
+    "PackageInformation": {
+        "SetupType": "EXE",
+        "SetupFile": "vcredist.exe",
+        "Version": "14.31.31103.0",
+        "SourceFolder": "Source",
+        "OutputFolder": "Package",
+        "IconFile": ""
+    },
+    "Information": {
+        "DisplayName": "Microsoft Visual C++ Redistributable",
+        "Description": "Visual C++ Redistributable Packages install runtime components of Visual C++ Libraries.",
+        "Publisher": "Microsoft",
+        "InformationURL": "https://visualstudio.microsoft.com/vs/support/",
+        "PrivacyURL": "https://go.microsoft.com/fwlink/?LinkId=521839",
+        "Notes": "Imported via VcRedist https://vcredist.com/"
+    },
+    "Program": {
+        "InstallCommand": "vcredist.exe /install /quiet /norestart",
+        "UninstallCommand": "msiexec /x{guid} /qn",
+        "InstallExperience": "system",
+        "DeviceRestartBehavior": "basedOnReturnCode"
+    },
+    "RequirementRule": {
+        "MinimumRequiredOperatingSystem": "1809",
+        "Architecture": "x64",
+        "SizeInMBValue": "100"
+    },
+    "DetectionRule": [
+        {
+            "Type": "Registry",
+            "DetectionMethod": "Existence",
+            "KeyPath": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{guid}",
+            "ValueName": "",
+            "DetectionType": "exists",
+            "Check32BitOn64System": "false"
+        }
+    ]
+}
