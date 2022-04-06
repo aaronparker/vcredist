@@ -121,7 +121,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
-          repository: aaronparker/vcredist-test
+          repository: aaronparker/vcredist
 
       - name: Get module version number
         id: get-version
