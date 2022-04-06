@@ -85,4 +85,16 @@ InModuleScope VcRedist {
             }
         }
     }
+
+    Describe 'New-TemporaryFolder' {
+        BeforeAll {
+            $Path = New-TemporaryFolder
+        }
+
+        Context "Test New-TemporaryFolder" {
+            It "Creates a temporary directory" {
+                Test-Path -Path $Path | Should -BeTrue
+            }
+        }
+    }
 }
