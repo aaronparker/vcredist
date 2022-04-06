@@ -23,7 +23,7 @@ New-VcMdtBundle [-MdtPath] <String> [[-AppFolder] <String>] [-Force] [[-MdtDrive
 
 Creates an application in a Microsoft Deployment Toolkit share for each Visual C++ Redistributable and includes properties such as target Silent command line, Platform and Uninstall key.
 
-Use Get-VcList and Get-VcRedist to download the Redistributables and create the array for importing into MDT.
+Use Get-VcList and Save-VcRedist to download the Redistributables and create the array for importing into MDT.
 
 The bundle will be imported into the MDT Deployment share with the default properties similar to the following:
 
@@ -42,7 +42,7 @@ Dependencies: (VcRedists in the MDT share)
 ### EXAMPLE 1
 
 ```powershell
-Get-VcList | Get-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
+Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 ```
 
 Description:
@@ -52,7 +52,7 @@ Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcR
 
 ```powershell
 $VcList = Get-VcList -ExportAll
-Get-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
+Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
 Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
 ```
 

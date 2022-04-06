@@ -142,7 +142,7 @@ nav:
   - ConfigMgr:
     - Import Redistributables into ConfigMgr: import-vcconfigmgrapplication.md
   - Intune:
-    - Import Redistributables into Intune: new-vcintuneapplication.md
+    - Import Redistributables into Intune: import-vcintuneapplication.md
   - Module help:
     - en-US:
       - about_VcRedist: help/en-US/about_VcRedist.md
