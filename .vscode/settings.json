@@ -23,6 +23,7 @@
         "mkdocs",
         "newversion",
         "noreboot",
+        "NUGETAPIKEY",
         "potatoqualitee",
         "psmodulecache",
         "Pygments",

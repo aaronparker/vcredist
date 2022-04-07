@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.333
+## VERSION
 
 * Adds `Import-VcIntuneApplication` to import the Visual C++ Redistributable into a target Microsoft Intune tenant. For this release, adding assignments to the application via `Import-VcIntuneApplication` is not supported. The function will return the Intune application objects that can be used to add assignments with the `Add-IntuneWin32AppAssignmentAllDevices` function in `IntuneWin32App`
 * Adds private function `New-TemporaryFolder`

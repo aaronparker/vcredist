@@ -123,12 +123,19 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: aaronparker/vcredist
 
+      - name: Git pull
+        id: pull
+        shell: pwsh
+        run: |
+            git pull origin main
+
       - name: Get module version number
         id: get-version
         shell: pwsh
         run: |
             $manifestPath = "${{ github.workspace }}/VcRedist/VcRedist.psd1"
             $manifest = Test-ModuleManifest -Path $manifestPath
+            Write-Host "Found version: $($manifest.Version)"
             echo "::set-output name=version::$($manifest.Version)"
 
       # Import GPG key so that we can sign the commit
