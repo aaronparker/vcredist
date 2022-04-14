@@ -2,8 +2,6 @@ name: update-manifest
 
 on:
   workflow_dispatch:
-    branches:
-        - development
   schedule:
     - cron: '0 18 * * *'
       branches:
