@@ -6,8 +6,6 @@ on:
         - development
   schedule:
     - cron: '0 18 * * *'
-      branches:
-        - development
 
 env:
   MANIFEST_FILE: ${{ github.workspace }}\VcRedist\VisualCRedistributables.json
@@ -17,8 +15,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
+          ref: development
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # Import GPG key so that we can sign the commit
