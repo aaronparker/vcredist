@@ -23,6 +23,7 @@
         "mkdocs",
         "newversion",
         "noreboot",
+        "notmatch",
         "NUGETAPIKEY",
         "potatoqualitee",
         "psmodulecache",
