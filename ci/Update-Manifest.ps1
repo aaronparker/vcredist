@@ -27,7 +27,7 @@ process {
 
         Write-Host "`tInstalling VcRedist $Item." -ForegroundColor "Cyan"
         Install-VcRedist -VcList (Get-VcList -Release $Item) -Path $Path -Silent
-        $InstalledVcRedists = Get-InstalledVcRedist
+        $InstalledVcRedists = Get-InstalledVcRedist | Where-Object { $_.Name -notmatch "Debug Runtime" }
 
         # Filter the VcRedists for the target version and compare against what has been installed
         foreach ($ManifestVcRedist in ($CurrentManifest.Supported | Where-Object { $_.Release -eq $Item })) {

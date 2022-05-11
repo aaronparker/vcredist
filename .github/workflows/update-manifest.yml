@@ -2,8 +2,10 @@ name: update-manifest
 
 on:
   workflow_dispatch:
-    branches:
-        - development
+  push:
+    branches: [ development ]
+    paths:
+      - ci/Update-Manifest.ps1
   schedule:
     - cron: '0 18 * * *'
 
