@@ -7,7 +7,7 @@ Function New-TemporaryFolder {
             Author: Aaron Parker
             Twitter: @stealthpuppy
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([System.String])]
     param ()
 
@@ -26,8 +26,10 @@ Function New-TemporaryFolder {
     try {
         $Folder = "vcredist_$([System.Convert]::ToString((Get-Random -Maximum 65535),16).PadLeft(4,'0')).tmp"
         $T = Join-Path -Path $Parent -ChildPath $Folder
-        $Path = New-Item -Path $T -ItemType "Directory" -ErrorAction "SilentlyContinue"
-        Write-Output -InputObject $Path.FullName
+        if ($PSCmdlet.ShouldProcess($T, "New directory.")) {
+            $Path = New-Item -Path $T -ItemType "Directory" -ErrorAction "SilentlyContinue"
+            Write-Output -InputObject $Path.FullName
+        }
     }
     catch {
         throw $_.Exception.Message
