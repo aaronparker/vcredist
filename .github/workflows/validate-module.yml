@@ -63,6 +63,7 @@ jobs:
           $Config.Run.Path = "${{ github.workspace }}\tests"
           $Config.Run.PassThru = $True
           $Config.CodeCoverage.Enabled = $True
+          $Config.CodeCoverage.Path = "${{ github.workspace }}\Evergreen"
           $Config.CodeCoverage.OutputFormat = "JaCoCo"
           $Config.CodeCoverage.OutputPath = "${{ github.workspace }}\tests\CodeCoverage-${{ matrix.os }}.xml"
           $Config.TestResult.Enabled = $True
