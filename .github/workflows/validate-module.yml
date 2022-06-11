@@ -84,6 +84,12 @@ jobs:
         run: |
           echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
 
+      - name: git pull
+        id: git-pull
+        shell: powershell
+        run: |
+          git pull origin
+
       - name: Commit changes
         id: commit
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -115,6 +121,6 @@ jobs:
       
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: results.sarif
