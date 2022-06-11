@@ -63,6 +63,7 @@ jobs:
           $Config.Run.Path = "${{ github.workspace }}\tests"
           $Config.Run.PassThru = $True
           $Config.CodeCoverage.Enabled = $True
+          $Config.CodeCoverage.OutputFormat = "JaCoCo"
           $Config.CodeCoverage.OutputPath = "${{ github.workspace }}\tests\CodeCoverage-${{ matrix.os }}.xml"
           $Config.TestResult.Enabled = $True
           $Config.TestResult.OutputFormat = "NUnitXml"
@@ -79,11 +80,11 @@ jobs:
 
       - name: Upload to Codecov
         id: codecov
-        shell: powershell
-        run: |
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -OutFile "${{ github.workspace }}\codecov.exe"
-          .\codecov.exe -t ${CODECOV_TOKEN} --gcovInclude "${{ github.workspace }}\tests"
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./tests/CodeCoverage-windows-2019.xml,./tests/CodeCoverage-windows-2022.xml,./tests/TestResults-windows-2019.xml,./tests/TestResults-windows-2022.xml
+          verbose: true
 
       # Format the date number for the commit message
       - name: Get date
