@@ -1,254 +1,254 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="35" errors="0" failures="0" not-run="1" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2022-06-11" time="03:02:52">
-  <environment clr-version="4.0.30319.42000" user-domain="fv-az207-598" cwd="D:\a\vcredist\vcredist" platform="Microsoft Windows Server 2019 Datacenter|C:\Windows|\Device\Harddisk0\Partition2" machine-name="fv-az207-598" nunit-version="2.5.8.0" os-version="10.0.17763" user="runneradmin" />
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="35" errors="0" failures="0" not-run="1" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2022-06-11" time="06:24:48">
+  <environment clr-version="4.0.30319.42000" user-domain="fv-az28-131" cwd="D:\a\vcredist\vcredist" platform="Microsoft Windows Server 2019 Datacenter|C:\Windows|\Device\Harddisk0\Partition2" machine-name="fv-az28-131" nunit-version="2.5.8.0" os-version="10.0.17763" user="runneradmin" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="62.8201" asserts="0" description="Pester">
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="91.5137" asserts="0" description="Pester">
     <results>
-      <test-suite type="TestFixture" name="D:\a\vcredist\vcredist\tests\Module.Tests.ps1" executed="True" result="Success" success="True" time="4.3521" asserts="0" description="D:\a\vcredist\vcredist\tests\Module.Tests.ps1">
+      <test-suite type="TestFixture" name="D:\a\vcredist\vcredist\tests\Module.Tests.ps1" executed="True" result="Success" success="True" time="5.8033" asserts="0" description="D:\a\vcredist\vcredist\tests\Module.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Module Metadata validation" executed="True" result="Success" success="True" time="1.8568" asserts="0" description="Module Metadata validation">
+          <test-suite type="TestFixture" name="Module Metadata validation" executed="True" result="Success" success="True" time="2.634" asserts="0" description="Module Metadata validation">
             <results>
-              <test-suite type="TestFixture" name="Module Metadata validation.File info" executed="True" result="Success" success="True" time="1.6597" asserts="0" description="Module Metadata validation.File info">
+              <test-suite type="TestFixture" name="Module Metadata validation.File info" executed="True" result="Success" success="True" time="2.2852" asserts="0" description="Module Metadata validation.File info">
                 <results>
-                  <test-case description="Script fileinfo should be OK" name="Module Metadata validation.File info.Script fileinfo should be OK" time="0.9392" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Import module should be OK" name="Module Metadata validation.File info.Import module should be OK" time="0.0961" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Script fileinfo should be OK" name="Module Metadata validation.File info.Script fileinfo should be OK" time="1.2204" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Import module should be OK" name="Module Metadata validation.File info.Import module should be OK" time="0.3441" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="D:\a\vcredist\vcredist\tests\PrivateFunctions.Tests.ps1" executed="True" result="Success" success="True" time="3.2002" asserts="0" description="D:\a\vcredist\vcredist\tests\PrivateFunctions.Tests.ps1">
+      <test-suite type="TestFixture" name="D:\a\vcredist\vcredist\tests\PrivateFunctions.Tests.ps1" executed="True" result="Success" success="True" time="6.17" asserts="0" description="D:\a\vcredist\vcredist\tests\PrivateFunctions.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="New-MdtApplicationFolder" executed="True" result="Success" success="True" time="2.1188" asserts="0" description="New-MdtApplicationFolder">
+          <test-suite type="TestFixture" name="New-MdtApplicationFolder" executed="True" result="Success" success="True" time="3.364" asserts="0" description="New-MdtApplicationFolder">
             <results>
-              <test-suite type="TestFixture" name="New-MdtApplicationFolder.Application folder exists" executed="True" result="Success" success="True" time="1.9169" asserts="0" description="New-MdtApplicationFolder.Application folder exists">
+              <test-suite type="TestFixture" name="New-MdtApplicationFolder.Application folder exists" executed="True" result="Success" success="True" time="2.2695" asserts="0" description="New-MdtApplicationFolder.Application folder exists">
                 <results>
-                  <test-case description="Returns True if the Application folder exists" name="New-MdtApplicationFolder.Application folder exists.Returns True if the Application folder exists" time="1.9071" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Returns True if the Application folder exists" name="New-MdtApplicationFolder.Application folder exists.Returns True if the Application folder exists" time="2.0953" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
-              <test-suite type="TestFixture" name="New-MdtApplicationFolder.Creates a new Packages folder" executed="True" result="Success" success="True" time="2.1103" asserts="0" description="New-MdtApplicationFolder.Creates a new Packages folder">
+              <test-suite type="TestFixture" name="New-MdtApplicationFolder.Creates a new Packages folder" executed="True" result="Success" success="True" time="3.1091" asserts="0" description="New-MdtApplicationFolder.Creates a new Packages folder">
                 <results>
-                  <test-case description="Successfully creates a Application folder" name="New-MdtApplicationFolder.Creates a new Packages folder.Successfully creates a Application folder" time="0.1585" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Successfully creates a Application folder" name="New-MdtApplicationFolder.Creates a new Packages folder.Successfully creates a Application folder" time="0.6879" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Test-PSCore" executed="True" result="Success" success="True" time="2.2297" asserts="0" description="Test-PSCore">
+          <test-suite type="TestFixture" name="Test-PSCore" executed="True" result="Success" success="True" time="4.2898" asserts="0" description="Test-PSCore">
             <results>
-              <test-suite type="TestFixture" name="Test-PSCore.Tests whether we are running on PowerShell Core" executed="True" result="Success" success="True" time="0.0196" asserts="0" description="Test-PSCore.Tests whether we are running on PowerShell Core">
+              <test-suite type="TestFixture" name="Test-PSCore.Tests whether we are running on PowerShell Core" executed="True" result="Success" success="True" time="0.2874" asserts="0" description="Test-PSCore.Tests whether we are running on PowerShell Core">
                 <results>
-                  <test-case description="Imports the MDT PowerShell module and returns True" name="Test-PSCore.Tests whether we are running on PowerShell Core.Imports the MDT PowerShell module and returns True" time="0.0101" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Imports the MDT PowerShell module and returns True" name="Test-PSCore.Tests whether we are running on PowerShell Core.Imports the MDT PowerShell module and returns True" time="0.1387" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
-              <test-suite type="TestFixture" name="Test-PSCore.Tests whether we are running on Windows PowerShell" executed="True" result="Success" success="True" time="0.1017" asserts="0" description="Test-PSCore.Tests whether we are running on Windows PowerShell">
+              <test-suite type="TestFixture" name="Test-PSCore.Tests whether we are running on Windows PowerShell" executed="True" result="Success" success="True" time="0.6551" asserts="0" description="Test-PSCore.Tests whether we are running on Windows PowerShell">
                 <results>
-                  <test-case description="Returns False if running Windows PowerShell" name="Test-PSCore.Tests whether we are running on Windows PowerShell.Returns False if running Windows PowerShell" time="0.0727" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Returns False if running Windows PowerShell" name="Test-PSCore.Tests whether we are running on Windows PowerShell.Returns False if running Windows PowerShell" time="0.2147" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="New-TemporaryFolder" executed="True" result="Success" success="True" time="2.2809" asserts="0" description="New-TemporaryFolder">
+          <test-suite type="TestFixture" name="New-TemporaryFolder" executed="True" result="Success" success="True" time="4.7552" asserts="0" description="New-TemporaryFolder">
             <results>
-              <test-suite type="TestFixture" name="New-TemporaryFolder.Test New-TemporaryFolder" executed="True" result="Success" success="True" time="0.0184" asserts="0" description="New-TemporaryFolder.Test New-TemporaryFolder">
+              <test-suite type="TestFixture" name="New-TemporaryFolder.Test New-TemporaryFolder" executed="True" result="Success" success="True" time="0.2958" asserts="0" description="New-TemporaryFolder.Test New-TemporaryFolder">
                 <results>
-                  <test-case description="Creates a temporary directory" name="New-TemporaryFolder.Test New-TemporaryFolder.Creates a temporary directory" time="0.0085" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Creates a temporary directory" name="New-TemporaryFolder.Test New-TemporaryFolder.Creates a temporary directory" time="0.1512" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="D:\a\vcredist\vcredist\tests\PublicFunctions.Tests.ps1" executed="True" result="Success" success="True" time="28.769" asserts="0" description="D:\a\vcredist\vcredist\tests\PublicFunctions.Tests.ps1">
+      <test-suite type="TestFixture" name="D:\a\vcredist\vcredist\tests\PublicFunctions.Tests.ps1" executed="True" result="Success" success="True" time="48.2709" asserts="0" description="D:\a\vcredist\vcredist\tests\PublicFunctions.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4" executed="True" result="Success" success="True" time="0.1696" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4" executed="True" result="Success" success="True" time="0.7592" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.1591" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5997" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.1503" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.447" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4" executed="True" result="Success" success="True" time="0.2035" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4" executed="True" result="Success" success="True" time="1.457" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0263" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.537" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0187" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2012 Update 4.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3865" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package" executed="True" result="Success" success="True" time="0.3807" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package" executed="True" result="Success" success="True" time="2.2058" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.1674" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5996" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0179" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.4483" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package" executed="True" result="Success" success="True" time="0.4128" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package" executed="True" result="Success" success="True" time="2.878" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0241" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5205" asserts="0" description="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0167" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2013 Update 5 Redistributable Package.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3681" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3" executed="True" result="Success" success="True" time="0.4458" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3" executed="True" result="Success" success="True" time="3.5591" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0251" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5284" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0173" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3806" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3" executed="True" result="Success" success="True" time="0.4817" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3" executed="True" result="Success" success="True" time="4.2387" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0286" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5334" asserts="0" description="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0213" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ 2015 Redistributable Update 3.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3863" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017" executed="True" result="Success" success="True" time="0.5123" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017" executed="True" result="Success" success="True" time="4.9243" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0233" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5435" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3937" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017" executed="True" result="Success" success="True" time="0.5444" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017" executed="True" result="Success" success="True" time="5.6179" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0244" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.533" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0161" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2017.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3858" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019" executed="True" result="Success" success="True" time="0.5751" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019" executed="True" result="Success" success="True" time="6.3639" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0232" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.587" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0161" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.4056" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019" executed="True" result="Success" success="True" time="0.6488" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019" executed="True" result="Success" success="True" time="7.0837" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.066" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5597" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0165" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2019.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3806" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022" executed="True" result="Success" success="True" time="0.6814" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022" executed="True" result="Success" success="True" time="7.7973" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0252" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5581" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0168" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3881" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022" executed="True" result="Success" success="True" time="0.7123" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022">
+          <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022" executed="True" result="Success" success="True" time="8.4936" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022">
             <results>
-              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.0237" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties">
+              <test-suite type="TestFixture" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties" executed="True" result="Success" success="True" time="0.5467" asserts="0" description="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties">
                 <results>
-                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.0153" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="VcRedist [, ] has expected properties" name="Validate Get-VcList for Visual C++ Redistributable for Visual Studio 2022.Validate Get-VcList array properties.VcRedist [, ] has expected properties" time="0.3937" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate manifest counts" executed="True" result="Success" success="True" time="1.2241" asserts="0" description="Validate manifest counts">
+          <test-suite type="TestFixture" name="Validate manifest counts" executed="True" result="Success" success="True" time="9.8741" asserts="0" description="Validate manifest counts">
             <results>
-              <test-suite type="TestFixture" name="Validate manifest counts.Return built-in manifest" executed="True" result="Success" success="True" time="0.5042" asserts="0" description="Validate manifest counts.Return built-in manifest">
+              <test-suite type="TestFixture" name="Validate manifest counts.Return built-in manifest" executed="True" result="Success" success="True" time="1.237" asserts="0" description="Validate manifest counts.Return built-in manifest">
                 <results>
-                  <test-case description="Given no parameters, it returns supported Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given no parameters, it returns supported Visual C++ Redistributables" time="0.3917" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given valid parameter -Export All, it returns all Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given valid parameter -Export All, it returns all Visual C++ Redistributables" time="0.066" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given valid parameter -Export Supported, it returns all Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given valid parameter -Export Supported, it returns all Visual C++ Redistributables" time="0.0172" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" time="0.0214" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given no parameters, it returns supported Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given no parameters, it returns supported Visual C++ Redistributables" time="0.2898" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Export All, it returns all Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given valid parameter -Export All, it returns all Visual C++ Redistributables" time="0.2984" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Export Supported, it returns all Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given valid parameter -Export Supported, it returns all Visual C++ Redistributables" time="0.2148" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" name="Validate manifest counts.Return built-in manifest.Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" time="0.2684" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Validate manifest scenarios" executed="True" result="Success" success="True" time="1.6708" asserts="0" description="Validate manifest scenarios">
+          <test-suite type="TestFixture" name="Validate manifest scenarios" executed="True" result="Success" success="True" time="11.2223" asserts="0" description="Validate manifest scenarios">
             <results>
-              <test-suite type="TestFixture" name="Validate manifest scenarios.Validation" executed="True" result="Success" success="True" time="0.4399" asserts="0" description="Validate manifest scenarios.Validation">
+              <test-suite type="TestFixture" name="Validate manifest scenarios.Validation" executed="True" result="Success" success="True" time="1.2139" asserts="0" description="Validate manifest scenarios.Validation">
                 <results>
-                  <test-case description="Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest" name="Validate manifest scenarios.Validation.Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest" time="0.0615" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given an JSON file that does not exist, it should throw an error" name="Validate manifest scenarios.Validation.Given an JSON file that does not exist, it should throw an error" time="0.232" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given an invalid JSON file, should throw an error on read" name="Validate manifest scenarios.Validation.Given an invalid JSON file, should throw an error on read" time="0.1137" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest" name="Validate manifest scenarios.Validation.Given valid parameter -Path, it returns Visual C++ Redistributables from an external manifest" time="0.2068" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given an JSON file that does not exist, it should throw an error" name="Validate manifest scenarios.Validation.Given an JSON file that does not exist, it should throw an error" time="0.4075" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given an invalid JSON file, should throw an error on read" name="Validate manifest scenarios.Validation.Given an invalid JSON file, should throw an error on read" time="0.3726" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Export-VcManifest" executed="True" result="Success" success="True" time="1.7219" asserts="0" description="Export-VcManifest">
+          <test-suite type="TestFixture" name="Export-VcManifest" executed="True" result="Success" success="True" time="12.0792" asserts="0" description="Export-VcManifest">
             <results>
-              <test-suite type="TestFixture" name="Export-VcManifest.Validation" executed="True" result="Success" success="True" time="0.043" asserts="0" description="Export-VcManifest.Validation">
+              <test-suite type="TestFixture" name="Export-VcManifest.Validation" executed="True" result="Success" success="True" time="0.7142" asserts="0" description="Export-VcManifest.Validation">
                 <results>
-                  <test-case description="Given valid parameter -Path, it exports an JSON file" name="Export-VcManifest.Validation.Given valid parameter -Path, it exports an JSON file" time="0.0062" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given valid parameter -Path, it exports an JSON file" name="Export-VcManifest.Validation.Given valid parameter -Path, it exports an JSON file" time="0.0056" asserts="0" success="True" result="Success" executed="True" />
-                  <test-case description="Given an invalid path, it should throw an error" name="Export-VcManifest.Validation.Given an invalid path, it should throw an error" time="0.012" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Path, it exports an JSON file" name="Export-VcManifest.Validation.Given valid parameter -Path, it exports an JSON file" time="0.1503" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given valid parameter -Path, it exports an JSON file" name="Export-VcManifest.Validation.Given valid parameter -Path, it exports an JSON file" time="0.1473" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given an invalid path, it should throw an error" name="Export-VcManifest.Validation.Given an invalid path, it should throw an error" time="0.1922" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Test-Downloads" executed="True" result="Success" success="True" time="4.0133" asserts="0" description="Test-Downloads">
+          <test-suite type="TestFixture" name="Test-Downloads" executed="True" result="Success" success="True" time="16.2223" asserts="0" description="Test-Downloads">
             <results>
-              <test-suite type="TestFixture" name="Test-Downloads.Download Redistributables" executed="True" result="Success" success="True" time="0.0336" asserts="0" description="Test-Downloads.Download Redistributables">
+              <test-suite type="TestFixture" name="Test-Downloads.Download Redistributables" executed="True" result="Success" success="True" time="0.3634" asserts="0" description="Test-Downloads.Download Redistributables">
                 <results>
-                  <test-case description="Downloads supported Visual C++ Redistributables" name="Test-Downloads.Download Redistributables.Downloads supported Visual C++ Redistributables" time="0.0253" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Downloads supported Visual C++ Redistributables" name="Test-Downloads.Download Redistributables.Downloads supported Visual C++ Redistributables" time="0.2086" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Save-VcRedist" executed="True" result="Success" success="True" time="5.1515" asserts="0" description="Save-VcRedist">
+          <test-suite type="TestFixture" name="Save-VcRedist" executed="True" result="Success" success="True" time="18.6413" asserts="0" description="Save-VcRedist">
             <results>
-              <test-suite type="TestFixture" name="Save-VcRedist.Download Redistributables" executed="True" result="Success" success="True" time="0.0978" asserts="0" description="Save-VcRedist.Download Redistributables">
+              <test-suite type="TestFixture" name="Save-VcRedist.Download Redistributables" executed="True" result="Success" success="True" time="0.4586" asserts="0" description="Save-VcRedist.Download Redistributables">
                 <results>
-                  <test-case description="Returns an expected object type to the pipeline" name="Save-VcRedist.Download Redistributables.Returns an expected object type to the pipeline" time="0.0848" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Returns an expected object type to the pipeline" name="Save-VcRedist.Download Redistributables.Returns an expected object type to the pipeline" time="0.317" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Save-VcRedist pipeline" executed="True" result="Success" success="True" time="6.0972" asserts="0" description="Save-VcRedist pipeline">
+          <test-suite type="TestFixture" name="Save-VcRedist pipeline" executed="True" result="Success" success="True" time="21.3206" asserts="0" description="Save-VcRedist pipeline">
             <results>
-              <test-suite type="TestFixture" name="Save-VcRedist pipeline.Test pipeline support" executed="True" result="Success" success="True" time="0.914" asserts="0" description="Save-VcRedist pipeline.Test pipeline support">
+              <test-suite type="TestFixture" name="Save-VcRedist pipeline.Test pipeline support" executed="True" result="Success" success="True" time="2.0991" asserts="0" description="Save-VcRedist pipeline.Test pipeline support">
                 <results>
-                  <test-case description="Should not throw when passed via pipeline with no parameters" name="Save-VcRedist pipeline.Test pipeline support.Should not throw when passed via pipeline with no parameters" time="0.9065" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should not throw when passed via pipeline with no parameters" name="Save-VcRedist pipeline.Test pipeline support.Should not throw when passed via pipeline with no parameters" time="1.9512" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
-              <test-suite type="TestFixture" name="Save-VcRedist pipeline.Test fail scenarios" executed="True" result="Success" success="True" time="0.931" asserts="0" description="Save-VcRedist pipeline.Test fail scenarios">
+              <test-suite type="TestFixture" name="Save-VcRedist pipeline.Test fail scenarios" executed="True" result="Success" success="True" time="2.466" asserts="0" description="Save-VcRedist pipeline.Test fail scenarios">
                 <results>
-                  <test-case description="Given an invalid path, it should throw an error" name="Save-VcRedist pipeline.Test fail scenarios.Given an invalid path, it should throw an error" time="0.0096" asserts="0" success="True" result="Success" executed="True" />
-                </results>
-              </test-suite>
-            </results>
-          </test-suite>
-          <test-suite type="TestFixture" name="Import-VcIntuneApplication without IntuneWin32App" executed="True" result="Success" success="True" time="6.298" asserts="0" description="Import-VcIntuneApplication without IntuneWin32App">
-            <results>
-              <test-suite type="TestFixture" name="Import-VcIntuneApplication without IntuneWin32App.Validate Import-VcIntuneApplication fail scenarios" executed="True" result="Success" success="True" time="0.1938" asserts="0" description="Import-VcIntuneApplication without IntuneWin32App.Validate Import-VcIntuneApplication fail scenarios">
-                <results>
-                  <test-case description="Should fail without IntuneWin32App" name="Import-VcIntuneApplication without IntuneWin32App.Validate Import-VcIntuneApplication fail scenarios.Should fail without IntuneWin32App" time="0.1868" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Given an invalid path, it should throw an error" name="Save-VcRedist pipeline.Test fail scenarios.Given an invalid path, it should throw an error" time="0.2155" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Import-VcIntuneApplication without authentication" executed="True" result="Success" success="True" time="14.6055" asserts="0" description="Import-VcIntuneApplication without authentication">
+          <test-suite type="TestFixture" name="Import-VcIntuneApplication without IntuneWin32App" executed="True" result="Success" success="True" time="21.8928" asserts="0" description="Import-VcIntuneApplication without IntuneWin32App">
             <results>
-              <test-suite type="TestFixture" name="Import-VcIntuneApplication without authentication.Validate Import-VcIntuneApplication fail scenarios" executed="True" result="Success" success="True" time="0.0736" asserts="0" description="Import-VcIntuneApplication without authentication.Validate Import-VcIntuneApplication fail scenarios">
+              <test-suite type="TestFixture" name="Import-VcIntuneApplication without IntuneWin32App.Validate Import-VcIntuneApplication fail scenarios" executed="True" result="Success" success="True" time="0.4289" asserts="0" description="Import-VcIntuneApplication without IntuneWin32App.Validate Import-VcIntuneApplication fail scenarios">
                 <results>
-                  <test-case description="Should fail without an authentication token" name="Import-VcIntuneApplication without authentication.Validate Import-VcIntuneApplication fail scenarios.Should fail without an authentication token" time="0.0601" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should fail without IntuneWin32App" name="Import-VcIntuneApplication without IntuneWin32App.Validate Import-VcIntuneApplication fail scenarios.Should fail without IntuneWin32App" time="0.2825" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Import-VcIntuneApplication without authentication" executed="True" result="Success" success="True" time="33.0768" asserts="0" description="Import-VcIntuneApplication without authentication">
+            <results>
+              <test-suite type="TestFixture" name="Import-VcIntuneApplication without authentication.Validate Import-VcIntuneApplication fail scenarios" executed="True" result="Success" success="True" time="0.4166" asserts="0" description="Import-VcIntuneApplication without authentication.Validate Import-VcIntuneApplication fail scenarios">
+                <results>
+                  <test-case description="Should fail without an authentication token" name="Import-VcIntuneApplication without authentication.Validate Import-VcIntuneApplication fail scenarios.Should fail without an authentication token" time="0.2655" asserts="0" success="True" result="Success" executed="True" />
                 </results>
               </test-suite>
             </results>
