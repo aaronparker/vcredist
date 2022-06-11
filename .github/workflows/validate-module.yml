@@ -84,8 +84,7 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ${{ github.workspace }}\tests\CodeCoverage-${{ matrix.os }}.xml
-          path_to_write_report: ${{ github.workspace }}\tests\codecov-report-${{ matrix.os }}.txt
+          files: .\tests\CodeCoverage-${{ matrix.os }}.xml
           verbose: true
 
       # Format the date number for the commit message
