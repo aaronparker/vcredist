@@ -31,6 +31,21 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
       - name: Install and cache PowerShell modules
         id: psmodulecache
         uses: potatoqualitee/psmodulecache@v4.5
@@ -48,26 +63,11 @@ jobs:
           $Config.Run.Path = "${{ github.workspace }}\tests"
           $Config.Run.PassThru = $True
           $Config.CodeCoverage.Enabled = $True
-          $Config.CodeCoverage.OutputPath = "${{ github.workspace }}\tests\CodeCoverage.xml"
+          $Config.CodeCoverage.OutputPath = "${{ github.workspace }}\tests\CodeCoverage-${{ matrix.os }}.xml"
           $Config.TestResult.Enabled = $True
           $Config.TestResult.OutputFormat = "NUnitXml"
-          $Config.TestResult.OutputPath = "${{ github.workspace }}\tests\TestResults.xml"
+          $Config.TestResult.OutputPath = "${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml"
           Invoke-Pester -Configuration $Config
-
-      # Import GPG key so that we can sign the commit
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v5
-        with:
-          gpg_private_key: ${{ secrets.GPGKEY }}
-          passphrase: ${{ secrets.GPGPASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-          git_config_global: true
-          git_tag_gpgsign: true
-          git_push_gpgsign: false
-          git_committer_name: ${{ secrets.COMMIT_NAME }}
-          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
 
       - name: Upload artifacts
         id: upload-artifacts
@@ -76,6 +76,14 @@ jobs:
           name: pester-test-results
           path: |
             ${{ github.workspace }}\tests\*.xml
+
+      - name: Upload to Codecov
+        id: codecov
+        shell: powershell
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -OutFile "${{ github.workspace }}\codecov.exe"
+          .\codecov.exe -t ${CODECOV_TOKEN} --gcovInclude "${{ github.workspace }}\tests"
 
       # Format the date number for the commit message
       - name: Get date
