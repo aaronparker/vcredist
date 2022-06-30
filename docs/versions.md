@@ -1,11 +1,11 @@
 ﻿# Included Redistributables
 
-VcRedist `3.0.336` includes the following Redistributables (supported and unsupported):
+VcRedist `3.0.337` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
-| 14.32.31326.0  | x86          | Visual C++ Redistributable for Visual Studio 2022                          |
-| 14.32.31326.0  | x64          | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.32.31332.0  | x86          | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.32.31332.0  | x64          | Visual C++ Redistributable for Visual Studio 2022                          |
 | 14.29.30139.0  | x86          | Visual C++ Redistributable for Visual Studio 2019                          |
 | 14.29.30139.0  | x64          | Visual C++ Redistributable for Visual Studio 2019                          |
 | 14.16.27033.0  | x86          | Visual C++ Redistributable for Visual Studio 2017                          |
