@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.1//EN" "report.dtd"[]>
-<report name="Pester (06/13/2022 04:48:20)">
-  <sessioninfo id="this" start="1655095626925" dump="1655095700364" />
+<report name="Pester (06/30/2022 13:41:18)">
+  <sessioninfo id="this" start="1656596186660" dump="1656596478595" />
   <package name="VcRedist/Private">
     <class name="VcRedist/Private/Compare-VersionNumber" sourcefilename="Private/Compare-VersionNumber.ps1">
       <method name="Compare-VersionNumber" desc="()" line="35">
@@ -104,12 +104,12 @@
     </class>
     <class name="VcRedist/Private/New-TemporaryFolder" sourcefilename="Private/New-TemporaryFolder.ps1">
       <method name="New-TemporaryFolder" desc="()" line="15">
-        <counter type="INSTRUCTION" missed="5" covered="8" />
-        <counter type="LINE" missed="5" covered="6" />
+        <counter type="INSTRUCTION" missed="5" covered="9" />
+        <counter type="LINE" missed="5" covered="7" />
         <counter type="METHOD" missed="0" covered="1" />
       </method>
-      <counter type="INSTRUCTION" missed="5" covered="8" />
-      <counter type="LINE" missed="5" covered="6" />
+      <counter type="INSTRUCTION" missed="5" covered="9" />
+      <counter type="LINE" missed="5" covered="7" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </class>
@@ -353,9 +353,10 @@
       <line nr="28" mi="0" ci="1" mb="0" cb="0" />
       <line nr="29" mi="0" ci="1" mb="0" cb="0" />
       <line nr="30" mi="0" ci="1" mb="0" cb="0" />
-      <line nr="33" mi="1" ci="0" mb="0" cb="0" />
-      <counter type="INSTRUCTION" missed="5" covered="8" />
-      <counter type="LINE" missed="5" covered="6" />
+      <line nr="31" mi="0" ci="1" mb="0" cb="0" />
+      <line nr="35" mi="1" ci="0" mb="0" cb="0" />
+      <counter type="INSTRUCTION" missed="5" covered="9" />
+      <counter type="LINE" missed="5" covered="7" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </sourcefile>
@@ -368,8 +369,8 @@
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </sourcefile>
-    <counter type="INSTRUCTION" missed="274" covered="30" />
-    <counter type="LINE" missed="156" covered="22" />
+    <counter type="INSTRUCTION" missed="274" covered="31" />
+    <counter type="LINE" missed="156" covered="23" />
     <counter type="METHOD" missed="8" covered="3" />
     <counter type="CLASS" missed="8" covered="3" />
   </package>
@@ -420,12 +421,12 @@
     </class>
     <class name="VcRedist/Public/Import-VcIntuneApplication" sourcefilename="Public/Import-VcIntuneApplication.ps1">
       <method name="Import-VcIntuneApplication" desc="()" line="15">
-        <counter type="INSTRUCTION" missed="74" covered="7" />
-        <counter type="LINE" missed="57" covered="7" />
+        <counter type="INSTRUCTION" missed="73" covered="8" />
+        <counter type="LINE" missed="56" covered="8" />
         <counter type="METHOD" missed="0" covered="1" />
       </method>
-      <counter type="INSTRUCTION" missed="74" covered="7" />
-      <counter type="LINE" missed="57" covered="7" />
+      <counter type="INSTRUCTION" missed="73" covered="8" />
+      <counter type="LINE" missed="56" covered="8" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </class>
@@ -697,7 +698,7 @@
       <line nr="21" mi="0" ci="1" mb="0" cb="0" />
       <line nr="22" mi="0" ci="1" mb="0" cb="0" />
       <line nr="23" mi="0" ci="1" mb="0" cb="0" />
-      <line nr="26" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="26" mi="0" ci="1" mb="0" cb="0" />
       <line nr="31" mi="0" ci="1" mb="0" cb="0" />
       <line nr="32" mi="0" ci="1" mb="0" cb="0" />
       <line nr="38" mi="3" ci="0" mb="0" cb="0" />
@@ -755,8 +756,8 @@
       <line nr="122" mi="1" ci="0" mb="0" cb="0" />
       <line nr="127" mi="1" ci="0" mb="0" cb="0" />
       <line nr="130" mi="1" ci="0" mb="0" cb="0" />
-      <counter type="INSTRUCTION" missed="74" covered="7" />
-      <counter type="LINE" missed="57" covered="7" />
+      <counter type="INSTRUCTION" missed="73" covered="8" />
+      <counter type="LINE" missed="56" covered="8" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </sourcefile>
@@ -1184,8 +1185,8 @@
       <counter type="METHOD" missed="1" covered="0" />
       <counter type="CLASS" missed="1" covered="0" />
     </sourcefile>
-    <counter type="INSTRUCTION" missed="917" covered="123" />
-    <counter type="LINE" missed="527" covered="79" />
+    <counter type="INSTRUCTION" missed="916" covered="124" />
+    <counter type="LINE" missed="526" covered="80" />
     <counter type="METHOD" missed="8" covered="4" />
     <counter type="CLASS" missed="8" covered="4" />
   </package>
@@ -1222,8 +1223,8 @@
     <counter type="METHOD" missed="0" covered="1" />
     <counter type="CLASS" missed="0" covered="1" />
   </package>
-  <counter type="INSTRUCTION" missed="1194" covered="166" />
-  <counter type="LINE" missed="685" covered="109" />
+  <counter type="INSTRUCTION" missed="1193" covered="168" />
+  <counter type="LINE" missed="684" covered="111" />
   <counter type="METHOD" missed="16" covered="8" />
   <counter type="CLASS" missed="16" covered="8" />
 </report>
