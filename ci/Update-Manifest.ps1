@@ -34,7 +34,7 @@ process {
             $InstalledItem = $InstalledVcRedists | Where-Object { ($_.Release -eq $ManifestVcRedist.Release) -and ($_.Architecture -eq $ManifestVcRedist.Architecture) }
 
             # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
-            if ($InstalledItem.Version -gt $ManifestVcRedist.Version) {
+            if ([System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version) {
                 Write-Host -ForegroundColor "Cyan" "`tVcRedist manifest is out of date."
                 Write-Host -ForegroundColor "Cyan" "`tInstalled version:`t$($InstalledItem.Version)"
                 Write-Host -ForegroundColor "Cyan" "`tManifest version:`t$($ManifestVcRedist.Version)"
