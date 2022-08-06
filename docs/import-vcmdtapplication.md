@@ -27,6 +27,7 @@ Import the `2012`, `2013` and `2022` supported Redistributables into an MDT depl
 
 ```powershell
 $VcList = Get-VcList
+Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
 Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 ```
 
