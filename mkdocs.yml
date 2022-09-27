@@ -58,11 +58,15 @@ theme:
 # Plugins
 plugins:
   - search
-  - redirects:
-      redirect_maps:
   - minify:
       minify_html: true
       minify_js: true
+  - social:
+      cards: true
+      cards_color:
+        fill: "#7e56c2"
+        text: "#FFFFFF"
+      cards_font: Roboto
 
 # Extensions
 markdown_extensions:
