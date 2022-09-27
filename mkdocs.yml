@@ -1,9 +1,9 @@
 # Project information
-site_name: VcRedist docs
+site_name: VcRedist
 site_url: https://vcredist.com
 site_author: Aaron Parker
 site_description: >-
-  Download and install the latest Microsoft Visual C++ Redistributables
+  A PowerShell module for lifecycle management of the Microsoft Visual C++ Redistributables.
 
 # Repository
 repo_name: aaronparker/vcredist
