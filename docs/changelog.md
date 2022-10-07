@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Adds `Test-VcRedistDownload` - tests whether the download URLs from exist VcRedist passed from `Get-VcList` are available
+
 ## 3.0.337
 
 * Update for VcRedist 2022 version `14.32.31332.0`
