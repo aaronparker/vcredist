@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.1//EN" "report.dtd"[]>
-<report name="Pester (10/07/2022 10:49:21)">
-  <sessioninfo id="this" start="1665139493272" dump="1665139761325" />
+<report name="Pester (11/09/2022 00:28:46)">
+  <sessioninfo id="this" start="1667953463621" dump="1667953726247" />
   <package name="VcRedist/Private">
     <class name="VcRedist/Private/Compare-VersionNumber" sourcefilename="Private/Compare-VersionNumber.ps1">
       <method name="Compare-VersionNumber" desc="()" line="35">
@@ -465,12 +465,12 @@
     </class>
     <class name="VcRedist/Public/Save-VcRedist" sourcefilename="Public/Save-VcRedist.ps1">
       <method name="Save-VcRedist" desc="()" line="14">
-        <counter type="INSTRUCTION" missed="27" covered="58" />
-        <counter type="LINE" missed="15" covered="39" />
+        <counter type="INSTRUCTION" missed="37" covered="48" />
+        <counter type="LINE" missed="19" covered="35" />
         <counter type="METHOD" missed="0" covered="1" />
       </method>
-      <counter type="INSTRUCTION" missed="27" covered="58" />
-      <counter type="LINE" missed="15" covered="39" />
+      <counter type="INSTRUCTION" missed="37" covered="48" />
+      <counter type="LINE" missed="19" covered="35" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </class>
@@ -486,7 +486,7 @@
       <counter type="CLASS" missed="1" covered="0" />
     </class>
     <class name="VcRedist/Public/Uninstall-VcRedist" sourcefilename="Public/Uninstall-VcRedist.ps1">
-      <method name="Uninstall-VcRedist" desc="()" line="13">
+      <method name="Uninstall-VcRedist" desc="()" line="12">
         <counter type="INSTRUCTION" missed="58" covered="0" />
         <counter type="LINE" missed="32" covered="0" />
         <counter type="METHOD" missed="1" covered="0" />
@@ -991,18 +991,18 @@
       <line nr="124" mi="1" ci="0" mb="0" cb="0" />
       <line nr="126" mi="0" ci="1" mb="0" cb="0" />
       <line nr="127" mi="0" ci="1" mb="0" cb="0" />
-      <line nr="130" mi="0" ci="3" mb="0" cb="0" />
-      <line nr="131" mi="0" ci="3" mb="0" cb="0" />
-      <line nr="132" mi="0" ci="3" mb="0" cb="0" />
-      <line nr="133" mi="0" ci="1" mb="0" cb="0" />
+      <line nr="130" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="131" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="132" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="133" mi="1" ci="0" mb="0" cb="0" />
       <line nr="138" mi="0" ci="1" mb="0" cb="0" />
       <line nr="139" mi="0" ci="2" mb="0" cb="0" />
       <line nr="140" mi="0" ci="1" mb="0" cb="0" />
       <line nr="147" mi="3" ci="0" mb="0" cb="0" />
       <line nr="148" mi="2" ci="0" mb="0" cb="0" />
       <line nr="149" mi="1" ci="0" mb="0" cb="0" />
-      <counter type="INSTRUCTION" missed="27" covered="58" />
-      <counter type="LINE" missed="15" covered="39" />
+      <counter type="INSTRUCTION" missed="37" covered="48" />
+      <counter type="LINE" missed="19" covered="35" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </sourcefile>
@@ -1042,38 +1042,38 @@
       <counter type="CLASS" missed="1" covered="0" />
     </sourcefile>
     <sourcefile name="Public/Uninstall-VcRedist.ps1">
-      <line nr="13" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="17" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="25" mi="3" ci="0" mb="0" cb="0" />
-      <line nr="29" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="32" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="33" mi="5" ci="0" mb="0" cb="0" />
-      <line nr="36" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="37" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="42" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="43" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="12" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="16" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="24" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="28" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="31" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="32" mi="5" ci="0" mb="0" cb="0" />
+      <line nr="35" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="36" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="41" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="42" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="43" mi="1" ci="0" mb="0" cb="0" />
       <line nr="44" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="45" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="47" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="46" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="47" mi="2" ci="0" mb="0" cb="0" />
       <line nr="48" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="49" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="50" mi="3" ci="0" mb="0" cb="0" />
-      <line nr="52" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="49" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="51" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="52" mi="2" ci="0" mb="0" cb="0" />
       <line nr="53" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="54" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="55" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="54" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="57" mi="2" ci="0" mb="0" cb="0" />
       <line nr="58" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="59" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="60" mi="3" ci="0" mb="0" cb="0" />
-      <line nr="63" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="59" mi="3" ci="0" mb="0" cb="0" />
+      <line nr="62" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="65" mi="2" ci="0" mb="0" cb="0" />
       <line nr="66" mi="2" ci="0" mb="0" cb="0" />
       <line nr="67" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="68" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="75" mi="1" ci="0" mb="0" cb="0" />
       <line nr="76" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="77" mi="1" ci="0" mb="0" cb="0" />
-      <line nr="78" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="81" mi="2" ci="0" mb="0" cb="0" />
-      <line nr="82" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="77" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="80" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="81" mi="1" ci="0" mb="0" cb="0" />
       <counter type="INSTRUCTION" missed="58" covered="0" />
       <counter type="LINE" missed="32" covered="0" />
       <counter type="METHOD" missed="1" covered="0" />
@@ -1231,8 +1231,8 @@
       <counter type="METHOD" missed="1" covered="0" />
       <counter type="CLASS" missed="1" covered="0" />
     </sourcefile>
-    <counter type="INSTRUCTION" missed="939" covered="134" />
-    <counter type="LINE" missed="551" covered="84" />
+    <counter type="INSTRUCTION" missed="949" covered="124" />
+    <counter type="LINE" missed="555" covered="80" />
     <counter type="METHOD" missed="9" covered="4" />
     <counter type="CLASS" missed="9" covered="4" />
   </package>
@@ -1269,8 +1269,8 @@
     <counter type="METHOD" missed="0" covered="1" />
     <counter type="CLASS" missed="0" covered="1" />
   </package>
-  <counter type="INSTRUCTION" missed="1216" covered="178" />
-  <counter type="LINE" missed="709" covered="115" />
+  <counter type="INSTRUCTION" missed="1226" covered="168" />
+  <counter type="LINE" missed="713" covered="111" />
   <counter type="METHOD" missed="17" covered="8" />
   <counter type="CLASS" missed="17" covered="8" />
 </report>
