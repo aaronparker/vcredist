@@ -1,4 +1,4 @@
-Function New-MdtDrive {
+function New-MdtDrive {
     <#
         .SYNOPSIS
             Creates a new persistent PS drive mapped to an MDT share.
@@ -15,10 +15,10 @@ Function New-MdtDrive {
     #>
     [CmdletBinding(SupportsShouldProcess)]
     [OutputType([System.String])]
-    Param (
+    param (
         [Parameter(Mandatory = $False, Position = 0)]
         [ValidateNotNullOrEmpty()]
-        [System.String] $Drive = "DS009",
+        [System.String] $Drive = "DS099",
 
         [Parameter(Mandatory = $True, Position = 1)]
         [ValidateNotNullOrEmpty()]
@@ -26,12 +26,12 @@ Function New-MdtDrive {
     )
     $description = "MDT drive created by $($MyInvocation.MyCommand)"
 
-    If ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
+    if ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
         Write-Verbose "$($MyInvocation.MyCommand): Found MDT drive: $($mdtDrives[0].Name)"
         $output = $mdtDrives[0].Name
     }
-    Else {
-        If ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
+    else {
+        if ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
             try {
                 New-PSDrive -Name $Drive -PSProvider "MDTProvider" -Root $Path `
                     -NetworkPath $Path -Description $description | Add-MDTPersistentDrive
@@ -39,7 +39,7 @@ Function New-MdtDrive {
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT drive at: [$Path]."
-                Throw $_.Exception.Message
+                throw $_.Exception.Message
             }
             finally {
                 Write-Verbose "$($MyInvocation.MyCommand): Found: $($psDrive.Name)"

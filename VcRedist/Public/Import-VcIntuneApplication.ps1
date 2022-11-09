@@ -28,7 +28,7 @@ function Import-VcIntuneApplication {
         }
 
         # Test for authentication token
-        if ($Null -eq $Global:AccessToken) {
+        if ($null -eq $Global:AccessToken) {
             throw "Microsoft Graph API access token missing. Authenticate to the Graph API with Connect-MSIntuneGraph."
         }
 
@@ -73,9 +73,9 @@ function Import-VcIntuneApplication {
             # Requirement rule
             if ($VcRedist.Architecture -eq "x86") { $Architecture = "All" } else { $Architecture = "x64" }
             $params = @{
-                Architecture                    = $Architecture
-                MinimumSupportedOperatingSystem = $IntuneManifest.RequirementRule.MinimumRequiredOperatingSystem
-                MinimumFreeDiskSpaceInMB        = $IntuneManifest.RequirementRule.SizeInMBValue
+                Architecture                   = $Architecture
+                MinimumSupportedWindowsRelease = $IntuneManifest.RequirementRule.MinimumRequiredOperatingSystem
+                MinimumFreeDiskSpaceInMB       = $IntuneManifest.RequirementRule.SizeInMBValue
             }
             $RequirementRule = New-IntuneWin32AppRequirementRule @params
 

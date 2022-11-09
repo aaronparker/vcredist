@@ -34,7 +34,7 @@ Function Import-VcMdtApplication {
 
         [Parameter(Mandatory = $False, Position = 4)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
-        [System.String] $MdtDrive = "DS001",
+        [System.String] $MdtDrive = "DS099",
 
         [Parameter(Mandatory = $False, Position = 5)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
