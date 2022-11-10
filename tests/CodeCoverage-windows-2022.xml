@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.1//EN" "report.dtd"[]>
-<report name="Pester (10/20/2022 07:12:37)">
-  <sessioninfo id="this" start="1666249759650" dump="1666249957570" />
+<report name="Pester (10/07/2022 10:48:27)">
+  <sessioninfo id="this" start="1665139521321" dump="1665139707752" />
   <package name="VcRedist/Private">
     <class name="VcRedist/Private/Compare-VersionNumber" sourcefilename="Private/Compare-VersionNumber.ps1">
       <method name="Compare-VersionNumber" desc="()" line="35">
@@ -473,6 +473,17 @@
       <counter type="LINE" missed="19" covered="35" />
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
+    </class>
+    <class name="VcRedist/Public/Test-VcRedistDownload" sourcefilename="Public/Test-VcRedistDownload.ps1">
+      <method name="Test-VcRedistDownload" desc="()" line="29">
+        <counter type="INSTRUCTION" missed="33" covered="0" />
+        <counter type="LINE" missed="29" covered="0" />
+        <counter type="METHOD" missed="1" covered="0" />
+      </method>
+      <counter type="INSTRUCTION" missed="33" covered="0" />
+      <counter type="LINE" missed="29" covered="0" />
+      <counter type="METHOD" missed="1" covered="0" />
+      <counter type="CLASS" missed="1" covered="0" />
     </class>
     <class name="VcRedist/Public/Uninstall-VcRedist" sourcefilename="Public/Uninstall-VcRedist.ps1">
       <method name="Uninstall-VcRedist" desc="()" line="13">
@@ -995,6 +1006,41 @@
       <counter type="METHOD" missed="0" covered="1" />
       <counter type="CLASS" missed="0" covered="1" />
     </sourcefile>
+    <sourcefile name="Public/Test-VcRedistDownload.ps1">
+      <line nr="29" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="30" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="33" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="37" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="42" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="45" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="48" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="53" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="54" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="55" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="56" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="57" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="59" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="60" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="62" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="63" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="65" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="66" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="69" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="71" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="72" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="73" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="74" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="75" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="76" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="78" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="83" mi="1" ci="0" mb="0" cb="0" />
+      <line nr="84" mi="2" ci="0" mb="0" cb="0" />
+      <line nr="85" mi="1" ci="0" mb="0" cb="0" />
+      <counter type="INSTRUCTION" missed="33" covered="0" />
+      <counter type="LINE" missed="29" covered="0" />
+      <counter type="METHOD" missed="1" covered="0" />
+      <counter type="CLASS" missed="1" covered="0" />
+    </sourcefile>
     <sourcefile name="Public/Uninstall-VcRedist.ps1">
       <line nr="13" mi="1" ci="0" mb="0" cb="0" />
       <line nr="17" mi="1" ci="0" mb="0" cb="0" />
@@ -1185,10 +1231,10 @@
       <counter type="METHOD" missed="1" covered="0" />
       <counter type="CLASS" missed="1" covered="0" />
     </sourcefile>
-    <counter type="INSTRUCTION" missed="916" covered="124" />
-    <counter type="LINE" missed="526" covered="80" />
-    <counter type="METHOD" missed="8" covered="4" />
-    <counter type="CLASS" missed="8" covered="4" />
+    <counter type="INSTRUCTION" missed="949" covered="124" />
+    <counter type="LINE" missed="555" covered="80" />
+    <counter type="METHOD" missed="9" covered="4" />
+    <counter type="CLASS" missed="9" covered="4" />
   </package>
   <package name="VcRedist">
     <class name="VcRedist/VcRedist" sourcefilename="VcRedist.psm1">
@@ -1223,8 +1269,8 @@
     <counter type="METHOD" missed="0" covered="1" />
     <counter type="CLASS" missed="0" covered="1" />
   </package>
-  <counter type="INSTRUCTION" missed="1193" covered="168" />
-  <counter type="LINE" missed="684" covered="111" />
-  <counter type="METHOD" missed="16" covered="8" />
-  <counter type="CLASS" missed="16" covered="8" />
+  <counter type="INSTRUCTION" missed="1226" covered="168" />
+  <counter type="LINE" missed="713" covered="111" />
+  <counter type="METHOD" missed="17" covered="8" />
+  <counter type="CLASS" missed="17" covered="8" />
 </report>

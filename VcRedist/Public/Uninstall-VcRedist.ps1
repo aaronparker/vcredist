@@ -6,7 +6,6 @@ Function Uninstall-VcRedist {
         HelpURI = "https://vcredist.com/uninstall-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
-    [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Manual')]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]

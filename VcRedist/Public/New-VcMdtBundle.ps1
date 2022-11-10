@@ -19,7 +19,7 @@ Function New-VcMdtBundle {
 
         [Parameter(Mandatory = $False, Position = 2)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
-        [System.String] $MdtDrive = "DS001",
+        [System.String] $MdtDrive = "DS099",
 
         [Parameter(Mandatory = $False, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
