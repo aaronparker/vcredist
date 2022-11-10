@@ -27,7 +27,7 @@ Author = 'Aaron Parker'
 CompanyName = 'stealthpuppy'
 
 # Copyright statement for this module
-Copyright = '(c) 2021 stealthpuppy. All rights reserved.'
+Copyright = '(c) 2022 stealthpuppy. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. VcRedist downloads the supported (and unsupported) Redistributables, for local install, main image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
@@ -102,7 +102,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','MEMCM','MEM','Intune'
+        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','MEM','Intune'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/main/LICENSE'
