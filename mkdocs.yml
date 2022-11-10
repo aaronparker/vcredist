@@ -1,9 +1,9 @@
 # Project information
-site_name: VcRedist docs
+site_name: VcRedist
 site_url: https://vcredist.com
 site_author: Aaron Parker
 site_description: >-
-  Download and install the latest Microsoft Visual C++ Redistributables
+  A PowerShell module for lifecycle management of the Microsoft Visual C++ Redistributables.
 
 # Repository
 repo_name: aaronparker/vcredist
@@ -58,11 +58,15 @@ theme:
 # Plugins
 plugins:
   - search
-  - redirects:
-      redirect_maps:
   - minify:
       minify_html: true
       minify_js: true
+  - social:
+      cards: true
+      cards_color:
+        fill: "#7e56c2"
+        text: "#FFFFFF"
+      cards_font: Roboto
 
 # Extensions
 markdown_extensions:
@@ -157,3 +161,5 @@ nav:
       - Uninstall-VcRedist: help/en-US/Uninstall-VcRedist.md
       - Update-VcMdtApplication: help/en-US/Update-VcMdtApplication.md
       - Update-VcMdtBundle: help/en-US/Update-VcMdtBundle.md
+  - stealthpuppy.com: https://stealthpuppy.com/
+  - PSPackageFactory: https://stealthpuppy.com/packagefactory/
