@@ -45,8 +45,8 @@ function Update-VcMdtApplication {
         if (Import-MdtModule) {
             if ($PSCmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $Null
-                    Restore-MDTPersistentDrive -Force > $Null
+                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $null
+                    Restore-MDTPersistentDrive -Force > $null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
@@ -79,7 +79,7 @@ function Update-VcMdtApplication {
                     throw $_
                 }
 
-                if ($Null -ne $ExistingVcRedist) {
+                if ($null -ne $ExistingVcRedist) {
                     try {
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Found application: [$($ExistingVcRedist.ShortName)]."
 
@@ -116,13 +116,12 @@ function Update-VcMdtApplication {
                             # Check the existing command line on the application and update
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update CommandLine")) {
                                 try {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Updating CommandLine."
                                     $params = @{
                                         Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                         Name  = "CommandLine"
                                         Value = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
                                     }
-                                    Set-ItemProperty @params > $Null
+                                    Set-ItemProperty @params > $null
                                 }
                                 catch [System.Exception] {
                                     throw $_
@@ -132,13 +131,12 @@ function Update-VcMdtApplication {
                             # Update ProductCode
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update UninstallKey")) {
                                 try {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Updating UninstallKey."
                                     $sipParams = @{
                                         Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                         Name  = "UninstallKey"
                                         Value = $VcRedist.ProductCode
                                     }
-                                    Set-ItemProperty @sipParams > $Null
+                                    Set-ItemProperty @sipParams > $null
                                 }
                                 catch [System.Exception] {
                                     throw $_
@@ -148,13 +146,12 @@ function Update-VcMdtApplication {
                             # Update Version number
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Version")) {
                                 try {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Updating version number."
                                     $sipParams = @{
                                         Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                         Name  = "Version"
                                         Value = $VcRedist.Version
                                     }
-                                    Set-ItemProperty @sipParams > $Null
+                                    Set-ItemProperty @sipParams > $null
                                 }
                                 catch [System.Exception] {
                                     throw $_
@@ -163,13 +160,12 @@ function Update-VcMdtApplication {
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Source")) {
                                 try {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Updating source directory."
                                     $sipParams = @{
                                         Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                         Name  = "Source"
                                         Value = $ExistingVcRedist.Source -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                     }
-                                    Set-ItemProperty @sipParams > $Null
+                                    Set-ItemProperty @sipParams > $null
                                 }
                                 catch [System.Exception] {
                                     throw $_
@@ -178,13 +174,12 @@ function Update-VcMdtApplication {
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update WorkingDirectory")) {
                                 try {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Updating working directory."
                                     $sipParams = @{
                                         Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                         Name  = "WorkingDirectory"
                                         Value = $ExistingVcRedist.WorkingDirectory -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                     }
-                                    Set-ItemProperty @sipParams > $Null
+                                    Set-ItemProperty @sipParams > $null
                                 }
                                 catch [System.Exception] {
                                     throw $_
@@ -193,13 +188,12 @@ function Update-VcMdtApplication {
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Name")) {
                                 try {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Updating name."
                                     $sipParams = @{
                                         Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                         Name  = "Name"
                                         Value = $ExistingVcRedist.Name -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                     }
-                                    Set-ItemProperty @sipParams > $Null
+                                    Set-ItemProperty @sipParams > $null
                                 }
                                 catch [System.Exception] {
                                     throw $_

@@ -9,10 +9,10 @@
 param ()
 
 BeforeDiscovery {
-    If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+    if (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
         [System.Environment]::SetEnvironmentVariable("WorkingPath", $env:GITHUB_WORKSPACE)
     }
-    Else {
+    else {
         [System.Environment]::SetEnvironmentVariable("WorkingPath", $env:APPVEYOR_BUILD_FOLDER)
     }
 }
@@ -41,7 +41,7 @@ Describe "General module validation" {
     }
 }
 
-Describe "Function validation" {
+Describe "function validation" {
     Context 'Validation' {
         BeforeEach {
             $scripts = Get-ChildItem -Path "$env:WorkingPath\VcRedist" -Recurse -Include "*.ps1"

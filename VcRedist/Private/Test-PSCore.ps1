@@ -1,4 +1,4 @@
-Function Test-PSCore {
+function Test-PSCore {
     <#
         .SYNOPSIS
             Returns True is running on PowerShell Core.
@@ -12,16 +12,16 @@ Function Test-PSCore {
     #>
     [CmdletBinding()]
     [OutputType([System.Boolean])]
-    Param (
+    param (
         [Parameter(Position = 0)]
         [System.String] $Version = '6.0.0'
     )
 
     # Check whether current PowerShell environment matches or is higher than $Version
-    If (($PSVersionTable.PSVersion -ge [System.Version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
+    if (($PSVersionTable.PSVersion -ge [System.Version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
         Write-Output -InputObject $True
     }
-    Else {
+    else {
         Write-Output -InputObject $False
     }
 }

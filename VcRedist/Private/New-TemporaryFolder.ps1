@@ -1,4 +1,4 @@
-Function New-TemporaryFolder {
+function New-TemporaryFolder {
     <#
         .SYNOPSIS
             Creates a new temporary folder

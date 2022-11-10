@@ -110,7 +110,7 @@ function Import-VcIntuneApplication {
                     "UninstallCommandLine"     = $VcRedist.SilentUninstall
                     "Verbose"                  = $true
                 }
-                if ($Null -ne $Icon) {
+                if ($null -ne $Icon) {
                     $Win32AppArgs.Add("Icon", $Icon)
                 }
                 $Application = Add-IntuneWin32App @Win32AppArgs
@@ -118,7 +118,7 @@ function Import-VcIntuneApplication {
             catch {
                 throw $_
             }
-            if ($Null -ne $Application) {
+            if ($null -ne $Application) {
                 Write-Output -InputObject $Application
             }
 

@@ -7,9 +7,9 @@ param ()
 
 InModuleScope VcRedist {
     BeforeAll { Describe 'New-MdtDrive' {
-            Function Get-MdtPersistentDrive {}
-            Function New-PSDrive {}
-            Function Add-MDTPersistentDrive {}
+            function Get-MdtPersistentDrive {}
+            function New-PSDrive {}
+            function Add-MDTPersistentDrive {}
         }
         Context "Creates a new MDT drive" {
             BeforeEach {
@@ -55,7 +55,7 @@ InModuleScope VcRedist {
         }
         Context "Creates a new Packages folder" {
             BeforeEach {
-                Function New-Item {}
+                function New-Item {}
                 Mock Test-Path { $False }
                 Mock New-Item { $obj = [PSCustomObject]@{Name = "VcRedists" } }
             }
@@ -72,14 +72,14 @@ InModuleScope VcRedist {
         }
         Context "Tests whether we are running on PowerShell Core" {
             It "Imports the MDT PowerShell module and returns True" {
-                If (($PSVersionTable.PSVersion -ge [version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
+                if (($PSVersionTable.PSVersion -ge [version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
                     Test-PSCore | Should -BeTrue
                 }
             }
         }
         Context "Tests whether we are running on Windows PowerShell" {
             It "Returns False if running Windows PowerShell" {
-                If (($PSVersionTable.PSVersion -lt [version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Desktop")) {
+                if (($PSVersionTable.PSVersion -lt [version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Desktop")) {
                     Test-PSCore | Should -BeFalse
                 }
             }

@@ -1,4 +1,4 @@
-Function Test-VcRedistDownload {
+function Test-VcRedistDownload {
     <#
         .EXTERNALHELP Vcredist-help.xml
     #>

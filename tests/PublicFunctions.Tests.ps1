@@ -14,13 +14,13 @@ BeforeDiscovery {
 
 	if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 	$Path = [System.IO.Path]::Combine($DownloadDir, "VcDownload")
-	New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+	New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $null
 	#Save-VcRedist -VcList (Get-VcList) -Path $Path
 
-	If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+	if (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
 		[System.Environment]::SetEnvironmentVariable("WorkingPath", $env:GITHUB_WORKSPACE)
 	}
-	Else {
+	else {
 		[System.Environment]::SetEnvironmentVariable("WorkingPath", $env:APPVEYOR_BUILD_FOLDER)
 	}
 }
@@ -68,7 +68,7 @@ Describe "Install-VcRedist" {
 
 			if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 			$Path = [System.IO.Path]::Combine($DownloadDir, "VcDownload")
-			New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+			New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $null
 
 			$VcList = Get-VcList -Release $VcRedist | Save-VcRedist -Path $Path
 			$Installed = Install-VcRedist -VcList $VcList -Path $Path -Silent
@@ -170,13 +170,13 @@ Describe "Export-VcManifest" {
 Describe "Test-Downloads" {
 	BeforeAll {
 		#region Functions used in tests
-		Function Test-VcDownload {
+		function Test-VcDownload {
 			<#
 		.SYNOPSIS
 			Tests downloads from Get-VcList are successful.
 		#>
 			[CmdletBinding()]
-			Param (
+			param (
 				[Parameter()]
 				[PSCustomObject] $VcList,
 
@@ -184,14 +184,14 @@ Describe "Test-Downloads" {
 				[string] $Path
 			)
 			$Output = $False
-			ForEach ($VcRedist in $VcList) {
+			foreach ($VcRedist in $VcList) {
 				$folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
 				$Target = [System.IO.Path]::Combine($Folder, $(Split-Path -Path $VcRedist.Download -Leaf))
-				If (Test-Path -Path $Target -PathType Leaf) {
+				if (Test-Path -Path $Target -PathType Leaf) {
 					Write-Verbose "$($Target) - exists."
 					$Output = $True
 				}
-				Else {
+				else {
 					Write-Warning "$($Target) - not found."
 					$Output = $False
 				}
@@ -202,8 +202,8 @@ Describe "Test-Downloads" {
 
 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 		$Path = $([System.IO.Path]::Combine($DownloadDir, "VcDownload"))
-		If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
-		New-Item -Path $Path -ItemType "Directory" -Force > $Null
+		if (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
+		New-Item -Path $Path -ItemType "Directory" -Force > $null
 
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 		$VcList = Get-VcList -Release $TestReleases
@@ -221,8 +221,8 @@ Describe "Save-VcRedist" {
 	BeforeAll {
 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
 		$Path = [System.IO.Path]::Combine($DownloadDir, "VcDownload")
-		If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
-		New-Item -Path $Path -ItemType "Directory" -Force > $Null
+		if (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
+		New-Item -Path $Path -ItemType "Directory" -Force > $null
 
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 		$DownloadedRedists = Save-VcRedist -VcList (Get-VcList -Release $TestReleases) -Path $Path
@@ -238,7 +238,7 @@ Describe "Save-VcRedist" {
 Describe "Save-VcRedist pipeline" {
 	BeforeAll {
 		if ([System.String]::IsNullOrWhiteSpace($env:Temp)) { $DownloadDir = $env:Temp } else { $DownloadDir = $env:TMPDIR }
-		New-Item -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest")) -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+		New-Item -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest")) -ItemType "Directory" -ErrorAction "SilentlyContinue" > $null
 		Push-Location -Path ([System.IO.Path]::Combine($DownloadDir, "VcTest"))
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 	}

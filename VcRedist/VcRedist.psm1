@@ -2,10 +2,9 @@
     .SYNOPSIS
         VcRedist script to initiate the module
 #>
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Variable VcManifest is used internally by the module.")]
 [CmdletBinding()]
-Param ()
+param ()
 
 #region Get public and private function definition files
 $publicRoot = Join-Path -Path $PSScriptRoot -ChildPath "Public"
@@ -14,13 +13,13 @@ $public = @( Get-ChildItem -Path (Join-Path $publicRoot "*.ps1") -ErrorAction "S
 $private = @( Get-ChildItem -Path (Join-Path $privateRoot "*.ps1") -ErrorAction "SilentlyContinue" )
 
 # Dot source the files
-ForEach ($import in @($public + $private)) {
-    Try {
+foreach ($import in @($public + $private)) {
+    try {
         . $import.FullName
     }
-    Catch {
+    catch {
         Write-Warning -Message "Failed to import function $($import.FullName)."
-        Throw $_.Exception.Message
+        throw $_
     }
 }
 

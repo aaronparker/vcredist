@@ -1,21 +1,21 @@
-Function Import-VcMdtApplication {
+function Import-VcMdtApplication {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Import-VcMdtApp")]
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/import-vcmdtapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
-    Param (
+    param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
         [System.String] $Path,
 
         [Parameter(Mandatory = $True, Position = 2)]
-        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False, Position = 3)]
@@ -45,55 +45,55 @@ Function Import-VcMdtApplication {
         [System.String] $Language = "en-US"
     )
 
-    Begin {
+    begin {
         # If running on PowerShell Core, error and exit.
-        If (Test-PSCore) {
+        if (Test-PSCore) {
             Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
-            Throw [System.Management.Automation.InvalidPowerShellStateException]
+            throw [System.Management.Automation.InvalidPowerShellStateException]
         }
 
         # Import the MDT module and create a PS drive to MdtPath
-        If (Import-MdtModule) {
-            If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
+        if (Import-MdtModule) {
+            if ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
                     $params = @{
                         Drive       = $MdtDrive
                         Path        = $MdtPath
                         ErrorAction = "SilentlyContinue"
                     }
-                    New-MdtDrive @params > $Null
-                    Restore-MDTPersistentDrive -Force > $Null
+                    New-MdtDrive @params > $null
+                    Restore-MDTPersistentDrive -Force > $null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
-                    Throw $_.Exception.Message
+                    throw $_.Exception.Message
                 }
             }
         }
-        Else {
+        else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
-            Throw [System.Management.Automation.InvalidPowerShellStateException]
+            throw [System.Management.Automation.InvalidPowerShellStateException]
         }
 
         # Create the Application folder
-        If ($AppFolder.Length -gt 0) {
-            If ($PSCmdlet.ShouldProcess($AppFolder, "Create")) {
+        if ($AppFolder.Length -gt 0) {
+            if ($PSCmdlet.ShouldProcess($AppFolder, "Create")) {
                 try {
                     $params = @{
                         Drive       = $MdtDrive
                         Name        = $AppFolder
                         Description = "Microsoft Visual C++ Redistributables"
                     }
-                    New-MdtApplicationFolder @params > $Null
+                    New-MdtApplicationFolder @params > $null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$AppFolder]."
-                    Throw $_.Exception.Message
+                    throw $_.Exception.Message
                 }
             }
             $target = "$($MdtDrive):\Applications\$AppFolder"
         }
-        Else {
+        else {
             $target = "$($MdtDrive):\Applications"
         }
         Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedists will be imported into: $target"
@@ -107,15 +107,15 @@ Function Import-VcMdtApplication {
         }
     }
 
-    Process {
-        ForEach ($VcRedist in $VcList) {
+    process {
+        foreach ($VcRedist in $VcList) {
 
             # Set variables
             Write-Verbose -Message "$($MyInvocation.MyCommand): processing: [$($VcRedist.Name) $($VcRedist.Architecture)]."
-            $supportedPlatform = If ($VcRedist.Architecture -eq "x86") {
+            $supportedPlatform = if ($VcRedist.Architecture -eq "x86") {
                 @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer")
             }
-            Else {
+            else {
                 @("All x64 Windows 7 and Newer")
             }
 
@@ -125,26 +125,26 @@ Function Import-VcMdtApplication {
 
 
             # Remove the matched VcRedist application
-            If ($PSBoundParameters.ContainsKey("Force")) {
-                If ($VcMatched.UninstallKey -eq $VcRedist.ProductCode) {
-                    If ($PSCmdlet.ShouldProcess($VcMatched.Name, "Remove")) {
+            if ($PSBoundParameters.ContainsKey("Force")) {
+                if ($VcMatched.UninstallKey -eq $VcRedist.ProductCode) {
+                    if ($PSCmdlet.ShouldProcess($VcMatched.Name, "Remove")) {
                         try {
                             Remove-Item -Path $("$target\$($VcMatched.Name)") -Force
                         }
                         catch [System.Exception] {
                             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to remove item: [$target\$($VcMatched.Name)]."
-                            Throw $_.Exception.Message
+                            throw $_.Exception.Message
                         }
                     }
                 }
             }
 
             # Import as an application into the MDT deployment share
-            If (Test-Path -Path $("$target\$($VcMatched.Name)") -ErrorAction "SilentlyContinue") {
+            if (Test-Path -Path $("$target\$($VcMatched.Name)") -ErrorAction "SilentlyContinue") {
                 Write-Verbose -Message "$($MyInvocation.MyCommand): '$("$target\$($VcMatched.Name)")' exists. Use -Force to overwrite the existing application."
             }
-            Else {
-                If ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $MdtPath", "Import")) {
+            else {
+                if ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $MdtPath", "Import")) {
                     try {
 
                         # Splat the Import-MDTApplication arguments
@@ -153,31 +153,31 @@ Function Import-VcMdtApplication {
                             Name                  = $ApplicationName
                             Enable                = $True
                             Reboot                = $False
-                            Hide                  = $(If ($DontHide.IsPresent) { "False" } Else { "True" })
+                            Hide                  = $(if ($DontHide.IsPresent) { "False" } else { "True" })
                             Comments              = "Generated by $($MyInvocation.MyCommand)"
                             ShortName             = "$($VcRedist.Name) $($VcRedist.Architecture)"
                             Version               = $VcRedist.Version
                             Publisher             = $Publisher
                             Language              = $Language
-                            CommandLine           = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(If ($Silent.IsPresent) { $VcRedist.SilentInstall } Else { $VcRedist.Install })"
+                            CommandLine           = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
                             ApplicationSourcePath = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                             DestinationFolder     = "$Publisher VcRedist\$($VcRedist.Release)\$($VcRedist.Version)\$($VcRedist.Architecture)"
                             WorkingDirectory      = ".\Applications\$Publisher VcRedist\$($VcRedist.Release)\$($VcRedist.Version)\$($VcRedist.Architecture)"
                             UninstallKey          = $VcRedist.ProductCode
                             SupportedPlatform     = $supportedPlatform
                         }
-                        Import-MDTApplication @importMDTAppParams > $Null
+                        Import-MDTApplication @importMDTAppParams > $null
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "$($MyInvocation.MyCommand): Error encountered importing the application: [$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)]."
-                        Throw $_.Exception.Message
+                        throw $_.Exception.Message
                     }
                 }
             }
         }
     }
 
-    End {
+    end {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         Write-Verbose -Message "$($MyInvocation.MyCommand): Retrieving Visual C++ Redistributables imported into the deployment share"
         Write-Output -InputObject (Get-ChildItem -Path $target | Where-Object { $_.Name -like "*Visual C++*" } | Select-Object -Property *)

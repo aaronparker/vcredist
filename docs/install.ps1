@@ -19,14 +19,14 @@ param (
 
 #region Trust the PSGallery for modules
 $Repository = "PSGallery"
-If (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.InstallationPolicy -ne "Trusted" }) {
+if (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.InstallationPolicy -ne "Trusted" }) {
     try {
         Write-Host "Trusting the repository: $Repository."
         Install-PackageProvider -Name "NuGet" -MinimumVersion 2.8.5.208 -Force
         Set-PSRepository -Name $Repository -InstallationPolicy "Trusted"
     }
     catch {
-        Throw $_
+        throw $_
     }
 }
 #region
@@ -38,7 +38,7 @@ $installedModule = Get-Module -Name $Module -ListAvailable -ErrorAction "Silentl
     Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | `
     Select-Object -First 1
 $publishedModule = Find-Module -Name $Module -ErrorAction "SilentlyContinue"
-If (($Null -eq $installedModule) -or ([System.Version]$publishedModule.Version -gt [System.Version]$installedModule.Version)) {
+if (($null -eq $installedModule) -or ([System.Version]$publishedModule.Version -gt [System.Version]$installedModule.Version)) {
     Write-Host "Installing module: $Module $($publishedModule.Version)."
     $params = @{
         Name               = $Module
@@ -53,10 +53,10 @@ If (($Null -eq $installedModule) -or ([System.Version]$publishedModule.Version -
 
 #region tasks/install apps
 Write-Host "Saving VcRedists to path: $Path."
-New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $null
 
 Write-Host "Downloading supported Microsoft Visual C++ Redistributables."
-Save-VcRedist -VcList (Get-VcList) -Path $Path > $Null
+Save-VcRedist -VcList (Get-VcList) -Path $Path > $null
 
 Write-Host "Installing supported Microsoft Visual C++ Redistributables."
 $Redists = Install-VcRedist -VcList (Get-VcList) -Path $Path

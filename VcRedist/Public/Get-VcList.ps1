@@ -1,10 +1,10 @@
-Function Get-VcList {
+function Get-VcList {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(DefaultParameterSetName = "Manifest", HelpURI = "https://vcredist.com/get-vclist/")]
-    Param (
+    param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName = "Manifest")]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]
         [System.String[]] $Release = @("2012", "2013", "2022"),
@@ -15,7 +15,7 @@ Function Get-VcList {
 
         [Parameter(Mandatory = $False, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
         [ValidateNotNull()]
-        [ValidateScript( { If (Test-Path -Path $_ -PathType "Leaf" -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find file $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType "Leaf" -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find file $_" } })]
         [Alias("Xml")]
         [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 
@@ -24,14 +24,14 @@ Function Get-VcList {
         [System.String] $Export = "Supported"
     )
 
-    Process {
+    process {
         try {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Reading JSON document [$Path]."
             $content = Get-Content -Raw -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to read manifest [$Path]."
-            Throw $_.Exception.Message
+            throw $_.Exception.Message
         }
         try {
             # Convert the JSON content to an object
@@ -40,12 +40,12 @@ Function Get-VcList {
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Unable to convert manifest JSON to required object. Please validate the input manifest."
-            Throw $_.Exception.Message
+            throw $_.Exception.Message
         }
 
-        If ($Null -ne $json) {
-            If ($PSBoundParameters.ContainsKey("Export")) {
-                Switch ($Export) {
+        if ($null -ne $json) {
+            if ($PSBoundParameters.ContainsKey("Export")) {
+                switch ($Export) {
                     "Supported" {
                         Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting supported VcRedists."
                         [System.Management.Automation.PSObject] $output = $json.Supported
@@ -62,12 +62,12 @@ Function Get-VcList {
                     }
                 }
             }
-            Else {
+            else {
                 # Filter the list for architecture and release
-                If ($json | Get-Member -Name "Supported" -MemberType "Properties") {
+                if ($json | Get-Member -Name "Supported" -MemberType "Properties") {
                     [System.Management.Automation.PSObject] $supported = $json.Supported
                 }
-                Else {
+                else {
                     [System.Management.Automation.PSObject] $supported = $json
                 }
                 [System.Management.Automation.PSObject] $output = $supported | Where-Object { $Release -contains $_.Release } | `
@@ -86,7 +86,7 @@ Function Get-VcList {
 
             # Replace strings in the manifest
             Write-Verbose -Message "$($MyInvocation.MyCommand): Object count is: $($output.$Property.Count)."
-            For ($i = 0; $i -le $Count; $i++) {
+            for ($i = 0; $i -le $Count; $i++) {
                 try {
                     $output[$i].SilentUninstall = $output[$i].SilentUninstall `
                         -replace "#Installer", $(Split-Path -Path $output[$i].Download -Leaf) `

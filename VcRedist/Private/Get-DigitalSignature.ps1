@@ -1,4 +1,4 @@
-Function Get-DigitalSignature {
+function Get-DigitalSignature {
     <#
         .SYNOPSIS
             Get digital signatures from files in a target folder.
@@ -41,7 +41,7 @@ Function Get-DigitalSignature {
     #>
     [CmdletBinding(SupportsShouldProcess = $False)]
     [OutputType([Array])]
-    Param (
+    param (
         [Parameter(Mandatory = $False, Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, `
                 HelpMessage = 'Specify a target path in which to scan files for digital signatures.')]
         [Alias('FullName', 'PSPath')]
@@ -55,23 +55,23 @@ Function Get-DigitalSignature {
         [Parameter(ParameterSetName = 'Base', Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $Unique
     )
-    Begin {
+    begin {
         # Initialise $Signatures as an array
         $Signatures = @()
     }
-    Process {
+    process {
         # For each path in $Path, check that the path exists
-        ForEach ($Loc in $Path) {
-            If (Test-Path -Path $Loc -IsValid -ErrorAction "SilentlyContinue") {
+        foreach ($Loc in $Path) {
+            if (Test-Path -Path $Loc -IsValid -ErrorAction "SilentlyContinue") {
 
                 # Get the item to determine whether it's a file or folder
-                If ((Get-Item -Path $Loc -Force).PSIsContainer) {
+                if ((Get-Item -Path $Loc -Force).PSIsContainer) {
 
                     # Target is a folder, so trawl the folder for .exe and .dll files in the target and sub-folders
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Scanning files in folder: $Loc"
                     $items = Get-ChildItem -Path $Loc -Recurse -File -Include $Include
                 }
-                Else {
+                else {
 
                     # Target is a file, so just get metadata for the file
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Scanning file: $Loc"
@@ -87,15 +87,15 @@ Function Get-DigitalSignature {
                     Status, `
                     Path
             }
-            Else {
+            else {
                 Write-Error "Path does not exist: $Loc"
             }
         }
     }
-    End {
+    end {
         # If -Unique is specified, filter the signatures list and return the first item of each unique certificate
         # If -Export is specified, we also only want unique certificate files
-        If ($Export -or $Unique) {
+        if ($Export -or $Unique) {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering for unique signatures."
             $Signatures = $Signatures | Where-Object { $_.Status -eq "Valid" -or $_.Status -eq "UnknownError" } | `
                 Group-Object -Property Thumbprint | `

@@ -11,10 +11,10 @@ param ()
 BeforeDiscovery {
     Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
     $ValidateReleases = @("2017", "2019", "2022")
-    If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
+    if (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
         [System.Environment]::SetEnvironmentVariable("WorkingPath",$env:GITHUB_WORKSPACE)
     }
-    Else {
+    else {
         [System.Environment]::SetEnvironmentVariable("WorkingPath",$env:APPVEYOR_BUILD_FOLDER)
     }
 }
@@ -28,7 +28,7 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
             $VcRedist = $_
 
             $Path = $([System.IO.Path]::Combine($DownloadDir, "VcDownload"))
-            New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $Null
+            New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $null
             Save-VcRedist -VcList (Get-VcList -Release $VcRedist) -Path $Path
 
             $Architectures = @("x86", "x64")

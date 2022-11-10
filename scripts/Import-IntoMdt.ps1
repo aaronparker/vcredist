@@ -3,7 +3,7 @@
     Downloads the VcRedists, imports them into an MDT deployment share and creates a bundle.
 #>
 [CmdletBinding()]
-Param (
+param (
     [Parameter(Mandatory = $False)]
     [System.String] $Path = "C:\Temp\VcRedists",
 
@@ -12,7 +12,7 @@ Param (
 )
 
 # Download the VcRedists
-If (!(Test-Path -Path $Path)) { New-Item -Path $Path -ItemType Directory }
+if (!(Test-Path -Path $Path)) { New-Item -Path $Path -ItemType Directory }
 Save-VcRedist -VcList (Get-VcList) -Path $Path
 
 # Add to the deployment share

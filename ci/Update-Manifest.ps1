@@ -6,7 +6,7 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUserDeclaredVarsMoreThanAssignments", "")]
 [CmdletBinding()]
-Param (
+param (
     [System.String[]] $Release,
 
     [System.String] $Path,

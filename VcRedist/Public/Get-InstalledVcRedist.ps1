@@ -1,10 +1,10 @@
-Function Get-InstalledVcRedist {
+function Get-InstalledVcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
     [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://vcredist.com/get-installedvcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
-    Param (
+    param (
         [Parameter(Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $ExportAll
     )
@@ -15,17 +15,17 @@ Function Get-InstalledVcRedist {
 
     # Add Architecture property to each entry
     Write-Verbose -Message "$($MyInvocation.MyCommand): Adding Architecture property."
-    $VcRedists | ForEach-Object { If ($_.Name -contains "x64") { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
+    $VcRedists | ForEach-Object { if ($_.Name -contains "x64") { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
 
     # If -ExportAll used, export everything instead of filtering for the primary Redistributable
-    If ($PSBoundParameters.ContainsKey("ExportAll")) {
+    if ($PSBoundParameters.ContainsKey("ExportAll")) {
 
         # Write the installed VcRedists to the pipeline
         Write-Output -InputObject $VcRedists
     }
-    Else {
+    else {
         Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering output."
-        $Output = $VcRedists | ForEach-Object { If (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | Sort-Object -Property "Name"
+        $Output = $VcRedists | ForEach-Object { if (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | Sort-Object -Property "Name"
 
         # Write the filtered installed VcRedists to the pipeline
         Write-Output -InputObject $Output

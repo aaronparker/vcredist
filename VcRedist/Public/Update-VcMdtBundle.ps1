@@ -1,12 +1,12 @@
-Function Update-VcMdtBundle {
+function Update-VcMdtBundle {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
     [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/update-vcmdtbundle/")]
     [OutputType([System.Management.Automation.PSObject])]
-    Param (
+    param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
-        [ValidateScript( { If (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } Else { Throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False)]
@@ -27,41 +27,41 @@ Function Update-VcMdtBundle {
         [System.String] $BundleName = "Visual C++ Redistributables"
     )
 
-    Begin {
+    begin {
         # Variables
         $Applications = "Applications"
         Write-Warning -Message "$($MyInvocation.MyCommand): Attempting to update bundle: [$Publisher $BundleName]."
 
         # If running on PowerShell Core, error and exit.
-        If (Test-PSCore) {
+        if (Test-PSCore) {
             Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
-            Throw [System.Management.Automation.InvalidPowerShellStateException]
+            throw [System.Management.Automation.InvalidPowerShellStateException]
             Exit
         }
     }
 
-    Process {
+    process {
         # Import the MDT module and create a PS drive to MdtPath
-        If (Import-MdtModule) {
-            If ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
+        if (Import-MdtModule) {
+            if ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
                     $params = @{
                         Drive       = $MdtDrive
                         Path        = $MdtPath
                         ErrorAction = "SilentlyContinue"
                     }
-                    New-MdtDrive @params > $Null
-                    Restore-MDTPersistentDrive -Force > $Null
+                    New-MdtDrive @params > $null
+                    Restore-MDTPersistentDrive -Force > $null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
-                    Throw $_.Exception.Message
+                    throw $_.Exception.Message
                 }
             }
         }
-        Else {
+        else {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
-            Throw [System.Management.Automation.InvalidPowerShellStateException]
+            throw [System.Management.Automation.InvalidPowerShellStateException]
         }
 
         # Get properties from the existing bundle/s
@@ -75,10 +75,10 @@ Function Update-VcMdtBundle {
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): Failed to retrieve the existing Visual C++ Redistributables bundle."
-            Throw $_.Exception.Message
+            throw $_.Exception.Message
         }
 
-        ForEach ($Bundle in $Bundles) {
+        foreach ($Bundle in $Bundles) {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Found bundle: [$($Bundle.Name)]."
 
             # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
@@ -86,9 +86,9 @@ Function Update-VcMdtBundle {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Gathering VcRedist applications in: $target"
             $existingVcRedists = Get-ChildItem -Path $target | Where-Object { ($_.Name -like "*Visual C++*") -and ($_.guid -ne $bundle.guid) -and ($_.CommandLine -ne "") }
             $existingVcRedists = $existingVcRedists | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false }
-            $dependencies = @(); ForEach ($app in $existingVcRedists) { $dependencies += $app.guid }
+            $dependencies = @(); foreach ($app in $existingVcRedists) { $dependencies += $app.guid }
 
-            If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
+            if ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update dependencies")) {
                 try {
                     $sipParams = @{
                         Path        = ($bundle.PSPath.Replace($bundle.PSProvider, "")).Trim(":")
@@ -97,14 +97,14 @@ Function Update-VcMdtBundle {
                         ErrorAction = "SilentlyContinue"
                         Force       = $True
                     }
-                    Set-ItemProperty @sipParams > $Null
+                    Set-ItemProperty @sipParams > $null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle dependencies."
-                    Throw $_.Exception.Message
+                    throw $_.Exception.Message
                 }
             }
-            If ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update version")) {
+            if ($PSCmdlet.ShouldProcess($bundle.PSPath, "Update version")) {
                 try {
                     $sipParams = @{
                         Path        = $($bundle.PSPath.Replace($bundle.PSProvider, "")).Trim(":")
@@ -113,11 +113,11 @@ Function Update-VcMdtBundle {
                         ErrorAction = "SilentlyContinue"
                         Force       = $True
                     }
-                    Set-ItemProperty @sipParams > $Null
+                    Set-ItemProperty @sipParams > $null
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Error updating VcRedist bundle version."
-                    Throw $_.Exception.Message
+                    throw $_.Exception.Message
                 }
             }
 

@@ -1,4 +1,4 @@
-Function Compare-VersionNumber {
+function Compare-VersionNumber {
     <#
         .SYNOPSIS
             Compares two version numbers to determine whether one is greater than the other.
@@ -18,7 +18,7 @@ Function Compare-VersionNumber {
     #>
     [CmdletBinding()]
     [OutputType([System.Boolean])]
-    Param (
+    param (
         [Parameter(Mandatory = $True, Position = 0)]
         [ValidateNotNull()]
         [System.String] $LowVersion,
@@ -30,27 +30,27 @@ Function Compare-VersionNumber {
         [Parameter(Mandatory = $False)]
         [System.Management.Automation.SwitchParameter] $MatchMinor
     )
-    Begin {
+    begin {
         # Convert parameters to version numbers
         $low = New-Object -TypeName "System.Version" -ArgumentList $LowVersion
         $high = New-Object -TypeName "System.Version" -ArgumentList $HighVersion
     }
-    Process {
+    process {
         # Compare versions
-        If ($MatchMinor) {
-            If ($high.Major -eq $low.Major) {
+        if ($MatchMinor) {
+            if ($high.Major -eq $low.Major) {
                 $result = $high.Minor -gt $low.Minor
             }
-            Else {
+            else {
                 # If major version numbers don't match return false
                 $result = $False
             }
         }
-        Else {
+        else {
             $result = $high -gt $low
         }
     }
-    End {
+    end {
         # Return result
         Write-Output -InputObject $result
     }

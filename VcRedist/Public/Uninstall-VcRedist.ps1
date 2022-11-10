@@ -1,4 +1,4 @@
-Function Uninstall-VcRedist {
+function Uninstall-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
@@ -6,7 +6,7 @@ Function Uninstall-VcRedist {
         HelpURI = "https://vcredist.com/uninstall-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
-    Param (
+    param (
         [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Manual')]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]
         [System.String[]] $Release = @("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022"),
@@ -20,12 +20,12 @@ Function Uninstall-VcRedist {
         [System.Management.Automation.PSObject] $VcList
     )
 
-    Begin {
-        If ($PSBoundParameters.ContainsKey("Confirm")) { Write-Warning -Message "$($MyInvocation.MyCommand): Uninstalling Visual C++ Redistributables" }
+    begin {
+        if ($PSBoundParameters.ContainsKey("Confirm")) { Write-Warning -Message "$($MyInvocation.MyCommand): Uninstalling Visual C++ Redistributables" }
     }
 
-    Process {
-        Switch ($PSCmdlet.ParameterSetName) {
+    process {
+        switch ($PSCmdlet.ParameterSetName) {
             "Manual" {
                 # Get the installed VcRedists and filter
                 Write-Verbose -Message "$($MyInvocation.MyCommand): Getting locally installed Visual C++ Redistributables"
@@ -38,22 +38,22 @@ Function Uninstall-VcRedist {
         }
 
         # Walk through each VcRedist and uninstall
-        ForEach ($VcRedist in $VcRedistsToRemove) {
-            If ($PSCmdlet.ShouldProcess("[$($VcRedist.Name)]", "Uninstall")) {
+        foreach ($VcRedist in $VcRedistsToRemove) {
+            if ($PSCmdlet.ShouldProcess("[$($VcRedist.Name)]", "Uninstall")) {
                 $invokeProcessParams = @{
                     FilePath = "$env:SystemRoot\System32\cmd.exe"
                 }
-                If ($Null -ne $VcRedist.QuietUninstallString) {
+                if ($null -ne $VcRedist.QuietUninstallString) {
                     $invokeProcessParams.ArgumentList = "/c $($VcRedist.QuietUninstallString)"
                     Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist has quiet uninstall string."
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.QuietUninstallString)]."
                 }
-                ElseIf ($Null -ne $VcRedist.SilentUninstall) {
+                Elseif ($null -ne $VcRedist.SilentUninstall) {
                     $invokeProcessParams.ArgumentList = "/c $($VcRedist.SilentUninstall)"
                     Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist has quiet uninstall string."
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.SilentUninstall)]."
                 }
-                Else {
+                else {
                     $invokeProcessParams.ArgumentList = "/c $($VcRedist.UninstallString) /quiet /noreboot"
                     Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist does not have quiet uninstall string. Adding [/quiet]."
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.UninstallString)]."
@@ -64,19 +64,19 @@ Function Uninstall-VcRedist {
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failure in uninstalling Visual C++ Redistributable."
                     Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
-                    Throw "Failed to uninstall VcRedist $($VcRedist.Name)"
+                    throw "Failed to uninstall VcRedist $($VcRedist.Name)"
                 }
             }
         }
     }
 
-    End {
+    end {
         # Output remaining installed VcRedists to the pipeline
         $InstalledVcRedist = Get-InstalledVcRedist
-        If ($Null -eq $InstalledVcRedist) {
+        if ($null -eq $InstalledVcRedist) {
             Write-Verbose -Message "$($MyInvocation.MyCommand): No VcRedists installed or all VcRedists uninstalled successfully."
         }
-        Else {
+        else {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Output remaining installed VcRedists."
             Write-Output -InputObject $InstalledVcRedist
         }

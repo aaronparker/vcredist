@@ -1,4 +1,4 @@
-Function Invoke-Process {
+function Invoke-process {
     <#PSScriptInfo
     .VERSION 1.4
     .GUID b787dc5d-8d11-45e9-aeef-5cf3a1f690de
@@ -48,10 +48,10 @@ Function Invoke-Process {
             $cmdError = Get-Content -Path $stdErrTempFile -Raw
             if ($cmd.ExitCode -ne 0) {
                 if ($cmdError) {
-                    Throw $cmdError.Trim()
+                    throw $cmdError.Trim()
                 }
                 if ($cmdOutput) {
-                    Throw $cmdOutput.Trim()
+                    throw $cmdOutput.Trim()
                 }
             }
             else {

@@ -1,4 +1,4 @@
-Function New-MdtApplicationFolder {
+function New-MdtApplicationFolder {
     <#
         .SYNOPSIS
             Creates a new Application folder in an MDT deployment share.
@@ -15,7 +15,7 @@ Function New-MdtApplicationFolder {
     #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([System.String])]
-    Param (
+    param (
         [Parameter(Mandatory = $True, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [System.String] $Drive,
@@ -33,12 +33,12 @@ Function New-MdtApplicationFolder {
     # Create a sub-folder below Applications to import the Redistributables into
     $target = "$($Drive):\Applications\$($Name)"
 
-    If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
+    if (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
         Write-Verbose "$($MyInvocation.MyCommand): MDT folder exists: $target"
         Write-Output -InputObject $True
     }
-    Else {
-        If ($PSCmdlet.ShouldProcess($target, "Create folder")) {
+    else {
+        if ($PSCmdlet.ShouldProcess($target, "Create folder")) {
             try {
                 # Create -AppFolder below Applications; Splat New-Item parameters
                 $newItemParams = @{
@@ -53,7 +53,7 @@ Function New-MdtApplicationFolder {
             }
             catch [System.Exception] {
                 Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT Applications folder: $Name"
-                Throw $_.Exception.Message
+                throw $_.Exception.Message
             }
             finally {
                 Write-Output -InputObject $True
