@@ -1,4 +1,4 @@
-name: update-module-version
+name: Update module version
 
 on:  
   workflow_dispatch:

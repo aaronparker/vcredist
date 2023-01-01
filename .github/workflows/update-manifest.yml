@@ -1,4 +1,4 @@
-name: update-manifest
+name: Update module manifest
 
 on:
   workflow_dispatch:

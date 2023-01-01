@@ -1,9 +1,6 @@
-name: publish-module
+name: Publish module to PowerShell Gallery
 
 on:
-  # workflow_dispatch:
-  #   branches:
-  #       - main
   push:
     tags:
       - "v*.*.*"
