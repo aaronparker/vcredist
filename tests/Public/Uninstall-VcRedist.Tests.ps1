@@ -13,7 +13,7 @@ BeforeDiscovery {
 
 Describe "Uninstall-VcRedist" {
 	BeforeAll {
-		$TestReleases = @("2013", "2015", "2017", "2019", "2022")
+		$TestReleases = @("2012", "2013", "2015", "2017", "2019")
 	}
 
 	Context "Uninstall VcRedist <_.Name> x64" -ForEach $TestReleases {
@@ -25,6 +25,6 @@ Describe "Uninstall-VcRedist" {
 	}
 
     Context "Test uninstall via the pipeline" {
-        { Get-VcList -Release "2012" | Uninstall-VcRedist -Confirm:$False } | Should -Not -Throw
+        { Get-VcList -Release "2022" | Uninstall-VcRedist -Confirm:$False } | Should -Not -Throw
     }
 }

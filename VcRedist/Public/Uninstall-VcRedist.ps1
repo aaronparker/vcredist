@@ -39,7 +39,7 @@ function Uninstall-VcRedist {
 
         # Walk through each VcRedist and uninstall
         foreach ($VcRedist in $VcRedistsToRemove) {
-            if ($PSCmdlet.ShouldProcess("[$($VcRedist.Name)]", "Uninstall")) {
+            if ($PSCmdlet.ShouldProcess($VcRedist.Name, "Uninstall")) {
                 $invokeProcessParams = @{
                     FilePath = "$env:SystemRoot\System32\cmd.exe"
                 }
@@ -48,7 +48,7 @@ function Uninstall-VcRedist {
                     Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist has quiet uninstall string."
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.QuietUninstallString)]."
                 }
-                Elseif ($null -ne $VcRedist.SilentUninstall) {
+                elseif ($null -ne $VcRedist.SilentUninstall) {
                     $invokeProcessParams.ArgumentList = "/c $($VcRedist.SilentUninstall)"
                     Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist has quiet uninstall string."
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.SilentUninstall)]."
@@ -58,13 +58,14 @@ function Uninstall-VcRedist {
                     Write-Verbose -Message "$($MyInvocation.MyCommand): VcRedist does not have quiet uninstall string. Adding [/quiet]."
                     Write-Verbose -Message "$($MyInvocation.MyCommand): Uninstalling with: [$($VcRedist.UninstallString)]."
                 }
+
                 try {
                     $result = Invoke-Process @invokeProcessParams
                 }
                 catch [System.Exception] {
                     Write-Warning -Message "$($MyInvocation.MyCommand): Failure in uninstalling Visual C++ Redistributable."
                     Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
-                    throw "Failed to uninstall VcRedist $($VcRedist.Name)"
+                    # throw "Failed to uninstall VcRedist $($VcRedist.Name) with error code: $($result.ExitCode)"
                 }
             }
         }
