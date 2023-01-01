@@ -25,6 +25,6 @@ Describe "Uninstall-VcRedist" {
 	}
 
     Context "Test uninstall via the pipeline" {
-        { Get-VcList -Release "2012" | Uninstall-VcRedist } | Should -Not -Throw
+        { Get-VcList -Release "2012" | Uninstall-VcRedist -Confirm:$False } | Should -Not -Throw
     }
 }
