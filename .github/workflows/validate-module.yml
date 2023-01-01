@@ -48,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019, windows-2022]
+        os: [windows-2022]
 
     steps:
       - uses: actions/checkout@v3
@@ -72,7 +72,7 @@ jobs:
 
       - name: Install and cache PowerShell modules
         id: psmodulecache
-        uses: potatoqualitee/psmodulecache@v5.1
+        uses: potatoqualitee/psmodulecache@v5.2
         with:
           modules-to-cache: Pester
           shell: powershell
