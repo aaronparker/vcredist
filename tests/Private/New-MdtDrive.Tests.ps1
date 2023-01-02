@@ -24,7 +24,8 @@ InModuleScope -ModuleName "VcRedist" {
             }
 
             It "Returns the expected MDT drive name" {
-                $Drive | Should -Be "DS020"
+                $Path = "$Env:RUNNER_TEMP\Deployment"
+                New-MdtDrive -Drive "DS020" -Path $Path | Should -Be "DS020"
             }
         }
     }
