@@ -13,38 +13,45 @@ function New-MdtDrive {
         .PARAMETER Drive
             A PS drive letter to map to the MDT share.
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([System.String])]
     param (
-        [Parameter(Mandatory = $False, Position = 0)]
+        [Parameter(Mandatory = $false, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [System.String] $Drive = "DS099",
 
-        [Parameter(Mandatory = $True, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [System.String] $Path
     )
-    $description = "MDT drive created by $($MyInvocation.MyCommand)"
+
+    # Set a description to be applied to the new MDT drive
+    $Description = "MDT drive created by $($MyInvocation.MyCommand)"
 
     if ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
-        Write-Verbose "$($MyInvocation.MyCommand): Found MDT drive: $($mdtDrives[0].Name)"
+        Write-Verbose "Found MDT drive: $($mdtDrives[0].Name)"
         $output = $mdtDrives[0].Name
     }
     else {
         if ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
             try {
-                New-PSDrive -Name $Drive -PSProvider "MDTProvider" -Root $Path `
-                    -NetworkPath $Path -Description $description | Add-MDTPersistentDrive
-                $psDrive = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Name -eq $Drive) }
+                $params = @{
+                    Name        = $Drive
+                    PSProvider  = "MDTProvider"
+                    Root        = $Path
+                    NetworkPath = $Path
+                    Description = $description
+                }
+                New-PSDrive @params | Add-MDTPersistentDrive
             }
             catch [System.Exception] {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT drive at: [$Path]."
-                throw $_.Exception.Message
+                throw $_
             }
-            finally {
-                Write-Verbose "$($MyInvocation.MyCommand): Found: $($psDrive.Name)"
-                $output = $psDrive.Name
-            }
+
+            # Return the MDT drive name
+            $psDrive = Get-MdtPersistentDrive | Where-Object { $_.Path -eq $Path -and $_.Name -eq $Drive }
+            Write-Verbose "Found: $($psDrive.Name)"
+            $output = $psDrive.Name
         }
     }
     Write-Output -InputObject $output

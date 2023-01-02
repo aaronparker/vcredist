@@ -13,8 +13,8 @@ function New-MdtApplicationFolder {
         .PARAMETER Name
             A folder name to create below the MDT Applications folder.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType([System.String])]
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    [OutputType([System.Boolean])]
     param (
         [Parameter(Mandatory = $True, Position = 0)]
         [ValidateNotNullOrEmpty()]
@@ -31,33 +31,30 @@ function New-MdtApplicationFolder {
     )
 
     # Create a sub-folder below Applications to import the Redistributables into
-    $target = "$($Drive):\Applications\$($Name)"
+    $MdtPath = [System.IO.Path]::Combine($Drive, "Applications", $Name)
 
-    if (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
-        Write-Verbose "$($MyInvocation.MyCommand): MDT folder exists: $target"
-        Write-Output -InputObject $True
+    if (Test-Path -Path $MdtPath -ErrorAction "SilentlyContinue") {
+        Write-Verbose "MDT folder exists: $MdtPath"
+        Write-Output -InputObject $true
     }
     else {
-        if ($PSCmdlet.ShouldProcess($target, "Create folder")) {
+        if ($PSCmdlet.ShouldProcess($MdtPath, "Create folder")) {
             try {
                 # Create -AppFolder below Applications; Splat New-Item parameters
-                $newItemParams = @{
-                    Path        = "$($Drive):\Applications"
+                $params = @{
+                    Path        = $([System.IO.Path]::Combine($Drive, "Applications"))
                     Enable      = "True"
                     Name        = $Name
                     Comments    = $Description
                     ItemType    = "Folder"
-                    ErrorAction = "SilentlyContinue"
+                    ErrorAction = "Stop"
                 }
-                New-Item @newItemParams
+                New-Item @params | Out-Null
             }
             catch [System.Exception] {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT Applications folder: $Name"
-                throw $_.Exception.Message
+                throw $_
             }
-            finally {
-                Write-Output -InputObject $True
-            }
+            Write-Output -InputObject $true
         }
     }
 }

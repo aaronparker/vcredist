@@ -10,7 +10,7 @@ function Import-MdtModule {
         .PARAMETER Force
             Re-imports the MDT module and its members, even if the module or its members have an access mode of read-only.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $false)]
     [OutputType([System.Boolean])]
     param (
         [Parameter(Mandatory = $False)]
@@ -18,38 +18,36 @@ function Import-MdtModule {
     )
 
     # Get path to the MDT PowerShell module via the Registry and fail if we can't read the properties
-    try {
-        $mdtReg = Get-ItemProperty -Path "HKLM:SOFTWARE\Microsoft\Deployment 4" -ErrorAction "SilentlyContinue"
+    $RegPath = "HKLM:SOFTWARE\Microsoft\Deployment 4"
+    if (Test-Path -Path $RegPath -ErrorAction "SilentlyContinue") {
+        Write-Verbose -Message "Get MDT details from registry at: $RegPath"
+        $MdtReg = Get-ItemProperty -Path $RegPath -ErrorAction "SilentlyContinue"
     }
-    catch [System.Exception] {
-        Write-Warning "$($MyInvocation.MyCommand): Unable to read MDT Registry path properties."
-        throw $_.Exception.Message
+    else {
+        $Msg = "Unable to read MDT Registry path properties at '$RegPath'. Ensure the Microsoft Deployment Toolkit is installed and try again."
+        throw [System.IO.DirectoryNotFoundException]::New($Msg)
     }
 
     # Attempt to load the module
-    $mdtInstallDir = Resolve-Path -Path $mdtReg.Install_Dir
-    $mdtModule = [System.IO.Path]::Combine($mdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
+    $MdtInstallDir = Resolve-Path -Path $MdtReg.Install_Dir
+    $MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
     if (Test-Path -Path $mdtModule -ErrorAction "SilentlyContinue") {
-        Write-Verbose "$($MyInvocation.MyCommand): Loading MDT module from: [$mdtInstallDir]."
+        Write-Verbose -Message "Loading MDT module from: $MdtInstallDir."
         try {
             $params = @{
-                Name        = $mdtModule
+                Name        = $MdtModule
                 ErrorAction = "SilentlyContinue"
-                Force       = if ($Force) { $True } else { $False }
+                Force       = if ($Force) { $true } else { $false }
             }
             Import-Module @params
         }
         catch [System.Exception] {
-            Write-Output -InputObject $False
-            Write-Warning "$($MyInvocation.MyCommand): Could not load MDT PowerShell Module. Please make sure that the MDT console is installed correctly."
-            throw $_.Exception.Message
+            throw $_
         }
-        finally {
-            Write-Output -InputObject $True
-        }
+        Write-Output -InputObject $true
     }
     else {
-        Write-Warning "$($MyInvocation.MyCommand): Cannot find the MDT PowerShell module. Is the MDT console installed?"
-        Write-Output -InputObject $False
+        $Msg = "Unable to find the MDT PowerShell module at $MdtModule. Ensure the Microsoft Deployment Toolkit is installed and try again."
+        throw [System.IO.FileNotFoundException]::New($Msg)
     }
 }

@@ -85,7 +85,7 @@ function Save-VcRedist {
             Write-Verbose -Message "$($MyInvocation.MyCommand): Testing target: $($target)"
 
             if (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
-                $ProductVersion = $(Get-FileMetadata -Path $target).ProductVersion
+                $ProductVersion = $(Get-Item -Path $target).VersionInfo.ProductVersion
 
                 # If the target Redistributable is already downloaded, compare the version
                 if (($VcRedist.Version -gt $ProductVersion) -or ($null -eq $ProductVersion)) {
@@ -106,7 +106,6 @@ function Save-VcRedist {
             # The VcRedist needs to be downloaded
             if ($download) {
                 if ($PSCmdlet.ShouldProcess($VcRedist.Download, "Invoke-WebRequest")) {
-
                     try {
 
                         # Download the file

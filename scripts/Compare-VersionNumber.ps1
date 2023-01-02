@@ -16,7 +16,7 @@ function Compare-VersionNumber {
         .PARAMETER HighVersion
             The higher version number to compare.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $false)]
     [OutputType([System.Boolean])]
     param (
         [Parameter(Mandatory = $True, Position = 0)]
@@ -35,6 +35,7 @@ function Compare-VersionNumber {
         $low = New-Object -TypeName "System.Version" -ArgumentList $LowVersion
         $high = New-Object -TypeName "System.Version" -ArgumentList $HighVersion
     }
+
     process {
         # Compare versions
         if ($MatchMinor) {
@@ -50,6 +51,7 @@ function Compare-VersionNumber {
             $result = $high -gt $low
         }
     }
+
     end {
         # Return result
         Write-Output -InputObject $result

@@ -10,3 +10,12 @@ param ()
 BeforeDiscovery {
 }
 
+InModuleScope VcRedist {
+	Describe "Get-Bitness" {
+		Context "Get-Bitness returns the architecture" {
+			It "Returns x64 when run on a 64-bit machine" {
+				Get-Bitness | Should -BeExactly "x64"
+			}
+		}
+	}
+}

@@ -1,4 +1,4 @@
-function Invoke-process {
+function Invoke-Process {
     <#PSScriptInfo
     .VERSION 1.4
     .GUID b787dc5d-8d11-45e9-aeef-5cf3a1f690de
@@ -16,7 +16,7 @@ function Invoke-process {
             This function ensures any errors are sent to the error stream, standard output is sent via the Output stream and any
             time the process returns an exit code other than 0, treat it as an error.
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -28,7 +28,6 @@ function Invoke-process {
     )
 
     $ErrorActionPreference = "Stop"
-
     try {
         $stdOutTempFile = "$env:TEMP\$((New-Guid).Guid)"
         $stdErrTempFile = "$env:TEMP\$((New-Guid).Guid)"
@@ -38,12 +37,13 @@ function Invoke-process {
             ArgumentList           = $ArgumentList
             RedirectStandardError  = $stdErrTempFile
             RedirectStandardOutput = $stdOutTempFile
-            Wait                   = $true;
-            PassThru               = $true;
-            NoNewWindow            = $true;
+            Wait                   = $true
+            PassThru               = $true
+            NoNewWindow            = $true
         }
         if ($PSCmdlet.ShouldProcess("Process [$($FilePath)]", "Run with args: [$($ArgumentList)]")) {
             $cmd = Start-Process @startProcessParams
+
             $cmdOutput = Get-Content -Path $stdOutTempFile -Raw
             $cmdError = Get-Content -Path $stdErrTempFile -Raw
             if ($cmd.ExitCode -ne 0) {
