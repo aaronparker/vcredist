@@ -18,14 +18,16 @@ Describe -Name "Import-VcMdtApplication" -ForEach $TestVcRedists {
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 
 		$VcRedist = $_
+		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
+		Save-VcRedist -Path $Path -VcList (Get-VcList -Release $VcRedist.Release)
 	}
 
 	Context "Import-VcMdtApplication imports Redistributables into the MDT share" {
 		It "Imports the <VcRedist.Release> x64 Redistributables into MDT OK" {
 			$params = @{
 				VcList    = (Get-VcList -Release $VcRedist.Release -Architecture "x64")
-				Path      = "$env:RUNNER_TEMP\Downloads"
-				MdtPath   = "$Env:RUNNER_TEMP\Deployment"
+				Path      = $Path
+				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
 				Silent    = $true
 				DontHide  = $true
@@ -40,8 +42,8 @@ Describe -Name "Import-VcMdtApplication" -ForEach $TestVcRedists {
 		It "Imports the <VcRedist.Release> x86 Redistributables into MDT OK" {
 			$params = @{
 				VcList    = (Get-VcList -Release $VcRedist.Release -Architecture "x86")
-				Path      = "$env:RUNNER_TEMP\Downloads"
-				MdtPath   = "$Env:RUNNER_TEMP\Deployment"
+				Path      = $Path
+				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
 				Silent    = $true
 				DontHide  = $true
