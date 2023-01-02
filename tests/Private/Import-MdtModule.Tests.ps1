@@ -33,14 +33,17 @@ InModuleScope VcRedist {
 				}
 				Invoke-WebRequest @params
 			}
-			$params = @{
-				FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-				ArgumentList = /package $OutFile /quiet /noreboot
-				NoNewWindow  = $true
-				Wait         = $false
-				PassThru     = $false
+			$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
+			if (-not(Test-Path -Path $MdtModule)) {
+				$params = @{
+					FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+					ArgumentList = "/package $OutFile /quiet /noreboot"
+					NoNewWindow  = $true
+					Wait         = $false
+					PassThru     = $false
+				}
+				Start-Process @params
 			}
-			Start-Process @params
 		}
 
 		Context "Import-MdtModule with MDT installed OK" {
