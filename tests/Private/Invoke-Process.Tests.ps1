@@ -16,7 +16,7 @@ InModuleScope VcRedist {
 			It "Should run the command without throwing an exception" {
 				$params = @{
 					FilePath     = "$env:SystemRoot\System32\cmd.exe"
-					ArgumentList = "/c dir"
+					ArgumentList = "/c dir $Env:RUNNER_TEMP"
 				}
 				{ Invoke-Process @params } | Should -Not -Throw
 			}
@@ -24,7 +24,7 @@ InModuleScope VcRedist {
 			It "Returns a string from cmd.exe" {
 				$params = @{
 					FilePath     = "$env:SystemRoot\System32\cmd.exe"
-					ArgumentList = "/c dir"
+					ArgumentList = "/c dir $Env:RUNNER_TEMP"
 				}
 				Invoke-Process @params | Should -BeOfType [System.String]
 			}

@@ -33,6 +33,7 @@ InModuleScope VcRedist {
 				}
 				Invoke-WebRequest @params
 			}
+			Get-ChildItem -Path "C:\Program Files\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
 			$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
 			if (-not(Test-Path -Path $MdtModule)) {
 				$params = @{
@@ -40,7 +41,7 @@ InModuleScope VcRedist {
 					ArgumentList = "/package $OutFile /quiet"
 					NoNewWindow  = $true
 					Wait         = $false
-					PassThru     = $false
+					PassThru     = $true
 				}
 				$Result = Start-Process @params
 				Write-Host "MDT install result: $($Result.ExitCode)"
