@@ -16,6 +16,7 @@ InModuleScope VcRedist {
 		Write-Host "Downloading and installing the Microsoft Deployment Toolkit"
 		$Url = "https://download.microsoft.com/download/3/3/9/339BE62D-B4B8-4956-B58D-73C4685FC492/MicrosoftDeploymentToolkit_x64.msi"
 		$OutFile = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "MicrosoftDeploymentToolkit_x64.msi"))
+		$ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
 		if (-not(Test-Path -Path $OutFile)) {
 			$params = @{
 				Uri             = $Url
@@ -30,11 +31,13 @@ InModuleScope VcRedist {
 				FilePath     = "$env:SystemRoot\System32\msiexec.exe"
 				ArgumentList = "/package $OutFile /quiet"
 				NoNewWindow  = $true
-				Wait         = $false
-				PassThru     = $false
+				Wait         = $true
+				PassThru     = $true
 			}
-			Start-Process @params
+			$Result = Start-Process @params
+			Write-Host "MDT install result: $($Result.ExitCode)"
 		}
+		Get-ChildItem -Path "C:\Program Files\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
 	}
 
 	Describe 'New-MdtApplicationFolder' {
