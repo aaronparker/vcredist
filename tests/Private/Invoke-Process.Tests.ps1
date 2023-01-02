@@ -18,7 +18,7 @@ InModuleScope VcRedist {
 					FilePath     = "$env:SystemRoot\System32\cmd.exe"
 					ArgumentList = "/c dir"
 				}
-				Invoke-Process @params | Should -Not -Throw
+				{ Invoke-Process @params } | Should -Not -Throw
 			}
 
 			It "Returns a string from cmd.exe" {
@@ -32,9 +32,9 @@ InModuleScope VcRedist {
 			It "Should throw when passed an executable that does not exist" {
 				$params = @{
 					FilePath     = "$env:SystemRoot\System32\cmd1.exe"
-					ArgumentList = "/c dir"
+					ArgumentList = "/c dir $Env:RUNNER_TEMP"
 				}
-				Invoke-Process @params | Should -Throw
+				{ Invoke-Process @params } | Should -Throw
 			}
 		}
 	}

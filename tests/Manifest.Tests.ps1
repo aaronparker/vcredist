@@ -2,32 +2,25 @@
 	.SYNOPSIS
 		Public Pester function tests.
 #>
-# [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost")]
-# [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions")]
-# [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "This OK for the tests files.")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 [CmdletBinding()]
 param ()
 
 BeforeDiscovery {
     Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
     $ValidateReleases = @("2017", "2019", "2022")
-    if (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-        [System.Environment]::SetEnvironmentVariable("WorkingPath",$env:GITHUB_WORKSPACE)
-    }
-    else {
-        [System.Environment]::SetEnvironmentVariable("WorkingPath",$env:APPVEYOR_BUILD_FOLDER)
-    }
 }
 
 Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
     Context "Validate manifest" {
         BeforeAll {
-            $VcManifest = "$env:WorkingPath\VcRedist\VisualCRedistributables.json"
+            $VcManifest = "$env:GITHUB_WORKSPACE\VcRedist\VisualCRedistributables.json"
             Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."
             $CurrentManifest = Get-Content -Path $VcManifest | ConvertFrom-Json
             $VcRedist = $_
 
-            $Path = $([System.IO.Path]::Combine($DownloadDir, "VcDownload"))
+            $Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
             New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" > $null
             Save-VcRedist -VcList (Get-VcList -Release $VcRedist) -Path $Path
 
@@ -36,7 +29,7 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
 
         Context "Compare manifest version against installed version for <VcRedist>" -ForEach $Architectures {
             BeforeEach {
-                Install-VcRedist -VcList (Get-VcList -Release $VcRedist) -Path $([System.IO.Path]::Combine($DownloadDir, "VcDownload")) -Silent
+                Install-VcRedist -VcList (Get-VcList -Release $VcRedist) -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads")) -Silent
                 $InstalledVcRedists = Get-InstalledVcRedist
             
                 $ManifestVcRedist = $CurrentManifest.Supported | Where-Object { $_.Release -eq $VcRedist }
@@ -49,4 +42,8 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
             }
         }
     }
+}
+
+AfterAll {
+    Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -WarningAction "SilentlyContinue"
 }

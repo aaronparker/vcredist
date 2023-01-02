@@ -42,7 +42,8 @@ InModuleScope VcRedist {
 					Wait         = $false
 					PassThru     = $false
 				}
-				Start-Process @params
+				$Result = Start-Process @params
+				Write-Host "MDT install result: $($Result.ExitCode)"
 			}
 		}
 
