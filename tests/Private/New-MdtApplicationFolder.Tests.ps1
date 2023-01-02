@@ -11,6 +11,32 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
+	BeforeAll {
+		# Install the MDT Workbench
+		Write-Host "Downloading and installing the Microsoft Deployment Toolkit"
+		$Url = "https://download.microsoft.com/download/3/3/9/339BE62D-B4B8-4956-B58D-73C4685FC492/MicrosoftDeploymentToolkit_x64.msi"
+		$OutFile = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "MicrosoftDeploymentToolkit_x64.msi"))
+		if (-not(Test-Path -Path $OutFile)) {
+			$params = @{
+				Uri             = $Url
+				OutFile         = $OutFile
+				UseBasicParsing = $true
+			}
+			Invoke-WebRequest @params
+		}
+		$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
+		if (-not(Test-Path -Path $MdtModule)) {
+			$params = @{
+				FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+				ArgumentList = "/package $OutFile /quiet /noreboot"
+				NoNewWindow  = $true
+				Wait         = $false
+				PassThru     = $false
+			}
+			Start-Process @params
+		}
+	}
+
 	Describe 'New-MdtApplicationFolder' {
 		Context "Application folder exists" {
 			BeforeEach {

@@ -24,7 +24,7 @@ InModuleScope VcRedist {
 			# Install the MDT Workbench
 			Write-Host "Downloading and installing the Microsoft Deployment Toolkit"
 			$Url = "https://download.microsoft.com/download/3/3/9/339BE62D-B4B8-4956-B58D-73C4685FC492/MicrosoftDeploymentToolkit_x64.msi"
-			$OutFile = $([System.IO.Path]::Combine($env:RUNNER_TEMP, $Installer))
+			$OutFile = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "MicrosoftDeploymentToolkit_x64.msi"))
 			if (-not(Test-Path -Path $OutFile)) {
 				$params = @{
 					Uri             = $Url
