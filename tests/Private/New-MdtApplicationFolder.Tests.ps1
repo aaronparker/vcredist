@@ -14,6 +14,7 @@ InModuleScope VcRedist {
 	BeforeAll {
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
 	}
 
 	Describe 'New-MdtApplicationFolder' {
