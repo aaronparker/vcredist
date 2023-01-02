@@ -8,7 +8,6 @@
 param ()
 
 BeforeDiscovery {
-
 }
 
 Describe "Uninstall-VcRedist" {
