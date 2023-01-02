@@ -19,6 +19,7 @@ InModuleScope -ModuleName "VcRedist" {
 
         Context "Creates a new MDT drive" {
             It "Does not throw when connecting to an MDT share" {
+                $Path = "$Env:RUNNER_TEMP\Deployment"
                 $Drive = New-MdtDrive -Drive "DS020" -Path $Path | Should -Not -Throw
             }
 

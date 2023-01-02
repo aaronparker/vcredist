@@ -21,9 +21,9 @@ Describe -Name "Import-VcMdtApplication" -ForEach $TestVcRedists {
 	}
 
 	Context "Import-VcMdtApplication imports Redistributables into the MDT share" {
-		It "Imports the <VcRedist> x64 Redistributables into MDT OK" {
+		It "Imports the <VcRedist.Release> x64 Redistributables into MDT OK" {
 			$params = @{
-				VcList    = (Get-VcList -Release $VcRedist -Architecture "x64")
+				VcList    = (Get-VcList -Release $VcRedist.Release -Architecture "x64")
 				Path      = "$env:RUNNER_TEMP\Downloads"
 				MdtPath   = "$Env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
@@ -37,9 +37,9 @@ Describe -Name "Import-VcMdtApplication" -ForEach $TestVcRedists {
 			Import-VcMdtApplication @params | Should -Not -Throw
 		}
 
-		It "Imports the <VcRedist> x86 Redistributables into MDT OK" {
+		It "Imports the <VcRedist.Release> x86 Redistributables into MDT OK" {
 			$params = @{
-				VcList    = (Get-VcList -Release $VcRedist -Architecture "x86")
+				VcList    = (Get-VcList -Release $VcRedist.Release -Architecture "x86")
 				Path      = "$env:RUNNER_TEMP\Downloads"
 				MdtPath   = "$Env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
