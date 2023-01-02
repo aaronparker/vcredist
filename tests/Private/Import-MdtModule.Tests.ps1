@@ -37,7 +37,7 @@ InModuleScope VcRedist {
 			if (-not(Test-Path -Path $MdtModule)) {
 				$params = @{
 					FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-					ArgumentList = "/package $OutFile /quiet /noreboot"
+					ArgumentList = "/package $OutFile /quiet"
 					NoNewWindow  = $true
 					Wait         = $false
 					PassThru     = $false
