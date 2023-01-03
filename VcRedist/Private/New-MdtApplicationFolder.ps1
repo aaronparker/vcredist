@@ -27,7 +27,7 @@ function New-MdtApplicationFolder {
 
         [Parameter(Mandatory = $False, Position = 2)]
         [ValidateNotNullOrEmpty()]
-        [System.String] $Description = "Microsoft Visual C++ Redistributables"
+        [System.String] $Description = "Microsoft Visual C++ Redistributables imported with VcRedist https://vcredist.com/"
     )
 
     # Create a sub-folder below Applications to import the Redistributables into
@@ -47,7 +47,7 @@ function New-MdtApplicationFolder {
                     Name        = $Name
                     Comments    = $Description
                     ItemType    = "Folder"
-                    ErrorAction = "Stop"
+                    ErrorAction = "Continue"
                 }
                 New-Item @params | Out-Null
             }
