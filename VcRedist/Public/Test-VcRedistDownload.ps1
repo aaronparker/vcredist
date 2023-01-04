@@ -42,10 +42,9 @@ function Test-VcRedistDownload {
         foreach ($Object in $InputObject) {
 
             #region Validate the URI property and find the output filename
-            if ([System.Boolean]($Object.Download)) {
-            }
-            else {
-                throw "Object does not have valid Download property."
+            if ([System.Boolean]($Object.Download) -eq $false) {
+                $Msg = "Object does not have valid Download property."
+                throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
             }
             #endregion
 
@@ -72,7 +71,7 @@ function Test-VcRedistDownload {
                 Result       = $Result
                 Release      = $Object.Release
                 Architecture = $Object.Architecture
-                Version = $Object.Version
+                Version      = $Object.Version
                 URI          = $Object.Download
             }
             Write-Output -InputObject $PSObject

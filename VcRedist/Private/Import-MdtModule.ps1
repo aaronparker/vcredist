@@ -36,7 +36,7 @@ function Import-MdtModule {
         try {
             $params = @{
                 Name        = $MdtModule
-                ErrorAction = "SilentlyContinue"
+                ErrorAction = "Continue"
                 Force       = if ($Force) { $true } else { $false }
             }
             Import-Module @params

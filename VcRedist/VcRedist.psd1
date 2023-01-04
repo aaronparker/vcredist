@@ -15,7 +15,7 @@ RootModule = 'VcRedist.psm1'
 ModuleVersion = '4.0.338'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+# CompatiblePSEditions = @('Desktop')
 
 # ID used to uniquely identify this module
 GUID = '9139778c-9a1a-4faf-aa88-5ac6fd3b3e48'
