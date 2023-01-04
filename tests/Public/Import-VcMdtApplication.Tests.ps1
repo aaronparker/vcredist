@@ -18,7 +18,7 @@ Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $TestReleases {
 
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
-		New-Item -Path $Path -ItemType "Directory" | Out-Null
+		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
 		Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
 	}
 
