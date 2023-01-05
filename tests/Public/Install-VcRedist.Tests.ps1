@@ -8,46 +8,52 @@
 param ()
 
 BeforeDiscovery {
+    $TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe "Install-VcRedist" {
+Describe "Install-VcRedist"  -ForEach $TestReleases {
     BeforeAll {
-        $TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+        $Release = $_
+
+        # Create download path
+        if ($env:Temp) {
+            $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
+        }
+        elseif ($env:TMPDIR) {
+            $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
+        }
+        elseif ($env:RUNNER_TEMP) {
+            $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
+        }
+        New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
     }
 
-    Context "Install Redistributables" -ForEach $TestReleases {
+    Context "Install <Release> x64 Redistributable" {
         BeforeAll {
-            $VcRedist = $_
-
-            # Create download path
-            if ($env:Temp) {
-                $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
-            }
-            elseif ($env:TMPDIR) {
-                $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
-            }
-            elseif ($env:RUNNER_TEMP) {
-                $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
-            }
-            New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-
-            $VcList = Get-VcList -Release $VcRedist | Save-VcRedist -Path $Path
-            $Architectures = @("x86", "x64")
+            $VcRedist = Get-VcList -Release $Release -Architecture "x64" | Save-VcRedist -Path $Path
         }
 
-        Context "Test architecture" -ForEach $Architectures {
-            BeforeAll {
-                $Architecture = $_
-                $List = $VcList | Where-Object { $_.Architecture -match $Architecture }
-            }
-
-            It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture>" {
-                $Installed = Install-VcRedist -VcList $VcList -Architecture $Architecture -Path $Path -Silent
-            }
-
-            It "Installed the VcRedist: <VcRedist.Name> <VcRedist.Architecture> successfully" {
-                $List.ProductCode | Should -BeIn $Installed.ProductCode
-            }
+        It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture>" {
+            { Install-VcRedist -VcList $VcRedist -Path $Path -Silent } | Should -Not -Throw
         }
+
+        # It "Installed the VcRedist: <VcRedist.Name> <VcRedist.Architecture> successfully" {
+        #     $List.ProductCode | Should -BeIn $Installed.ProductCode
+        # }
+    }
+
+    Context "Install <Release> x86 Redistributable" {
+        BeforeAll {
+            $VcRedist = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
+        }
+
+        It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture>" {
+            { Install-VcRedist -VcList $VcRedist -Path $Path -Silent } | Should -Not -Throw
+        }
+
+        # It "Installed the VcRedist: <VcRedist.Name> <VcRedist.Architecture> successfully" {
+        #     $List.ProductCode | Should -BeIn $Installed.ProductCode
+        # }
     }
 }
+

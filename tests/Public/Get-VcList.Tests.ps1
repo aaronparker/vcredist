@@ -12,44 +12,6 @@ BeforeDiscovery {
 	$TestVcRedists = Get-VcList -Release $TestReleases
 }
 
-Describe -Name "Get-VcRedist parameters" {
-    Context "Test parameters" {
-        It "Returns the expected output for VcRedist 2022" {
-            (Get-VcList -Release "2022")[0].Name | Should -BeExactly "Visual C++ Redistributable for Visual Studio 2022"
-        }
-
-        It "Returns 3 items for x64" {
-            (Get-VcList -Architecture "x64").Count | Should -BeExactly 3
-        }
-    }
-}
-
-Describe -Name "Validate manifest counts" {
-	BeforeAll {
-		$VcCount = @{
-			"Default"     = 6
-			"Supported"   = 12
-			"Unsupported" = 24
-			"All"         = 36
-		}
-	}
-
-	Context "Return built-in manifest" {
-		It "Given no parameters, it returns supported Visual C++ Redistributables" {
-			Get-VcList | Should -HaveCount $VcCount.Default
-		}
-		It "Given valid parameter -Export All, it returns all Visual C++ Redistributables" {
-			Get-VcList -Export "All" | Should -HaveCount $VcCount.All
-		}
-		It "Given valid parameter -Export Supported, it returns all Visual C++ Redistributables" {
-			Get-VcList -Export "Supported" | Should -HaveCount $VcCount.Supported
-		}
-		It "Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" {
-			Get-VcList -Export "Unsupported" | Should -HaveCount $VcCount.Unsupported
-		}
-	}
-}
-
 Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists {
 	BeforeAll {
 		$VcRedist = $_
@@ -99,6 +61,44 @@ Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists
         It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a UninstallKey property" {
             [System.Boolean]($VcRedist.UninstallKey) | Should -BeTrue
         }
+	}
+}
+
+Describe -Name "Get-VcRedist parameters" {
+    Context "Test parameters" {
+        It "Returns the expected output for VcRedist 2022" {
+            (Get-VcList -Release "2022")[0].Name | Should -BeExactly "Visual C++ Redistributable for Visual Studio 2022"
+        }
+
+        It "Returns 3 items for x64" {
+            (Get-VcList -Architecture "x64").Count | Should -BeExactly 3
+        }
+    }
+}
+
+Describe -Name "Validate manifest counts" {
+	BeforeAll {
+		$VcCount = @{
+			"Default"     = 6
+			"Supported"   = 12
+			"Unsupported" = 24
+			"All"         = 36
+		}
+	}
+
+	Context "Return built-in manifest" {
+		It "Given no parameters, it returns supported Visual C++ Redistributables" {
+			Get-VcList | Should -HaveCount $VcCount.Default
+		}
+		It "Given valid parameter -Export All, it returns all Visual C++ Redistributables" {
+			Get-VcList -Export "All" | Should -HaveCount $VcCount.All
+		}
+		It "Given valid parameter -Export Supported, it returns all Visual C++ Redistributables" {
+			Get-VcList -Export "Supported" | Should -HaveCount $VcCount.Supported
+		}
+		It "Given valid parameter -Export Unsupported, it returns unsupported Visual C++ Redistributables" {
+			Get-VcList -Export "Unsupported" | Should -HaveCount $VcCount.Unsupported
+		}
 	}
 }
 

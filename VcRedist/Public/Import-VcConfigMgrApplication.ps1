@@ -11,14 +11,14 @@ function Import-VcConfigMgrApplication {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_." } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_." } })]
         [System.String] $Path,
 
         [Parameter(Mandatory = $True, Position = 2)]
         [System.String] $CMPath,
 
         [Parameter(Mandatory = $True, Position = 3)]
-        [ValidateScript( { if ($_ -match "^[a-zA-Z0-9]{3}$") { $True } else { throw "$_ is not a valid ConfigMgr site code." } })]
+        [ValidateScript( { if ($_ -match "^[a-zA-Z0-9]{3}$") { $true } else { throw "$_ is not a valid ConfigMgr site code." } })]
         [System.String] $SMSSiteCode,
 
         [Parameter(Mandatory = $False, Position = 4)]
@@ -43,13 +43,13 @@ function Import-VcConfigMgrApplication {
     begin {
         #region CMPath will be the network location for copying the Visual C++ Redistributables to
         try {
-            Set-Location -Path $Path -ErrorAction "SilentlyContinue"
+            Write-Verbose -Message "Setting location to: $Path."
+            Set-Location -Path $Path -ErrorAction "Continue"
         }
         catch [System.Exception] {
-            Write-Warning -Message "Failed to set location to [$Path]."
-            throw $_.Exception.Message
+            Write-Warning -Message "Failed to set location to: $Path."
+            throw $_
         }
-        Write-Verbose -Message "Set location to [$Path]."
         #endregion
 
         #region Validate $CMPath
@@ -61,43 +61,38 @@ function Import-VcConfigMgrApplication {
                 try {
                     # Import the ConfigurationManager.psd1 module
                     Write-Verbose -Message "Importing module: $($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1."
-                    Import-Module "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$False > $null
+                    Import-Module -Name "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$False > $null
 
                     # Create the folder for importing the Redistributables into
                     if ($AppFolder) {
                         $DestFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
                         if ($PSCmdlet.ShouldProcess($DestFolder, "Creating")) {
-                            try {
-                                New-Item -Path $DestFolder -ErrorAction "SilentlyContinue" > $null
-                            }
-                            catch [System.Exception] {
-                                Write-Warning -Message "Failed to create folder: [$DestFolder]."
-                                throw $_.Exception.Message
-                            }
+                            Write-Verbose -Message "Creating: $DestFolder."
+                            New-Item -Path $DestFolder -ErrorAction "Continue" > $null
                         }
                         if (Test-Path -Path $DestFolder) {
-                            Write-Verbose -Message "Importing into: [$DestFolder]."
+                            Write-Verbose -Message "Importing into: $DestFolder."
                         }
                     }
                     else {
-                        Write-Verbose -Message "Importing into: [$($SMSSiteCode):\Application]."
+                        Write-Verbose -Message "Importing into: $($SMSSiteCode):\Application."
                         $DestFolder = "$($SMSSiteCode):\Application"
                     }
                 }
-                catch [System.Exception] {
-                    Write-Warning -Message "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
-                    throw $_.Exception.Message
+                catch {
+                    $Msg = "Could not load ConfigMgr Module. Please make sure that the ConfigMgr Console is installed."
+                    throw [System.Exception]::New($Msg)
                 }
             }
             else {
-                Write-Warning -Message "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr console and PowerShell module installed?"
-                break
+                $Msg = "Cannot find environment variable SMS_ADMIN_UI_PATH. Is the ConfigMgr console and PowerShell module installed?"
+                throw [System.Exception]::New($Msg)
             }
             #endregion
         }
         else {
-            Write-Warning -Message "Unable to confirm $CMPath exists. Please check that $CMPath is valid."
-            break
+            $Msg = "Unable to confirm $CMPath exists. Please check that $CMPath is valid."
+            throw [System.IO.DirectoryNotFoundException]::New($Msg)
         }
         #endregion
     }
@@ -126,14 +121,8 @@ function Import-VcConfigMgrApplication {
                             }
                             else {
                                 if ($PSCmdlet.ShouldProcess("$($folder) to $($ContentLocation)", "Copy")) {
-                                    try {
-                                        if (!(Test-Path -Path $ContentLocation)) {
-                                            New-Item -Path $ContentLocation -ItemType "Directory" -ErrorAction "SilentlyContinue" > $null
-                                        }
-                                    }
-                                    catch {
-                                        Write-Warning -Message "Failed to create: [$ContentLocation]."
-                                        throw $_.Exception.Message
+                                    if (!(Test-Path -Path $ContentLocation)) {
+                                        New-Item -Path $ContentLocation -ItemType "Directory" -ErrorAction "Continue" > $null
                                     }
                                     try {
                                         $invokeProcessParams = @{
@@ -158,13 +147,13 @@ function Import-VcConfigMgrApplication {
                             #endregion
 
                             # Change to the SMS Application folder before importing the applications
-                            Write-Verbose -Message "Setting location to $($DestFolder)"
+                            Write-Verbose -Message "Setting location to: $($DestFolder)"
                             try {
-                                Set-Location -Path $DestFolder -ErrorAction "SilentlyContinue"
+                                Set-Location -Path $DestFolder -ErrorAction "Continue"
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "Failed to set location to [$DestFolder]."
-                                throw $_.Exception.Message
+                                Write-Warning -Message "Failed to set location to: $DestFolder."
+                                throw $_
                             }
 
                             try {
@@ -188,19 +177,17 @@ function Import-VcConfigMgrApplication {
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "Failed to create application $($VcRedist.Name) $($VcRedist.Architecture)."
-                                throw $_.Exception.Message
+                                throw $_
                             }
-                            finally {
-                                # Write app detail to the pipeline
-                                Write-Output -InputObject $app
-                            }
+                            # Write app detail to the pipeline
+                            Write-Output -InputObject $app
 
                             try {
-                                Write-Verbose -Message "Setting location to [$Path]."
-                                Set-Location -Path $Path -ErrorAction "SilentlyContinue"
+                                Write-Verbose -Message "Setting location to: $Path."
+                                Set-Location -Path $Path -ErrorAction "Continue"
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "Failed to set location to [$Path]."
+                                Write-Warning -Message "Failed to set location to: $Path."
                                 throw $_.Exception.Message
                             }
                         }
@@ -210,11 +197,11 @@ function Import-VcConfigMgrApplication {
 
                             # Change to the SMS Application folder before importing the applications
                             try {
-                                Set-Location -Path $DestFolder -ErrorAction "SilentlyContinue"
+                                Set-Location -Path $DestFolder -ErrorAction "Continue"
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "Failed to set location to [$DestFolder]."
-                                throw $_.Exception.Message
+                                throw $_
                             }
                             Write-Verbose -Message "Set location to [$DestFolder]."
 
@@ -244,16 +231,16 @@ function Import-VcConfigMgrApplication {
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "Failed to add script deployment type."
-                                throw $_.Exception.Message
+                                throw $_
                             }
 
                             try {
-                                Write-Verbose -Message "Setting location to [$Path]."
-                                Set-Location -Path $Path -ErrorAction "SilentlyContinue"
+                                Write-Verbose -Message "Setting location to: $Path."
+                                Set-Location -Path $Path -ErrorAction "Continue"
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "Failed to set location to [$Path]."
-                                throw $_.Exception.Message
+                                Write-Warning -Message "Failed to set location to: $Path."
+                                throw $_
                             }
                         }
                     }
@@ -263,13 +250,7 @@ function Import-VcConfigMgrApplication {
     }
 
     end {
-        try {
-            Set-Location -Path $Path -ErrorAction "SilentlyContinue"
-        }
-        catch [System.Exception] {
-            Write-Warning -Message "Failed to set location to [$Path]."
-            throw $_.Exception.Message
-        }
-        Write-Verbose -Message "Set location to [$Path]."
+        Write-Verbose -Message "Set location to: $Path."
+        Set-Location -Path $Path -ErrorAction "SilentlyContinue"
     }
 }

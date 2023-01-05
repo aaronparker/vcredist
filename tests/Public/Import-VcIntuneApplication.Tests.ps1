@@ -23,7 +23,7 @@ Describe "Import-VcIntuneApplication without IntuneWin32App" {
 
 Describe "Import-VcIntuneApplication without authentication" {
 	BeforeAll {
-		Install-Module -Name "IntuneWin32App"
+		Install-Module -Name "IntuneWin32App" -Force
 	}
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without an authentication token" {

@@ -8,14 +8,14 @@
 param ()
 
 BeforeDiscovery {
-}
-
-Describe "Uninstall-VcRedist" {
 	BeforeAll {
 		$TestReleases = @("2012", "2013", "2015", "2017", "2019")
 	}
+}
 
-	Context "Uninstall VcRedist <_.Name> x64" -ForEach $TestReleases {
+Describe "Uninstall-VcRedist" -ForEach $TestReleases {
+
+	Context "Uninstall VcRedist <_.Name> x64" {
 		{ Uninstall-VcRedist -Release $_ -Architecture "x64" -Confirm:$False } | Should -Not -Throw
 	}
 

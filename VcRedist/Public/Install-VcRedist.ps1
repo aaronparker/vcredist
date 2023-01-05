@@ -39,7 +39,7 @@ function Install-VcRedist {
 
             # If already installed or the -Force parameter is not specified, skip
             if (($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) -and !($PSBoundParameters.ContainsKey("Force"))) {
-                Write-Warning -Message "VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
+                Write-Information -MessageData "VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]." -InformationAction "Continue"
             }
             else {
 
