@@ -21,11 +21,11 @@ InModuleScope VcRedist {
 		Context "Validates New-MdtApplicationFolder" {
 
 			It "Does not throw when creating an application folder" {
-				{ New-MdtApplicationFolder -Drive "DS020" -Name "Test1" } | Should -Not -Throw
+				{ New-MdtApplicationFolder -Drive "DS020:" -Name "Test1" } | Should -Not -Throw
 			}
 
 			It "Returns true if the application folder is created" {
-				New-MdtApplicationFolder -Drive "DS020" -Name "Test2" | Should -BeTrue
+				New-MdtApplicationFolder -Drive "DS020:" -Name "Test2" | Should -BeTrue
 			}
 		}
 	}

@@ -23,7 +23,7 @@ Describe -Name "New-VcMdtBundle" {
 				MdtPath    = "$env:RUNNER_TEMP\Deployment"
 				AppFolder  = "VcRedists"
 				Force      = $true
-				MdtDrive   = "DS099"
+				MdtDrive   = "DS020"
 				BundleName = "Visual C++ Redistributables"
 				Publisher  = "Microsoft"
 				Language   = "en-US"
