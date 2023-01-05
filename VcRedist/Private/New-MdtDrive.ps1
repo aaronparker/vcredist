@@ -29,7 +29,7 @@ function New-MdtDrive {
     $Description = "MDT drive created by $($MyInvocation.MyCommand)"
 
     if ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
-        Write-Verbose "Found MDT drive: $($mdtDrives[0].Name)"
+        Write-Verbose -Message "Found MDT drive: $($mdtDrives[0].Name)"
         $output = $mdtDrives[0].Name
     }
     else {
@@ -39,7 +39,7 @@ function New-MdtDrive {
                     Name        = $Drive
                     PSProvider  = "MDTProvider"
                     Root        = $Path
-                    NetworkPath = $Path
+                    #NetworkPath = $Path
                     Description = $description
                 }
                 New-PSDrive @params | Add-MDTPersistentDrive
@@ -50,7 +50,7 @@ function New-MdtDrive {
 
             # Return the MDT drive name
             $psDrive = Get-MdtPersistentDrive | Where-Object { $_.Path -eq $Path -and $_.Name -eq $Drive }
-            Write-Verbose "Found: $($psDrive.Name)"
+            Write-Verbose -Message "Found: $($psDrive.Name)"
             $output = $psDrive.Name
         }
     }

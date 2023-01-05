@@ -15,18 +15,20 @@ InModuleScope VcRedist {
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
-		New-MdtDrive -Drive "DS020" -Path "$Env:RUNNER_TEMP\Deployment"
 	}
 
 	Describe 'New-MdtApplicationFolder' {
-		Context "Validates New-MdtApplicationFolder" {
+		BeforeAll {
+			New-MdtDrive -Drive "DS020" -Path "$Env:RUNNER_TEMP\Deployment"
+		}
 
+		Context "Validates New-MdtApplicationFolder" {
 			It "Does not throw when creating an application folder" {
-				{ New-MdtApplicationFolder -Drive "DS020:" -Name "Test1" } | Should -Not -Throw
+				{ New-MdtApplicationFolder -Drive "DS020:" -Name "Test1" -Verbose } | Should -Not -Throw
 			}
 
 			It "Returns true if the application folder is created" {
-				New-MdtApplicationFolder -Drive "DS020:" -Name "Test2" | Should -BeTrue
+				New-MdtApplicationFolder -Drive "DS020:" -Name "Test2" -Verbose | Should -BeTrue
 			}
 		}
 	}
