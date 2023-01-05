@@ -20,6 +20,7 @@ InModuleScope VcRedist {
 	Describe 'New-MdtApplicationFolder' {
 		BeforeAll {
 			New-MdtDrive -Drive "DS020" -Path "$Env:RUNNER_TEMP\Deployment"
+			Restore-MDTPersistentDrive -Force > $null
 		}
 
 		Context "Validates New-MdtApplicationFolder" {
@@ -29,6 +30,10 @@ InModuleScope VcRedist {
 
 			It "Returns true if the application folder is created" {
 				New-MdtApplicationFolder -Drive "DS020:" -Name "Test2" -Verbose | Should -BeTrue
+			}
+
+			It "It throws when referencing a drive that does not exist" {
+				{ New-MdtApplicationFolder -Drive "DS021:" -Name "Test1" -Verbose } | Should -Throw
 			}
 		}
 	}
