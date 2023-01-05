@@ -31,7 +31,7 @@ function New-MdtApplicationFolder {
     )
 
     # Create a sub-folder below Applications to import the Redistributables into
-    $MdtPath = [System.IO.Path]::Combine($Drive, "Applications", $Name)
+    $MdtPath = "$($Drive)\Applications\$($Name)"
 
     if (Test-Path -Path $MdtPath) {
         Write-Verbose -Message "MDT folder exists: $MdtPath"
@@ -42,7 +42,7 @@ function New-MdtApplicationFolder {
             try {
                 # Create -AppFolder below Applications; Splat New-Item parameters
                 $params = @{
-                    Path        = $([System.IO.Path]::Combine($Drive, "Applications"))
+                    Path        = "$($Drive)\Applications"
                     Enable      = "True"
                     Name        = $Name
                     Comments    = $Description
