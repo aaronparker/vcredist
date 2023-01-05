@@ -11,11 +11,11 @@ function Import-VcMdtApplication {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
         [System.String] $Path,
 
         [Parameter(Mandatory = $True, Position = 2)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False, Position = 3)]
@@ -80,7 +80,7 @@ function Import-VcMdtApplication {
             if ($PSCmdlet.ShouldProcess($AppFolder, "Create")) {
                 try {
                     $params = @{
-                        Drive       = $MdtDrive
+                        Drive       = $(Edit-MdtDrive -Drive $MdtDrive)
                         Name        = $AppFolder
                         Description = "Microsoft Visual C++ Redistributables"
                     }
@@ -91,10 +91,10 @@ function Import-VcMdtApplication {
                     throw $_
                 }
             }
-            $TargetMdtFolder = "$($MdtDrive):\Applications\$AppFolder"
+            $TargetMdtFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications\$AppFolder"
         }
         else {
-            $TargetMdtFolder = "$($MdtDrive):\Applications"
+            $TargetMdtFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications"
         }
         Write-Verbose -Message "VcRedists will be imported into: $TargetMdtFolder"
         Write-Verbose -Message "Retrieving existing Visual C++ Redistributables from the deployment share"
@@ -127,7 +127,7 @@ function Import-VcMdtApplication {
             }
 
             # Import as an application into the MDT deployment share
-            if (Test-Path -Path $("$TargetMdtFolder\$($VcMatched.Name)") -ErrorAction "SilentlyContinue") {
+            if (Test-Path -Path "$TargetMdtFolder\$($VcMatched.Name)") {
                 Write-Verbose -Message "'$("$TargetMdtFolder\$($VcMatched.Name)")' exists. Use -Force to overwrite the existing application."
             }
             else {

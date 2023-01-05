@@ -43,7 +43,7 @@ function Import-VcIntuneApplication {
 
         # Create the icon object for the app
         $IconPath = [System.IO.Path]::Combine($MyInvocation.MyCommand.Module.ModuleBase, "img", "vcredist.png")
-        if (Test-Path -Path $IconPath -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $IconPath) {
             $Icon = New-IntuneWin32AppIcon -FilePath $IconPath
         }
         else {

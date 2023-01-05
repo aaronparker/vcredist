@@ -19,7 +19,7 @@ Describe -Name "Test-VcRedistDownload" -ForEach $TestReleases {
 	Context "Test-VcRedistDownload returns true for release <Release> x64" {
 		BeforeAll {
 			$params = @{
-				InputObject = (Get-List -Release $Release -Architecture "x64")
+				InputObject = (Get-VcList -Release $Release -Architecture "x64")
 				NoProgress  = $true
 			}
 			$Test = Test-VcRedistDownload @params
@@ -37,7 +37,7 @@ Describe -Name "Test-VcRedistDownload" -ForEach $TestReleases {
 	Context "Test-VcRedistDownload returns true for release <Release> x86" {
 		BeforeAll {
 			$params = @{
-				InputObject = (Get-List -Release $Release -Architecture "x86")
+				InputObject = (Get-VcList -Release $Release -Architecture "x86")
 				NoProgress  = $true
 			}
 			$Test = Test-VcRedistDownload @params

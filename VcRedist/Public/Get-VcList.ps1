@@ -15,7 +15,7 @@ function Get-VcList {
 
         [Parameter(Mandatory = $False, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
         [ValidateNotNull()]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType "Leaf" -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find file $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType "Leaf") { $True } else { throw "Cannot find file $_" } })]
         [Alias("Xml")]
         [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 
@@ -26,20 +26,20 @@ function Get-VcList {
 
     process {
         try {
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Reading JSON document [$Path]."
+            Write-Verbose -Message "Reading JSON document [$Path]."
             $content = Get-Content -Raw -Path $Path -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Unable to read manifest [$Path]."
+            Write-Warning -Message "Unable to read manifest [$Path]."
             throw $_.Exception.Message
         }
         try {
             # Convert the JSON content to an object
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Converting JSON."
+            Write-Verbose -Message "Converting JSON."
             $json = $content | ConvertFrom-Json -ErrorAction "SilentlyContinue"
         }
         catch [System.Exception] {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Unable to convert manifest JSON to required object. Please validate the input manifest."
+            Write-Warning -Message "Unable to convert manifest JSON to required object. Please validate the input manifest."
             throw $_.Exception.Message
         }
 
@@ -47,17 +47,17 @@ function Get-VcList {
             if ($PSBoundParameters.ContainsKey("Export")) {
                 switch ($Export) {
                     "Supported" {
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting supported VcRedists."
+                        Write-Verbose -Message "Exporting supported VcRedists."
                         [System.Management.Automation.PSObject] $output = $json.Supported
                     }
                     "All" {
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting all VcRedists."
-                        Write-Warning -Message "$($MyInvocation.MyCommand): This list includes unsupported Visual C++ Redistributables."
+                        Write-Verbose -Message "Exporting all VcRedists."
+                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
                         [System.Management.Automation.PSObject] $output = $json.Supported + $json.Unsupported
                     }
                     "Unsupported" {
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Exporting unsupported VcRedists."
-                        Write-Warning -Message "$($MyInvocation.MyCommand): This list includes unsupported Visual C++ Redistributables."
+                        Write-Verbose -Message "Exporting unsupported VcRedists."
+                        Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
                         [System.Management.Automation.PSObject] $output = $json.Unsupported
                     }
                 }
@@ -85,7 +85,7 @@ function Get-VcList {
             }
 
             # Replace strings in the manifest
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Object count is: $($output.$Property.Count)."
+            Write-Verbose -Message "Object count is: $($output.$Property.Count)."
             for ($i = 0; $i -le $Count; $i++) {
                 try {
                     $output[$i].SilentUninstall = $output[$i].SilentUninstall `

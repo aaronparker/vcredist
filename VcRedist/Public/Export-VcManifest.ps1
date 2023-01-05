@@ -8,7 +8,7 @@ function Export-VcManifest {
     param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [ValidateScript( { if (Test-Path -Path $(Split-Path -Path $_ -Parent) -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
+        [ValidateScript( { if (Test-Path -Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } else { throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [System.String] $Path
     )
 
@@ -18,11 +18,11 @@ function Export-VcManifest {
 
         # Output the manifest to supplied path
         try {
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Copying $Manifest to $Path."
+            Write-Verbose -Message "Copying $Manifest to $Path."
             Copy-Item -Path $Manifest -Destination $Path
         }
         catch {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy $Manifest to $Path."
+            Write-Warning -Message "Failed to copy $Manifest to $Path."
             throw $_.Exception.Message
         }
         finally {

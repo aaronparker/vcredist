@@ -10,7 +10,7 @@ function Install-VcRedist {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $False, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
         [Parameter(Mandatory = $False)]
@@ -23,11 +23,9 @@ function Install-VcRedist {
     begin {
         # Get script elevation status
         [System.Boolean] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-        if ($Elevated) {}
-        else {
-            $Message =  "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again"
-            Write-Warning -Message "$($MyInvocation.MyCommand): $Message."
-            throw [System.Management.Automation.ScriptRequiresException]
+        if ($Elevated -eq $false) {
+            $Msg = "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again"
+            throw [System.Management.Automation.ScriptRequiresException]::New($Msg)
         }
 
         # Get currently installed VcRedist versions
@@ -41,23 +39,23 @@ function Install-VcRedist {
 
             # If already installed or the -Force parameter is not specified, skip
             if (($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) -and !($PSBoundParameters.ContainsKey("Force"))) {
-                Write-Warning -Message "$($MyInvocation.MyCommand): VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
+                Write-Warning -Message "VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
             }
             else {
 
                 # Avoid installing 64-bit Redistributable on x86 Windows
                 if ((Get-Bitness -eq "x86") -and ($VcRedist.Architecture -eq 'x64')) {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Incompatible architecture: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
+                    Write-Warning -Message "Incompatible architecture: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                 }
                 else {
 
                     # Target folder structure; VcRedist setup file
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): Construct target installer folder and filename."
+                    Write-Verbose -Message "Construct target installer folder and filename."
                     $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                     $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
 
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
-                    if (Test-Path -Path $filename -ErrorAction "SilentlyContinue") {
+                    Write-Verbose -Message "Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
+                    if (Test-Path -Path $filename) {
                         if ($PSCmdlet.ShouldProcess("$filename $($VcRedist.Install)", "Install")) {
 
                             try {
@@ -70,8 +68,8 @@ function Install-VcRedist {
                                 $result = Invoke-Process @invokeProcessParams
                             }
                             catch [System.Exception] {
-                                Write-Warning -Message "$($MyInvocation.MyCommand): Failure in installing Visual C++ Redistributable."
-                                Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                                Write-Warning -Message "Failure in installing Visual C++ Redistributable."
+                                Write-Warning -Message "Captured error (if any): [$result]."
                             }
                             finally {
                                 $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
@@ -82,7 +80,7 @@ function Install-VcRedist {
                         }
                     }
                     else {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Cannot find: [$filename]. Download with Save-VcRedist."
+                        Write-Warning -Message "Cannot find: [$filename]. Download with Save-VcRedist."
                     }
                 }
             }

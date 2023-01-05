@@ -58,9 +58,9 @@ function Save-VcRedist {
             $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
 
             # Create the folder to store the downloaded file. Skip if it exists
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Test folder: [$folder]."
-            if (Test-Path -Path $folder -ErrorAction "SilentlyContinue") {
-                Write-Verbose -Message "$($MyInvocation.MyCommand): Folder [$folder] exists. Skipping."
+            Write-Verbose -Message "Test folder: [$folder]."
+            if (Test-Path -Path $folder) {
+                Write-Verbose -Message "Folder [$folder] exists. Skipping."
             }
             else {
                 if ($PSCmdlet.ShouldProcess($folder, "Create")) {
@@ -74,7 +74,7 @@ function Save-VcRedist {
                         New-Item @params > $null
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create folder: [$folder]."
+                        Write-Warning -Message "Failed to create folder: [$folder]."
                         throw $_.Exception.Message
                     }
                 }
@@ -82,20 +82,20 @@ function Save-VcRedist {
 
             # Test whether the VcRedist is already on disk
             $target = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Testing target: $($target)"
+            Write-Verbose -Message "Testing target: $($target)"
 
-            if (Test-Path -Path $target -PathType "Leaf" -ErrorAction "SilentlyContinue") {
+            if (Test-Path -Path $target -PathType "Leaf") {
                 $ProductVersion = $(Get-Item -Path $target).VersionInfo.ProductVersion
 
                 # If the target Redistributable is already downloaded, compare the version
                 if (($VcRedist.Version -gt $ProductVersion) -or ($null -eq $ProductVersion)) {
 
                     # Download the newer version
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: [$($VcRedist.Version)] > file version: [$ProductVersion]."
+                    Write-Verbose -Message "Manifest version: [$($VcRedist.Version)] > file version: [$ProductVersion]."
                     $download = $True
                 }
                 else {
-                    Write-Verbose -Message "$($MyInvocation.MyCommand): Manifest version: [$($VcRedist.Version)] matches file version: [$ProductVersion]."
+                    Write-Verbose -Message "Manifest version: [$($VcRedist.Version)] matches file version: [$ProductVersion]."
                     $download = $False
                 }
             }
@@ -109,7 +109,7 @@ function Save-VcRedist {
                     try {
 
                         # Download the file
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
+                        Write-Verbose -Message "Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
                         $iwrParams = @{
                             Uri             = $VcRedist.Download
                             OutFile         = $target
@@ -126,9 +126,9 @@ function Save-VcRedist {
                         $Downloaded = $True
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Failed to download: [$($VcRedist.Name)]."
-                        Write-Warning -Message "$($MyInvocation.MyCommand): URL: [$($VcRedist.Download)]."
-                        Write-Warning -Message "$($MyInvocation.MyCommand): Download failed with: [$($_.Exception.Message)]"
+                        Write-Warning -Message "Failed to download: [$($VcRedist.Name)]."
+                        Write-Warning -Message "URL: [$($VcRedist.Download)]."
+                        Write-Warning -Message "Download failed with: [$($_.Exception.Message)]"
                         $Downloaded = $False
                     }
 
@@ -143,7 +143,7 @@ function Save-VcRedist {
             else {
                 # Return the $VcList array on the pipeline so that we can act on what was downloaded
                 # Add the Path property pointing to the downloaded file
-                Write-Verbose -Message "$($MyInvocation.MyCommand): [$($target)] exists."
+                Write-Verbose -Message "[$($target)] exists."
                 $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $target
                 Write-Output -InputObject $VcRedist
             }

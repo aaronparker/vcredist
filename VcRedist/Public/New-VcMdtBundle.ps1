@@ -6,7 +6,7 @@ function New-VcMdtBundle {
     [OutputType([System.Management.Automation.PSObject])]
     param (
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False, Position = 1)]
@@ -85,7 +85,7 @@ function New-VcMdtBundle {
             }
 
             # Create the application bundle
-            if (Test-Path -Path $("$TargetMdtFolder\$Publisher $BundleName") -ErrorAction "SilentlyContinue") {
+            if (Test-Path -Path "$TargetMdtFolder\$Publisher $BundleName") {
                 Write-Verbose "'$($Publisher) $($BundleName)' exists. Use -Force to overwrite the existing bundle."
             }
             else {
@@ -126,7 +126,7 @@ function New-VcMdtBundle {
             Write-Error -Message "Failed to find path $TargetMdtFolder."
         }
 
-        if (Test-Path -Path $TargetMdtFolder -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $TargetMdtFolder) {
             # Return list of apps to the pipeline
             Write-Output -InputObject (Get-ChildItem -Path "$TargetMdtFolder\$($Publisher) $($BundleName)" | Select-Object -Property *)
         }

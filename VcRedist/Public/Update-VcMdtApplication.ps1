@@ -10,11 +10,11 @@ function Update-VcMdtApplication {
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
         [System.String] $Path,
 
         [Parameter(Mandatory = $True)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $False)]
@@ -37,7 +37,7 @@ function Update-VcMdtApplication {
     begin {
         # If running on PowerShell Core, error and exit.
         if (Test-PSCore) {
-            Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
+            Write-Warning -Message "PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
             throw [System.Management.Automation.InvalidPowerShellStateException]
         }
 
@@ -49,22 +49,22 @@ function Update-VcMdtApplication {
                     Restore-MDTPersistentDrive -Force > $null
                 }
                 catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
+                    Write-Warning -Message "Failed to map drive to [$MdtPath]."
                     throw $_
                 }
             }
         }
         else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
+            Write-Warning -Message "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
             throw [System.Management.Automation.InvalidPowerShellStateException]
         }
 
         $Target = "$($MdtDrive):\Applications\$AppFolder"
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Update applications in: $Target"
+        Write-Verbose -Message "Update applications in: $Target"
     }
 
     process {
-        if (Test-Path -Path $Target -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $Target) {
             foreach ($VcRedist in $VcList) {
 
                 # Get the existing VcRedist applications in the MDT share
@@ -81,7 +81,7 @@ function Update-VcMdtApplication {
 
                 if ($null -ne $ExistingVcRedist) {
                     try {
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Found application: [$($ExistingVcRedist.ShortName)]."
+                        Write-Verbose -Message "Found application: [$($ExistingVcRedist.ShortName)]."
 
                         # Determine whether update is required
                         $Update = $False
@@ -92,7 +92,7 @@ function Update-VcMdtApplication {
 
                             # Copy the updated executable
                             try {
-                                Write-Verbose -Message "$($MyInvocation.MyCommand): Copy VcRedist installer."
+                                Write-Verbose -Message "Copy VcRedist installer."
                                 $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $ContentLocation = [System.IO.Path]::Combine((Resolve-Path -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $params = @{
@@ -103,12 +103,12 @@ function Update-VcMdtApplication {
                             }
                             catch {
                                 $ExeTarget = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
-                                if (Test-Path -Path $ExeTarget -ErrorAction "SilentlyContinue") {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Copy successful: [$ExeTarget]."
+                                if (Test-Path -Path $ExeTarget) {
+                                    Write-Verbose -Message "Copy successful: [$ExeTarget]."
                                 }
                                 else {
-                                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$folder] to [$ContentLocation]."
-                                    Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                                    Write-Warning -Message "Failed to copy Redistributables from [$folder] to [$ContentLocation]."
+                                    Write-Warning -Message "Captured error (if any): [$result]."
                                     throw $_
                                 }
                             }
@@ -208,19 +208,19 @@ function Update-VcMdtApplication {
             }
         }
         else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $Target."
+            Write-Warning -Message "Failed to find path $Target."
         }
     }
 
     end {
-        if (Test-Path -Path $Target -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $Target) {
 
             # Get the imported Visual C++ Redistributables applications to return on the pipeline
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
+            Write-Verbose -Message "Getting Visual C++ Redistributables from the deployment share"
             Write-Output -InputObject (Get-ChildItem -Path $Target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })
         }
         else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $Target."
+            Write-Warning -Message "Failed to find path $Target."
         }
     }
 }
