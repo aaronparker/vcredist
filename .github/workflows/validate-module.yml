@@ -3,7 +3,7 @@ name: Validate module
 on:  
   push:
     branches:
-      - 'development'
+      - '!main'
     paths:
       - 'VcRedist/**'
       - 'tests/**'

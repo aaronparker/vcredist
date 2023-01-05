@@ -10,10 +10,10 @@ function Edit-MdtDrive {
 
     switch -Regex ($Drive) {
         "^[a-z|A-Z|0-9]+$" {
-            Write-Output -InputObject $Drive.ToUpper()
+            Write-Output -InputObject $("$Drive$(":")").ToUpper()
         }
         "^[a-z|A-Z|0-9]+:$" {
-            Write-Output -InputObject $("$Drive$(":")").ToUpper()
+            Write-Output -InputObject $Drive.ToUpper()
         }
         default {
             throw [System.FormatException]::New("The MDT drive letter string represented by $Drive is not valid.")
