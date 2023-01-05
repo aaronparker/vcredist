@@ -18,25 +18,14 @@ InModuleScope VcRedist {
 	}
 
 	Describe 'New-MdtApplicationFolder' {
-		Context "Application folder exists" {
-			BeforeEach {
-				Mock Test-Path { $True }
+		Context "Validates New-MdtApplicationFolder" {
+
+			It "Does not throw when creating an application folder" {
+				{ New-MdtApplicationFolder -Drive "DS020" -Name "Test1" } | Should -Not -Throw
 			}
 
-			It "Returns True if the Application folder exists" {
-				New-MdtApplicationFolder -Drive "DS001" -Name "VcRedists" | Should -BeTrue
-			}
-		}
-
-		Context "Creates a new Packages folder" {
-			BeforeEach {
-				function New-Item {}
-				Mock Test-Path { $False }
-				Mock New-Item { $obj = [PSCustomObject]@{Name = "VcRedists" } }
-			}
-
-			It "Successfully creates a Application folder" {
-				New-MdtApplicationFolder -Drive "DS001" -Name "VcRedists" | Should -BeTrue
+			It "Returns true if the application folder is created" {
+				New-MdtApplicationFolder -Drive "DS020" -Name "Test2" | Should -BeTrue
 			}
 		}
 	}

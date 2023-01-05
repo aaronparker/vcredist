@@ -71,19 +71,13 @@ jobs:
           git_committer_name: ${{ secrets.COMMIT_NAME }}
           git_committer_email: ${{ secrets.COMMIT_EMAIL }}
 
-      - name: Install and cache PowerShell modules
-        id: psmodulecache
-        uses: potatoqualitee/psmodulecache@v5.2
-        with:
-          modules-to-cache: Pester
-          shell: powershell
-
       # Run Pester tests
       - name: Run Pester tests
         shell: powershell
         working-directory: "${{ github.workspace }}"
         run: |
-          Import-Module -Name "Pester" -Force
+          .\tests\Install-Pester.ps1
+          Import-Module -Name "Pester" -Force -ErrorAction "Stop"
 
           Import-Module -Name "$env:GITHUB_WORKSPACE\VcRedist" -Force
           $Config = [PesterConfiguration]::Default

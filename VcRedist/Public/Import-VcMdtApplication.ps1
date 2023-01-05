@@ -82,7 +82,6 @@ function Import-VcMdtApplication {
                     $params = @{
                         Drive       = $(Edit-MdtDrive -Drive $MdtDrive)
                         Name        = $AppFolder
-                        Description = "Microsoft Visual C++ Redistributables"
                     }
                     New-MdtApplicationFolder @params > $null
                 }

@@ -32,7 +32,7 @@ Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $TestReleases {
 				Silent    = $true
 				DontHide  = $true
 				Force     = $true
-				MdtDrive  = "DS099"
+				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
 				Language  = "en-US"
 			}
@@ -48,7 +48,7 @@ Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $TestReleases {
 				Silent    = $true
 				DontHide  = $true
 				Force     = $true
-				MdtDrive  = "DS099"
+				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
 				Language  = "en-US"
 			}
