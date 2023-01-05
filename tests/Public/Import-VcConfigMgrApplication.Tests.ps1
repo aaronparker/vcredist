@@ -8,13 +8,15 @@
 param ()
 
 BeforeDiscovery {
+	$TestReleases = @("2022")
+	$TestVcRedists = Get-VcList -Release $TestReleases
 }
 
-Describe -Name "Validate Import-VcConfigMgrApplication" {
+Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $TestReleases {
 	Context "ConfigMgr is not installed" {
 		It "Should throw when the ConfigMgr module is not installed" {
 			$params = @{
-				VcList      = (Get-VcList)
+				VcList      = $_
 				Path        = "$env:RUNNER_TEMP\Downloads"
 				CMPath      = $env:RUNNER_TEMP
 				SMSSiteCode = "LAB"
@@ -35,7 +37,7 @@ Describe -Name "Validate Import-VcConfigMgrApplication" {
 
 		It "Should throw when env:SMS_ADMIN_UI_PATH is valid but module does not exist" {
 			$params = @{
-				VcList      = (Get-VcList)
+				VcList      = $_
 				Path        = "$env:RUNNER_TEMP\Downloads"
 				CMPath      = $env:RUNNER_TEMP
 				SMSSiteCode = "LAB"
@@ -56,7 +58,7 @@ Describe -Name "Validate Import-VcConfigMgrApplication" {
 
 		It "Should throw when env:SMS_ADMIN_UI_PATH is invalid" {
 			$params = @{
-				VcList      = (Get-VcList)
+				VcList      = $_
 				Path        = "$env:RUNNER_TEMP\Downloads"
 				CMPath      = $env:RUNNER_TEMP
 				SMSSiteCode = "LAB"

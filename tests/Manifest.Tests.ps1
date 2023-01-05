@@ -1,18 +1,21 @@
 <#
 	.SYNOPSIS
-		Public Pester function tests.
+		Manifest tests.
 #>
+[CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "This OK for the tests files.")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
-[CmdletBinding()]
 param ()
 
 BeforeDiscovery {
-    Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
     $ValidateReleases = @("2017", "2019", "2022")
 }
 
 Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
+    BeforeAll {
+        Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
+    }
+
     Context "Validate manifest" {
         BeforeAll {
             $VcManifest = "$env:GITHUB_WORKSPACE\VcRedist\VisualCRedistributables.json"
@@ -44,6 +47,6 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
     }
 }
 
-AfterAll {
-    Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -WarningAction "SilentlyContinue"
-}
+# AfterAll {
+#     Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -WarningAction "SilentlyContinue"
+# }

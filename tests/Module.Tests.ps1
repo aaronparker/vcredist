@@ -2,16 +2,16 @@
     .SYNOPSIS
         Main Pester function tests.
 #>
+[CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "This OK for the tests files.")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
-[CmdletBinding()]
 param ()
 
 BeforeDiscovery {
 }
 
 Describe "General module validation" {
-    Context 'Validation' {
+    Context "Validation" {
         BeforeAll {
             $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
 
@@ -35,7 +35,7 @@ Describe "General module validation" {
 }
 
 Describe "function validation" {
-    Context 'Validation' {
+    Context "Validation" {
         BeforeEach {
             $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1"
             $testCase = $scripts | ForEach-Object { @{file = $_ } }
@@ -60,16 +60,16 @@ Describe "function validation" {
 }
 
 # Test module and manifest
-Describe 'Module Metadata validation' {
-    Context 'File info' {
+Describe "Module Metadata validation" {
+    Context "File info" {
         BeforeAll {
         }
 
-        It 'Script fileinfo should be OK' {
+        It "Script fileinfo should be OK" {
             { Test-ModuleManifest -Path "$env:GITHUB_WORKSPACE\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
         }
 
-        It 'Import module should be OK' {
+        It "Import module should be OK" {
             { Import-Module "$env:GITHUB_WORKSPACE\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
         }
     }
