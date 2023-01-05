@@ -44,7 +44,7 @@ function Install-VcRedist {
             else {
 
                 # Avoid installing 64-bit Redistributable on x86 Windows
-                if ((Get-Bitness -eq "x86") -and ($VcRedist.Architecture -eq 'x64')) {
+                if (((Get-Bitness) -eq "x86") -and ($VcRedist.Architecture -eq "x64")) {
                     Write-Warning -Message "Incompatible architecture: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                 }
                 else {

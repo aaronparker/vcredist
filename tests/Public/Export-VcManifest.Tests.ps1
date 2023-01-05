@@ -8,20 +8,20 @@
 param ()
 
 BeforeDiscovery {
-	$Json = [System.IO.Path]::Combine($env:RUNNER_TEMP, "Redists.json")
-	Export-VcManifest -Path $Json
-	$VcList = Get-VcList -Path $Json
-	$VcCount = @{
-		"Default"     = 6
-		"Supported"   = 12
-		"Unsupported" = 24
-		"All"         = 36
-	}
 }
 
 Describe "Export-VcManifest" {
-	Context "validate Export-VcManifest" {
+	Context "Validate Export-VcManifest" {
 		BeforeAll {
+			$Json = [System.IO.Path]::Combine($env:RUNNER_TEMP, "Redists.json")
+			Export-VcManifest -Path $Json
+			$VcList = Get-VcList -Path $Json
+			$VcCount = @{
+				"Default"     = 6
+				"Supported"   = 12
+				"Unsupported" = 24
+				"All"         = 36
+			}
 		}
 
 		It "Given valid parameter -Path, it exports an JSON file" {
