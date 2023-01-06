@@ -1,4 +1,4 @@
-name: Validate module (PWSH)
+name: Validate module (pwsh)
 
 on:  
   push:
@@ -8,7 +8,7 @@ on:
     paths:
       - 'VcRedist/**'
       - 'tests/**'
-      - '.github/workflows/validate-module.yml'
+      - '.github/workflows/validate-pwsh.yml'
     tags-ignore:
       - '*'
   pull_request:
@@ -76,7 +76,7 @@ jobs:
         shell: pwsh
         working-directory: "${{ github.workspace }}"
         run: |
-          .\tests\Install-Pester.ps1
+          Install-Module -Name Pester -SkipPublisherCheck -Force
           Import-Module -Name "Pester" -Force -ErrorAction "Stop"
 
           Import-Module -Name "$env:GITHUB_WORKSPACE\VcRedist" -Force
