@@ -11,7 +11,7 @@ BeforeDiscovery {
     $ValidateReleases = @("2017", "2019", "2022")
 }
 
-Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
+Describe -Name "VcRedist manifest tests" -ForEach $ValidateReleases {
     BeforeAll {
         Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$false
     }

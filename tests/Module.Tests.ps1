@@ -10,7 +10,7 @@ param ()
 BeforeDiscovery {
 }
 
-Describe "General module validation" {
+Describe -Name "General module validation" {
     Context "Validation" {
         BeforeAll {
             $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
@@ -34,7 +34,7 @@ Describe "General module validation" {
     }
 }
 
-Describe "function validation" {
+Describe -Name "function validation" {
     Context "Validation" {
         BeforeEach {
             $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1"
@@ -60,7 +60,7 @@ Describe "function validation" {
 }
 
 # Test module and manifest
-Describe "Module Metadata validation" {
+Describe -Name "Module Metadata validation" {
     Context "File info" {
         BeforeAll {
         }

@@ -11,7 +11,7 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
-	Describe "Import-MdtModule without MDT installed" {
+	Describe -Name "Import-MdtModule without MDT installed" {
 		Context "Import-MdtModule without MDT installed" {
 			It "Should throw when MDT is not installed" {
 				{ Import-MdtModule } | Should -Throw
@@ -19,7 +19,7 @@ InModuleScope VcRedist {
 		}
 	}
 
-	Describe "Import-MdtModule with MDT installed OK" {
+	Describe -Name "Import-MdtModule with MDT installed OK" {
 		BeforeAll {
 			# Install the MDT Workbench
 			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
@@ -32,7 +32,7 @@ InModuleScope VcRedist {
 		}
 	}
 
-	Describe "Import-MdtModule fails with MDT installed but module missing" {
+	Describe -Name "Import-MdtModule fails with MDT installed but module missing" {
 		BeforeAll {
 			$RegPath = "HKLM:SOFTWARE\Microsoft\Deployment 4"
 			$MdtReg = Get-ItemProperty -Path $RegPath -ErrorAction "SilentlyContinue"

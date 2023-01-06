@@ -11,7 +11,7 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
-	Describe "Invoke-Process" {
+	Describe -Name "Invoke-Process" {
 		Context "Invoke-Process works as expected" {
 			It "Should run the command without throwing an exception" {
 				$params = @{

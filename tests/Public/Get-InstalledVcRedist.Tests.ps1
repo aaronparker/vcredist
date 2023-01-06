@@ -11,7 +11,7 @@ BeforeDiscovery {
 	$VcList = Get-InstalledVcRedist
 }
 
-Describe "Get-InstalledVcRedist" -ForEach $VcList {
+Describe -Name "Get-InstalledVcRedist" -ForEach $VcList {
 	Context "Validate Get-InstalledVcRedist array properties" {
 		It "VcRedist <_.Name> has expected Name property" {
 			[System.Boolean]$_.Name | Should -BeTrue

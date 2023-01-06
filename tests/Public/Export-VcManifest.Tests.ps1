@@ -10,7 +10,7 @@ param ()
 BeforeDiscovery {
 }
 
-Describe "Export-VcManifest" {
+Describe -Name "Export-VcManifest" {
 	Context "Validate Export-VcManifest" {
 		BeforeAll {
 			$Json = [System.IO.Path]::Combine($env:RUNNER_TEMP, "Redists.json")

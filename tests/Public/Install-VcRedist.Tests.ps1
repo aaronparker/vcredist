@@ -11,7 +11,7 @@ BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe "Install-VcRedist" -ForEach $TestReleases {
+Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 	BeforeAll {
 		$Release = $_
 

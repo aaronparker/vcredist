@@ -12,7 +12,7 @@ BeforeDiscovery {
 	$TestVcRedists = Get-VcList -Release $TestReleases
 }
 
-Describe "Import-VcIntuneApplication without IntuneWin32App" -ForEach $TestReleases {
+Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $TestReleases {
 	BeforeAll {
 	}
 
@@ -23,7 +23,7 @@ Describe "Import-VcIntuneApplication without IntuneWin32App" -ForEach $TestRelea
 	}
 }
 
-Describe "Import-VcIntuneApplication without authentication" -ForEach $TestReleases {
+Describe -Name "Import-VcIntuneApplication without authentication" -ForEach $TestReleases {
 	BeforeAll {
 		Install-Module -Name "IntuneWin32App" -Force
 	}

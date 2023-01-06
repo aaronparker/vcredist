@@ -11,7 +11,7 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
-	Describe "Edit-MdtDrive" {
+	Describe -Name "Edit-MdtDrive" {
 		Context "Validate Edit-MdtDrive" {
 			It "Should not throw when sent a valid string" {
 				{ Edit-MdtDrive -Drive "DS009" } | Should -Not -Throw

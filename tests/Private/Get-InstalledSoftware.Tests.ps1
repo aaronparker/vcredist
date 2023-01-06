@@ -11,7 +11,7 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
-	Describe "Get-InstalledSoftware" {
+	Describe -Name "Get-InstalledSoftware" {
 		Context "Get-InstalledSoftware returns the expected output" {
 			It "Returns null for software that is not installed" {
 				Get-InstalledSoftware -Name "SoftwareThatIsNotInstalled" | Should -BeNullOrEmpty

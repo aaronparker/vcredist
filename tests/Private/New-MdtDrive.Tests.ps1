@@ -11,7 +11,7 @@ BeforeDiscovery {
 }
 
 InModuleScope -ModuleName "VcRedist" {
-    Describe "New-MdtDrive" {
+    Describe -Name "New-MdtDrive" {
         BeforeAll {
             # Install the MDT Workbench
             & "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"

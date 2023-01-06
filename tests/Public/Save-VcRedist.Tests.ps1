@@ -11,7 +11,7 @@ BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe "Save-VcRedist" -ForEach $TestReleases {
+Describe -Name "Save-VcRedist" -ForEach $TestReleases {
 	BeforeAll {
         if ($env:Temp) {
             $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
@@ -77,7 +77,7 @@ Describe "Save-VcRedist" -ForEach $TestReleases {
 	}
 }
 
-Describe "Save-VcRedist pipeline" -ForEach $TestReleases {
+Describe -Name "Save-VcRedist pipeline" -ForEach $TestReleases {
 	BeforeAll {
         if ($env:Temp) {
             $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
@@ -107,7 +107,7 @@ Describe "Save-VcRedist pipeline" -ForEach $TestReleases {
 	}
 }
 
-Describe "Save-VcRedist fail scenarios" {
+Describe -Name "Save-VcRedist fail scenarios" {
 	Context "Test fail scenarios" {
 		It "Given an invalid path, it should throw an error" {
 			{ Save-VcRedist -Path ([System.IO.Path]::Combine($Path, "Temp")) } | Should -Throw

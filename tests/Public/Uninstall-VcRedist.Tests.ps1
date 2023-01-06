@@ -11,7 +11,7 @@ BeforeDiscovery {
     $TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe "Uninstall-VcRedist" -ForEach $TestReleases {
+Describe -Name "Uninstall-VcRedist" -ForEach $TestReleases {
     BeforeAll {
         $Release = $_
 
@@ -42,7 +42,7 @@ Describe "Uninstall-VcRedist" -ForEach $TestReleases {
     }
 }
 
-Describe "Uninstall VcRedist via the pipeline" {
+Describe -Name "Uninstall VcRedist via the pipeline" {
     Context "Test uninstall via the pipeline" {
         It "Uninstalls the 2022 Redistributables via the pipeline" {
             { Get-VcList -Release "2022" | Uninstall-VcRedist -Confirm:$false } | Should -Not -Throw
