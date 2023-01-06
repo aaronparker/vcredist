@@ -45,50 +45,64 @@ function Uninstall-VcRedist {
         # Walk through each VcRedist and uninstall
         foreach ($VcRedist in $VcRedistsToRemove) {
 
-            # Build the uninstall command
-            switch -Regex ($VcRedist.UninstallString) {
-                "^Msiexec*$" {
-                    Write-Verbose -Message "VcRedist uninstall uses Msiexec."
-                    $params = @{
-                        FilePath     = "$Env:SystemRoot\System32\msiexec.exe"
-                        ArgumentList = "/uninstall $($VcRedist.ProductCode) /quiet /norestart"
-                        PassThru     = $true
-                        Wait         = $true
-                        NoNewWindow  = $true
-                    }
-                }
-                default {
-                    $FilePath = [Regex]::Match($VcRedist.UninstallString, '\"(.*)\"').Captures.Groups[1].Value
-                    Write-Verbose -Message "VcRedist uninstall uses '$FilePath'."
-                    $params = @{
-                        FilePath     = $FilePath
-                        ArgumentList = "/uninstall /quiet /norestart"
-                        PassThru     = $true
-                        Wait         = $true
-                        NoNewWindow  = $true
-                    }
-                }
+            # We could be passed an object from Get-VcList or Get InstalledVcRedist
+            if ([System.String]::IsNullOrEmpty($VcRedist.UninstallString) -eq $false) {
+                $UninstallString = $VcRedist.UninstallString
+            }
+            elseif ([System.String]::IsNullOrEmpty($VcRedist.SilentUninstall) -eq $false) {
+                $UninstallString = $VcRedist.SilentUninstall
             }
 
-            if ($PSCmdlet.ShouldProcess($VcRedist.Name, "Uninstall")) {
-                try {
-                    $Result = Start-Process @params
-                    $State = "Uninstalled"
-                }
-                catch [System.Exception] {
-                    Write-Warning -Message "Failure in uninstalling $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
-                    $State = "Failed"
-                }
-                finally {
-                    $Object = [PSCustomObject] @{
-                        Name         = $VcRedist.Name
-                        Version      = $VcRedist.Version
-                        Release      = $VcRedist.Release
-                        Architecture = $VcRedist.Architecture
-                        State        = $State
-                        ExitCode     = $Result.ExitCode
+            if ([System.String]::IsNullOrEmpty($UninstallString)) {
+                $Msg = "Cannot find uninstall string. Please check object passed to this function."
+                throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+            }
+            else {
+                # Build the uninstall command
+                switch -Regex ($UninstallString) {
+                    "^Msiexec*$" {
+                        Write-Verbose -Message "VcRedist uninstall uses Msiexec."
+                        $params = @{
+                            FilePath     = "$Env:SystemRoot\System32\msiexec.exe"
+                            ArgumentList = "/uninstall $($VcRedist.ProductCode) /quiet /norestart"
+                            PassThru     = $true
+                            Wait         = $true
+                            NoNewWindow  = $true
+                        }
                     }
-                    Write-Output -InputObject $Object
+                    default {
+                        $FilePath = [Regex]::Match($UninstallString, '\"(.*)\"').Captures.Groups[1].Value
+                        Write-Verbose -Message "VcRedist uninstall uses '$FilePath'."
+                        $params = @{
+                            FilePath     = $FilePath
+                            ArgumentList = "/uninstall /quiet /norestart"
+                            PassThru     = $true
+                            Wait         = $true
+                            NoNewWindow  = $true
+                        }
+                    }
+                }
+
+                if ($PSCmdlet.ShouldProcess($VcRedist.Name, "Uninstall")) {
+                    try {
+                        $Result = Start-Process @params
+                        $State = "Uninstalled"
+                    }
+                    catch [System.Exception] {
+                        Write-Warning -Message "Failure in uninstalling $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
+                        $State = "Failed"
+                    }
+                    finally {
+                        $Object = [PSCustomObject] @{
+                            Name         = $VcRedist.Name
+                            Version      = $VcRedist.Version
+                            Release      = $VcRedist.Release
+                            Architecture = $VcRedist.Architecture
+                            State        = $State
+                            ExitCode     = $Result.ExitCode
+                        }
+                        Write-Output -InputObject $Object
+                    }
                 }
             }
         }
