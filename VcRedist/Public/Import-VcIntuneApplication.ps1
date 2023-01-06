@@ -98,7 +98,7 @@ function Import-VcIntuneApplication {
                 "RestartBehavior"          = $IntuneManifest.Program.DeviceRestartBehavior
                 "DetectionRule"            = $DetectionRule
                 "RequirementRule"          = $RequirementRule
-                "InstallCommandLine"       = "$(Split-Path -Path $VcRedist.Download -Leaf) $($VcRedist.SilentInstall)"
+                "InstallCommandLine"       = "$(Split-Path -Path $VcRedist.URI -Leaf) $($VcRedist.SilentInstall)"
                 "UninstallCommandLine"     = $VcRedist.SilentUninstall
                 "Verbose"                  = $true
             }

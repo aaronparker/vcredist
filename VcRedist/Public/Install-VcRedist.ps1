@@ -52,7 +52,7 @@ function Install-VcRedist {
                     # Target folder structure; VcRedist setup file
                     Write-Verbose -Message "Construct target installer folder and filename."
                     $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-                    $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+                    $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
 
                     Write-Verbose -Message "Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
                     if (Test-Path -Path $filename) {

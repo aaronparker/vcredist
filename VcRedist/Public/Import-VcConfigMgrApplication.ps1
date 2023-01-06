@@ -132,7 +132,7 @@ function Import-VcConfigMgrApplication {
                                         $result = Invoke-Process @invokeProcessParams
                                     }
                                     catch [System.Exception] {
-                                        $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+                                        $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
                                         if (Test-Path -Path $Target) {
                                             Write-Verbose -Message "Copy successful: [$Target]."
                                         }
@@ -217,7 +217,7 @@ function Import-VcConfigMgrApplication {
                                 # Splat Add-CMScriptDeploymentType parameters and add the application deployment type
                                 $cmScriptParams = @{
                                     ApplicationName          = $ApplicationName
-                                    InstallCommand           = "$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
+                                    InstallCommand           = "$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
                                     ContentLocation          = $ContentLocation
                                     AddDetectionClause       = $detectionClause
                                     DeploymentTypeName       = "SCRIPT_$($VcRedist.Name)"

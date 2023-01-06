@@ -41,7 +41,7 @@ Describe "Save-VcRedist" -ForEach $TestReleases {
 			$Output = $False
 			foreach ($VcRedist in $VcList) {
 				$folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-				$Target = [System.IO.Path]::Combine($Folder, $(Split-Path -Path $VcRedist.Download -Leaf))
+				$Target = [System.IO.Path]::Combine($Folder, $(Split-Path -Path $VcRedist.URI -Leaf))
 				if (Test-Path -Path $Target -PathType Leaf) {
 					Write-Verbose "$($Target) - exists."
 					$Output = $True

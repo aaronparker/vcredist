@@ -87,7 +87,7 @@ function Update-VcMdtApplication {
                         $Update = $False
                         if ($ExistingVcRedist.UninstallKey -ne $VcRedist.ProductCode) { $Update = $True }
                         if ([System.Version]$ExistingVcRedist.Version -lt [System.Version]$VcRedist.Version) { $Update = $True }
-                        if ($ExistingVcRedist.CommandLine -ne ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })") { $Update = $True }
+                        if ($ExistingVcRedist.CommandLine -ne ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })") { $Update = $True }
                         if ($Update -eq $True) {
 
                             # Copy the updated executable
@@ -102,7 +102,7 @@ function Update-VcMdtApplication {
                                 $result = Invoke-Process @params
                             }
                             catch {
-                                $ExeTarget = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+                                $ExeTarget = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
                                 if (Test-Path -Path $ExeTarget) {
                                     Write-Verbose -Message "Copy successful: [$ExeTarget]."
                                 }
@@ -118,7 +118,7 @@ function Update-VcMdtApplication {
                                 $params = @{
                                     Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
                                     Name  = "CommandLine"
-                                    Value = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
+                                    Value = ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
                                 }
                                 Set-ItemProperty @params > $null
                             }

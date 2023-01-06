@@ -89,7 +89,7 @@ function Get-VcList {
             for ($i = 0; $i -le $Count; $i++) {
                 try {
                     $output[$i].SilentUninstall = $output[$i].SilentUninstall `
-                        -replace "#Installer", $(Split-Path -Path $output[$i].Download -Leaf) `
+                        -replace "#Installer", $(Split-Path -Path $output[$i].URI -Leaf) `
                         -replace "#ProductCode", $output[$i].ProductCode
                 }
                 catch {

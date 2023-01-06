@@ -35,7 +35,7 @@ Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists
         }
 
         It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Download property" {
-            [System.Boolean]($VcRedist.Download) | Should -BeTrue
+            [System.Boolean]($VcRedist.URI) | Should -BeTrue
         }
 
         It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Release property" {

@@ -81,7 +81,7 @@ function Save-VcRedist {
             }
 
             # Test whether the VcRedist is already on disk
-            $target = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
+            $target = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
             Write-Verbose -Message "Testing target: $($target)"
 
             if (Test-Path -Path $target -PathType "Leaf") {
@@ -105,13 +105,13 @@ function Save-VcRedist {
 
             # The VcRedist needs to be downloaded
             if ($download) {
-                if ($PSCmdlet.ShouldProcess($VcRedist.Download, "Invoke-WebRequest")) {
+                if ($PSCmdlet.ShouldProcess($VcRedist.URI, "Invoke-WebRequest")) {
                     try {
 
                         # Download the file
                         Write-Verbose -Message "Download VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]"
                         $iwrParams = @{
-                            Uri             = $VcRedist.Download
+                            Uri             = $VcRedist.URI
                             OutFile         = $target
                             UseBasicParsing = $True
                             ErrorAction     = "SilentlyContinue"
@@ -127,7 +127,7 @@ function Save-VcRedist {
                     }
                     catch [System.Exception] {
                         Write-Warning -Message "Failed to download: [$($VcRedist.Name)]."
-                        Write-Warning -Message "URL: [$($VcRedist.Download)]."
+                        Write-Warning -Message "URL: [$($VcRedist.URI)]."
                         Write-Warning -Message "Download failed with: [$($_.Exception.Message)]"
                         $Downloaded = $False
                     }
