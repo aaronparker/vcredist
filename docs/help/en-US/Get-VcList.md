@@ -15,13 +15,13 @@ Returns an object of Microsoft Visual C++ Redistributables for use with other Vc
 
 ### Manifest (Default)
 
-```powershell
+```
 Get-VcList [[-Release] <String[]>] [[-Architecture] <String[]>] [[-Path] <String>] [<CommonParameters>]
 ```
 
 ### Export
 
-```powershell
+```
 Get-VcList [[-Export] <String>] [<CommonParameters>]
 ```
 

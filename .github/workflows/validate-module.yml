@@ -80,7 +80,7 @@ jobs:
           Import-Module -Name "Pester" -Force -ErrorAction "Stop"
 
           Import-Module -Name "$env:GITHUB_WORKSPACE\VcRedist" -Force
-          $Config = [PesterConfiguration]::Default
+          $Config = New-PesterConfiguration
           $Config.Run.Path = "$env:GITHUB_WORKSPACE\tests"
           $Config.Run.PassThru = $True
           $Config.CodeCoverage.Enabled = $True

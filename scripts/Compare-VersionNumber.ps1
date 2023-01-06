@@ -19,15 +19,15 @@ function Compare-VersionNumber {
     [CmdletBinding(SupportsShouldProcess = $false)]
     [OutputType([System.Boolean])]
     param (
-        [Parameter(Mandatory = $True, Position = 0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [ValidateNotNull()]
         [System.String] $LowVersion,
 
-        [Parameter(Mandatory = $True, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [ValidateNotNull()]
         [System.String] $HighVersion,
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $MatchMinor
     )
     begin {
@@ -44,7 +44,7 @@ function Compare-VersionNumber {
             }
             else {
                 # If major version numbers don't match return false
-                $result = $False
+                $result = $false
             }
         }
         else {

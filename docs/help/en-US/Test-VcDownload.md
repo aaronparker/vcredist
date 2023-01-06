@@ -1,15 +1,15 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://vcredist.com/save-vcredist/
+online version: https://vcredist.com/test-vcdownload/
 schema: 2.0.0
 ---
 
-# Save-VcRedist
+# Test-VcDownload
 
 ## SYNOPSIS
 
-Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList.
+Tests that the downloads for the Visual C++ Redistributables as listed in the manifest returned by Get-VcList are available (i.e. return a HTTP 200 response).
 
 ## SYNTAX
 

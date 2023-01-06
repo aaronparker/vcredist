@@ -13,7 +13,7 @@ function Import-MdtModule {
     [CmdletBinding(SupportsShouldProcess = $false)]
     [OutputType([System.Boolean])]
     param (
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Force
     )
 

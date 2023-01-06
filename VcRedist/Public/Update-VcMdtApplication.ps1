@@ -2,34 +2,34 @@ function Update-VcMdtApplication {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/update-vcmdtapplication/")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/update-vcmdtapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $true, Position = 1)]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
         [System.String] $Path,
 
-        [Parameter(Mandatory = $True)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $true)]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Silent,
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $MdtDrive = "DS099",
 
-        [Parameter(Mandatory = $False, Position = 3)]
+        [Parameter(Mandatory = $false, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft"
     )
@@ -84,11 +84,11 @@ function Update-VcMdtApplication {
                         Write-Verbose -Message "Found application: [$($ExistingVcRedist.ShortName)]."
 
                         # Determine whether update is required
-                        $Update = $False
-                        if ($ExistingVcRedist.UninstallKey -ne $VcRedist.ProductCode) { $Update = $True }
-                        if ([System.Version]$ExistingVcRedist.Version -lt [System.Version]$VcRedist.Version) { $Update = $True }
-                        if ($ExistingVcRedist.CommandLine -ne ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })") { $Update = $True }
-                        if ($Update -eq $True) {
+                        $Update = $false
+                        if ($ExistingVcRedist.UninstallKey -ne $VcRedist.ProductCode) { $Update = $true }
+                        if ([System.Version]$ExistingVcRedist.Version -lt [System.Version]$VcRedist.Version) { $Update = $true }
+                        if ($ExistingVcRedist.CommandLine -ne ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })") { $Update = $true }
+                        if ($Update -eq $true) {
 
                             # Copy the updated executable
                             try {

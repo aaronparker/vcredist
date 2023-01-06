@@ -3,12 +3,12 @@ function Export-VcManifest {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Export-VcXml")]
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://vcredist.com/export-vcmanifest/")]
+    [CmdletBinding(SupportsShouldProcess = $false, HelpURI = "https://vcredist.com/export-vcmanifest/")]
     [OutputType([System.String])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
-        [ValidateScript( { if (Test-Path -Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $True } else { throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
+        [ValidateScript( { if (Test-Path -Path $(Split-Path -Path $_ -Parent) -PathType 'Container') { $true } else { throw "Cannot find path $(Split-Path -Path $_ -Parent)" } })]
         [System.String] $Path
     )
 

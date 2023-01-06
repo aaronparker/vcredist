@@ -13,7 +13,7 @@ BeforeDiscovery {
 
 Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
     BeforeAll {
-        Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False
+        Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$false
     }
 
     Context "Validate manifest" {
@@ -41,7 +41,7 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
 
             # If the manifest version of the VcRedist is lower than the installed version, the manifest is out of date
             It "$($ManifestVcRedist.Release) $($ManifestVcRedist.Architecture) version should be current" {
-                [System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version | Should -Be $False
+                [System.Version]$InstalledItem.Version -gt [System.Version]$ManifestVcRedist.Version | Should -Be $false
             }
         }
     }

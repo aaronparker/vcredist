@@ -38,7 +38,7 @@ Describe -Name "Test-VcRedistDownload" -ForEach $TestReleases {
 		BeforeAll {
 			$params = @{
 				InputObject = (Get-VcList -Release $Release -Architecture "x86")
-				NoProgress  = $true
+				ShowProgress = $true
 			}
 			$Test = Test-VcRedistDownload @params
 		}

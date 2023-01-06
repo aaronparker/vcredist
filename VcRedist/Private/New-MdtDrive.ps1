@@ -40,7 +40,7 @@ function New-MdtDrive {
                     PSProvider  = "MDTProvider"
                     Root        = $Path
                     #NetworkPath = $Path
-                    Description = $description
+                    Description = $Description
                 }
                 New-PSDrive @params | Add-MDTPersistentDrive
             }

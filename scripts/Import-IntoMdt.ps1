@@ -4,10 +4,10 @@
 #>
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $false)]
     [System.String] $Path = "C:\Temp\VcRedists",
 
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $false)]
     [System.String] $DeploymentShare = "\\marty.local\Deployment\Automata"
 )
 

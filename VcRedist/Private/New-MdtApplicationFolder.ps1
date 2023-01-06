@@ -16,16 +16,16 @@ function New-MdtApplicationFolder {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([System.Boolean])]
     param (
-        [Parameter(Mandatory = $True, Position = 0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [System.String] $Drive,
 
-        [Parameter(Mandatory = $True, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [Alias('AppFolder')]
         [System.String] $Name,
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [ValidateNotNullOrEmpty()]
         [System.String] $Description = "Microsoft Visual C++ Redistributables imported with VcRedist https://vcredist.com/"
     )

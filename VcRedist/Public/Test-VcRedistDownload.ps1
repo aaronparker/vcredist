@@ -3,24 +3,24 @@ function Test-VcRedistDownload {
         .EXTERNALHELP Vcredist-help.xml
     #>
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/test/", DefaultParameterSetName = "Path")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://stealthpuppy.com/vcredist/test/", DefaultParameterSetName = "Path")]
     param (
         [Parameter(
-            Mandatory = $True,
+            Mandatory = $true,
             Position = 0,
             ValueFromPipeline,
             HelpMessage = "Pass an object from Get-VcList.")]
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $InputObject,
 
-        [Parameter(Mandatory = $False, Position = 1)]
+        [Parameter(Mandatory = $false, Position = 1)]
         [System.String] $Proxy,
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [System.Management.Automation.PSCredential]
         $ProxyCredential = [System.Management.Automation.PSCredential]::Empty,
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $ShowProgress
     )
 
@@ -52,7 +52,7 @@ function Test-VcRedistDownload {
                 $params = @{
                     Uri             = $Object.URI
                     Method          = "HEAD"
-                    UseBasicParsing = $True
+                    UseBasicParsing = $true
                     ErrorAction     = "SilentlyContinue"
                 }
                 if ($PSBoundParameters.ContainsKey("Proxy")) {
@@ -61,11 +61,11 @@ function Test-VcRedistDownload {
                 if ($PSBoundParameters.ContainsKey("ProxyCredential")) {
                     $params.ProxyCredential = $ProxyCredential
                 }
-                $Result = $True
+                $Result = $true
                 Invoke-WebRequest @params | Out-Null
             }
             catch [System.Exception] {
-                $Result = $False
+                $Result = $false
             }
             $PSObject = [PSCustomObject] @{
                 Result       = $Result

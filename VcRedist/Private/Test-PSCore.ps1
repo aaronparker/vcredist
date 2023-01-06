@@ -19,9 +19,9 @@ function Test-PSCore {
 
     # Check whether current PowerShell environment matches or is higher than $Version
     if (($PSVersionTable.PSVersion -ge [System.Version]::Parse($Version)) -and ($PSVersionTable.PSEdition -eq "Core")) {
-        Write-Output -InputObject $True
+        Write-Output -InputObject $true
     }
     else {
-        Write-Output -InputObject $False
+        Write-Output -InputObject $false
     }
 }

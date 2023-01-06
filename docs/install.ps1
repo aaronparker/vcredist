@@ -7,11 +7,11 @@
     Installs the VcRedist PowerShell module and installs the default Microsoft Visual C++ Redistributables on the local system.
 
     .NOTES
-    Copyright 2021, Aaron Parker, stealthpuppy.com
+    Copyright 2023, Aaron Parker, stealthpuppy.com
 #>
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $false)]
     [System.String] $Path = "$env:Temp\VcRedist"
 )
 

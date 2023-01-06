@@ -2,20 +2,20 @@ function Uninstall-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Manual', SupportsShouldProcess = $True, ConfirmImpact = "High",
+    [CmdletBinding(DefaultParameterSetName = 'Manual', SupportsShouldProcess = $true, ConfirmImpact = "High",
         HelpURI = "https://vcredist.com/uninstall-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     param (
-        [Parameter(Mandatory = $False, Position = 0, ParameterSetName = 'Manual')]
+        [Parameter(Mandatory = $false, Position = 0, ParameterSetName = 'Manual')]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]
         [System.String[]] $Release = @("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022"),
 
-        [Parameter(Mandatory = $False, Position = 1, ParameterSetName = 'Manual')]
+        [Parameter(Mandatory = $false, Position = 1, ParameterSetName = 'Manual')]
         [ValidateSet("x86", "x64")]
         [System.String[]] $Architecture = @("x86", "x64"),
 
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline, ParameterSetName = 'Pipeline')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline, ParameterSetName = 'Pipeline')]
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )

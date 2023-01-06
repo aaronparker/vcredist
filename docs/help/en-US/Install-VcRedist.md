@@ -13,7 +13,7 @@ Installs the Visual C++ Redistributables on the local system.
 
 ## SYNTAX
 
-```powershell
+```
 Install-VcRedist [-VcList] <PSObject> [[-Path] <String>] [-Silent] [-Force] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```

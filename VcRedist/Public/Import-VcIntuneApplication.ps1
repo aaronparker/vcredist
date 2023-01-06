@@ -2,10 +2,10 @@ function Import-VcIntuneApplication {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://vcredist.com/import-vcintuneapplication/")]
+    [CmdletBinding(SupportsShouldProcess = $false, HelpURI = "https://vcredist.com/import-vcintuneapplication/")]
     [OutputType([System.String])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $VcList
     )
@@ -73,7 +73,7 @@ function Import-VcIntuneApplication {
             $RequirementRule = New-IntuneWin32AppRequirementRule @params
 
             # Detection rule
-            if ($VcRedist.UninstallKey -eq "32") { $Check32BitOn64System = $True } else { $Check32BitOn64System = $False }
+            if ($VcRedist.UninstallKey -eq "32") { $Check32BitOn64System = $true } else { $Check32BitOn64System = $false }
             $DetectionRuleArgs = @{
                 "Existence"            = $true
                 "KeyPath"              = $IntuneManifest.DetectionRule.KeyPath -replace "{guid}", $VcRedist.ProductCode

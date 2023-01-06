@@ -2,21 +2,21 @@ function Install-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/install-vcredist/")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/install-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $False, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $false, Position = 1)]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
         [System.String] $Path = (Resolve-Path -Path $PWD),
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Silent,
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Force
     )
 

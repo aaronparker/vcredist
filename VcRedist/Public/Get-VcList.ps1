@@ -5,21 +5,21 @@ function Get-VcList {
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(DefaultParameterSetName = "Manifest", HelpURI = "https://vcredist.com/get-vclist/")]
     param (
-        [Parameter(Mandatory = $False, Position = 0, ParameterSetName = "Manifest")]
+        [Parameter(Mandatory = $false, Position = 0, ParameterSetName = "Manifest")]
         [ValidateSet("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022")]
         [System.String[]] $Release = @("2012", "2013", "2022"),
 
-        [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "Manifest")]
+        [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "Manifest")]
         [ValidateSet("x86", "x64")]
         [System.String[]] $Architecture = @("x86", "x64"),
 
-        [Parameter(Mandatory = $False, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
+        [Parameter(Mandatory = $false, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
         [ValidateNotNull()]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType "Leaf") { $True } else { throw "Cannot find file $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType "Leaf") { $true } else { throw "Cannot find file $_" } })]
         [Alias("Xml")]
         [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 
-        [Parameter(Mandatory = $False, Position = 0, ParameterSetName = "Export")]
+        [Parameter(Mandatory = $false, Position = 0, ParameterSetName = "Export")]
         [ValidateSet("Supported", "All", "Unsupported")]
         [System.String] $Export = "Supported"
     )

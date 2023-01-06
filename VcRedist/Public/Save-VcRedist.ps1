@@ -3,7 +3,7 @@ function Save-VcRedist {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias("Get-VcRedist")]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/save-vcredist/")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/save-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
@@ -118,7 +118,7 @@ function Save-VcRedist {
                             $iwrParams.ProxyCredential = $ProxyCredential
                         }
                         Invoke-WebRequest @iwrParams
-                        $Downloaded = $True
+                        $Downloaded = $true
                     }
                     catch [System.Exception] {
                         $Downloaded = $false

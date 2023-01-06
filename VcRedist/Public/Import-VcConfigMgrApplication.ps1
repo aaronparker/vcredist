@@ -3,39 +3,39 @@ function Import-VcConfigMgrApplication {
         .EXTERNALHELP VcRedist-help.xml
     #>
     [Alias('Import-VcCmApp')]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/import-vcconfigmgrapplication/")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/import-vcconfigmgrapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
         [ValidateNotNull()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_." } })]
         [System.String] $Path,
 
-        [Parameter(Mandatory = $True, Position = 2)]
+        [Parameter(Mandatory = $true, Position = 2)]
         [System.String] $CMPath,
 
-        [Parameter(Mandatory = $True, Position = 3)]
+        [Parameter(Mandatory = $true, Position = 3)]
         [ValidateScript( { if ($_ -match "^[a-zA-Z0-9]{3}$") { $true } else { throw "$_ is not a valid ConfigMgr site code." } })]
         [System.String] $SMSSiteCode,
 
-        [Parameter(Mandatory = $False, Position = 4)]
+        [Parameter(Mandatory = $false, Position = 4)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $AppFolder = "VcRedists",
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Silent,
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $NoCopy,
 
-        [Parameter(Mandatory = $False, Position = 5)]
+        [Parameter(Mandatory = $false, Position = 5)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft",
 
-        [Parameter(Mandatory = $False, Position = 6)]
+        [Parameter(Mandatory = $false, Position = 6)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
         [System.String] $Keyword = "Visual C++ Redistributable"
     )
@@ -61,7 +61,7 @@ function Import-VcConfigMgrApplication {
                 try {
                     # Import the ConfigurationManager.psd1 module
                     Write-Verbose -Message "Importing module: $($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1."
-                    Import-Module -Name "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$False > $null
+                    Import-Module -Name "$($env:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$false > $null
 
                     # Create the folder for importing the Redistributables into
                     if ($AppFolder) {
@@ -129,17 +129,17 @@ function Import-VcConfigMgrApplication {
                                             FilePath     = "$env:SystemRoot\System32\robocopy.exe"
                                             ArgumentList = "*.exe `"$folder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
                                         }
-                                        $result = Invoke-Process @invokeProcessParams
+                                        Invoke-Process @invokeProcessParams | Out-Null
                                     }
                                     catch [System.Exception] {
+                                        $Err = $_
                                         $Target = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
                                         if (Test-Path -Path $Target) {
                                             Write-Verbose -Message "Copy successful: [$Target]."
                                         }
                                         else {
                                             Write-Warning -Message "Failed to copy Redistributables from [$folder] to [$ContentLocation]."
-                                            Write-Warning -Message "Captured error (if any): [$result]."
-                                            throw $_.Exception.Message
+                                            throw $Err
                                         }
                                     }
                                 }
@@ -161,7 +161,7 @@ function Import-VcConfigMgrApplication {
                                 $ApplicationName = "Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)"
                                 $cmAppParams = @{
                                     Name              = $ApplicationName
-                                    Description       = "$Publisher $ApplicationName imported by $($MyInvocation.MyCommand)"
+                                    Description       = "$Publisher $ApplicationName imported by $($MyInvocation.MyCommand). https://vcredist.com"
                                     SoftwareVersion   = $VcRedist.Version
                                     LinkText          = $VcRedist.URL
                                     Publisher         = $Publisher
@@ -188,7 +188,7 @@ function Import-VcConfigMgrApplication {
                             }
                             catch [System.Exception] {
                                 Write-Warning -Message "Failed to set location to: $Path."
-                                throw $_.Exception.Message
+                                throw $_
                             }
                         }
 
@@ -209,7 +209,7 @@ function Import-VcConfigMgrApplication {
                                 # Create the detection method
                                 $params = @{
                                     Hive    = "LocalMachine"
-                                    Is64Bit = if ($VcRedist.UninstallKey -eq "64") { $True } else { $False }
+                                    Is64Bit = if ($VcRedist.UninstallKey -eq "64") { $true } else { $false }
                                     KeyName = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$($VcRedist.ProductCode)"
                                 }
                                 $detectionClause = New-CMDetectionClauseRegistryKey @params
@@ -225,7 +225,7 @@ function Import-VcConfigMgrApplication {
                                     UninstallCommand         = $VcRedist.SilentUninstall
                                     LogonRequirementType     = "WhetherOrNotUserLoggedOn"
                                     InstallationBehaviorType = "InstallForSystem"
-                                    Comment                  = "Generated by $($MyInvocation.MyCommand)"
+                                    Comment                  = "Generated by $($MyInvocation.MyCommand). https://vcredist.com"
                                 }
                                 Add-CMScriptDeploymentType @cmScriptParams > $null
                             }

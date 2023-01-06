@@ -2,27 +2,27 @@ function Update-VcMdtBundle {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/update-vcmdtbundle/")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/update-vcmdtbundle/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $True } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
-        [Parameter(Mandatory = $False, Position = 1)]
+        [Parameter(Mandatory = $false, Position = 1)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $MdtDrive = "DS099",
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [ValidatePattern('^[a-zA-Z0-9]+$')]
         [System.String] $Publisher = "Microsoft",
 
-        [Parameter(Mandatory = $False, Position = 3)]
+        [Parameter(Mandatory = $false, Position = 3)]
         [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
         [System.String] $BundleName = "Visual C++ Redistributables"
     )
@@ -68,7 +68,7 @@ function Update-VcMdtBundle {
         try {
             $gciParams = @{
                 Path        = "$($MdtDrive):\$Applications"
-                Recurse     = $True
+                Recurse     = $true
                 ErrorAction = "SilentlyContinue"
             }
             $Bundles = Get-ChildItem @gciParams | Where-Object { $_.Name -eq "$Publisher $BundleName" }
@@ -95,7 +95,7 @@ function Update-VcMdtBundle {
                         Name        = "Dependency"
                         Value       = $dependencies
                         ErrorAction = "SilentlyContinue"
-                        Force       = $True
+                        Force       = $true
                     }
                     Set-ItemProperty @sipParams > $null
                 }
@@ -111,7 +111,7 @@ function Update-VcMdtBundle {
                         Name        = "Version"
                         Value       = $(Get-Date -Format (([System.Globalization.CultureInfo]::CurrentUICulture.DateTimeFormat).ShortDatePattern))
                         ErrorAction = "SilentlyContinue"
-                        Force       = $True
+                        Force       = $true
                     }
                     Set-ItemProperty @sipParams > $null
                 }
