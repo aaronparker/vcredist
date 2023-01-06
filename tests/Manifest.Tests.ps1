@@ -34,7 +34,7 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
             BeforeEach {
                 Install-VcRedist -VcList (Get-VcList -Release $VcRedist) -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads")) -Silent
                 $InstalledVcRedists = Get-InstalledVcRedist
-            
+
                 $ManifestVcRedist = $CurrentManifest.Supported | Where-Object { $_.Release -eq $VcRedist }
                 $InstalledItem = $InstalledVcRedists | Where-Object { ($VcRedist -eq $ManifestVcRedist.Release) -and ($_ -eq $ManifestVcRedist.Architecture) }
             }
@@ -46,7 +46,3 @@ Describe "VcRedist manifest tests" -ForEach $ValidateReleases {
         }
     }
 }
-
-# AfterAll {
-#     Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -WarningAction "SilentlyContinue"
-# }

@@ -21,12 +21,12 @@ function Test-VcRedistDownload {
         $ProxyCredential = [System.Management.Automation.PSCredential]::Empty,
 
         [Parameter(Mandatory = $False)]
-        [System.Management.Automation.SwitchParameter] $NoProgress
+        [System.Management.Automation.SwitchParameter] $ShowProgress
     )
 
     begin {
         # Disable the Invoke-WebRequest progress bar for faster downloads
-        if ($PSBoundParameters.ContainsKey("Verbose") -and !($PSBoundParameters.ContainsKey("NoProgress"))) {
+        if ($PSBoundParameters.ContainsKey("Verbose") -or ($PSBoundParameters.ContainsKey("ShowProgress"))) {
             $ProgressPreference = [System.Management.Automation.ActionPreference]::Continue
         }
         else {

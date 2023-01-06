@@ -3,7 +3,7 @@
 #>
 
 # Trust the PSGallery for modules
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 Install-PackageProvider -Name "NuGet" -MinimumVersion "2.8.5.208"
 Install-PackageProvider -Name "PowerShellGet" -MinimumVersion "2.2.5"
 if (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.InstallationPolicy -ne "Trusted" }) {

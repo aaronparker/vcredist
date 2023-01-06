@@ -8,8 +8,6 @@
 
     .NOTES
     Copyright 2021, Aaron Parker, stealthpuppy.com
-    
-
 #>
 [CmdletBinding()]
 param (
