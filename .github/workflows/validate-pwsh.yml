@@ -1,4 +1,4 @@
-name: Validate module
+name: Validate module (PWSH)
 
 on:  
   push:
