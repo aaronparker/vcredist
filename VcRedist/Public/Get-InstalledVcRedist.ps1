@@ -9,25 +9,24 @@ function Get-InstalledVcRedist {
         [System.Management.Automation.SwitchParameter] $ExportAll
     )
 
+    if ($PSBoundParameters.ContainsKey("ExportAll")) {
+        # If -ExportAll used, export everything instead of filtering for the primary Redistributable
+        # Get all installed Visual C++ Redistributables installed components
+        Write-Verbose -Message "-ExportAll specified. Exporting all install Visual C++ Redistributables and runtimes."
+        $Filter = "(Microsoft Visual C.*).*"
+    }
+    else {
+        $Filter = "(Microsoft Visual C.*)(\bRedistributable).*"
+    }
+
     # Get all installed Visual C++ Redistributables installed components
-    Write-Verbose -Message "Matching installed VcRedists with: [(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*]."
-    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match "(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*" }
+    Write-Verbose -Message "Matching installed VcRedists with: '$Filter'."
+    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match $Filter }
 
     # Add Architecture property to each entry
     Write-Verbose -Message "Adding Architecture property."
     $VcRedists | ForEach-Object { if ($_.Name -contains "x64") { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
-
-    # If -ExportAll used, export everything instead of filtering for the primary Redistributable
-    if ($PSBoundParameters.ContainsKey("ExportAll")) {
-
-        # Write the installed VcRedists to the pipeline
-        Write-Output -InputObject $VcRedists
-    }
-    else {
-        Write-Verbose -Message "Filtering output."
-        $Output = $VcRedists | ForEach-Object { if (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | Sort-Object -Property "Name"
-
-        # Write the filtered installed VcRedists to the pipeline
-        Write-Output -InputObject $Output
-    }
+    
+    # Write the installed VcRedists to the pipeline
+    Write-Output -InputObject $VcRedists
 }

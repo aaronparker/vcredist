@@ -24,19 +24,22 @@ Describe "Uninstall-VcRedist" -ForEach $TestReleases {
         }
         New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-		$VcRedist = Get-VcList -Release $_ | Save-VcRedist -Path $Path
-		Install-VcRedist -VcList $VcRedist -Path $Path -Silent
+		Write-Host "Test uninstall $_"
+		Get-VcList -Release $_ | Save-VcRedist -Path $Path | Out-Null
+		Install-VcRedist -VcList (Get-VcList -Release $_) -Path $Path -Silent | Out-Null
 	}
 
-	Context "Uninstall VcRedist <_.Name> x64" {
-		{ Uninstall-VcRedist -Release $_ -Architecture "x64" -Confirm:$False } | Should -Not -Throw
+	Context "Uninstall VcRedist <_> x64" {
+		{ Uninstall-VcRedist -Release $_ -Architecture "x64" -Confirm:$false } | Should -Not -Throw
 	}
 
-	Context "Uninstall VcRedist <_.Name> x86" -ForEach $TestReleases {
-		{ Uninstall-VcRedist -Release $_ -Architecture "x86" -Confirm:$False } | Should -Not -Throw
+	Context "Uninstall VcRedist <_> x86" -ForEach $TestReleases {
+		{ Uninstall-VcRedist -Release $_ -Architecture "x86" -Confirm:$false } | Should -Not -Throw
 	}
+}
 
+Describe "Uninstall VcRedist via the pipeline" {
 	Context "Test uninstall via the pipeline" {
-		{ Get-VcList -Release "2022" | Uninstall-VcRedist -Confirm:$False } | Should -Not -Throw
+		{ Get-VcList -Release "2022" | Uninstall-VcRedist -Confirm:$false } | Should -Not -Throw
 	}
 }

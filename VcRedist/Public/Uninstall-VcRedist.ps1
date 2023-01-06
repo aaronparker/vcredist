@@ -16,12 +16,17 @@ function Uninstall-VcRedist {
         [System.String[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline, ParameterSetName = 'Pipeline')]
-        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )
 
     begin {
-        if ($PSBoundParameters.ContainsKey("Confirm")) { Write-Warning -Message "Uninstalling Visual C++ Redistributables" }
+        # Get script elevation status
+        [System.Boolean] $Elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+        if ($Elevated -eq $false) {
+            $Msg = "Uninstalling the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again"
+            throw [System.Management.Automation.ScriptRequiresException]::New($Msg)
+        }
     }
 
     process {
@@ -39,47 +44,56 @@ function Uninstall-VcRedist {
 
         # Walk through each VcRedist and uninstall
         foreach ($VcRedist in $VcRedistsToRemove) {
-            if ($PSCmdlet.ShouldProcess($VcRedist.Name, "Uninstall")) {
-                $invokeProcessParams = @{
-                    FilePath = "$env:SystemRoot\System32\cmd.exe"
-                }
-                if ($null -ne $VcRedist.QuietUninstallString) {
-                    $invokeProcessParams.ArgumentList = "/c $($VcRedist.QuietUninstallString)"
-                    Write-Verbose -Message "VcRedist has quiet uninstall string."
-                    Write-Verbose -Message "Uninstalling with: [$($VcRedist.QuietUninstallString)]."
-                }
-                elseif ($null -ne $VcRedist.SilentUninstall) {
-                    $invokeProcessParams.ArgumentList = "/c $($VcRedist.SilentUninstall)"
-                    Write-Verbose -Message "VcRedist has quiet uninstall string."
-                    Write-Verbose -Message "Uninstalling with: [$($VcRedist.SilentUninstall)]."
-                }
-                else {
-                    $invokeProcessParams.ArgumentList = "/c $($VcRedist.UninstallString) /quiet /noreboot"
-                    Write-Verbose -Message "VcRedist does not have quiet uninstall string. Adding [/quiet]."
-                    Write-Verbose -Message "Uninstalling with: [$($VcRedist.UninstallString)]."
-                }
 
+            # Build the uninstall command
+            switch -Regex ($VcRedist.UninstallString) {
+                "^Msiexec*$" {
+                    Write-Verbose -Message "VcRedist uninstall uses Msiexec."
+                    $params = @{
+                        FilePath     = "$Env:SystemRoot\System32\msiexec.exe"
+                        ArgumentList = "/uninstall $($VcRedist.ProductCode) /quiet /norestart"
+                        PassThru     = $true
+                        Wait         = $true
+                        NoNewWindow  = $true
+                    }
+                }
+                default {
+                    $FilePath = [Regex]::Match($VcRedist.UninstallString, '\"(.*)\"').Captures.Groups[1].Value
+                    Write-Verbose -Message "VcRedist uninstall uses '$FilePath'."
+                    $params = @{
+                        FilePath     = $FilePath
+                        ArgumentList = "/uninstall /quiet /norestart"
+                        PassThru     = $true
+                        Wait         = $true
+                        NoNewWindow  = $true
+                    }
+                }
+            }
+
+            if ($PSCmdlet.ShouldProcess($VcRedist.Name, "Uninstall")) {
                 try {
-                    $result = Invoke-Process @invokeProcessParams
+                    $Result = Start-Process @params
+                    $State = "Uninstalled"
                 }
                 catch [System.Exception] {
-                    Write-Warning -Message "Failure in uninstalling Visual C++ Redistributable."
-                    Write-Warning -Message "Captured error (if any): [$result]."
-                    # throw "Failed to uninstall VcRedist $($VcRedist.Name) with error code: $($result.ExitCode)"
+                    Write-Warning -Message "Failure in uninstalling $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
+                    $State = "Failed"
+                }
+                finally {
+                    $Object = [PSCustomObject] @{
+                        Name         = $VcRedist.Name
+                        Version      = $VcRedist.Version
+                        Release      = $VcRedist.Release
+                        Architecture = $VcRedist.Architecture
+                        State        = $State
+                        ExitCode     = $Result.ExitCode
+                    }
+                    Write-Output -InputObject $Object
                 }
             }
         }
     }
 
     end {
-        # Output remaining installed VcRedists to the pipeline
-        $InstalledVcRedist = Get-InstalledVcRedist
-        if ($null -eq $InstalledVcRedist) {
-            Write-Verbose -Message "No VcRedists installed or all VcRedists uninstalled successfully."
-        }
-        else {
-            Write-Verbose -Message "Output remaining installed VcRedists."
-            Write-Output -InputObject $InstalledVcRedist
-        }
     }
 }
