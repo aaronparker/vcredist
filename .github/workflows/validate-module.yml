@@ -44,7 +44,7 @@ jobs:
           sarif_file: results.sarif
 
   run-pester:
-    name: run-pester
+    name: Test with Pester
     needs: psscriptanalyzer
     runs-on: ${{ matrix.os }}
     strategy:
