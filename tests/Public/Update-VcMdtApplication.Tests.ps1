@@ -32,6 +32,7 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
+				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
@@ -45,6 +46,7 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
+				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
@@ -75,6 +77,7 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
+				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
@@ -88,6 +91,7 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
+				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
