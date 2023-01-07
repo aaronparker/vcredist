@@ -105,7 +105,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
         with:
-          nunit_files: "${{ github.workspace }}//tests//TestResults7.xml"
+          nunit_files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml
 
       - name: Upload to Codecov
         id: codecov
