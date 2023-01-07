@@ -19,11 +19,11 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
 		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-		Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
+		$SaveList = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
 	}
 
-	Context "Update-VcMdtApplication updates Redistributables in the MDT share" {
-		It "Updates the <Release> x64 Redistributables in MDT OK" {
+	Context "Update-VcMdtApplication updates OK with existing Redistributables in the MDT share" {
+		It "Does not throw when updating the existing <Release> x64 Redistributables" {
 			$params = @{
 				VcList    = (Get-VcList -Release $Release -Architecture "x64")
 				Path      = $Path
@@ -36,9 +36,52 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
 
-		It "Updates the <Release> x86 Redistributables in MDT OK" {
+		It "Does not throw when updating the existing <Release> x86 Redistributables" {
 			$params = @{
 				VcList    = (Get-VcList -Release $Release -Architecture "x86")
+				Path      = $Path
+				MdtPath   = "$env:RUNNER_TEMP\Deployment"
+				AppFolder = "VcRedists"
+				Silent    = $true
+				MdtDrive  = "DS020"
+				Publisher = "Microsoft"
+			}
+			{ Update-VcMdtApplication @params } | Should -Not -Throw
+		}
+	}
+}
+
+Describe -Name "Update-VcMdtApplication updates an existing application" {
+	BeforeAll {
+		# Copy a previous version over the top of the existing version
+		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
+		$SaveVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release "2019")
+		$Version = (Get-VcList -Release "2022" -Architecture "x64").Version
+		$VcPath = "$env:RUNNER_TEMP\Deployment\Applications\Microsoft VcRedist\2022\$Version"
+		foreach ($Item in $SaveVcRedist) {
+			foreach ($Arch in @("x64", "x86")) {
+				Copy-Item -Path $Item.Path -Destination "$VcPath\$Arch" -Force
+			}
+		}
+	}
+
+	Context "Update-VcMdtApplication updates Redistributables in the MDT share" {
+		It "Updates the 2022 x64 Redistributables in MDT OK" {
+			$params = @{
+				VcList    = (Get-VcList -Release "2022" -Architecture "x64")
+				Path      = $Path
+				MdtPath   = "$env:RUNNER_TEMP\Deployment"
+				AppFolder = "VcRedists"
+				Silent    = $true
+				MdtDrive  = "DS020"
+				Publisher = "Microsoft"
+			}
+			{ Update-VcMdtApplication @params } | Should -Not -Throw
+		}
+
+		It "Updates the 2022 x86 Redistributables in MDT OK" {
+			$params = @{
+				VcList    = (Get-VcList -Release "2022" -Architecture "x86")
 				Path      = $Path
 				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
