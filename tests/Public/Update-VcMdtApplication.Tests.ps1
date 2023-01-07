@@ -32,7 +32,6 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
-				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
@@ -46,7 +45,6 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
-				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
@@ -55,7 +53,8 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 
 Describe -Name "Update-VcMdtApplication updates an existing application" {
 	BeforeAll {
-		# Copy a previous version over the top of the existing version
+
+		# Setup existing 2022 VcRedist applications with details that need to be updated
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
 		$SaveVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release "2019")
 		$Version = (Get-VcList -Release "2022" -Architecture "x64").Version
@@ -64,6 +63,30 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 			foreach ($Arch in @("x64", "x86")) {
 				Copy-Item -Path $Item.Path -Destination "$VcPath\$Arch" -Force
 			}
+		}
+		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\bin\MicrosoftDeploymentToolkit.psd1"
+		$params = @{
+			Name        = "DS020"
+			PSProvider  = "MDTProvider"
+			Root        = "$env:RUNNER_TEMP\Deployment"
+		}
+		New-PSDrive @params | Add-MDTPersistentDrive
+		Restore-MDTPersistentDrive | Out-Null
+		$MdtDrive = "DS020"
+		$MdtTargetFolder = "$($MdtDrive):\Applications\VcRedists"
+		$gciParams = @{
+			Path        = $MdtTargetFolder
+			Recurse     = $true
+			ErrorAction = "Continue"
+		}
+		foreach ($Architecture in @("x86", "x64")) {
+			$ExistingVcRedist = Get-ChildItem @gciParams | Where-Object { $_.ShortName -match "2022 $Architecture" }
+			$params = @{
+				Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+				Name  = "UninstallKey"
+				Value = $((New-Guid).Guid)
+			}
+			Set-ItemProperty @params
 		}
 	}
 
@@ -77,7 +100,6 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
-				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}
@@ -91,7 +113,6 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 				Silent    = $true
 				MdtDrive  = "DS020"
 				Publisher = "Microsoft"
-				Force     = $true
 			}
 			{ Update-VcMdtApplication @params } | Should -Not -Throw
 		}

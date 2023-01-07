@@ -64,17 +64,17 @@ function Update-VcMdtApplication {
             throw [System.Management.Automation.InvalidPowerShellStateException]::New($Msg)
         }
 
-        $Target = "$($MdtDrive):\Applications\$AppFolder"
-        Write-Verbose -Message "Update applications in: $Target"
+        $MdtTargetFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications\$AppFolder"
+        Write-Verbose -Message "Update applications in: $MdtTargetFolder"
     }
 
     process {
-        if (Test-Path -Path $Target) {
+        if (Test-Path -Path $MdtTargetFolder) {
             foreach ($VcRedist in $VcList) {
 
                 # Get the existing VcRedist applications in the MDT share
                 $params = @{
-                    Path        = $Target
+                    Path        = $MdtTargetFolder
                     ErrorAction = "Continue"
                 }
                 $ExistingVcRedist = Get-ChildItem @params | Where-Object { $_.ShortName -match "$($VcRedist.Release) $($VcRedist.Architecture)" }
@@ -116,7 +116,7 @@ function Update-VcMdtApplication {
                             # Check the existing command line on the application and update
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update CommandLine")) {
                                 $params = @{
-                                    Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
                                     Name  = "CommandLine"
                                     Value = ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
                                 }
@@ -126,7 +126,7 @@ function Update-VcMdtApplication {
                             # Update ProductCode
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update UninstallKey")) {
                                 $sipParams = @{
-                                    Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
                                     Name  = "UninstallKey"
                                     Value = $VcRedist.ProductCode
                                 }
@@ -136,7 +136,7 @@ function Update-VcMdtApplication {
                             # Update Version number
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Version")) {
                                 $sipParams = @{
-                                    Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
                                     Name  = "Version"
                                     Value = $VcRedist.Version
                                 }
@@ -145,7 +145,7 @@ function Update-VcMdtApplication {
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Source")) {
                                 $sipParams = @{
-                                    Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
                                     Name  = "Source"
                                     Value = $ExistingVcRedist.Source -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                 }
@@ -154,7 +154,7 @@ function Update-VcMdtApplication {
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update WorkingDirectory")) {
                                 $sipParams = @{
-                                    Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
                                     Name  = "WorkingDirectory"
                                     Value = $ExistingVcRedist.WorkingDirectory -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                 }
@@ -163,7 +163,7 @@ function Update-VcMdtApplication {
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Name")) {
                                 $sipParams = @{
-                                    Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
                                     Name  = "Name"
                                     Value = $ExistingVcRedist.Name -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                 }
@@ -178,19 +178,19 @@ function Update-VcMdtApplication {
             }
         }
         else {
-            Write-Warning -Message "Failed to find path $Target."
+            Write-Warning -Message "Failed to find path $MdtTargetFolder."
         }
     }
 
     end {
-        if (Test-Path -Path $Target) {
+        if (Test-Path -Path $MdtTargetFolder) {
 
             # Get the imported Visual C++ Redistributables applications to return on the pipeline
             Write-Verbose -Message "Getting Visual C++ Redistributables from the deployment share"
-            Write-Output -InputObject (Get-ChildItem -Path $Target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })
+            Write-Output -InputObject (Get-ChildItem -Path $MdtTargetFolder | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })
         }
         else {
-            Write-Warning -Message "Failed to find path $Target."
+            Write-Warning -Message "Failed to find path $MdtTargetFolder."
         }
     }
 }

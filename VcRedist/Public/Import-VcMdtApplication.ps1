@@ -90,14 +90,14 @@ function Import-VcMdtApplication {
                     throw $_
                 }
             }
-            $TargetMdtFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications\$AppFolder"
+            $MdtTargetFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications\$AppFolder"
         }
         else {
-            $TargetMdtFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications"
+            $MdtTargetFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications"
         }
-        Write-Verbose -Message "VcRedists will be imported into: $TargetMdtFolder"
+        Write-Verbose -Message "VcRedists will be imported into: $MdtTargetFolder"
         Write-Verbose -Message "Retrieving existing Visual C++ Redistributables from the deployment share"
-        $existingVcRedists = Get-ChildItem -Path $TargetMdtFolder -ErrorAction "SilentlyContinue" | Where-Object { $_.Name -like "*Visual C++*" }
+        $existingVcRedists = Get-ChildItem -Path $MdtTargetFolder -ErrorAction "SilentlyContinue" | Where-Object { $_.Name -like "*Visual C++*" }
     }
 
     process {
@@ -120,14 +120,14 @@ function Import-VcMdtApplication {
             if ($PSBoundParameters.ContainsKey("Force")) {
                 if ($VcMatched.UninstallKey -eq $VcRedist.ProductCode) {
                     if ($PSCmdlet.ShouldProcess($VcMatched.Name, "Remove")) {
-                        Remove-Item -Path $("$TargetMdtFolder\$($VcMatched.Name)") -Force
+                        Remove-Item -Path $("$MdtTargetFolder\$($VcMatched.Name)") -Force
                     }
                 }
             }
 
             # Import as an application into the MDT deployment share
-            if (Test-Path -Path "$TargetMdtFolder\$($VcMatched.Name)") {
-                Write-Verbose -Message "'$("$TargetMdtFolder\$($VcMatched.Name)")' exists. Use -Force to overwrite the existing application."
+            if (Test-Path -Path "$MdtTargetFolder\$($VcMatched.Name)") {
+                Write-Verbose -Message "'$("$MdtTargetFolder\$($VcMatched.Name)")' exists. Use -Force to overwrite the existing application."
             }
             else {
                 if ($PSCmdlet.ShouldProcess("$($VcRedist.Name) in $MdtPath", "Import")) {
@@ -135,7 +135,7 @@ function Import-VcMdtApplication {
 
                         # Splat the Import-MDTApplication arguments
                         $importMDTAppParams = @{
-                            Path                  = $TargetMdtFolder
+                            Path                  = $MdtTargetFolder
                             Name                  = $ApplicationName
                             Enable                = $true
                             Reboot                = $false
@@ -166,6 +166,6 @@ function Import-VcMdtApplication {
     end {
         # Get the imported Visual C++ Redistributables applications to return on the pipeline
         Write-Verbose -Message "Retrieving Visual C++ Redistributables imported into the deployment share"
-        Write-Output -InputObject (Get-ChildItem -Path $TargetMdtFolder | Where-Object { $_.Name -like "*Visual C++*" } | Select-Object -Property *)
+        Write-Output -InputObject (Get-ChildItem -Path $MdtTargetFolder | Where-Object { $_.Name -like "*Visual C++*" } | Select-Object -Property *)
     }
 }
