@@ -88,6 +88,7 @@ jobs:
           $Config.TestResult.Enabled = $True
           $Config.TestResult.OutputFormat = "NUnitXml"
           $Config.TestResult.OutputPath = "$env:GITHUB_WORKSPACE\tests\TestResults-${{ matrix.os }}.xml"
+          $Config.Output.Verbosity = "Detailed"
           Invoke-Pester -Configuration $Config
 
       - name: Upload artifacts
@@ -98,6 +99,13 @@ jobs:
           name: pester-test-results
           path: |
             ${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml
+
+      # Publish Pester test results
+      - name: Publish Pester test results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          nunit_files: "${{ github.workspace }}//tests//TestResults7.xml"
 
       - name: Upload to Codecov
         id: codecov
