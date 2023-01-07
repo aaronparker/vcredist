@@ -10,7 +10,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -23,7 +23,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -36,7 +36,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -49,7 +49,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -62,7 +62,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -75,7 +75,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -88,7 +88,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -101,7 +101,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -114,7 +114,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -127,7 +127,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -140,7 +140,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -153,7 +153,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         }
     ],
@@ -454,7 +454,7 @@
             "Architecture": "x64",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         },
         {
@@ -467,7 +467,7 @@
             "Architecture": "x86",
             "Install": "/install /passive /norestart",
             "SilentInstall": "/install /quiet /norestart",
-            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /noreboot",
+            "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32"
         }
     ]
