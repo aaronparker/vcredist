@@ -15,50 +15,52 @@ BeforeDiscovery {
 Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists {
 	BeforeAll {
 		$VcRedist = $_
+		$Name = $_.Name
+		$Architecture = $_.Architecture
 	}
 
 	Context "Validate Get-VcList array properties" {
-		It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Name property" {
+		It "VcRedist '<Name>, <Architecture>' has a Name property" {
             [System.Boolean]($VcRedist.Name) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a ProductCode property" {
+        It "VcRedist '<Name>, <Architecture>' has a ProductCode property" {
             [System.Boolean]($VcRedist.ProductCode) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Version property" {
+        It "VcRedist '<Name>, <Architecture>' has a Version property" {
             [System.Boolean]($VcRedist.Version) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a URL property" {
+        It "VcRedist '<Name>, <Architecture>' has a URL property" {
             [System.Boolean]($VcRedist.URL) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Download property" {
+        It "VcRedist '<Name>, <Architecture>' has a URI property" {
             [System.Boolean]($VcRedist.URI) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Release property" {
+        It "VcRedist '<Name>, <Architecture>' has a Release property" {
             [System.Boolean]($VcRedist.Release) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a Architecture property" {
+        It "VcRedist '<Name>, <Architecture>' has an Architecture property" {
             [System.Boolean]($VcRedist.Architecture) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have an Install property" {
+        It "VcRedist '<Name>, <Architecture>' has an Install property" {
             [System.Boolean]($VcRedist.Install) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a SilentInstall property" {
+        It "VcRedist '<Name>, <Architecture>' has a SilentInstall property" {
             [System.Boolean]($VcRedist.SilentInstall) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a SilentUninstall property" {
+        It "VcRedist '<Name>, <Architecture>' has a SilentUninstall property" {
             [System.Boolean]($VcRedist.SilentUninstall) | Should -BeTrue
         }
 
-        It "VcRedist [$($VcRedist.Name), $($VcRedist.Architecture)] have a UninstallKey property" {
+        It "VcRedist '<Name>, <Architecture>' has an UninstallKey property" {
             [System.Boolean]($VcRedist.UninstallKey) | Should -BeTrue
         }
 	}
