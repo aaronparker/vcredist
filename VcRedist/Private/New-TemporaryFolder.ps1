@@ -16,7 +16,7 @@ function New-TemporaryFolder {
         $Folder = "vcredist_$([System.Convert]::ToString((Get-Random -Maximum 65535),16).PadLeft(4,'0')).tmp"
         $T = Join-Path -Path $Env:Temp -ChildPath $Folder
         if ($PSCmdlet.ShouldProcess($T, "New directory.")) {
-            $Path = New-Item -Path $T -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+            $Path = New-Item -Path $T -ItemType "Directory" -ErrorAction "SilentlyContinue"
             Write-Output -InputObject $Path.FullName
         }
     }
