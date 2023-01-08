@@ -43,7 +43,7 @@ function Test-VcRedistDownload {
 
             #region Validate the URI property and find the output filename
             if ([System.Boolean]($Object.URI) -eq $false) {
-                $Msg = "Object does not have valid Download property."
+                $Msg = "Object does not have valid URI property."
                 throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
             }
             #endregion

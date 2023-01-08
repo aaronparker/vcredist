@@ -11,6 +11,11 @@ function Import-VcIntuneApplication {
     )
 
     begin {
+        if ([System.Boolean]$VcList.Path -eq $false) {
+            $Msg = "Object does not have valid Path property. Please ensure that output from Save-VcRedist is passed to this function."
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+        }
+
         # IntuneWin32App currently supports Windows PowerShell only
         if (Test-PSCore) {
             $Msg = "We can't load the IntuneWin32App module on PowerShell Core. Please use PowerShell 5.1."
@@ -108,7 +113,7 @@ function Import-VcIntuneApplication {
             }
 
             # Clean up the temporary intunewin package
-            Remove-Item -Path $OutputFolder -Recurse -Force
+            Remove-Item -Path $OutputFolder -Recurse -Force -ErrorAction "SilentlyContinue"
         }
     }
 }
