@@ -13,7 +13,7 @@ function Import-VcIntuneApplication {
     begin {
         # IntuneWin32App currently supports Windows PowerShell only
         if (Test-PSCore) {
-            $Msg = "We can't load the MicrosoftDeploymentToolkit module on PowerShell Core. Please use PowerShell 5.1."
+            $Msg = "We can't load the IntuneWin32App module on PowerShell Core. Please use PowerShell 5.1."
             throw [System.TypeLoadException]::New($Msg)
         }
 
