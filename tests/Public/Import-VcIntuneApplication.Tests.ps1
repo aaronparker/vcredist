@@ -52,10 +52,13 @@ Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $TestRele
 			catch {
 				throw $_
 			}
+
+			# Path with VcRedist downloads
+			$Path = "$env:RUNNER_TEMP\Deployment"
 		}
 
 		It "Imports into the target tenant OK" {
-			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Not -Throw
+			{ Import-VcIntuneApplication -VcList (Save-VcRedist -Path $Path -VcList (Get-VcList -Release $_)) } | Should -Not -Throw
 		}
 	}
 }
