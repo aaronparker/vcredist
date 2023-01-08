@@ -25,22 +25,22 @@ function Get-VcList {
     )
 
     process {
-        try {
-            Write-Verbose -Message "Reading JSON document [$Path]."
-            $content = Get-Content -Raw -Path $Path -ErrorAction "SilentlyContinue"
+        Write-Verbose -Message "Reading JSON document [$Path]."
+        $params = @{
+            Path        = $Path
+            Raw         = $true
+            ErrorAction = "Stop"
         }
-        catch [System.Exception] {
-            Write-Warning -Message "Unable to read manifest [$Path]."
-            throw $_.Exception.Message
-        }
+        $content = Get-Content @params
+
         try {
             # Convert the JSON content to an object
             Write-Verbose -Message "Converting JSON."
-            $json = $content | ConvertFrom-Json -ErrorAction "SilentlyContinue"
+            $json = $content | ConvertFrom-Json -ErrorAction "Continue"
         }
         catch [System.Exception] {
             Write-Warning -Message "Unable to convert manifest JSON to required object. Please validate the input manifest."
-            throw $_.Exception.Message
+            throw $_
         }
 
         if ($null -ne $json) {
