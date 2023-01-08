@@ -67,7 +67,7 @@ Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists
 }
 
 Describe -Name "Get-VcRedist parameters" {
-    Context "Test parameters" {
+    Context "Test Get-VcRedist parameters" {
         It "Returns the expected output for VcRedist 2022" {
             (Get-VcList -Release "2022")[0].Name | Should -BeExactly "Visual C++ Redistributable for Visual Studio 2022"
         }
@@ -78,7 +78,7 @@ Describe -Name "Get-VcRedist parameters" {
     }
 }
 
-Describe -Name "Validate manifest counts" {
+Describe -Name "Validate manifest counts from Get-VcList" {
 	BeforeAll {
 		$VcCount = @{
 			"Default"     = 6
@@ -88,7 +88,7 @@ Describe -Name "Validate manifest counts" {
 		}
 	}
 
-	Context "Return built-in manifest" {
+	Context "Return built-in manifest with Get-VcList" {
 		It "Given no parameters, it returns supported Visual C++ Redistributables" {
 			Get-VcList | Should -HaveCount $VcCount.Default
 		}
@@ -104,11 +104,10 @@ Describe -Name "Validate manifest counts" {
 	}
 }
 
-Describe -Name "Validate manifest scenarios" {
-	Context 'Validation' {
+Describe -Name "Validate manifest scenarios with Get-VcList" {
+	Context 'Validate Get-VcList' {
 		BeforeAll {
-			$Json = [System.IO.Path]::Combine($env:RUNNER_TEMP, "Redists.json")
-			Export-VcManifest -Path $Json
+			$Json = Export-VcManifest -Path $env:RUNNER_TEMP
 			$VcList = Get-VcList -Path $Json
 			$VcCount = @{
 				"Default"     = 6

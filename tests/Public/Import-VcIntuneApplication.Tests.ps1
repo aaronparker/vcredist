@@ -58,7 +58,7 @@ Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $TestRele
 			# Path with VcRedist downloads
 			$Path = "$env:RUNNER_TEMP\Deployment"
 			$SavedVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $_)
-			{ Import-VcIntuneApplication -VcList $SavedVcRedist > $null} | Should -Not -Throw
+			{ Import-VcIntuneApplication -VcList $SavedVcRedist | Out-Null } | Should -Not -Throw
 		}
 	}
 }

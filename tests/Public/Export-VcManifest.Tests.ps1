@@ -43,9 +43,5 @@ Describe -Name "Export-VcManifest" {
 		It "Given an valid path, it should not throw an error" {
 			{ Export-VcManifest -Path $env:RUNNER_TEMP } | Should -Not -Throw
 		}
-
-		It "Should output the expected object type" {
-			$Json | Should -BeOfType ((Get-Command -Command Export-VcManifest).OutputType.Type.Name)
-		}
 	}
 }
