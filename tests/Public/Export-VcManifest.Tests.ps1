@@ -13,9 +13,9 @@ BeforeDiscovery {
 Describe -Name "Export-VcManifest" {
 	Context "Validate Export-VcManifest" {
 		BeforeAll {
-			$Json = [System.IO.Path]::Combine($env:RUNNER_TEMP, "Redists.json")
-			Export-VcManifest -Path $Json
+			$Json = Export-VcManifest -Path $env:RUNNER_TEMP
 			$VcList = Get-VcList -Path $Json
+
 			$VcCount = @{
 				"Default"     = 6
 				"Supported"   = 12
@@ -33,7 +33,19 @@ Describe -Name "Export-VcManifest" {
 		}
 
 		It "Given an invalid path, it should throw an error" {
-			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Temp", "Temp.json")) } | Should -Throw
+			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Temp")) } | Should -Throw
+		}
+
+		It "Given an valid path, it should not throw an error" {
+			{ Export-VcManifest -Path $env:RUNNER_TEMP } | Should -Not -Throw
+		}
+
+		It "Given an valid path, it should not throw an error" {
+			{ Export-VcManifest -Path $env:RUNNER_TEMP } | Should -Not -Throw
+		}
+
+		It "Should output the expected object type" {
+			$Json | Should -BeOfType ((Get-Command -Command Export-VcManifest).OutputType.Type.Name)
 		}
 	}
 }

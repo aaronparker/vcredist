@@ -34,19 +34,15 @@ function New-MdtDrive {
     }
     else {
         if ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
-            try {
-                $params = @{
-                    Name        = $Drive
-                    PSProvider  = "MDTProvider"
-                    Root        = $Path
-                    #NetworkPath = $Path
-                    Description = $Description
-                }
-                New-PSDrive @params | Add-MDTPersistentDrive
+            $params = @{
+                Name        = $Drive
+                PSProvider  = "MDTProvider"
+                Root        = $Path
+                #NetworkPath = $Path
+                Description = $Description
+                ErrorAction = "Stop"
             }
-            catch [System.Exception] {
-                throw $_
-            }
+            New-PSDrive @params | Add-MDTPersistentDrive
 
             # Return the MDT drive name
             $psDrive = Get-MdtPersistentDrive | Where-Object { $_.Path -eq $Path -and $_.Name -eq $Drive }

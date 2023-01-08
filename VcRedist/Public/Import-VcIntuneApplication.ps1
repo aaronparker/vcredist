@@ -91,7 +91,7 @@ function Import-VcIntuneApplication {
                 "DisplayName"              = $DisplayName
                 "Description"              = "$($IntuneManifest.Information.Description). $DisplayName"
                 "AppVersion"               = $VcRedist.Version
-                "Notes"                    = "Package created with VcRedist on $(Get-Date -Format "yyyy-MM-dd"), https://vcredist.com."
+                "Notes"                    = "Package created with VcRedist on $(Get-Date -Format "yyyy-MM-dd"); https://vcredist.com"
                 "Publisher"                = $IntuneManifest.Information.Publisher
                 "InformationURL"           = $IntuneManifest.Information.InformationURL
                 "PrivacyURL"               = $IntuneManifest.Information.PrivacyURL

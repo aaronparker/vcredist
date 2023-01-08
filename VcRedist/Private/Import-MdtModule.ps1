@@ -33,17 +33,12 @@ function Import-MdtModule {
     $MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
     if (Test-Path -Path $mdtModule -ErrorAction "SilentlyContinue") {
         Write-Verbose -Message "Loading MDT module from: $MdtInstallDir."
-        try {
-            $params = @{
-                Name        = $MdtModule
-                ErrorAction = "Continue"
-                Force       = if ($Force) { $true } else { $false }
-            }
-            Import-Module @params
+        $params = @{
+            Name        = $MdtModule
+            ErrorAction = "Stop"
+            Force       = if ($Force) { $true } else { $false }
         }
-        catch [System.Exception] {
-            throw $_
-        }
+        Import-Module @params
         Write-Output -InputObject $true
     }
     else {
