@@ -36,7 +36,6 @@ function Import-VcIntuneApplication {
         }
 
         # Get the Intune app manifest
-        #$Strings = $(Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VcRedist.json") | ConvertFrom-Json
         $IntuneManifest = Get-Content -Path $(Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "Intune.json") | ConvertFrom-Json
 
         # Create the icon object for the app
@@ -53,12 +52,10 @@ function Import-VcIntuneApplication {
         foreach ($VcRedist in $VcList) {
 
             # Package MSI as .intunewin file
-            $SourceFolder = $(Split-Path -Path $VcRedist.Path -Parent)
-            $SetupFile = $(Split-Path -Path $VcRedist.Path -Leaf)
             $OutputFolder = New-TemporaryFolder
             $params = @{
-                SourceFolder = $SourceFolder
-                SetupFile    = $SetupFile
+                SourceFolder = $(Split-Path -Path $VcRedist.Path -Parent)
+                SetupFile    = $(Split-Path -Path $VcRedist.Path -Leaf)
                 OutputFolder = $OutputFolder
             }
             $Package = New-IntuneWin32AppPackage @params
