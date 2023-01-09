@@ -13,7 +13,7 @@ Creates Visual C++ Redistributable applications in a ConfigMgr site.
 
 ## SYNTAX
 
-```powershell
+```
 Import-VcConfigMgrApplication [-VcList] <PSObject> [-Path] <String> [-CMPath] <String> [-SMSSiteCode] <String>
  [[-AppFolder] <String>] [-Silent] [-NoCopy] [[-Publisher] <String>] [[-Keyword] <String>] [-WhatIf] [-Confirm]
  [<CommonParameters>]

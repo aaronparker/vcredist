@@ -13,7 +13,7 @@ Exports the Visual C++ Redistributables JSON manifest to an external file.
 
 ## SYNTAX
 
-```powershell
+```
 Export-VcManifest [-Path] <String> [<CommonParameters>]
 ```
 

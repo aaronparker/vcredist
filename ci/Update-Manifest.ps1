@@ -6,7 +6,7 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUserDeclaredVarsMoreThanAssignments", "")]
 [CmdletBinding()]
-Param (
+param (
     [System.String[]] $Release,
 
     [System.String] $Path,
@@ -22,7 +22,7 @@ process {
     $InstalledVcRedists = Get-InstalledVcRedist
 
     $Output = @()
-    $FoundNewVersion = $False
+    $FoundNewVersion = $false
     foreach ($Item in $Release) {
 
         Write-Host "`tInstalling VcRedist $Item." -ForegroundColor "Cyan"
@@ -46,7 +46,7 @@ process {
 
                 # Create output variable
                 # $NewVersion = $InstalledItem.Version
-                $FoundNewVersion = $True
+                $FoundNewVersion = $true
                 $Output += $Item
             }
         }
@@ -54,7 +54,7 @@ process {
 
     # If a version was found and were aren't in the main branch
     Write-Host -ForegroundColor "Cyan" "`tFound new version $FoundNewVersion."
-    if ($FoundNewVersion -eq $True) {
+    if ($FoundNewVersion -eq $true) {
 
         # Convert to JSON and export to the module manifest
         try {

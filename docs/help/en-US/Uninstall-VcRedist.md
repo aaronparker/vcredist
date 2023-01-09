@@ -15,14 +15,14 @@ Uninstall the installed Visual C++ Redistributables on the local system.
 
 ### Manual (Default)
 
-```powershell
+```
 Uninstall-VcRedist [[-Release] <String[]>] [[-Architecture] <String[]>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### Pipeline
 
-```powershell
+```
 Uninstall-VcRedist [-VcList] <PSObject> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 

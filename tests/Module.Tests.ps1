@@ -2,25 +2,18 @@
     .SYNOPSIS
         Main Pester function tests.
 #>
-#Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost",,, "" "" "")]
-#Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions",,, "" "" "")]
-#Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", "", "")]
 [CmdletBinding()]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "This OK for the tests files.")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
 BeforeDiscovery {
-    If (Test-Path -Path env:GITHUB_WORKSPACE -ErrorAction "SilentlyContinue") {
-        [System.Environment]::SetEnvironmentVariable("WorkingPath", $env:GITHUB_WORKSPACE)
-    }
-    Else {
-        [System.Environment]::SetEnvironmentVariable("WorkingPath", $env:APPVEYOR_BUILD_FOLDER)
-    }
 }
 
-Describe "General module validation" {
-    Context 'Validation' {
+Describe -Name "General module validation" {
+    Context "Validation" {
         BeforeAll {
-            $scripts = Get-ChildItem -Path "$env:WorkingPath\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
+            $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1", "*.psm1", "*.psd1"
 
             # TestCases are splatted to the script so we need hashtables
             $testCase = $scripts | ForEach-Object { @{file = $_ } }
@@ -41,10 +34,10 @@ Describe "General module validation" {
     }
 }
 
-Describe "Function validation" {
-    Context 'Validation' {
+Describe -Name "function validation" {
+    Context "Validation" {
         BeforeEach {
-            $scripts = Get-ChildItem -Path "$env:WorkingPath\VcRedist" -Recurse -Include "*.ps1"
+            $scripts = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\VcRedist" -Recurse -Include "*.ps1"
             $testCase = $scripts | ForEach-Object { @{file = $_ } }
         }
 
@@ -67,17 +60,17 @@ Describe "Function validation" {
 }
 
 # Test module and manifest
-Describe 'Module Metadata validation' {
-    Context 'File info' {
+Describe -Name "Module Metadata validation" {
+    Context "File info" {
         BeforeAll {
         }
 
-        It 'Script fileinfo should be OK' {
-            { Test-ModuleManifest -Path "$env:WorkingPath\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
+        It "Script fileinfo should be OK" {
+            { Test-ModuleManifest -Path "$env:GITHUB_WORKSPACE\VcRedist\VcRedist.psd1" -ErrorAction "Stop" } | Should -Not -Throw
         }
 
-        It 'Import module should be OK' {
-            { Import-Module "$env:WorkingPath\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
+        It "Import module should be OK" {
+            { Import-Module "$env:GITHUB_WORKSPACE\VcRedist" -Force -ErrorAction "Stop" } | Should -Not -Throw
         }
     }
 }

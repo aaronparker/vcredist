@@ -13,7 +13,7 @@ Updates Visual C++ Redistributable application bundles in a Microsoft Deployment
 
 ## SYNTAX
 
-```powershell
+```
 Update-VcMdtBundle [-MdtPath] <String> [-AppFolder <String>] [[-MdtDrive] <String>] [[-Publisher] <String>]
  [[-BundleName] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```

@@ -2,18 +2,28 @@ function Import-VcIntuneApplication {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://vcredist.com/import-vcintuneapplication/")]
+    [CmdletBinding(SupportsShouldProcess = $false, HelpURI = "https://vcredist.com/import-vcintuneapplication/")]
     [OutputType([System.String])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
-        [ValidateNotNull()]
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Pass a VcList object from Save-VcList.")]
+            [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )
 
     begin {
+        if ([System.Boolean]$VcList.Path -eq $false) {
+            $Msg = "Object does not have valid Path property. Please ensure that output from Save-VcRedist is passed to this function."
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+        }
+
         # IntuneWin32App currently supports Windows PowerShell only
         if (Test-PSCore) {
-            throw "This function requires Windows PowerShell."
+            $Msg = "We can't load the IntuneWin32App module on PowerShell Core. Please use PowerShell 5.1."
+            throw [System.TypeLoadException]::New($Msg)
         }
 
         # Test for required variables
@@ -23,27 +33,23 @@ function Import-VcIntuneApplication {
                 Write-Verbose -Message "Support module installed: $Module."
             }
             else {
-                throw "Required module missing: $Module."
+                $Msg = "Required module missing: $Module."
+                throw [System.TypeLoadException]::New($Msg)
             }
         }
 
         # Test for authentication token
         if ($null -eq $Global:AccessToken) {
-            throw "Microsoft Graph API access token missing. Authenticate to the Graph API with Connect-MSIntuneGraph."
+            $Msg = "Microsoft Graph API access token missing. Authenticate to the Graph API with Connect-MSIntuneGraph."
+            throw [System.UnauthorizedAccessException]::New($Msg)
         }
 
         # Get the Intune app manifest
-        try {
-            #$Strings = $(Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VcRedist.json") | ConvertFrom-Json
-            $IntuneManifest = Get-Content -Path $(Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "Intune.json") | ConvertFrom-Json
-        }
-        catch {
-            throw $_.Exception.Message
-        }
+        $IntuneManifest = Get-Content -Path $(Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "Intune.json") | ConvertFrom-Json
 
         # Create the icon object for the app
         $IconPath = [System.IO.Path]::Combine($MyInvocation.MyCommand.Module.ModuleBase, "img", "vcredist.png")
-        if (Test-Path -Path $IconPath -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $IconPath) {
             $Icon = New-IntuneWin32AppIcon -FilePath $IconPath
         }
         else {
@@ -55,20 +61,13 @@ function Import-VcIntuneApplication {
         foreach ($VcRedist in $VcList) {
 
             # Package MSI as .intunewin file
-            try {
-                $SourceFolder = $(Split-Path -Path $VcRedist.Path -Parent)
-                $SetupFile = $(Split-Path -Path $VcRedist.Path -Leaf)
-                $OutputFolder = New-TemporaryFolder
-                $params = @{
-                    SourceFolder = $SourceFolder
-                    SetupFile    = $SetupFile
-                    OutputFolder = $OutputFolder
-                }
-                $Package = New-IntuneWin32AppPackage @params
+            $OutputFolder = New-TemporaryFolder
+            $params = @{
+                SourceFolder = $(Split-Path -Path $VcRedist.Path -Parent)
+                SetupFile    = $(Split-Path -Path $VcRedist.Path -Leaf)
+                OutputFolder = $OutputFolder
             }
-            catch {
-                throw "Failed to create an Intune package for: $($VcRedist.Path)."
-            }
+            $Package = New-IntuneWin32AppPackage @params
 
             # Requirement rule
             if ($VcRedist.Architecture -eq "x86") { $Architecture = "All" } else { $Architecture = "x64" }
@@ -80,7 +79,7 @@ function Import-VcIntuneApplication {
             $RequirementRule = New-IntuneWin32AppRequirementRule @params
 
             # Detection rule
-            if ($VcRedist.UninstallKey -eq "32") { $Check32BitOn64System = $True } else { $Check32BitOn64System = $False }
+            if ($VcRedist.UninstallKey -eq "32") { $Check32BitOn64System = $true } else { $Check32BitOn64System = $false }
             $DetectionRuleArgs = @{
                 "Existence"            = $true
                 "KeyPath"              = $IntuneManifest.DetectionRule.KeyPath -replace "{guid}", $VcRedist.ProductCode
@@ -90,45 +89,35 @@ function Import-VcIntuneApplication {
             $DetectionRule = New-IntuneWin32AppDetectionRuleRegistry @DetectionRuleArgs
 
             # Construct a table of default parameters for Win32 app
-            try {
-                $DisplayName = "$($IntuneManifest.Information.Publisher) $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
-                $Win32AppArgs = @{
-                    "FilePath"                 = $Package.Path
-                    "DisplayName"              = $DisplayName
-                    "Description"              = "$($IntuneManifest.Information.Description). $DisplayName"
-                    "AppVersion"               = $VcRedist.Version
-                    "Notes"                    = "Package created with VcRedist on $(Get-Date -Format "yyyy-MM-dd"), https://vcredist.com."
-                    "Publisher"                = $IntuneManifest.Information.Publisher
-                    "InformationURL"           = $IntuneManifest.Information.InformationURL
-                    "PrivacyURL"               = $IntuneManifest.Information.PrivacyURL
-                    "CompanyPortalFeaturedApp" = $false
-                    "InstallExperience"        = $IntuneManifest.Program.InstallExperience
-                    "RestartBehavior"          = $IntuneManifest.Program.DeviceRestartBehavior
-                    "DetectionRule"            = $DetectionRule
-                    "RequirementRule"          = $RequirementRule
-                    "InstallCommandLine"       = "$(Split-Path -Path $VcRedist.Download -Leaf) $($VcRedist.SilentInstall)"
-                    "UninstallCommandLine"     = $VcRedist.SilentUninstall
-                    "Verbose"                  = $true
-                }
-                if ($Null -ne $Icon) {
-                    $Win32AppArgs.Add("Icon", $Icon)
-                }
-                $Application = Add-IntuneWin32App @Win32AppArgs
+            $DisplayName = "$($IntuneManifest.Information.Publisher) $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
+            $Win32AppArgs = @{
+                "FilePath"                 = $Package.Path
+                "DisplayName"              = $DisplayName
+                "Description"              = "$($IntuneManifest.Information.Description). $DisplayName"
+                "AppVersion"               = $VcRedist.Version
+                "Notes"                    = "Package created with VcRedist on $(Get-Date -Format "yyyy-MM-dd"); https://vcredist.com"
+                "Publisher"                = $IntuneManifest.Information.Publisher
+                "InformationURL"           = $IntuneManifest.Information.InformationURL
+                "PrivacyURL"               = $IntuneManifest.Information.PrivacyURL
+                "CompanyPortalFeaturedApp" = $false
+                "InstallExperience"        = $IntuneManifest.Program.InstallExperience
+                "RestartBehavior"          = $IntuneManifest.Program.DeviceRestartBehavior
+                "DetectionRule"            = $DetectionRule
+                "RequirementRule"          = $RequirementRule
+                "InstallCommandLine"       = "$(Split-Path -Path $VcRedist.URI -Leaf) $($VcRedist.SilentInstall)"
+                "UninstallCommandLine"     = $VcRedist.SilentUninstall
+                "Verbose"                  = $true
             }
-            catch {
-                throw $_
+            if ($null -ne $Icon) {
+                $Win32AppArgs.Add("Icon", $Icon)
             }
-            if ($Null -ne $Application) {
+            $Application = Add-IntuneWin32App @Win32AppArgs
+            if ($null -ne $Application) {
                 Write-Output -InputObject $Application
             }
 
             # Clean up the temporary intunewin package
-            try {
-                Remove-Item -Path $OutputFolder -Recurse -Force
-            }
-            catch {
-                Write-Error -Message $_.Exception.Message
-            }
+            Remove-Item -Path $OutputFolder -Recurse -Force -ErrorAction "SilentlyContinue"
         }
     }
 }

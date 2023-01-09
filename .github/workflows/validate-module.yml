@@ -1,9 +1,10 @@
-name: validate-module
+name: Validate module
 
 on:  
   push:
     branches:
       - '*'
+      - '!main'
     paths:
       - 'VcRedist/**'
       - 'tests/**'
@@ -12,15 +13,39 @@ on:
       - '*'
   pull_request:
     branches:
-      - '*'
+      - 'main'
     paths:
       - 'VcRedist/**'
       - 'tests/**'
   workflow_dispatch:
 
 jobs:
+  psscriptanalyzer:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    name: Run PSScriptAnalyzer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run PSScriptAnalyzer (development push)
+        uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f
+        with:
+          path: "./VcRedist"
+          recurse: true
+          output: results.sarif
+
+      # Upload the SARIF file generated in the previous step
+      - name: Upload SARIF results file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
+
   run-pester:
-    name: run-pester
+    name: Test with Pester
+    needs: psscriptanalyzer
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -28,109 +53,54 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Import GPG key so that we can sign the commit
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v5
-        with:
-          gpg_private_key: ${{ secrets.GPGKEY }}
-          passphrase: ${{ secrets.GPGPASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-          git_config_global: true
-          git_tag_gpgsign: true
-          git_push_gpgsign: false
-          git_committer_name: ${{ secrets.COMMIT_NAME }}
-          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
-
-      - name: Install and cache PowerShell modules
-        id: psmodulecache
-        uses: potatoqualitee/psmodulecache@v5.2
-        with:
-          modules-to-cache: Pester
-          shell: powershell
 
       # Run Pester tests
       - name: Run Pester tests
         shell: powershell
+        working-directory: "${{ github.workspace }}"
+        env:
+          TENANT_ID: ${{ secrets.TENANT_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
-          Import-Module "${{ github.workspace }}\VcRedist" -Force
-          Import-Module -Name "Pester" -Force
-          $Config = [PesterConfiguration]::Default
-          $Config.Run.Path = "${{ github.workspace }}\tests"
+          .\tests\Install-Pester.ps1
+          Import-Module -Name "Pester" -Force -ErrorAction "Stop"
+
+          Import-Module -Name "$env:GITHUB_WORKSPACE\VcRedist" -Force
+          $Config = New-PesterConfiguration
+          $Config.Run.Path = "$env:GITHUB_WORKSPACE\tests"
           $Config.Run.PassThru = $True
           $Config.CodeCoverage.Enabled = $True
-          $Config.CodeCoverage.Path = "${{ github.workspace }}\VcRedist"
+          $Config.CodeCoverage.Path = "$env:GITHUB_WORKSPACE\VcRedist"
           $Config.CodeCoverage.OutputFormat = "JaCoCo"
-          $Config.CodeCoverage.OutputPath = "${{ github.workspace }}\tests\CodeCoverage-${{ matrix.os }}.xml"
+          $Config.CodeCoverage.OutputPath = "$env:GITHUB_WORKSPACE\CodeCoverage-${{ matrix.os }}.xml"
           $Config.TestResult.Enabled = $True
           $Config.TestResult.OutputFormat = "NUnitXml"
-          $Config.TestResult.OutputPath = "${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml"
+          $Config.TestResult.OutputPath = "$env:GITHUB_WORKSPACE\tests\TestResults-${{ matrix.os }}.xml"
+          $Config.Output.Verbosity = "Detailed"
           Invoke-Pester -Configuration $Config
 
       - name: Upload artifacts
         id: upload-artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: pester-test-results
           path: |
-            ${{ github.workspace }}\tests\*.xml
+            ${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml
+
+      # Publish Pester test results
+      - name: Publish Pester test results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          nunit_files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"
 
       - name: Upload to Codecov
         id: codecov
+        if: always()
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: .\tests\CodeCoverage-${{ matrix.os }}.xml
+          files: ./CodeCoverage-${{ matrix.os }}.xml
           verbose: true
-
-      # Format the date number for the commit message
-      - name: Get date
-        id: get-date
-        shell: powershell
-        run: |
-          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
-
-      - name: git pull
-        id: git-pull
-        shell: powershell
-        run: |
-          git pull origin
-
-      - name: Commit changes
-        id: commit
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "validate-module ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
-          commit_user_name: ${{ secrets.COMMIT_NAME }}
-          commit_user_email: ${{ secrets.COMMIT_EMAIL }}
-
-      - name: "Run if changes have been detected"
-        if: steps.commit.outputs.changes_detected == 'true'
-        run: echo "Changes committed."
-
-      - name: "Run if no changes have been detected"
-        if: steps.commit.outputs.changes_detected == 'false'
-        run: echo "No changes detected."
-
-  analyse-powershell:
-    name: run-psscriptanalyzer
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Run PSScriptAnalyzer
-        uses: microsoft/psscriptanalyzer-action@v1.1
-        with:
-          path: ./VcRedist
-          recurse: true 
-          output: results.sarif
-      
-      # Upload the SARIF file generated in the previous step
-      - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: results.sarif

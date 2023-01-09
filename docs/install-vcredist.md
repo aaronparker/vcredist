@@ -4,6 +4,8 @@ A [quick install option](https://vcredist.com/quick/) is provided; however for a
 
 `Install-VcRedist` supports both passive installs (default) or silent installs with the `-Silent` parameter.
 
+After the Visual C++ Redistributables are installed, the list of installed Visual C++ Redistributables is returned to the pipeline from `Get-InstalledVcRedist`.
+
 ## Parameters
 
 ### Required parameters

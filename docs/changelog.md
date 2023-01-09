@@ -1,5 +1,18 @@
 # Changelog
 
+## VERSION
+
+* This update is primarily a result of code improvements through implementing additional testing and code coverage reports
+* Includes general code improvements including simplifying routines and consistent throwing behavior in the event of errors
+* Changes the output from `Uninstall-VcRedist` to return status codes for uninstall results
+* Updates `Export-VcManifest` to output a `System.IO.FileSystemInfo` object instead of a string
+* Fixes an issue with `Get-InstalledVcRedist` where is was not exporting only the installed Redistributables by default
+* Renames `Test-VcRedistDownload` to `Test-VcRedistUri` to better align with function purpose
+* Changes the `Download` property to `URI` in the Visual C++ Redistributable manifest
+* Fixes install command lines in the Visual C++ Redistributable manifest that were using `noreboot` instead of `norestart`
+* Adds internal validation when creating a drive mapping to an MDT deployment share
+* Removes private functions that were not being used or providing critical functionality
+
 ## 3.0.338
 
 * Update for VcRedist 2022 version `14.34.31931.0`

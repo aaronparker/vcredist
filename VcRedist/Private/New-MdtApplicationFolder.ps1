@@ -1,4 +1,4 @@
-Function New-MdtApplicationFolder {
+function New-MdtApplicationFolder {
     <#
         .SYNOPSIS
             Creates a new Application folder in an MDT deployment share.
@@ -13,51 +13,48 @@ Function New-MdtApplicationFolder {
         .PARAMETER Name
             A folder name to create below the MDT Applications folder.
     #>
-    [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType([System.String])]
-    Param (
-        [Parameter(Mandatory = $True, Position = 0)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    [OutputType([System.Boolean])]
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [System.String] $Drive,
 
-        [Parameter(Mandatory = $True, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [ValidateNotNullOrEmpty()]
-        [Alias('AppFolder')]
+        [Alias("AppFolder")]
         [System.String] $Name,
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [ValidateNotNullOrEmpty()]
-        [System.String] $Description = "Microsoft Visual C++ Redistributables"
+        [System.String] $Description = "Microsoft Visual C++ Redistributables imported with VcRedist https://vcredist.com/"
     )
 
     # Create a sub-folder below Applications to import the Redistributables into
-    $target = "$($Drive):\Applications\$($Name)"
+    $MdtPath = "$($Drive)\Applications\$($Name)"
 
-    If (Test-Path -Path $target -ErrorAction "SilentlyContinue") {
-        Write-Verbose "$($MyInvocation.MyCommand): MDT folder exists: $target"
-        Write-Output -InputObject $True
+    if (Test-Path -Path $MdtPath) {
+        Write-Verbose -Message "MDT folder exists: $MdtPath"
+        Write-Output -InputObject $true
     }
-    Else {
-        If ($PSCmdlet.ShouldProcess($target, "Create folder")) {
+    else {
+        if ($PSCmdlet.ShouldProcess($MdtPath, "Create folder")) {
             try {
                 # Create -AppFolder below Applications; Splat New-Item parameters
-                $newItemParams = @{
-                    Path        = "$($Drive):\Applications"
+                $params = @{
+                    Path        = "$($Drive)\Applications"
                     Enable      = "True"
                     Name        = $Name
                     Comments    = $Description
                     ItemType    = "Folder"
-                    ErrorAction = "SilentlyContinue"
+                    ErrorAction = "Continue"
                 }
-                New-Item @newItemParams
+                New-Item @params | Out-Null
             }
             catch [System.Exception] {
-                Write-Warning -Message "$($MyInvocation.MyCommand): Failed to create MDT Applications folder: $Name"
-                Throw $_.Exception.Message
+                throw $_
             }
-            finally {
-                Write-Output -InputObject $True
-            }
+            Write-Output -InputObject $true
         }
     }
 }

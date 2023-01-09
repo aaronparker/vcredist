@@ -23,8 +23,8 @@ catch {
 # Run tests
 $Config = [PesterConfiguration]::Default
 $Config.Run.Path = "$env:APPVEYOR_BUILD_FOLDER\tests"
-$Config.Run.PassThru = $True
-$Config.TestResult.Enabled = $True
+$Config.Run.PassThru = $true
+$Config.TestResult.Enabled = $true
 $Config.TestResult.OutputFormat = "NUnitXml"
 $Config.TestResult.OutputPath = "$env:APPVEYOR_BUILD_FOLDER\tests\TestResults.xml"
 $res = Invoke-Pester -Configuration $Config
