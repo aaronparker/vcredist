@@ -21,7 +21,7 @@ function Uninstall-VcRedist {
             ValueFromPipeline,
             ParameterSetName = "Pipeline",
             HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )
 
@@ -64,8 +64,8 @@ function Uninstall-VcRedist {
             }
             else {
                 # Build the uninstall command
-                switch -Regex ($UninstallString) {
-                    "^Msiexec*$" {
+                switch -Regex ($UninstallString.ToLower()) {
+                    "^msiexec.*$" {
                         Write-Verbose -Message "VcRedist uninstall uses Msiexec."
                         $params = @{
                             FilePath     = "$Env:SystemRoot\System32\msiexec.exe"
@@ -73,6 +73,7 @@ function Uninstall-VcRedist {
                             PassThru     = $true
                             Wait         = $true
                             NoNewWindow  = $true
+                            Verbose      = $VerbosePreference
                         }
                     }
                     default {
@@ -84,6 +85,7 @@ function Uninstall-VcRedist {
                             PassThru     = $true
                             Wait         = $true
                             NoNewWindow  = $true
+                            Verbose      = $VerbosePreference
                         }
                     }
                 }
