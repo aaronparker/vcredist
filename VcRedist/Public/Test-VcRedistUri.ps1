@@ -1,7 +1,8 @@
-function Test-VcRedistDownload {
+function Test-VcRedistUri {
     <#
         .EXTERNALHELP Vcredist-help.xml
     #>
+    [Alias("Test-VcRedistDownload")]
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://stealthpuppy.com/vcredist/test/", DefaultParameterSetName = "Path")]
     param (
@@ -39,7 +40,7 @@ function Test-VcRedistDownload {
 
     process {
         # Loop through each object and download to the target path
-        foreach ($Object in $InputObject) {
+        foreach ($Object in $VcList) {
 
             #region Validate the URI property and find the output filename
             if ([System.Boolean]($Object.URI) -eq $false) {

@@ -19,20 +19,20 @@ function Test-VcListObject {
         [System.Management.Automation.PSObject] $InputObject,
 
         [Parameter(Position = 1)]
-        [System.String] $RequiredProperties = @("Architecture", "Install", "Name", "ProductCode", `
+        [System.String[]] $RequiredProperties = @("Architecture", "Install", "Name", "ProductCode", `
                 "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version")
     )
 
-    $Members = Get-Member -InputObject $_ -MemberType "NoteProperty"
+    $Members = Get-Member -InputObject $InputObject -MemberType "NoteProperty"
     $params = @{
         ReferenceObject  = $RequiredProperties
         DifferenceObject = $Members.Name
         PassThru         = $true
-        ErrorAction      = "SilentlyContinue"
+        ErrorAction      = "Stop"
     }
     $MissingProperties = Compare-Object @params
 
-    if ($null -ne $missingProperties) {
+    if (-not($missingProperties)) {
         return $true
     }
     else {
@@ -41,7 +41,7 @@ function Test-VcListObject {
         }
     }
 
-    $_.PSObject.Properties | ForEach-Object {
+    $InputObject.PSObject.Properties | ForEach-Object {
         if (([System.String]::IsNullOrEmpty($_.Value))) {
             throw [System.Management.Automation.ValidationMetadataException] "Property '$($_.Name)' is null or empty."
         }

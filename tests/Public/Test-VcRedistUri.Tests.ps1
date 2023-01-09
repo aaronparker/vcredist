@@ -11,18 +11,18 @@ BeforeDiscovery {
 	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Test-VcRedistDownload" -ForEach $TestReleases {
+Describe -Name "Test-VcRedistUri" -ForEach $TestReleases {
 	BeforeAll {
 		$Release = $_
 	}
 
-	Context "Test-VcRedistDownload returns true for release <Release> x64" {
+	Context "Test-VcRedistUri returns true for release <Release> x64" {
 		BeforeAll {
 			$params = @{
 				VcList       = (Get-VcList -Release $Release -Architecture "x64")
 				ShowProgress = $true
 			}
-			$Test = Test-VcRedistDownload @params
+			$Test = Test-VcRedistUri @params
 		}
 
 		It "Returns a true result" {
@@ -34,13 +34,13 @@ Describe -Name "Test-VcRedistDownload" -ForEach $TestReleases {
 		}
 	}
 
-	Context "Test-VcRedistDownload returns true for release <Release> x86" {
+	Context "Test-VcRedistUri returns true for release <Release> x86" {
 		BeforeAll {
 			$params = @{
 				VcList       = (Get-VcList -Release $Release -Architecture "x86")
 				ShowProgress = $true
 			}
-			$Test = Test-VcRedistDownload @params
+			$Test = Test-VcRedistUri @params
 		}
 
 		It "Returns a true result" {
