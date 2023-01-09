@@ -10,7 +10,7 @@ function Install-VcRedist {
             Position = 0,
             ValueFromPipeline,
             HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $false, Position = 1)]
@@ -58,29 +58,31 @@ function Install-VcRedist {
                     Write-Verbose -Message "Construct target installer folder and filename."
                     $TargetDirectory = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                     $TargetVcRedist = Join-Path -Path $TargetDirectory -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
+                    Write-Verbose -Message "Target directory: $TargetDirectory"
+                    Write-Verbose -Message "Target VcRedist installer: $TargetVcRedist"
 
-                    Write-Verbose -Message "Install VcRedist: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
                     if (Test-Path -Path $TargetVcRedist) {
+                        Write-Verbose -Message "Installing VcRedist: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
                         if ($PSCmdlet.ShouldProcess("$TargetVcRedist $($VcRedist.Install)", "Install")) {
 
                             try {
                                 # Create parameters with -ArgumentList set based on Install/SilentInstall properties in the manifest
-                                # Install the VcRedist using the Invoke-Process private function
-                                $invokeProcessParams = @{
+                                $params = @{
                                     FilePath     = $TargetVcRedist
                                     ArgumentList = if ($Silent) { $VcRedist.SilentInstall } else { $VcRedist.Install }
+                                    PassThru     = $true
+                                    Wait         = $true
+                                    NoNewWindow  = $true
+                                    Verbose      = $VerbosePreference
                                 }
-                                $result = Invoke-Process @invokeProcessParams
+                                $Result = Start-Process @params
                             }
-                            catch [System.Exception] {
-                                Write-Warning -Message "Failure in installing Visual C++ Redistributable."
-                                Write-Warning -Message "Captured error (if any): [$result]."
+                            catch {
+                                throw $_
                             }
-                            finally {
-                                $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
-                                if ($Installed) {
-                                    Write-Verbose -Message "Installed successfully: VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
-                                }
+                            $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
+                            if ($Installed) {
+                                Write-Verbose -Message "Installed successfully: VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version); Code: $($Result.ExitCode)"
                             }
                         }
                     }
