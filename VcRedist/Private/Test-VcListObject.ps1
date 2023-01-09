@@ -14,6 +14,7 @@ function Test-VcListObject {
             An array of the require properties to validate against the InputObject
     #>
     [CmdletBinding()]
+    [OutputType([System.Boolean])]
     param (
         [Parameter(Position = 0)]
         [System.Management.Automation.PSObject] $InputObject,
