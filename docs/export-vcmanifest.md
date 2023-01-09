@@ -10,7 +10,7 @@
 
 ## Examples
 
-Export the VcRedist manifest of supported Redistributables to C:\Temp. The manifest will be exported to C:\Temp\VisualCRedistributables.json
+Export the VcRedist manifest of supported Redistributables to `C:\Temp`. The manifest will be exported to `C:\Temp\VisualCRedistributables.json`.
 
 ```powershell
 Export-VcManifest -Path C:\Temp

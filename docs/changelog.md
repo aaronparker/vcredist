@@ -4,6 +4,7 @@
 
 * This update is primarily a result of code improvements through implementing additional testing and code coverage reports
 * Includes general code improvements including simplifying routines and consistent throwing behavior in the event of errors
+* Changes the output from `Uninstall-VcRedist` to return status codes for uninstall results
 * Updates `Export-VcManifest` to output a `System.IO.FileSystemInfo` object instead of a string
 * Fixes an issue with `Get-InstalledVcRedist` where is was not exporting only the installed Redistributables by default
 * Renames `Test-VcRedistDownload` to `Test-VcRedistUri` to better align with function purpose

@@ -29,6 +29,5 @@ Install-Module -Name "VcRedist" -Force
 [psgallery-badge]: https://img.shields.io/powershellgallery/dt/vcredist.svg?logo=PowerShell&style=flat-square
 [psgallery]: https://www.powershellgallery.com/packages/vcredist
 [psgallery-version-badge]: https://img.shields.io/powershellgallery/v/vcredist.svg?logo=PowerShell&style=flat-square
-[psgallery-version]: https://www.powershellgallery.com/packages/vcredist
 [license-badge]: https://img.shields.io/github/license/aaronparker/Install-VisualCRedistributables.svg?style=flat-square
 [license]: https://github.com/aaronparker/vcredist/blob/main/LICENSE
