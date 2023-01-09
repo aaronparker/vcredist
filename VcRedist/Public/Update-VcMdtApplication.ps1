@@ -22,7 +22,7 @@ function Update-VcMdtApplication {
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $false)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
@@ -30,11 +30,11 @@ function Update-VcMdtApplication {
         [System.Management.Automation.SwitchParameter] $Silent,
 
         [Parameter(Mandatory = $false, Position = 2)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $MdtDrive = "DS099",
 
         [Parameter(Mandatory = $false, Position = 3)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $Publisher = "Microsoft"
     )
 
@@ -97,21 +97,21 @@ function Update-VcMdtApplication {
                             # Copy the updated executable
                             try {
                                 Write-Verbose -Message "Copy VcRedist installer."
-                                $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                $SourceFolder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $ContentLocation = [System.IO.Path]::Combine((Resolve-Path -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $params = @{
                                     FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                                    ArgumentList = "*.exe `"$folder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                                    ArgumentList = "*.exe `"$SourceFolder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
                                 }
                                 $result = Invoke-Process @params
                             }
                             catch {
                                 $ExeTarget = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
                                 if (Test-Path -Path $ExeTarget) {
-                                    Write-Verbose -Message "Copy successful: [$ExeTarget]."
+                                    Write-Verbose -Message "Copy successful: '$ExeTarget'."
                                 }
                                 else {
-                                    Write-Warning -Message "Failed to copy Redistributables from [$folder] to [$ContentLocation]."
+                                    Write-Warning -Message "Failed to copy Redistributables from '$SourceFolder' to '$ContentLocation'."
                                     Write-Warning -Message "Captured error (if any): [$result]."
                                     throw $_
                                 }

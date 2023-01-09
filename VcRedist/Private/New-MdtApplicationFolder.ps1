@@ -22,7 +22,7 @@ function New-MdtApplicationFolder {
 
         [Parameter(Mandatory = $true, Position = 1)]
         [ValidateNotNullOrEmpty()]
-        [Alias('AppFolder')]
+        [Alias("AppFolder")]
         [System.String] $Name,
 
         [Parameter(Mandatory = $false, Position = 2)]

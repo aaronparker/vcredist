@@ -50,24 +50,24 @@ function Install-VcRedist {
 
                 # Avoid installing 64-bit Redistributable on x86 Windows
                 if (((Get-Bitness) -eq "x86") -and ($VcRedist.Architecture -eq "x64")) {
-                    Write-Warning -Message "Incompatible architecture: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
+                    Write-Warning -Message "Incompatible architecture: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
                 }
                 else {
 
                     # Target folder structure; VcRedist setup file
                     Write-Verbose -Message "Construct target installer folder and filename."
-                    $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-                    $filename = Join-Path -Path $folder -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
+                    $TargetDirectory = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                    $TargetVcRedist = Join-Path -Path $TargetDirectory -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
 
-                    Write-Verbose -Message "Install VcRedist: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]."
-                    if (Test-Path -Path $filename) {
-                        if ($PSCmdlet.ShouldProcess("$filename $($VcRedist.Install)", "Install")) {
+                    Write-Verbose -Message "Install VcRedist: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
+                    if (Test-Path -Path $TargetVcRedist) {
+                        if ($PSCmdlet.ShouldProcess("$TargetVcRedist $($VcRedist.Install)", "Install")) {
 
                             try {
                                 # Create parameters with -ArgumentList set based on Install/SilentInstall properties in the manifest
                                 # Install the VcRedist using the Invoke-Process private function
                                 $invokeProcessParams = @{
-                                    FilePath     = $filename
+                                    FilePath     = $TargetVcRedist
                                     ArgumentList = if ($Silent) { $VcRedist.SilentInstall } else { $VcRedist.Install }
                                 }
                                 $result = Invoke-Process @invokeProcessParams
@@ -85,7 +85,7 @@ function Install-VcRedist {
                         }
                     }
                     else {
-                        Write-Warning -Message "Cannot find: [$filename]. Download with Save-VcRedist."
+                        Write-Warning -Message "Cannot find: '$TargetVcRedist'. Download with Save-VcRedist."
                     }
                 }
             }

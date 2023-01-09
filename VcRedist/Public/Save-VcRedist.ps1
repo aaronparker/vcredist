@@ -61,15 +61,15 @@ function Save-VcRedist {
             # Loop through each Redistributable and download to the target path
 
             # Build the path to save the VcRedist into; Create the folder to store the downloaded file. Skip if it exists
-            $Folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-            Write-Verbose -Message "Test directory: $Folder."
-            if (Test-Path -Path $Folder) {
-                Write-Verbose -Message "Directory exists: $Folder. Skipping."
+            $TargetDirectory = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+            Write-Verbose -Message "Test directory: $TargetDirectory."
+            if (Test-Path -Path $TargetDirectory) {
+                Write-Verbose -Message "Directory exists: $TargetDirectory. Skipping."
             }
             else {
-                if ($PSCmdlet.ShouldProcess($Folder, "Create")) {
+                if ($PSCmdlet.ShouldProcess($TargetDirectory, "Create")) {
                     $params = @{
-                        Path        = $Folder
+                        Path        = $TargetDirectory
                         Type        = "Directory"
                         Force       = $true
                         ErrorAction = "Continue"
@@ -79,7 +79,7 @@ function Save-VcRedist {
             }
 
             # Test whether the VcRedist is already on disk
-            $TargetVcRedist = Join-Path -Path $Folder -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
+            $TargetVcRedist = Join-Path -Path $TargetDirectory -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
             Write-Verbose -Message "Testing for downloaded VcRedist: $($TargetVcRedist)"
 
             if (Test-Path -Path $TargetVcRedist -PathType "Leaf") {

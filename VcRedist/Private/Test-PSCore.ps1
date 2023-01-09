@@ -14,7 +14,7 @@ function Test-PSCore {
     [OutputType([System.Boolean])]
     param (
         [Parameter(Position = 0)]
-        [System.String] $Version = '6.0.0'
+        [System.String] $Version = "6.0.0"
     )
 
     # Check whether current PowerShell environment matches or is higher than $Version

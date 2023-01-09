@@ -10,20 +10,20 @@ function Update-VcMdtBundle {
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $false)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
         [Parameter(Mandatory = $false, Position = 1)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $MdtDrive = "DS099",
 
         [Parameter(Mandatory = $false, Position = 2)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $Publisher = "Microsoft",
 
         [Parameter(Mandatory = $false, Position = 3)]
-        [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
+        [ValidatePattern("^[a-zA-Z0-9\+ ]+$")]
         [System.String] $BundleName = "Visual C++ Redistributables"
     )
 
@@ -79,7 +79,7 @@ function Update-VcMdtBundle {
         }
 
         foreach ($Bundle in $Bundles) {
-            Write-Verbose -Message "Found bundle: [$($Bundle.Name)]."
+            Write-Verbose -Message "Found bundle: '$($Bundle.Name)'."
 
             # Grab the Visual C++ Redistributable application guids; Sort added VcRedists by version so they are ordered correctly
             $target = "$($MdtDrive):\$Applications\$AppFolder"

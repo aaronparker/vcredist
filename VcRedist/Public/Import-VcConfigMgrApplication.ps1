@@ -28,7 +28,7 @@ function Import-VcConfigMgrApplication {
         [System.String] $SMSSiteCode,
 
         [Parameter(Mandatory = $false, Position = 4)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $AppFolder = "VcRedists",
 
         [Parameter(Mandatory = $false)]
@@ -38,11 +38,11 @@ function Import-VcConfigMgrApplication {
         [System.Management.Automation.SwitchParameter] $NoCopy,
 
         [Parameter(Mandatory = $false, Position = 5)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $Publisher = "Microsoft",
 
         [Parameter(Mandatory = $false, Position = 6)]
-        [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
+        [ValidatePattern("^[a-zA-Z0-9\+ ]+$")]
         [System.String] $Keyword = "Visual C++ Redistributable"
     )
 
@@ -105,7 +105,7 @@ function Import-VcConfigMgrApplication {
 
     process {
         foreach ($VcRedist in $VcList) {
-            Write-Verbose -Message "Importing VcRedist app: [Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)]"
+            Write-Verbose -Message "Importing VcRedist app: 'Visual C++ Redistributable $($VcRedist.Release) $($VcRedist.Architecture) $($VcRedist.Version)'"
 
             # If SMS_ADMIN_UI_PATH variable exists, assume module imported successfully earlier
             if (Test-Path -Path env:SMS_ADMIN_UI_PATH) {

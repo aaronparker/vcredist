@@ -25,7 +25,7 @@ function Import-VcMdtApplication {
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $false, Position = 3)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
@@ -39,15 +39,15 @@ function Import-VcMdtApplication {
         [System.Management.Automation.SwitchParameter] $Force,
 
         [Parameter(Mandatory = $false, Position = 4)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $MdtDrive = "DS099",
 
         [Parameter(Mandatory = $false, Position = 5)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $Publisher = "Microsoft",
 
         [Parameter(Mandatory = $false, Position = 6)]
-        [ValidatePattern('^[a-zA-Z0-9-]+$')]
+        [ValidatePattern("^[a-zA-Z0-9-]+$")]
         [System.String] $Language = "en-US"
     )
 
@@ -110,7 +110,7 @@ function Import-VcMdtApplication {
         foreach ($VcRedist in $VcList) {
 
             # Set variables
-            Write-Verbose -Message "processing: [$($VcRedist.Name) $($VcRedist.Architecture)]."
+            Write-Verbose -Message "processing: '$($VcRedist.Name) $($VcRedist.Architecture)'."
             $supportedPlatform = if ($VcRedist.Architecture -eq "x86") {
                 @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer")
             }
@@ -161,7 +161,7 @@ function Import-VcMdtApplication {
                         Import-MDTApplication @importMDTAppParams > $null
                     }
                     catch [System.Exception] {
-                        Write-Warning -Message "Error encountered importing the application: [$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)]."
+                        Write-Warning -Message "Error encountered importing the application: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'."
                         throw $_
                     }
                 }
