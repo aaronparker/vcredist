@@ -9,7 +9,6 @@ param ()
 
 BeforeDiscovery {
 	$TestReleases = @("2022")
-	$TestVcRedists = Get-VcList -Release $TestReleases
 }
 
 Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $TestReleases {
@@ -18,7 +17,7 @@ Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $Tes
 
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without IntuneWin32App" {
-			{ Import-VcIntuneApplication -VcList $_ } | Should -Throw
+			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Throw
 		}
 	}
 }
@@ -32,7 +31,7 @@ Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $TestRele
 
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without an authentication token" {
-			{ Import-VcIntuneApplication -VcList $_ } | Should -Throw
+			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Throw
 		}
 	}
 
@@ -54,10 +53,10 @@ Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $TestRele
 			}
 		}
 
-		It "Imports into the target tenant OK" {
+		It "Imports VcRedist into the target tenant OK" {
 			# Path with VcRedist downloads
 			$Path = "$env:RUNNER_TEMP\Deployment"
-			$SavedVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $_)
+			$SavedVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $_ -Architecture "x64")
 			{ Import-VcIntuneApplication -VcList $SavedVcRedist | Out-Null } | Should -Not -Throw
 		}
 	}
