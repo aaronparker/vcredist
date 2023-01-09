@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.0.460
 
 * This update is primarily a result of code improvements through implementing additional testing and code coverage reports
 * Includes general code improvements including simplifying routines and consistent throwing behavior in the event of errors

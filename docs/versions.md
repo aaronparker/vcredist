@@ -1,6 +1,6 @@
 ﻿# Included Redistributables
 
-VcRedist `3.0.338` includes the following Redistributables (supported and unsupported):
+VcRedist `4.0.460` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
