@@ -37,9 +37,9 @@ Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 			{ Install-VcRedist -VcList $VcRedist -Path $Path -Silent } | Should -Not -Throw
 		}
 
-		# It "Installed the VcRedist: <VcRedist.Name> <VcRedist.Architecture> successfully" {
-		#     $List.ProductCode | Should -BeIn $Installed.ProductCode
-		# }
+		It "Returns the list of installed VcRedists after install" {
+			Install-VcRedist -VcList $VcRedist -Path $Path -Silent | Should -BeOfType "System.Management.Automation.PSObject"
+		}
 	}
 
 	Context "Install <Release> x86 Redistributable" {
@@ -51,9 +51,8 @@ Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 			{ Install-VcRedist -VcList $VcRedist -Path $Path -Silent } | Should -Not -Throw
 		}
 
-		# It "Installed the VcRedist: <VcRedist.Name> <VcRedist.Architecture> successfully" {
-		#     $List.ProductCode | Should -BeIn $Installed.ProductCode
-		# }
+		It "Returns the list of installed VcRedists after install" {
+			Install-VcRedist -VcList $VcRedist -Path $Path -Silent | Should -BeOfType "System.Management.Automation.PSObject"
+		}
 	}
 }
-
