@@ -12,10 +12,10 @@
 RootModule = 'VcRedist.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.0.338'
+ModuleVersion = '4.0.338'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+# CompatiblePSEditions = @('Desktop')
 
 # ID used to uniquely identify this module
 GUID = '9139778c-9a1a-4faf-aa88-5ac6fd3b3e48'
@@ -27,7 +27,7 @@ Author = 'Aaron Parker'
 CompanyName = 'stealthpuppy'
 
 # Copyright statement for this module
-Copyright = '(c) 2022 stealthpuppy. All rights reserved.'
+Copyright = '(c) 2023 stealthpuppy. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'A module for lifecycle management of the Microsoft Visual C++ Redistributables. VcRedist downloads the supported (and unsupported) Redistributables, for local install, main image deployment or importing as applications into the Microsoft Deployment Toolkit or Microsoft Endpoint Configuration Manager. Supports passive and silent installs and uninstalls of the Visual C++ Redistributables.'
@@ -69,10 +69,10 @@ PowerShellVersion = '3.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 
-               'Import-VcConfigMgrApplication', 'Import-VcIntuneApplication', 
-               'Import-VcMdtApplication', 'Install-VcRedist', 'New-VcMdtBundle', 
-               'Save-VcRedist', 'Test-VcRedistDownload', 'Uninstall-VcRedist', 
+FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList',
+               'Import-VcConfigMgrApplication', 'Import-VcIntuneApplication',
+               'Import-VcMdtApplication', 'Install-VcRedist', 'New-VcMdtBundle',
+               'Save-VcRedist', 'Test-VcRedistUri', 'Uninstall-VcRedist',
                'Update-VcMdtApplication', 'Update-VcMdtBundle')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -82,7 +82,7 @@ CmdletsToExport = @()
 VariablesToExport = 'VcManifest'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = 'Get-VcRedist', 'Export-VcXml', 'Import-VcCmApp', 'Import-VcMdtApp'
+AliasesToExport = 'Get-VcRedist', 'Export-VcXml', 'Import-VcCmApp', 'Import-VcMdtApp', 'Test-VcRedistDownload'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -102,7 +102,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Redistributables','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','MEM','Intune'
+        Tags = 'Redistributables','C++','VisualC','VisualStudio','MDT','ConfigMgr','SCCM','Intune','Windows'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/aaronparker/VcRedist/blob/main/LICENSE'

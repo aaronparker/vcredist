@@ -8,26 +8,56 @@
 param ()
 
 BeforeDiscovery {
+	$TestReleases = @("2022")
 }
 
-Describe "Import-VcIntuneApplication without IntuneWin32App" {
+Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $TestReleases {
 	BeforeAll {
-
 	}
+
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without IntuneWin32App" {
-			{ Get-VcList | Import-VcIntuneApplication } | Should -Throw
+			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Throw
 		}
 	}
 }
 
-Describe "Import-VcIntuneApplication without authentication" {
+Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $TestReleases {
 	BeforeAll {
-		Install-Module -Name "IntuneWin32App"
+		foreach ($Module in @("MSAL.PS", "IntuneWin32App")) {
+			Install-Module -Name $Module -Force
+		}
 	}
+
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without an authentication token" {
-			{ Get-VcList | Import-VcIntuneApplication } | Should -Throw
+			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Throw
+		}
+	}
+
+	Context "Import-VcIntuneApplication imports VcRedists into a target tenant" {
+		BeforeAll {
+			try {
+				# Authenticate to the Graph API
+				# Expects secrets to be passed into environment variables
+				Write-Information -MessageData "Authenticate to the Graph API"
+				$params = @{
+					TenantId     = "$env:TENANT_ID"
+					ClientId     = "$env:CLIENT_ID"
+					ClientSecret = "$env:CLIENT_SECRET"
+				}
+				$script:AuthToken = Connect-MSIntuneGraph @params
+			}
+			catch {
+				throw $_
+			}
+		}
+
+		It "Imports VcRedist into the target tenant OK" {
+			# Path with VcRedist downloads
+			$Path = "$env:RUNNER_TEMP\Deployment"
+			$SavedVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $_ -Architecture "x64")
+			{ Import-VcIntuneApplication -VcList $SavedVcRedist | Out-Null } | Should -Not -Throw
 		}
 	}
 }

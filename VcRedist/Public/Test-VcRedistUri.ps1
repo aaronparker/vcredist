@@ -1,32 +1,33 @@
-function Test-VcRedistDownload {
+function Test-VcRedistUri {
     <#
         .EXTERNALHELP Vcredist-help.xml
     #>
+    [Alias("Test-VcRedistDownload")]
     [OutputType([System.Management.Automation.PSObject])]
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://stealthpuppy.com/vcredist/test/", DefaultParameterSetName = "Path")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://stealthpuppy.com/vcredist/test/", DefaultParameterSetName = "Path")]
     param (
         [Parameter(
-            Mandatory = $True,
+            Mandatory = $true,
             Position = 0,
             ValueFromPipeline,
-            HelpMessage = "Pass an object from Get-VcList.")]
-        [ValidateNotNull()]
-        [System.Management.Automation.PSObject] $InputObject,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $False, Position = 1)]
+        [Parameter(Mandatory = $false, Position = 1)]
         [System.String] $Proxy,
 
-        [Parameter(Mandatory = $False, Position = 2)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [System.Management.Automation.PSCredential]
         $ProxyCredential = [System.Management.Automation.PSCredential]::Empty,
 
-        [Parameter(Mandatory = $False)]
-        [System.Management.Automation.SwitchParameter] $NoProgress
+        [Parameter(Mandatory = $false)]
+        [System.Management.Automation.SwitchParameter] $ShowProgress
     )
 
     begin {
         # Disable the Invoke-WebRequest progress bar for faster downloads
-        if ($PSBoundParameters.ContainsKey("Verbose") -and !($PSBoundParameters.ContainsKey("NoProgress"))) {
+        if ($PSBoundParameters.ContainsKey("Verbose") -or ($PSBoundParameters.ContainsKey("ShowProgress"))) {
             $ProgressPreference = [System.Management.Automation.ActionPreference]::Continue
         }
         else {
@@ -39,21 +40,20 @@ function Test-VcRedistDownload {
 
     process {
         # Loop through each object and download to the target path
-        foreach ($Object in $InputObject) {
+        foreach ($Object in $VcList) {
 
             #region Validate the URI property and find the output filename
-            if ([System.Boolean]($Object.Download)) {
-            }
-            else {
-                throw "Object does not have valid Download property."
+            if ([System.Boolean]($Object.URI) -eq $false) {
+                $Msg = "Object does not have valid URI property."
+                throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
             }
             #endregion
 
             try {
                 $params = @{
-                    Uri             = $Object.Download
+                    Uri             = $Object.URI
                     Method          = "HEAD"
-                    UseBasicParsing = $True
+                    UseBasicParsing = $true
                     ErrorAction     = "SilentlyContinue"
                 }
                 if ($PSBoundParameters.ContainsKey("Proxy")) {
@@ -62,18 +62,18 @@ function Test-VcRedistDownload {
                 if ($PSBoundParameters.ContainsKey("ProxyCredential")) {
                     $params.ProxyCredential = $ProxyCredential
                 }
-                $Result = $True
+                $Result = $true
                 Invoke-WebRequest @params | Out-Null
             }
             catch [System.Exception] {
-                $Result = $False
+                $Result = $false
             }
             $PSObject = [PSCustomObject] @{
                 Result       = $Result
                 Release      = $Object.Release
                 Architecture = $Object.Architecture
-                Version = $Object.Version
-                URI          = $Object.Download
+                Version      = $Object.Version
+                URI          = $Object.URI
             }
             Write-Output -InputObject $PSObject
         }

@@ -11,26 +11,29 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
-	Describe 'New-MdtApplicationFolder' {
-		Context "Application folder exists" {
-			BeforeEach {
-				Mock Test-Path { $True }
-			}
+	BeforeAll {
+		# Install the MDT Workbench
+		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
+	}
 
-			It "Returns True if the Application folder exists" {
-				New-MdtApplicationFolder -Drive "DS001" -Name "VcRedists" | Should -BeTrue
-			}
+	Describe 'New-MdtApplicationFolder' {
+		BeforeAll {
+			New-MdtDrive -Drive "DS020" -Path "$Env:RUNNER_TEMP\Deployment"
+			Restore-MDTPersistentDrive -Force > $null
 		}
 
-		Context "Creates a new Packages folder" {
-			BeforeEach {
-				function New-Item {}
-				Mock Test-Path { $False }
-				Mock New-Item { $obj = [PSCustomObject]@{Name = "VcRedists" } }
+		Context "Validates New-MdtApplicationFolder" {
+			It "Does not throw when creating an application folder" {
+				{ New-MdtApplicationFolder -Drive "DS020:" -Name "Test1" -Verbose } | Should -Not -Throw
 			}
 
-			It "Successfully creates a Application folder" {
-				New-MdtApplicationFolder -Drive "DS001" -Name "VcRedists" | Should -BeTrue
+			It "Returns true if the application folder is created" {
+				New-MdtApplicationFolder -Drive "DS020:" -Name "Test2" -Verbose | Should -BeTrue
+			}
+
+			It "It throws when referencing a drive that does not exist" {
+				{ New-MdtApplicationFolder -Drive "DS021:" -Name "Test1" -Verbose } | Should -Throw
 			}
 		}
 	}

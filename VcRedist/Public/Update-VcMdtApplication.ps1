@@ -2,202 +2,176 @@ function Update-VcMdtApplication {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $True, HelpURI = "https://vcredist.com/update-vcmdtapplication/")]
+    [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/update-vcmdtapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline)]
-        [ValidateNotNull()]
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $True, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $true, Position = 1)]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
         [System.String] $Path,
 
-        [Parameter(Mandatory = $True)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container' -ErrorAction "SilentlyContinue") { $True } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $true)]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
-        [Parameter(Mandatory = $False)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [Parameter(Mandatory = $false)]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Silent,
 
-        [Parameter(Mandatory = $False, Position = 2)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [Parameter(Mandatory = $false, Position = 2)]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $MdtDrive = "DS099",
 
-        [Parameter(Mandatory = $False, Position = 3)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [Parameter(Mandatory = $false, Position = 3)]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $Publisher = "Microsoft"
     )
 
     begin {
         # If running on PowerShell Core, error and exit.
         if (Test-PSCore) {
-            Write-Warning -Message "$($MyInvocation.MyCommand): PowerShell Core doesn't support PSSnapins. We can't load the MicrosoftDeploymentToolkit module."
-            throw [System.Management.Automation.InvalidPowerShellStateException]
+            $Msg = "We can't load the MicrosoftDeploymentToolkit module on PowerShell Core. Please use PowerShell 5.1."
+            throw [System.TypeLoadException]::New($Msg)
         }
 
         # Import the MDT module and create a PS drive to MdtPath
         if (Import-MdtModule) {
-            if ($PSCmdlet.ShouldProcess($MdtPath, "Mapping")) {
+            if ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
                 try {
-                    New-MdtDrive -Drive $MdtDrive -Path $MdtPath -ErrorAction "SilentlyContinue" > $null
+                    $params = @{
+                        Drive       = $MdtDrive
+                        Path        = $MdtPath
+                        ErrorAction = "Continue"
+                    }
+                    New-MdtDrive @params > $null
                     Restore-MDTPersistentDrive -Force > $null
                 }
                 catch [System.Exception] {
-                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to map drive to [$MdtPath]."
-                    throw $_
+                    $Msg = "Failed to map drive to: $MdtPath. Error: $($_.Exception.Message)"
+                    throw $Msg
                 }
             }
         }
         else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
-            throw [System.Management.Automation.InvalidPowerShellStateException]
+            $Msg = "Failed to import the MDT PowerShell module. Please install the MDT Workbench and try again."
+            throw [System.Management.Automation.InvalidPowerShellStateException]::New($Msg)
         }
 
-        $Target = "$($MdtDrive):\Applications\$AppFolder"
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Update applications in: $Target"
+        $MdtTargetFolder = "$(Edit-MdtDrive -Drive $MdtDrive)\Applications\$AppFolder"
+        Write-Verbose -Message "Update applications in: $MdtTargetFolder"
     }
 
     process {
-        if (Test-Path -Path $Target -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $MdtTargetFolder) {
             foreach ($VcRedist in $VcList) {
 
                 # Get the existing VcRedist applications in the MDT share
-                try {
-                    $params = @{
-                        Path        = $Target
-                        ErrorAction = "SilentlyContinue"
-                    }
-                    $ExistingVcRedist = Get-ChildItem @params | Where-Object { $_.ShortName -match "$($VcRedist.Release) $($VcRedist.Architecture)" }
+                $params = @{
+                    Path        = $MdtTargetFolder
+                    ErrorAction = "Continue"
                 }
-                catch [System.Exception] {
-                    throw $_
-                }
+                $ExistingVcRedist = Get-ChildItem @params | Where-Object { $_.ShortName -match "$($VcRedist.Release) $($VcRedist.Architecture)" }
 
                 if ($null -ne $ExistingVcRedist) {
                     try {
-                        Write-Verbose -Message "$($MyInvocation.MyCommand): Found application: [$($ExistingVcRedist.ShortName)]."
+                        Write-Verbose -Message "Found application: [$($ExistingVcRedist.ShortName)]."
 
                         # Determine whether update is required
-                        $Update = $False
-                        if ($ExistingVcRedist.UninstallKey -ne $VcRedist.ProductCode) { $Update = $True }
-                        if ([System.Version]$ExistingVcRedist.Version -lt [System.Version]$VcRedist.Version) { $Update = $True }
-                        if ($ExistingVcRedist.CommandLine -ne ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })") { $Update = $True }
-                        if ($Update -eq $True) {
+                        $Update = $false
+                        if ($ExistingVcRedist.UninstallKey -ne $VcRedist.ProductCode) { $Update = $true }
+                        if ([System.Version]$ExistingVcRedist.Version -lt [System.Version]$VcRedist.Version) { $Update = $true }
+                        if ($ExistingVcRedist.CommandLine -ne ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })") { $Update = $true }
+                        if ($Update -eq $true) {
 
                             # Copy the updated executable
                             try {
-                                Write-Verbose -Message "$($MyInvocation.MyCommand): Copy VcRedist installer."
-                                $folder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                Write-Verbose -Message "Copy VcRedist installer."
+                                $SourceFolder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $ContentLocation = [System.IO.Path]::Combine((Resolve-Path -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $params = @{
                                     FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                                    ArgumentList = "*.exe `"$folder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                                    ArgumentList = "*.exe `"$SourceFolder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
                                 }
                                 $result = Invoke-Process @params
                             }
                             catch {
-                                $ExeTarget = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.Download -Leaf)
-                                if (Test-Path -Path $ExeTarget -ErrorAction "SilentlyContinue") {
-                                    Write-Verbose -Message "$($MyInvocation.MyCommand): Copy successful: [$ExeTarget]."
+                                $ExeTarget = Join-Path -Path $ContentLocation -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
+                                if (Test-Path -Path $ExeTarget) {
+                                    Write-Verbose -Message "Copy successful: '$ExeTarget'."
                                 }
                                 else {
-                                    Write-Warning -Message "$($MyInvocation.MyCommand): Failed to copy Redistributables from [$folder] to [$ContentLocation]."
-                                    Write-Warning -Message "$($MyInvocation.MyCommand): Captured error (if any): [$result]."
+                                    Write-Warning -Message "Failed to copy Redistributables from '$SourceFolder' to '$ContentLocation'."
+                                    Write-Warning -Message "Captured error (if any): [$result]."
                                     throw $_
                                 }
                             }
 
                             # Check the existing command line on the application and update
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update CommandLine")) {
-                                try {
-                                    $params = @{
-                                        Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
-                                        Name  = "CommandLine"
-                                        Value = ".\$(Split-Path -Path $VcRedist.Download -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
-                                    }
-                                    Set-ItemProperty @params > $null
+                                $params = @{
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+                                    Name  = "CommandLine"
+                                    Value = ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
                                 }
-                                catch [System.Exception] {
-                                    throw $_
-                                }
+                                Set-ItemProperty @params > $null
                             }
 
                             # Update ProductCode
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update UninstallKey")) {
-                                try {
-                                    $sipParams = @{
-                                        Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
-                                        Name  = "UninstallKey"
-                                        Value = $VcRedist.ProductCode
-                                    }
-                                    Set-ItemProperty @sipParams > $null
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+                                    Name  = "UninstallKey"
+                                    Value = $VcRedist.ProductCode
                                 }
-                                catch [System.Exception] {
-                                    throw $_
-                                }
+                                Set-ItemProperty @sipParams > $null
                             }
 
                             # Update Version number
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Version")) {
-                                try {
-                                    $sipParams = @{
-                                        Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
-                                        Name  = "Version"
-                                        Value = $VcRedist.Version
-                                    }
-                                    Set-ItemProperty @sipParams > $null
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+                                    Name  = "Version"
+                                    Value = $VcRedist.Version
                                 }
-                                catch [System.Exception] {
-                                    throw $_
-                                }
+                                Set-ItemProperty @sipParams > $null
                             }
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Source")) {
-                                try {
-                                    $sipParams = @{
-                                        Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
-                                        Name  = "Source"
-                                        Value = $ExistingVcRedist.Source -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
-                                    }
-                                    Set-ItemProperty @sipParams > $null
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+                                    Name  = "Source"
+                                    Value = $ExistingVcRedist.Source -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                 }
-                                catch [System.Exception] {
-                                    throw $_
-                                }
+                                Set-ItemProperty @sipParams > $null
                             }
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update WorkingDirectory")) {
-                                try {
-                                    $sipParams = @{
-                                        Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
-                                        Name  = "WorkingDirectory"
-                                        Value = $ExistingVcRedist.WorkingDirectory -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
-                                    }
-                                    Set-ItemProperty @sipParams > $null
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+                                    Name  = "WorkingDirectory"
+                                    Value = $ExistingVcRedist.WorkingDirectory -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                 }
-                                catch [System.Exception] {
-                                    throw $_
-                                }
+                                Set-ItemProperty @sipParams > $null
                             }
 
                             if ($PSCmdlet.ShouldProcess($ExistingVcRedist.PSPath, "Update Name")) {
-                                try {
-                                    $sipParams = @{
-                                        Path  = (Join-Path -Path $Target -ChildPath $ExistingVcRedist.Name)
-                                        Name  = "Name"
-                                        Value = $ExistingVcRedist.Name -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
-                                    }
-                                    Set-ItemProperty @sipParams > $null
+                                $sipParams = @{
+                                    Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+                                    Name  = "Name"
+                                    Value = $ExistingVcRedist.Name -replace "(\d+(\.\d+){1,4})", $VcRedist.Version
                                 }
-                                catch [System.Exception] {
-                                    throw $_
-                                }
+                                Set-ItemProperty @sipParams > $null
                             }
                         }
                     }
@@ -208,19 +182,19 @@ function Update-VcMdtApplication {
             }
         }
         else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $Target."
+            Write-Warning -Message "Failed to find path $MdtTargetFolder."
         }
     }
 
     end {
-        if (Test-Path -Path $Target -ErrorAction "SilentlyContinue") {
+        if (Test-Path -Path $MdtTargetFolder) {
 
             # Get the imported Visual C++ Redistributables applications to return on the pipeline
-            Write-Verbose -Message "$($MyInvocation.MyCommand): Getting Visual C++ Redistributables from the deployment share"
-            Write-Output -InputObject (Get-ChildItem -Path $Target | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })
+            Write-Verbose -Message "Getting Visual C++ Redistributables from the deployment share"
+            Write-Output -InputObject (Get-ChildItem -Path $MdtTargetFolder | Where-Object { $_.Name -like "*Visual C++*" | Select-Object -Property * })
         }
         else {
-            Write-Warning -Message "$($MyInvocation.MyCommand): Failed to find path $Target."
+            Write-Warning -Message "Failed to find path $MdtTargetFolder."
         }
     }
 }

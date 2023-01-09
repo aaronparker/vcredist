@@ -2,32 +2,31 @@ function Get-InstalledVcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(SupportsShouldProcess = $False, HelpURI = "https://vcredist.com/get-installedvcredist/")]
+    [CmdletBinding(SupportsShouldProcess = $false, HelpURI = "https://vcredist.com/get-installedvcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $False)]
+        [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $ExportAll
     )
 
-    # Get all installed Visual C++ Redistributables installed components
-    Write-Verbose -Message "$($MyInvocation.MyCommand): Matching installed VcRedists with: [(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*]."
-    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match "(Microsoft Visual C.*)(\bRedistributable|\bRuntime).*" }
-
-    # Add Architecture property to each entry
-    Write-Verbose -Message "$($MyInvocation.MyCommand): Adding Architecture property."
-    $VcRedists | ForEach-Object { if ($_.Name -contains "x64") { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
-
-    # If -ExportAll used, export everything instead of filtering for the primary Redistributable
     if ($PSBoundParameters.ContainsKey("ExportAll")) {
-
-        # Write the installed VcRedists to the pipeline
-        Write-Output -InputObject $VcRedists
+        # If -ExportAll used, export everything instead of filtering for the primary Redistributable
+        # Get all installed Visual C++ Redistributables installed components
+        Write-Verbose -Message "-ExportAll specified. Exporting all install Visual C++ Redistributables and runtimes."
+        $Filter = "(Microsoft Visual C.*).*"
     }
     else {
-        Write-Verbose -Message "$($MyInvocation.MyCommand): Filtering output."
-        $Output = $VcRedists | ForEach-Object { if (-not (Select-String -InputObject $_ -Pattern "Additional|Minimum")) { $_ } } | Sort-Object -Property "Name"
-
-        # Write the filtered installed VcRedists to the pipeline
-        Write-Output -InputObject $Output
+        $Filter = "(Microsoft Visual C.*)(\bRedistributable).*"
     }
+
+    # Get all installed Visual C++ Redistributables installed components
+    Write-Verbose -Message "Matching installed VcRedists with: '$Filter'."
+    $VcRedists = Get-InstalledSoftware | Where-Object { $_.Name -match $Filter }
+
+    # Add Architecture property to each entry
+    Write-Verbose -Message "Adding Architecture property."
+    $VcRedists | ForEach-Object { if ($_.Name -contains "x64") { $_ | Add-Member -NotePropertyName "Architecture" -NotePropertyValue "x64" } }
+
+    # Write the installed VcRedists to the pipeline
+    Write-Output -InputObject $VcRedists
 }

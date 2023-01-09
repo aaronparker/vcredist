@@ -13,7 +13,7 @@ Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolki
 
 ## SYNTAX
 
-```powershell
+```
 New-VcMdtBundle [-MdtPath] <String> [[-AppFolder] <String>] [-Force] [[-MdtDrive] <String>]
  [[-Publisher] <String>] [[-BundleName] <String>] [[-Language] <String>] [-WhatIf] [-Confirm]
  [<CommonParameters>]

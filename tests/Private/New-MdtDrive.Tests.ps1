@@ -10,43 +10,23 @@ param ()
 BeforeDiscovery {
 }
 
-InModuleScope VcRedist {
-    BeforeAll { Describe 'New-MdtDrive' {
-            function Get-MdtPersistentDrive {}
-            function New-PSDrive {}
-            function Add-MDTPersistentDrive {}
+InModuleScope -ModuleName "VcRedist" {
+    Describe -Name "New-MdtDrive" {
+        BeforeAll {
+            # Install the MDT Workbench
+            & "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+            Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
         }
 
         Context "Creates a new MDT drive" {
-            BeforeEach {
-                Mock -CommandName Get-MdtPersistentDrive -MockWith {
-                    $obj = [PSCustomObject]@{
-                        Name        = "DS004"
-                        Path        = "\\server\share"
-                        Description = "MDT drive created by New-MdtDrive"
-                    }
-                    Write-Output $obj
-                }
-                Mock -CommandName New-PSDrive -MockWith {
-                    $obj = [PSCustomObject]@{
-                        Name     = "DS004"
-                        Provider = "MDTProvider"
-                        Root     = "\\server\share"
-                    }
-                    Write-Output $obj
-                }
-                Mock -CommandName Add-MdtPersistentDrive -MockWith {
-                    $obj = [PSCustomObject]@{
-                        Name     = "DS004"
-                        Provider = "MDTProvider"
-                        Root     = "\\server\share"
-                    }
-                    Write-Output $obj
-                }
+            It "Does not throw when connecting to an MDT share" {
+                $Path = "$Env:RUNNER_TEMP\Deployment"
+                { $Drive = New-MdtDrive -Drive "DS020" -Path $Path } | Should -Not -Throw
             }
 
-            It "Successfully creates the MDT drive" {
-                New-MdtDrive -Drive "DS004" -Path "\\server\share" | Should -Be "DS004"
+            It "Returns the expected MDT drive name" {
+                $Path = "$Env:RUNNER_TEMP\Deployment"
+                New-MdtDrive -Drive "DS020" -Path $Path | Should -Be "DS020"
             }
         }
     }

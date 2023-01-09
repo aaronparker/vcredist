@@ -11,7 +11,7 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
-	Describe "Test-PSCore" {
+	Describe -Name "Test-PSCore" {
 		Context "Test for Windows PowerShell or PowerShell Core" {
 			if (($PSVersionTable.PSVersion -ge [System.Version]::Parse("6.0.0")) -and ($PSVersionTable.PSEdition -eq "Core")) {
 				It "Returns true when running on PowerShell Core" {

@@ -3,7 +3,8 @@ name: Validate module
 on:  
   push:
     branches:
-      - 'development'
+      - '*'
+      - '!main'
     paths:
       - 'VcRedist/**'
       - 'tests/**'
@@ -43,7 +44,7 @@ jobs:
           sarif_file: results.sarif
 
   run-pester:
-    name: run-pester
+    name: Test with Pester
     needs: psscriptanalyzer
     runs-on: ${{ matrix.os }}
     strategy:
@@ -52,40 +53,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Import GPG key so that we can sign the commit
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v5
-        with:
-          gpg_private_key: ${{ secrets.GPGKEY }}
-          passphrase: ${{ secrets.GPGPASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-          git_config_global: true
-          git_tag_gpgsign: true
-          git_push_gpgsign: false
-          git_committer_name: ${{ secrets.COMMIT_NAME }}
-          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
-
-      - name: Install and cache PowerShell modules
-        id: psmodulecache
-        uses: potatoqualitee/psmodulecache@v5.2
-        with:
-          modules-to-cache: Pester
-          shell: powershell
 
       # Run Pester tests
       - name: Run Pester tests
         shell: powershell
         working-directory: "${{ github.workspace }}"
+        env:
+          TENANT_ID: ${{ secrets.TENANT_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
-          Import-Module -Name "Pester" -Force
+          .\tests\Install-Pester.ps1
+          Import-Module -Name "Pester" -Force -ErrorAction "Stop"
 
           Import-Module -Name "$env:GITHUB_WORKSPACE\VcRedist" -Force
-          $Config = [PesterConfiguration]::Default
+          $Config = New-PesterConfiguration
           $Config.Run.Path = "$env:GITHUB_WORKSPACE\tests"
           $Config.Run.PassThru = $True
           $Config.CodeCoverage.Enabled = $True
@@ -95,18 +77,28 @@ jobs:
           $Config.TestResult.Enabled = $True
           $Config.TestResult.OutputFormat = "NUnitXml"
           $Config.TestResult.OutputPath = "$env:GITHUB_WORKSPACE\tests\TestResults-${{ matrix.os }}.xml"
+          $Config.Output.Verbosity = "Detailed"
           Invoke-Pester -Configuration $Config
 
       - name: Upload artifacts
         id: upload-artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: pester-test-results
           path: |
             ${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml
 
+      # Publish Pester test results
+      - name: Publish Pester test results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          nunit_files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"
+
       - name: Upload to Codecov
         id: codecov
+        if: always()
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

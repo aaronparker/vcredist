@@ -10,12 +10,12 @@ param ()
 BeforeDiscovery {
 }
 
-Describe "Export-VcManifest" {
-	Context 'Validation' {
+Describe -Name "Export-VcManifest" {
+	Context "Validate Export-VcManifest" {
 		BeforeAll {
-			$Json = [System.IO.Path]::Combine($env:RUNNER_TEMP, "Redists.json")
-			Export-VcManifest -Path $Json
+			$Json = Export-VcManifest -Path $env:RUNNER_TEMP
 			$VcList = Get-VcList -Path $Json
+
 			$VcCount = @{
 				"Default"     = 6
 				"Supported"   = 12
@@ -27,11 +27,21 @@ Describe "Export-VcManifest" {
 		It "Given valid parameter -Path, it exports an JSON file" {
 			Test-Path -Path $Json | Should -BeTrue
 		}
+
 		It "Given valid parameter -Path, it exports an JSON file" {
 			$VcList.Count | Should -BeGreaterOrEqual $VcCount.Default
 		}
+
 		It "Given an invalid path, it should throw an error" {
-			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Temp", "Temp.json")) } | Should -Throw
+			{ Export-VcManifest -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Temp")) } | Should -Throw
+		}
+
+		It "Given an valid path, it should not throw an error" {
+			{ Export-VcManifest -Path $env:RUNNER_TEMP } | Should -Not -Throw
+		}
+
+		It "Given an valid path, it should not throw an error" {
+			{ Export-VcManifest -Path $env:RUNNER_TEMP } | Should -Not -Throw
 		}
 	}
 }

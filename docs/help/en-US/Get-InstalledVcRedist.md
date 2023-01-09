@@ -13,7 +13,7 @@ Returns the installed Visual C++ Redistributables.
 
 ## SYNTAX
 
-```powershell
+```
 Get-InstalledVcRedist [-ExportAll] [<CommonParameters>]
 ```
 

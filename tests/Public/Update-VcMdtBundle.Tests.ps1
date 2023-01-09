@@ -9,3 +9,24 @@ param ()
 
 BeforeDiscovery {
 }
+
+Describe -Name "Update-VcMdtBundle" {
+	BeforeAll {
+		# Install the MDT Workbench
+		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+
+	}
+
+	Context "Update-VcMdtBundle updates the bundle in the MDT deployment share" {
+		It "Updates the bundle in the deployment share OK" {
+			$params = @{
+				MdtPath    = "$env:RUNNER_TEMP\Deployment"
+				AppFolder  = "VcRedists"
+				MdtDrive   = "DS020"
+				BundleName = "Visual C++ Redistributables"
+				Publisher  = "Microsoft"
+			}
+			{ Update-VcMdtBundle @params } | Should -Not -Throw
+		}
+	}
+}
