@@ -6,34 +6,12 @@
 
 ### Required parameters
 
-* `Path` - Path to the JSON file the content will be exported to.
-
-### Optional parameters
-
-* `ExportAll` - Switch parameter that forces the export of Visual C++ Redistributables including unsupported Redistributables
+* `Path` - A directory path that the manifest will be exported to.
 
 ## Examples
 
-Export the manifest of supported Redistributables:
+Export the VcRedist manifest of supported Redistributables to C:\Temp. The manifest will be exported to C:\Temp\VisualCRedistributables.json
 
 ```powershell
-Export-VcManifest -Path C:\Temp\VcRedists.json
-```
-
-Export the manifest of all supported and unsupported Redistributables:
-
-```powershell
-Export-VcManifest -Path .\VcRedists.json -Export All
-```
-
-Export the manifest of all supported Redistributables:
-
-```powershell
-Export-VcManifest -Path .\VcRedists.json -Export Supported
-```
-
-Export the manifest of all unsupported Redistributables:
-
-```powershell
-Export-VcManifest -Path .\VcRedists.json -Export Unsupported
+Export-VcManifest -Path C:\Temp
 ```

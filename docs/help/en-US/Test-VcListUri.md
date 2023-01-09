@@ -1,11 +1,11 @@
 ---
 external help file: VcRedist-help.xml
 Module Name: VcRedist
-online version: https://vcredist.com/test-vcdownload/
+online version: https://vcredist.com/test-vcredisturi/
 schema: 2.0.0
 ---
 
-# Test-VcDownload
+# Test-VcRedistUri
 
 ## SYNOPSIS
 
@@ -14,74 +14,55 @@ Tests that the downloads for the Visual C++ Redistributables as listed in the ma
 ## SYNTAX
 
 ```
-Save-VcRedist [-VcList] <PSObject> [[-Path] <String>] [-ForceWebRequest] [-Priority <String>]
+Test-VcRedistUri [-VcList] <PSObject> [[-Path] <String>] [-Priority <String>]
  [[-Proxy] <String>] [[-ProxyCredential] <PSCredential>] [-UserAgent <String>] [-ShowProgress] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList into a folder structure that represents release, version and processor architecture.
-If the redistributable exists in the specified path, it will not be re-downloaded.
+Tests that the downloads for the Visual C++ Redistributables as listed in the manifest returned by Get-VcList are available (i.e. return a HTTP 200 response).
 
-For example, the following folder structure will be created when downloading the 2010, 2012, 2013 and 2019 Redistributables to C:\VcRedist:
-
-C:\VcRedist\2010\10.0.40219.325\x64
-C:\VcRedist\2010\10.0.40219.325\x86
-C:\VcRedist\2012\11.0.61030.0\x64
-C:\VcRedist\2012\11.0.61030.0\x86
-C:\VcRedist\2013\12.0.40664.0\x64
-C:\VcRedist\2013\12.0.40664.0\x86
-C:\VcRedist\2019\14.28.29913.0\x64
-C:\VcRedist\2019\14.28.29913.0\x86
+A true or false value is returned for each Visual C++ Redistributables passed to the function.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Save-VcRedist -VcList (Get-VcList) -Path C:\Redist
+Test-VcRedistUri -VcList (Get-VcList)
 ```
 
 Description:
-Downloads the supported Visual C++ Redistributables to C:\Redist.
+Test the Visual C++ Redistributables passed from Get-VcList.
 
 ### EXAMPLE 2
 
 ```powershell
-Get-VcList | Save-VcRedist -Path C:\Redist
+Get-VcList | Test-VcRedistUri
 ```
 
 Description:
-Passes the list of supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
+Passes the list of supported Visual C++ Redistributables from Get-VcList to Test-VcRedistUri via the pipeline
 
 ### EXAMPLE 3
 
 ```powershell
 $VcList = Get-VcList -Release 2013, 2019 -Architecture x86
-Save-VcRedist -VcList $VcList -Path C:\Redist
+Test-VcRedistUri -VcList $VcList
 ```
 
 Description:
-Passes the list of 2013 and 2019 x86 supported Visual C++ Redistributables to Save-VcRedist and downloads the Redistributables to C:\Redist.
+Tests the list of 2013 and 2019 x86 supported Visual C++ Redistributables.
 
 ### EXAMPLE 4
 
 ```powershell
-Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist
+Test-VcRedistUri -VcList (Get-VcList -ExportAll)
 ```
 
 Description:
-Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist.
-
-### EXAMPLE 5
-
-```powershell
-Save-VcRedist -VcList (Get-VcList -Release 2010, 2012, 2013, 2019) -Path C:\Redist -Proxy proxy.domain.local
-```
-
-Description:
-Downloads the 2010, 2012, 2013, and 2019 Visual C++ Redistributables to C:\Redist using the proxy server 'proxy.domain.local'
+Exports all supported and unsupported Visual C++ Redistributables and tests the downloads to determine whether they are valid.
 
 ## PARAMETERS
 
@@ -98,54 +79,6 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Path
-
-Specify a target folder to download the Redistributables to, otherwise use the current folder.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: (Resolve-Path -Path $PWD)
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ForceWebRequest
-
-Force the use of Invoke-WebRequest instead of Start-BitsTransfer. Included for backwards compatibility only.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Priority
-
-Force the priority when using Start-BitsTransfer. Included for backwards compatibility only.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Foreground
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -192,22 +125,6 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
 
 Required: False
 Position: Named

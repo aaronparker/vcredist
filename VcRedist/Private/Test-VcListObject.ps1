@@ -1,7 +1,7 @@
 function Test-VcListObject {
     <#
         .SYNOPSIS
-            Returns True is running on PowerShell Core.
+            Returns True if running on PowerShell Core.
 
         .NOTES
             Author: Aaron Parker
