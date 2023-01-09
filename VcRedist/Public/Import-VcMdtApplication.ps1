@@ -6,16 +6,22 @@ function Import-VcMdtApplication {
     [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/import-vcmdtapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
-        [ValidateNotNull()]
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $true, Position = 1)]
         [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         [Parameter(Mandatory = $true, Position = 2)]
         [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
+        [ValidateNotNullOrEmpty()]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $false, Position = 3)]

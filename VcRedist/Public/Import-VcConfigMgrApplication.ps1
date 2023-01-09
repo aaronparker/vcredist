@@ -6,15 +6,21 @@ function Import-VcConfigMgrApplication {
     [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/import-vcconfigmgrapplication/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
-        [ValidateNotNull()]
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $true, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_." } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType "Container") { $true } else { throw "Cannot find path $_." } })]
+        [ValidateNotNullOrEmpty()]
         [System.String] $Path,
 
         [Parameter(Mandatory = $true, Position = 2)]
+        [ValidateNotNullOrEmpty()]
         [System.String] $CMPath,
 
         [Parameter(Mandatory = $true, Position = 3)]

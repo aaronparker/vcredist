@@ -5,8 +5,12 @@ function Import-VcIntuneApplication {
     [CmdletBinding(SupportsShouldProcess = $false, HelpURI = "https://vcredist.com/import-vcintuneapplication/")]
     [OutputType([System.String])]
     param (
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
-        [ValidateNotNull()]
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Pass a VcList object from Save-VcList.")]
+            [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )
 

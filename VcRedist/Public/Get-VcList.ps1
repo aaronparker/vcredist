@@ -14,8 +14,8 @@ function Get-VcList {
         [System.String[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $false, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
-        [ValidateNotNull()]
         [ValidateScript( { if (Test-Path -Path $_ -PathType "Leaf") { $true } else { throw "Cannot find file $_" } })]
+        [ValidateNotNullOrEmpty()]
         [Alias("Xml")]
         [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "VisualCRedistributables.json"),
 

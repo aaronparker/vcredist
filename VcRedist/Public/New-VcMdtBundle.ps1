@@ -6,11 +6,11 @@ function New-VcMdtBundle {
     [OutputType([System.Management.Automation.PSObject])]
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType "Container") { $true } else { throw "Cannot find path $_" } })]
         [System.String] $MdtPath,
 
         [Parameter(Mandatory = $false, Position = 1)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [ValidateNotNullOrEmpty()]
         [System.String] $AppFolder = "VcRedists",
 
@@ -18,19 +18,19 @@ function New-VcMdtBundle {
         [System.Management.Automation.SwitchParameter] $Force,
 
         [Parameter(Mandatory = $false, Position = 2)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $MdtDrive = "DS099",
 
         [Parameter(Mandatory = $false, Position = 3)]
-        [ValidatePattern('^[a-zA-Z0-9]+$')]
+        [ValidatePattern("^[a-zA-Z0-9]+$")]
         [System.String] $Publisher = "Microsoft",
 
         [Parameter(Mandatory = $false, Position = 4)]
-        [ValidatePattern('^[a-zA-Z0-9\+ ]+$')]
+        [ValidatePattern("^[a-zA-Z0-9\+ ]+$")]
         [System.String] $BundleName = "Visual C++ Redistributables",
 
         [Parameter(Mandatory = $false, Position = 5)]
-        [ValidatePattern('^[a-zA-Z0-9-]+$')]
+        [ValidatePattern("^[a-zA-Z0-9-]+$")]
         [System.String] $Language = "en-US"
     )
 

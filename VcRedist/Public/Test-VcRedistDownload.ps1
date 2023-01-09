@@ -9,9 +9,9 @@ function Test-VcRedistDownload {
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline,
-            HelpMessage = "Pass an object from Get-VcList.")]
-        [ValidateNotNull()]
-        [System.Management.Automation.PSObject] $InputObject,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $false, Position = 1)]
         [System.String] $Proxy,
