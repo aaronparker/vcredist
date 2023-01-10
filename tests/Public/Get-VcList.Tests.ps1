@@ -83,8 +83,8 @@ Describe -Name "Validate manifest counts from Get-VcList" {
 		$VcCount = @{
 			"Default"     = 6
 			"Supported"   = 12
-			"Unsupported" = 24
-			"All"         = 36
+			"Unsupported" = 14
+			"All"         = 26
 		}
 	}
 
@@ -112,8 +112,8 @@ Describe -Name "Validate manifest scenarios with Get-VcList" {
 			$VcCount = @{
 				"Default"     = 6
 				"Supported"   = 12
-				"Unsupported" = 24
-				"All"         = 36
+				"Unsupported" = 14
+				"All"         = 26
 			}
 		}
 
