@@ -16,14 +16,13 @@ Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $TestReleases {
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
 		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-		Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
+		$VcList = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
 	}
 
 	Context "ConfigMgr is not installed" {
 		It "Should throw when the ConfigMgr module is not installed" {
 			$params = @{
-				VcList      = $(Get-VcList -Release $Release)
-				Path        = "$env:RUNNER_TEMP\Downloads"
+				VcList      = $VcList
 				CMPath      = $env:RUNNER_TEMP
 				SMSSiteCode = "LAB"
 				AppFolder   = "VcRedists"
@@ -43,8 +42,7 @@ Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $TestReleases {
 
 		It "Should throw when env:SMS_ADMIN_UI_PATH is valid but module does not exist" {
 			$params = @{
-				VcList      = $(Get-VcList -Release $Release)
-				Path        = "$env:RUNNER_TEMP\Downloads"
+				VcList      = $VcList
 				CMPath      = $env:RUNNER_TEMP
 				SMSSiteCode = "LAB"
 				AppFolder   = "VcRedists"
@@ -64,8 +62,7 @@ Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $TestReleases {
 
 		It "Should throw when env:SMS_ADMIN_UI_PATH is invalid" {
 			$params = @{
-				VcList      = $(Get-VcList -Release $Release)
-				Path        = "$env:RUNNER_TEMP\Downloads"
+				VcList      = $VcList
 				CMPath      = $env:RUNNER_TEMP
 				SMSSiteCode = "LAB"
 				AppFolder   = "VcRedists"

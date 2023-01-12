@@ -2,6 +2,7 @@ function Get-VcList {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
+    [Alias("Get-VcRedist")]
     [OutputType([System.Management.Automation.PSObject])]
     [CmdletBinding(DefaultParameterSetName = "Manifest", HelpURI = "https://vcredist.com/get-vclist/")]
     param (

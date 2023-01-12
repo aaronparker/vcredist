@@ -2,7 +2,6 @@ function Install-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-
     [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/install-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
