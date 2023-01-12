@@ -19,14 +19,15 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
 		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-		$SaveList = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
+
+		$VcListX64 = Get-VcList -Release $Release -Architecture "x64" | Save-VcRedist -Path $Path
+		$VcListX86 = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
 	}
 
 	Context "Update-VcMdtApplication updates OK with existing Redistributables in the MDT share" {
 		It "Does not throw when updating the existing <Release> x64 Redistributables" {
 			$params = @{
-				VcList    = (Get-VcList -Release $Release -Architecture "x64")
-				Path      = $Path
+				VcList    = $VcListX64
 				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
 				Silent    = $true
@@ -38,8 +39,7 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $TestReleases {
 
 		It "Does not throw when updating the existing <Release> x86 Redistributables" {
 			$params = @{
-				VcList    = (Get-VcList -Release $Release -Architecture "x86")
-				Path      = $Path
+				VcList    = $VcListX86
 				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
 				Silent    = $true
@@ -93,8 +93,7 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 	Context "Update-VcMdtApplication updates Redistributables in the MDT share" {
 		It "Updates the 2022 x64 Redistributables in MDT OK" {
 			$params = @{
-				VcList    = (Get-VcList -Release "2022" -Architecture "x64")
-				Path      = $Path
+				VcList    = $(Get-VcList -Release "2022" -Architecture "x64" | Save-VcRedist -Path $Path)
 				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"
 				Silent    = $true
@@ -106,7 +105,7 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 
 		It "Updates the 2022 x86 Redistributables in MDT OK" {
 			$params = @{
-				VcList    = (Get-VcList -Release "2022" -Architecture "x86")
+				VcList    = $(Get-VcList -Release "2022" -Architecture "x86" | Save-VcRedist -Path $Path)
 				Path      = $Path
 				MdtPath   = "$env:RUNNER_TEMP\Deployment"
 				AppFolder = "VcRedists"

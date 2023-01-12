@@ -11,7 +11,7 @@ After the Visual C++ Redistributables are installed, the list of installed Visua
 ### Required parameters
 
 * `VcList` - An array containing details of the Visual C++ Redistributables from `Get-VcList`
-* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcList`
+* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcRedist`
 
 ### Optional parameters
 

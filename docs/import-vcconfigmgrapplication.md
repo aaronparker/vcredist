@@ -9,7 +9,7 @@ Visual C++ Redistributables can be filtered for release and processor architectu
 ### Required parameters
 
 * `VcList` - An array containing details of the Visual C++ Redistributables from `Get-VcList`
-* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcList`
+* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcRedist`
 * `CMPath` - Specify a UNC path where the Visual C++ Redistributables will be distributed from
 * `SMSSiteCode` - Specify the Site Code for ConfigMgr app creation
 

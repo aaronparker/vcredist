@@ -9,7 +9,7 @@ Visual C++ Redistributables can be filtered for release and processor architectu
 ### Required parameters
 
 * `VcList` - An array containing details of the Visual C++ Redistributables from `Get-VcList`
-* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcList`
+* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcRedist`
 * `MdtPath` - the local or network path to the MDT deployment share
 
 ### Optional parameters
