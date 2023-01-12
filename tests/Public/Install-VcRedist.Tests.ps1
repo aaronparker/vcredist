@@ -44,7 +44,7 @@ Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via the pipeline" {
 			{ Get-VcList -Release $Release -Architecture "x64" | `
 					Save-VcRedist -Path $Path | `
-					Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
+					Install-VcRedist -Silent } | Should -Not -Throw
 		}
 	}
 
@@ -64,7 +64,7 @@ Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via the pipeline" {
 			{ Get-VcList -Release $Release -Architecture "x86" | `
 					Save-VcRedist -Path $Path | `
-					Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
+					Install-VcRedist -Silent } | Should -Not -Throw
 		}
 	}
 }

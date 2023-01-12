@@ -24,6 +24,7 @@ InModuleScope VcRedist {
 			SilentInstall   = "/install /quiet /norestart"
 			SilentUninstall = "%ProgramData%\Package Cache\{6ba9fb5e-8366-4cc4-bf65-25fe9819b2fc}\VC_redist.x86.exe /uninstall /quiet /norestart"
 			UninstallKey    = "32"
+			Path            = "C:\Temp\VcRedist.exe"
 		}
 
 		$InvalidObject = [PSCustomObject]@{
