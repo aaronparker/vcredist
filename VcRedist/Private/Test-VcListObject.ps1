@@ -16,15 +16,20 @@ function Test-VcListObject {
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param (
-        [Parameter(Position = 0)]
-        [System.Management.Automation.PSObject] $InputObject,
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Position = 1)]
         [System.String[]] $RequiredProperties = @("Architecture", "Install", "Name", "ProductCode", `
-                "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version")
+                "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version", "Path")
     )
 
-    $Members = Get-Member -InputObject $InputObject -MemberType "NoteProperty"
+    $Members = Get-Member -InputObject $VcList -MemberType "NoteProperty"
     $params = @{
         ReferenceObject  = $RequiredProperties
         DifferenceObject = $Members.Name
@@ -42,7 +47,7 @@ function Test-VcListObject {
         }
     }
 
-    $InputObject.PSObject.Properties | ForEach-Object {
+    $VcList.PSObject.Properties | ForEach-Object {
         if (([System.String]::IsNullOrEmpty($_.Value))) {
             throw [System.Management.Automation.ValidationMetadataException] "Property '$($_.Name)' is null or empty."
         }

@@ -13,10 +13,9 @@ function Install-VcRedist {
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $false, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType "Container") { $true } else { throw "Cannot find path $_" } })]
-        [ValidateNotNullOrEmpty()]
-        [System.String] $Path = (Resolve-Path -Path $PWD),
+        [Parameter(Mandatory = $false)]
+        [System.ObsoleteAttribute("This parameter is not longer supported. The Path property must be on the object passed to -VcList.")]
+        [System.String] $Path,
 
         [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter] $Silent,
@@ -31,6 +30,12 @@ function Install-VcRedist {
         if ($Elevated -eq $false) {
             $Msg = "Installing the Visual C++ Redistributables requires elevation. The current Windows PowerShell session is not running as Administrator. Start Windows PowerShell by using the Run as Administrator option, and then try running the script again"
             throw [System.Management.Automation.ScriptRequiresException]::New($Msg)
+        }
+
+        # Make sure that $VcList has the required properties
+        if (Test-VcListObject -ne $true) {
+            $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
         }
 
         # Get currently installed VcRedist versions
@@ -54,26 +59,20 @@ function Install-VcRedist {
                 }
                 else {
 
-                    # Target folder structure; VcRedist setup file
-                    Write-Verbose -Message "Construct target installer folder and filename."
-                    $TargetDirectory = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-                    $TargetVcRedist = Join-Path -Path $TargetDirectory -ChildPath $(Split-Path -Path $VcRedist.URI -Leaf)
-                    Write-Verbose -Message "Target directory: $TargetDirectory"
-                    Write-Verbose -Message "Target VcRedist installer: $TargetVcRedist"
-
-                    if (Test-Path -Path $TargetVcRedist) {
+                    if (Test-Path -Path $VcRedist.Path) {
                         Write-Verbose -Message "Installing VcRedist: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
-                        if ($PSCmdlet.ShouldProcess("$TargetVcRedist $($VcRedist.Install)", "Install")) {
+                        if ($PSCmdlet.ShouldProcess("$($VcRedist.Path) $($VcRedist.Install)", "Install")) {
 
                             try {
                                 # Create parameters with -ArgumentList set based on Install/SilentInstall properties in the manifest
                                 $params = @{
-                                    FilePath     = $TargetVcRedist
+                                    FilePath     = $VcRedist.Path
                                     ArgumentList = if ($Silent) { $VcRedist.SilentInstall } else { $VcRedist.Install }
                                     PassThru     = $true
                                     Wait         = $true
                                     NoNewWindow  = $true
                                     Verbose      = $VerbosePreference
+                                    ErrorAction  = "Continue"
                                 }
                                 $Result = Start-Process @params
                             }
@@ -87,7 +86,7 @@ function Install-VcRedist {
                         }
                     }
                     else {
-                        Write-Warning -Message "Cannot find: '$TargetVcRedist'. Download with Save-VcRedist."
+                        Write-Warning -Message "Cannot find: '$($VcRedist.Path)'. Download with Save-VcRedist."
                     }
                 }
             }

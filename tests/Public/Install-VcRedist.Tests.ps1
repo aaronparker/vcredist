@@ -33,12 +33,18 @@ Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 			$VcRedist = Get-VcList -Release $Release -Architecture "x64" | Save-VcRedist -Path $Path
 		}
 
-		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture>" {
-			{ Install-VcRedist -VcList $VcRedist -Path $Path -Silent } | Should -Not -Throw
+		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via parameters" {
+			{ Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
 		}
 
 		It "Returns the list of installed VcRedists after install" {
-			Install-VcRedist -VcList $VcRedist -Path $Path -Silent | Should -BeOfType "System.Management.Automation.PSObject"
+			Install-VcRedist -VcList $VcRedist -Silent | Should -BeOfType "System.Management.Automation.PSObject"
+		}
+
+		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via the pipeline" {
+			{ Get-VcList -Release $Release -Architecture "x64" | `
+					Save-VcRedist -Path $Path | `
+					Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
 		}
 	}
 
@@ -47,12 +53,18 @@ Describe -Name "Install-VcRedist" -ForEach $TestReleases {
 			$VcRedist = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
 		}
 
-		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture>" {
-			{ Install-VcRedist -VcList $VcRedist -Path $Path -Silent } | Should -Not -Throw
+		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via parameters" {
+			{ Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
 		}
 
 		It "Returns the list of installed VcRedists after install" {
-			Install-VcRedist -VcList $VcRedist -Path $Path -Silent | Should -BeOfType "System.Management.Automation.PSObject"
+			Install-VcRedist -VcList $VcRedist -Silent | Should -BeOfType "System.Management.Automation.PSObject"
+		}
+
+		It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via the pipeline" {
+			{ Get-VcList -Release $Release -Architecture "x86" | `
+					Save-VcRedist -Path $Path | `
+					Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
 		}
 	}
 }

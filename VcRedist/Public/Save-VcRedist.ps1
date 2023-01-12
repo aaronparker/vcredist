@@ -90,19 +90,19 @@ function Save-VcRedist {
 
                     # Download the newer version
                     Write-Verbose -Message "Manifest version: '$($VcRedist.Version)' > file version: '$ProductVersion'."
-                    $download = $true
+                    $DownloadRequired = $true
                 }
                 else {
                     Write-Verbose -Message "Manifest version: '$($VcRedist.Version)' matches file version: '$ProductVersion'."
-                    $download = $false
+                    $DownloadRequired = $false
                 }
             }
             else {
-                $download = $true
+                $DownloadRequired = $true
             }
 
             # The VcRedist needs to be downloaded
-            if ($download -eq $true) {
+            if ($DownloadRequired -eq $true) {
                 if ($PSCmdlet.ShouldProcess($VcRedist.URI, "Invoke-WebRequest")) {
 
                     try {
@@ -131,7 +131,8 @@ function Save-VcRedist {
 
                     # Return the $VcList array on the pipeline so that we can act on what was downloaded
                     # Add the Path property pointing to the downloaded file
-                    if ($Downloaded) {
+                    if ($Downloaded -eq $true) {
+                        Write-Verbose -Message "Adding Path property."
                         $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $TargetVcRedist
                         Write-Output -InputObject $VcRedist
                     }
@@ -141,6 +142,7 @@ function Save-VcRedist {
                 # Return the $VcList array on the pipeline so that we can act on what was downloaded
                 # Add the Path property pointing to the downloaded file
                 Write-Verbose -Message "VcRedist exists: $TargetVcRedist."
+                Write-Verbose -Message "Adding Path property."
                 $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $TargetVcRedist
                 Write-Output -InputObject $VcRedist
             }
