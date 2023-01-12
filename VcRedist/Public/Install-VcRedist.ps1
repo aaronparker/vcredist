@@ -2,14 +2,15 @@ function Install-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
+
     [CmdletBinding(SupportsShouldProcess = $true, HelpURI = "https://vcredist.com/install-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     param (
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            ValueFromPipeline,
-            HelpMessage = "Pass a VcList object from Get-VcList.")]
+            ValueFromPipeline = $true,
+            HelpMessage = "Pass a VcList object from Save-VcList.")]
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
@@ -32,35 +33,35 @@ function Install-VcRedist {
             throw [System.Management.Automation.ScriptRequiresException]::New($Msg)
         }
 
-        # Make sure that $VcList has the required properties
-        if ((Test-VcListObject -VcList $VcList) -ne $true) {
-            $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
-            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
-        }
-
         # Get currently installed VcRedist versions
         $currentInstalled = Get-InstalledVcRedist
     }
 
     process {
 
+        # Make sure that $VcList has the required properties
+        if ((Test-VcListObject -VcList $VcList) -ne $true) {
+            $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+        }
+
         # Sort $VcList by version number from oldest to newest
         foreach ($VcRedist in ($VcList | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $false })) {
 
             # If already installed or the -Force parameter is not specified, skip
             if (($currentInstalled | Where-Object { $VcRedist.ProductCode -contains $_.ProductCode }) -and !($PSBoundParameters.ContainsKey("Force"))) {
-                Write-Information -MessageData "VcRedist already installed: [$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)]." -InformationAction "Continue"
+                Write-Information -MessageData "VcRedist already installed: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'" -InformationAction "Continue"
             }
             else {
 
                 # Avoid installing 64-bit Redistributable on x86 Windows
                 if (((Get-Bitness) -eq "x86") -and ($VcRedist.Architecture -eq "x64")) {
-                    Write-Warning -Message "Incompatible architecture: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
+                    Write-Warning -Message "Incompatible architecture: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'"
                 }
                 else {
 
                     if (Test-Path -Path $VcRedist.Path) {
-                        Write-Verbose -Message "Installing VcRedist: '$($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)'."
+                        Write-Verbose -Message "Installing VcRedist: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'"
                         if ($PSCmdlet.ShouldProcess("$($VcRedist.Path) $($VcRedist.Install)", "Install")) {
 
                             try {
@@ -81,7 +82,7 @@ function Install-VcRedist {
                             }
                             $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
                             if ($Installed) {
-                                Write-Verbose -Message "Installed successfully: VcRedist $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version); Code: $($Result.ExitCode)"
+                                Write-Verbose -Message "Installed successfully: VcRedist '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'; ExitCode: $($Result.ExitCode)"
                             }
                         }
                     }

@@ -9,9 +9,9 @@ function Save-VcRedist {
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            ValueFromPipeline,
+            ValueFromPipeline = $true,
             HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $false, Position = 1)]

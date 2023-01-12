@@ -19,9 +19,9 @@ function Test-VcListObject {
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            ValueFromPipeline,
+            ValueFromPipeline = $true,
             HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Position = 1)]
@@ -29,27 +29,34 @@ function Test-VcListObject {
                 "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version", "Path")
     )
 
-    $Members = Get-Member -InputObject $VcList -MemberType "NoteProperty"
-    $params = @{
-        ReferenceObject  = $RequiredProperties
-        DifferenceObject = $Members.Name
-        PassThru         = $true
-        ErrorAction      = "Stop"
-    }
-    $MissingProperties = Compare-Object @params
+    process {
+        foreach ($Item in $VcList) {
+            $Members = Get-Member -InputObject $Item -MemberType "NoteProperty"
+            $params = @{
+                ReferenceObject  = $RequiredProperties
+                DifferenceObject = $Members.Name
+                PassThru         = $true
+                ErrorAction      = "Stop"
+            }
+            $MissingProperties = Compare-Object @params
 
-    if (-not($missingProperties)) {
-        return $true
-    }
-    else {
-        $MissingProperties | ForEach-Object {
-            throw [System.Management.Automation.ValidationMetadataException] "Property: '$_' missing."
-        }
-    }
+            if (-not($missingProperties)) {
+                $Result = $true
+            }
+            else {
+                $MissingProperties | ForEach-Object {
+                    throw [System.Management.Automation.ValidationMetadataException] "Property: '$_' missing."
+                }
+            }
 
-    $VcList.PSObject.Properties | ForEach-Object {
-        if (([System.String]::IsNullOrEmpty($_.Value))) {
-            throw [System.Management.Automation.ValidationMetadataException] "Property '$($_.Name)' is null or empty."
+            $Item.PSObject.Properties | ForEach-Object {
+                if (([System.String]::IsNullOrEmpty($_.Value))) {
+                    throw [System.Management.Automation.ValidationMetadataException] "Property '$($_.Name)' is null or empty."
+                }
+            }
         }
+
+        # Return true if all is good with the object
+        return $Result
     }
 }
