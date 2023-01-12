@@ -33,7 +33,7 @@ function Install-VcRedist {
         }
 
         # Make sure that $VcList has the required properties
-        if (Test-VcListObject -ne $true) {
+        if ((Test-VcListObject -VcList $VcList) -ne $true) {
             $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
             throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
         }
