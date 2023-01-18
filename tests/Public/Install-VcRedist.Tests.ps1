@@ -8,10 +8,39 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$UnsupportedReleases = Get-VcList -Export "Unsupported"
 }
 
-Describe -Name "Install-VcRedist" -ForEach $TestReleases {
+Describe -Name "Install-VcRedist with unsupported Redistributables" -ForEach $UnsupportedReleases {
+	BeforeAll {
+		$Release = $_
+
+		# Create download path
+		if ($env:Temp) {
+			$Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
+		}
+		elseif ($env:TMPDIR) {
+			$Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
+		}
+		elseif ($env:RUNNER_TEMP) {
+			$Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
+		}
+		New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+	}
+
+	Context "Install <Release[0].Name> Redistributable" {
+		BeforeAll {
+			$VcRedist = $Release | Save-VcRedist -Path $Path
+		}
+
+		It "Installs OK via parameters" {
+			{ Install-VcRedist -VcList $VcRedist -Silent } | Should -Not -Throw
+		}
+	}
+}
+
+Describe -Name "Install-VcRedist with supported Redistributables" -ForEach $SupportedReleases {
 	BeforeAll {
 		$Release = $_
 

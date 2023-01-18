@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $TestReleases {
+Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $SupportedReleases {
 	BeforeAll {
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"

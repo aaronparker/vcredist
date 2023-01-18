@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Test-VcRedistUri" -ForEach $TestReleases {
+Describe -Name "Test-VcRedistUri" -ForEach $SupportedReleases {
 	BeforeAll {
 		$Release = $_
 	}

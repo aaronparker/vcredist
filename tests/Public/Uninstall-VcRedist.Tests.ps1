@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-    $TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+    $SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Uninstall-VcRedist" -ForEach $TestReleases {
+Describe -Name "Uninstall-VcRedist" -ForEach $SupportedReleases {
     BeforeAll {
         $Release = $_
 

@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2022")
+	$SupportedReleases = @("2022")
 }
 
-Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $TestReleases {
+Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedReleases {
 	BeforeAll {
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
