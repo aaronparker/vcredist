@@ -62,7 +62,7 @@ function Save-VcRedist {
 
             # Build the path to save the VcRedist into; Create the folder to store the downloaded file. Skip if it exists
             $TargetDirectory = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-            Write-Verbose -Message "Test directory: $TargetDirectory."
+            Write-Verbose -Message "Test directory exists: $TargetDirectory."
             if (Test-Path -Path $TargetDirectory) {
                 Write-Verbose -Message "Directory exists: $TargetDirectory. Skipping."
             }
@@ -107,7 +107,7 @@ function Save-VcRedist {
 
                     try {
                         # Download the file
-                        Write-Verbose -Message "Download VcRedist: $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
+                        Write-Verbose -Message "Download VcRedist: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'"
                         $iwrParams = @{
                             Uri             = $VcRedist.URI
                             OutFile         = $TargetVcRedist
@@ -132,7 +132,7 @@ function Save-VcRedist {
                     # Return the $VcList array on the pipeline so that we can act on what was downloaded
                     # Add the Path property pointing to the downloaded file
                     if ($Downloaded -eq $true) {
-                        Write-Verbose -Message "Adding Path property."
+                        Write-Verbose -Message "Add Path property: $TargetVcRedist"
                         $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $TargetVcRedist
                         Write-Output -InputObject $VcRedist
                     }
@@ -142,7 +142,7 @@ function Save-VcRedist {
                 # Return the $VcList array on the pipeline so that we can act on what was downloaded
                 # Add the Path property pointing to the downloaded file
                 Write-Verbose -Message "VcRedist exists: $TargetVcRedist."
-                Write-Verbose -Message "Adding Path property."
+                Write-Verbose -Message "Add Path property: $TargetVcRedist"
                 $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $TargetVcRedist
                 Write-Output -InputObject $VcRedist
             }

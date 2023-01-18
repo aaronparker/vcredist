@@ -60,7 +60,7 @@ function Install-VcRedist {
                 else {
 
                     if (Test-Path -Path $VcRedist.Path) {
-                        Write-Verbose -Message "Installing VcRedist: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'"
+                        Write-Verbose -Message "Install VcRedist: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'"
                         if ($PSCmdlet.ShouldProcess("$($VcRedist.Path) $($VcRedist.Install)", "Install")) {
 
                             try {
@@ -81,7 +81,7 @@ function Install-VcRedist {
                             }
                             $Installed = Get-InstalledVcRedist | Where-Object { $_.ProductCode -eq $VcRedist.ProductCode }
                             if ($Installed) {
-                                Write-Verbose -Message "Installed successfully: VcRedist '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'; ExitCode: $($Result.ExitCode)"
+                                Write-Verbose -Message "Installed successfully: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'; ExitCode: $($Result.ExitCode)"
                             }
                         }
                     }
