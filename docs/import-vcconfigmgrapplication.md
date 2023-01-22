@@ -2,14 +2,13 @@
 
 To install the Visual C++ Redistributables with Microsoft Endpoint Configuration Manager, use `Import-VcConfigMgrApplication` to import each of the Visual C++ Redistributables as a separate application that includes the application and a single deployment type.
 
-Visual C++ Redistributables can be filtered for release and processor architecture by `Get-VcList` before passing to `Import-VcConfigMgrApplication`.
+Visual C++ Redistributables can be filtered for release and processor architecture by `Get-VcList` before passing to `Save-VcRedist` and `Import-VcConfigMgrApplication`. The output from `Save-VcRedist` is required, because it includes the `Path` property that is populated with the path to each installer.
 
 ## Parameters
 
 ### Required parameters
 
 * `VcList` - An array containing details of the Visual C++ Redistributables from `Get-VcList`
-* `Path` - A folder containing the downloaded Visual C++ Redistributables downloaded with `Save-VcRedist`
 * `CMPath` - Specify a UNC path where the Visual C++ Redistributables will be distributed from
 * `SMSSiteCode` - Specify the Site Code for ConfigMgr app creation
 
@@ -26,17 +25,15 @@ Visual C++ Redistributables can be filtered for release and processor architectu
 To import the Visual C++ Redistributables as applications with a single deployment type into ConfigMgr. This includes copying the downloaded installers to a network path.
 
 ```powershell
-$VcList = Get-VcList
-Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
-Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
+$VcList = Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist"
+Import-VcConfigMgrApplication -VcList $VcList -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 ```
 
 The install command line arguments used by default are passive. Fully silent install command line arguments can be specified with the `-Silent` parameter when importing the applications into Configuration Manager.
 
 ```powershell
-$VcList = Get-VcList
-Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
-Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB -Silent
+$VcList = Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist"
+Import-VcConfigMgrApplication -VcList $VcList -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB -Silent
 ```
 
 ![Microsoft Visual C++ Redistributables applications imported into ConfigMgr](assets/images/vcredistconfigmgr.png)
