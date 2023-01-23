@@ -51,7 +51,7 @@ jobs:
           $Release = "2017"
           Import-Module "${{ github.workspace }}\VcRedist" -Force
           New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-          Save-VcRedist -VcList (Get-VcList -Release $Release) -Path "$env:RUNNER_TEMP\VcRedist" -Verbose | Install-VcRedist
+          Get-VcList -Release $Release | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
           $params = @{
               Release    = $Release
               Path       = "$env:RUNNER_TEMP\VcRedist"
@@ -66,7 +66,7 @@ jobs:
           $Release = "2019"
           Import-Module "${{ github.workspace }}\VcRedist" -Force
           New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-          Save-VcRedist -VcList (Get-VcList -Release $Release) -Path "$env:RUNNER_TEMP\VcRedist" -Verbose | Install-VcRedist
+          Get-VcList -Release $Release | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
           $params = @{
               Release    = $Release
               Path       = "$env:RUNNER_TEMP\VcRedist"
@@ -81,7 +81,7 @@ jobs:
           $Release = "2022"
           Import-Module "${{ github.workspace }}\VcRedist" -Force
           New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-          Save-VcRedist -VcList (Get-VcList -Release $Release) -Path "$env:RUNNER_TEMP\VcRedist" -Verbose | Install-VcRedist
+          Get-VcList -Release $Release | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
           $params = @{
               Release    = $Release
               Path       = "$env:RUNNER_TEMP\VcRedist"

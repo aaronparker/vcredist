@@ -21,8 +21,7 @@ After the Visual C++ Redistributables are installed, the list of installed Visua
 The following commands will install the default supported Visual C++ Redistributables downloaded locally with `Save-VcRedist` to C:\Temp\VcRedist.
 
 ```powershell
-$VcList = Get-VcList
-Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
+$VcList = Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist
 Install-VcRedist -VcList $VcList
 ```
 

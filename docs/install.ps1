@@ -54,10 +54,10 @@ Write-Host "Saving VcRedists to path: $Path."
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $null
 
 Write-Host "Downloading supported Microsoft Visual C++ Redistributables."
-Save-VcRedist -VcList (Get-VcList) -Path $Path > $null
+$VcList = Get-VcList | Save-VcRedist -VcList -Path $Path
 
 Write-Host "Installing supported Microsoft Visual C++ Redistributables."
-$Redists = Install-VcRedist -VcList (Get-VcList) -Path $Path
+$Redists = Install-VcRedist -VcList $VcList
 
 Write-Host "Install complete."
 Write-Host "Installed Visual C++ Redistributables:"
