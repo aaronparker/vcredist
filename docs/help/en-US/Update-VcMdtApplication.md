@@ -14,8 +14,8 @@ Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolki
 ## SYNTAX
 
 ```
-Update-VcMdtApplication [-VcList] <PSObject> [-Path] <String> -MdtPath <String> [-AppFolder <String>] [-Silent]
- [[-MdtDrive] <String>] [[-Publisher] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-VcMdtApplication [-VcList] <PSObject> [-MdtPath <String> [-AppFolder <String>]
+ [-Silent] [[-MdtDrive] <String>] [[-Publisher] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,7 +65,7 @@ Retrieves the list of supported and unsupported Visual C++ Redistributables in t
 
 ### -VcList
 
-An array containing details of the Visual C++ Redistributables from Get-VcList.
+An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.
 
 ```yaml
 Type: PSObject
@@ -76,22 +76,6 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Path
-
-A folder containing the downloaded Visual C++ Redistributables.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

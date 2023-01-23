@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList.
+Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList. The output from Get-VcList is modified by adding the path to the Redistributable installer in the Path property. This output can then be passed to other functions that require the downloaded installer.
 
 ## SYNTAX
 
@@ -21,8 +21,7 @@ Save-VcRedist [-VcList] <PSObject> [[-Path] <String>] [-ForceWebRequest] [-Prior
 
 ## DESCRIPTION
 
-Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList into a folder structure that represents release, version and processor architecture.
-If the redistributable exists in the specified path, it will not be re-downloaded.
+Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList into a folder structure that represents release, version and processor architecture. If the redistributable exists in the specified path, it will not be re-downloaded.
 
 For example, the following folder structure will be created when downloading the 2010, 2012, 2013 and 2019 Redistributables to C:\VcRedist:
 

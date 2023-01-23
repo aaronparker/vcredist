@@ -10,7 +10,7 @@ After the Visual C++ Redistributables are installed, the list of installed Visua
 
 ### Required parameters
 
-* `VcList` - An array containing details of the Visual C++ Redistributables from `Save-VcList`
+* `VcList` - An array containing details of the Visual C++ Redistributables from `Save-VcRedist`
 
 ### Optional parameters
 

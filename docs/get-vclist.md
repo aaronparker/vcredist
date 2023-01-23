@@ -103,9 +103,9 @@ To return Redistributables from the list of unsupported Redistributables or the 
 
 ## Filtering Output
 
-The output from `Get-VcList` can be filtered before sending to other functions. `Get-VcList` has the `-Release` parameter for filtering on the `2005`, `2008`, `2010`, `2012`, `2013`, `2015`, `2017`, `2019` and `2022` releases of the Redistributables. Additionally, the `-Architecture` parameter can filter on `x86` and `x64` processor architectures.
+The output from `Get-VcList` can be filtered before sending to other functions. `Get-VcList` has the `-Release` parameter for filtering on the `2012`, `2013`, `2015`, `2017`, `2019` and `2022` releases of the Redistributables. Additionally, the `-Architecture` parameter can filter on `x86` and `x64` processor architectures.
 
-These parameters cannot be used with the `-Export` parameter. If you require filtering when exporting All, Supported or Unsupported Redistributables, pipe the output to the `Where-Object` function.
+These parameters cannot be used with the `-Export` parameter. If you require filtering when exporting All, Supported or Unsupported Redistributables, pipe the output to the `Where-Object` function. This approach is required where you want to export a list of the unsupported Redistributables.
 
 ## Examples
 
@@ -133,8 +133,8 @@ You may want to export the complete list of available supported and unsupported 
 Get-VcList -Export All | Where-Object { $_.Architecture -eq "x64" }
 ```
 
-To return a specific release and architecture from the list of unsupported Visual C++ Redistributables from the embedded manifest, the following can be used to filter for the `2008`, 64-bit versions of the Redistributables.
+To return a specific release and architecture from the list of unsupported Visual C++ Redistributables from the embedded manifest, the following can be used to filter for the `2008`, and `2010` releases and 64-bit versions of the Redistributables.
 
 ```powershell
-Get-VcList -Export Unsupported | Where-Object { $_.Release -eq "2008" -and $_.Architecture -eq "x64" }
+Get-VcList -Export Unsupported | Where-Object { $_.Release -in "2008", "2010" -and $_.Architecture -eq "x64" }
 ```

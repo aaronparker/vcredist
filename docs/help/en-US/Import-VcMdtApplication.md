@@ -14,7 +14,7 @@ Creates Visual C++ Redistributable applications in a Microsoft Deployment Toolki
 ## SYNTAX
 
 ```
-Import-VcMdtApplication [-VcList] <PSObject> [-Path] <String> [-MdtPath] <String> [[-AppFolder] <String>]
+Import-VcMdtApplication [-VcList] <PSObject> [[-MdtPath] <String> [[-AppFolder] <String>]
  [-Silent] [-DontHide] [-Force] [[-MdtDrive] <String>] [[-Publisher] <String>] [[-Language] <String>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
@@ -54,9 +54,8 @@ Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcR
 ### EXAMPLE 2
 
 ```powershell
-$VcList = Get-VcList -ExportAll
-Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
-Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
+$VcList = Get-VcList -ExportAll | Save-VcRedist -Path C:\Temp\VcRedist
+Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle
 ```
 
 Description:
@@ -66,7 +65,7 @@ Retrieves the list of supported and unsupported Visual C++ Redistributables in t
 
 ### -VcList
 
-An array containing details of the Visual C++ Redistributables from Get-VcList.
+An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.
 
 ```yaml
 Type: PSObject
@@ -77,22 +76,6 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Path
-
-A folder containing the downloaded Visual C++ Redistributable binaries.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -260,7 +243,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
