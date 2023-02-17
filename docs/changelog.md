@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.461
+
+* Update for VcRedist 2022 version `14.34.31938.0`
+
 ## 4.0.460
 
 * This update is primarily a result of code improvements through implementing additional testing and code coverage reports
