@@ -8,11 +8,11 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
-	$TestVcRedists = Get-VcList -Release $TestReleases
+	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedVcRedists = Get-VcList -Release $SupportedReleases
 }
 
-Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $TestVcRedists {
+Describe -Name "Validate Get-VcList for <VcRedist.Name>" -ForEach $SupportedVcRedists {
 	BeforeAll {
 		$VcRedist = $_
 		$Name = $_.Name
@@ -83,8 +83,8 @@ Describe -Name "Validate manifest counts from Get-VcList" {
 		$VcCount = @{
 			"Default"     = 6
 			"Supported"   = 12
-			"Unsupported" = 24
-			"All"         = 36
+			"Unsupported" = 14
+			"All"         = 26
 		}
 	}
 
@@ -112,8 +112,8 @@ Describe -Name "Validate manifest scenarios with Get-VcList" {
 			$VcCount = @{
 				"Default"     = 6
 				"Supported"   = 12
-				"Unsupported" = 24
-				"All"         = 36
+				"Unsupported" = 14
+				"All"         = 26
 			}
 		}
 
@@ -124,7 +124,7 @@ Describe -Name "Validate manifest scenarios with Get-VcList" {
 			{ Get-VcList -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "RedistsFail.json")) } | Should -Throw
 		}
 		It "Given an invalid JSON file, should throw an error on read" {
-			{ Get-VcList -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "README.MD")) } | Should -Throw
+			{ Get-VcList -Path $([System.IO.Path]::Combine($env:GITHUB_WORKSPACE, "README.MD")) } | Should -Throw
 		}
 	}
 }

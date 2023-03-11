@@ -16,35 +16,47 @@ function Test-VcListObject {
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param (
-        [Parameter(Position = 0)]
-        [System.Management.Automation.PSObject] $InputObject,
+        [Parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline = $true,
+            HelpMessage = "Pass a VcList object from Get-VcList.")]
+        [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Position = 1)]
         [System.String[]] $RequiredProperties = @("Architecture", "Install", "Name", "ProductCode", `
-                "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version")
+                "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version", "Path")
     )
 
-    $Members = Get-Member -InputObject $InputObject -MemberType "NoteProperty"
-    $params = @{
-        ReferenceObject  = $RequiredProperties
-        DifferenceObject = $Members.Name
-        PassThru         = $true
-        ErrorAction      = "Stop"
-    }
-    $MissingProperties = Compare-Object @params
+    process {
+        foreach ($Item in $VcList) {
+            $Members = Get-Member -InputObject $Item -MemberType "NoteProperty"
+            $params = @{
+                ReferenceObject  = $RequiredProperties
+                DifferenceObject = $Members.Name
+                PassThru         = $true
+                ErrorAction      = "Stop"
+            }
+            $MissingProperties = Compare-Object @params
 
-    if (-not($missingProperties)) {
-        return $true
-    }
-    else {
-        $MissingProperties | ForEach-Object {
-            throw [System.Management.Automation.ValidationMetadataException] "Property: '$_' missing."
-        }
-    }
+            if (-not($missingProperties)) {
+                $Result = $true
+            }
+            else {
+                $MissingProperties | ForEach-Object {
+                    throw [System.Management.Automation.ValidationMetadataException] "Property: '$_' missing."
+                }
+            }
 
-    $InputObject.PSObject.Properties | ForEach-Object {
-        if (([System.String]::IsNullOrEmpty($_.Value))) {
-            throw [System.Management.Automation.ValidationMetadataException] "Property '$($_.Name)' is null or empty."
+            $Item.PSObject.Properties | ForEach-Object {
+                if (([System.String]::IsNullOrEmpty($_.Value))) {
+                    throw [System.Management.Automation.ValidationMetadataException] "Property '$($_.Name)' is null or empty."
+                }
+            }
         }
+
+        # Return true if all is good with the object
+        return $Result
     }
 }

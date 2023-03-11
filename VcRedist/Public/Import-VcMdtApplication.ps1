@@ -9,18 +9,17 @@ function Import-VcMdtApplication {
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            ValueFromPipeline,
-            HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+            ValueFromPipeline = $true,
+            HelpMessage = "Pass a VcList object from Save-VcRedist.")]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $true, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
-        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory = $false)]
+        [System.ObsoleteAttribute("This parameter is not longer supported. The Path property must be on the object passed to -VcList.")]
         [System.String] $Path,
 
         [Parameter(Mandatory = $true, Position = 2)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
+        [ValidateScript( { if (Test-Path -Path $_ -PathType "Container") { $true } else { throw "Cannot find path $_" } })]
         [ValidateNotNullOrEmpty()]
         [System.String] $MdtPath,
 
@@ -60,7 +59,7 @@ function Import-VcMdtApplication {
 
         # Import the MDT module and create a PS drive to MdtPath
         if (Import-MdtModule) {
-            if ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
+            if ($PSCmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
                     $params = @{
                         Drive       = $MdtDrive
@@ -107,6 +106,13 @@ function Import-VcMdtApplication {
     }
 
     process {
+
+        # Make sure that $VcList has the required properties
+        if ((Test-VcListObject -VcList $VcList) -ne $true) {
+            $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+        }
+
         foreach ($VcRedist in $VcList) {
 
             # Set variables
@@ -152,7 +158,7 @@ function Import-VcMdtApplication {
                             Publisher             = $Publisher
                             Language              = $Language
                             CommandLine           = ".\$(Split-Path -Path $VcRedist.URI -Leaf) $(if ($Silent.IsPresent) { $VcRedist.SilentInstall } else { $VcRedist.Install })"
-                            ApplicationSourcePath = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                            ApplicationSourcePath = $(Split-Path -Path $VcRedist.Path -Parent)
                             DestinationFolder     = "$Publisher VcRedist\$($VcRedist.Release)\$($VcRedist.Version)\$($VcRedist.Architecture)"
                             WorkingDirectory      = ".\Applications\$Publisher VcRedist\$($VcRedist.Release)\$($VcRedist.Version)\$($VcRedist.Architecture)"
                             UninstallKey          = $VcRedist.ProductCode

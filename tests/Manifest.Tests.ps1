@@ -32,7 +32,8 @@ Describe -Name "VcRedist manifest tests" -ForEach $ValidateReleases {
 
         Context "Compare manifest version against installed version for <VcRedist>" -ForEach $Architectures {
             BeforeEach {
-                Install-VcRedist -VcList (Get-VcList -Release $VcRedist) -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads")) -Silent
+                $VcList = Get-VcList -Release $VcRedist | Save-VcRedist -Path $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
+                Install-VcRedist -VcList $VcList -Silent
                 $InstalledVcRedists = Get-InstalledVcRedist
 
                 $ManifestVcRedist = $CurrentManifest.Supported | Where-Object { $_.Release -eq $VcRedist }

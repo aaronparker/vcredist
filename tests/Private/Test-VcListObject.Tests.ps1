@@ -24,6 +24,7 @@ InModuleScope VcRedist {
 			SilentInstall   = "/install /quiet /norestart"
 			SilentUninstall = "%ProgramData%\Package Cache\{6ba9fb5e-8366-4cc4-bf65-25fe9819b2fc}\VC_redist.x86.exe /uninstall /quiet /norestart"
 			UninstallKey    = "32"
+			Path            = "C:\Temp\VcRedist.exe"
 		}
 
 		$InvalidObject = [PSCustomObject]@{
@@ -35,17 +36,17 @@ InModuleScope VcRedist {
 	Describe -Name "Test-VcListObject" {
 		Context "Test-VcListObject validates a valid VcList object" {
 			It "Should not throw with a valid object" {
-				{ Test-VcListObject -InputObject $ValidObject } | Should -Not -Throw
+				{ Test-VcListObject -VcList $ValidObject } | Should -Not -Throw
 			}
 
 			It "Should return true a valid object" {
-				Test-VcListObject -InputObject $ValidObject | Should -BeTrue
+				Test-VcListObject -VcList $ValidObject | Should -BeTrue
 			}
 		}
 
 		Context "Test-VcListObject validates an invalid VcList object" {
 			It "Should throw with a valid object" {
-				{ Test-VcListObject -InputObject $InvalidObject } | Should -Throw
+				{ Test-VcListObject -VcList $InvalidObject } | Should -Throw
 			}
 		}
 	}

@@ -14,9 +14,9 @@ Creates Visual C++ Redistributable applications in a ConfigMgr site.
 ## SYNTAX
 
 ```
-Import-VcConfigMgrApplication [-VcList] <PSObject> [-Path] <String> [-CMPath] <String> [-SMSSiteCode] <String>
- [[-AppFolder] <String>] [-Silent] [-NoCopy] [[-Publisher] <String>] [[-Keyword] <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Import-VcConfigMgrApplication [-VcList] <PSObject> [[-CMPath] <String>
+ [-SMSSiteCode] <String> [[-AppFolder] <String>] [-Silent] [-NoCopy] [[-Publisher] <String>]
+ [[-Keyword] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,9 +54,8 @@ Detection method: (Registry path)
 ### EXAMPLE 1
 
 ```powershell
-$VcList = Get-VcList
-Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
-Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
+$VcList = Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist"
+Import-VcConfigMgrApplication -VcList $VcList -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB
 ```
 
 Description:
@@ -66,7 +65,7 @@ Download the supported Visual C++ Redistributables to "C:\Temp\VcRedist", copy t
 
 ### -VcList
 
-An array containing details of the Visual C++ Redistributables from Get-VcList.
+An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.
 
 ```yaml
 Type: PSObject
@@ -77,22 +76,6 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Path
-
-A folder containing the downloaded Visual C++ Redistributables.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
