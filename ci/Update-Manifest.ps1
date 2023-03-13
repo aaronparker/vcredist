@@ -8,9 +8,7 @@
 [CmdletBinding()]
 param (
     [System.String[]] $Release,
-
     [System.String] $Path,
-
     [System.String] $VcManifest
 )
 
@@ -26,7 +24,7 @@ process {
     foreach ($Item in $Release) {
 
         Write-Host "`tInstalling VcRedist $Item." -ForegroundColor "Cyan"
-        Get-VcList -Release $Item | Save-VcRedist -Path C:\Temp\VcRedist | Install-VcRedist -Silent
+        Get-VcList -Release $Item | Save-VcRedist -Path $Path | Install-VcRedist -Silent
         $InstalledVcRedists = Get-InstalledVcRedist | Where-Object { $_.Name -notmatch "Debug Runtime" }
 
         # Filter the VcRedists for the target version and compare against what has been installed
