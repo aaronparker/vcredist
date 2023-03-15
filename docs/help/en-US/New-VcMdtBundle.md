@@ -42,7 +42,7 @@ Dependencies: (VcRedists in the MDT share)
 ### EXAMPLE 1
 
 ```powershell
-Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment
+Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApplication -Path C:\Temp\VcRedist -MdtPath \\server\deployment
 ```
 
 Description:
@@ -51,9 +51,8 @@ Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcR
 ### EXAMPLE 2
 
 ```powershell
-$VcList = Get-VcList -ExportAll
-Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
-Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle
+$VcList = Get-VcList -ExportAll | Save-VcRedist -Path C:\Temp\VcRedist
+Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle
 ```
 
 Description:

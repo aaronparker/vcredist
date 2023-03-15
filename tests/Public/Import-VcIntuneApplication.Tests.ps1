@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2022")
+	$SupportedReleases = @("2022")
 }
 
-Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $TestReleases {
+Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $SupportedReleases {
 	BeforeAll {
 	}
 
@@ -22,7 +22,7 @@ Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $Tes
 	}
 }
 
-Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $TestReleases {
+Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $SupportedReleases {
 	BeforeAll {
 		foreach ($Module in @("MSAL.PS", "IntuneWin32App")) {
 			Install-Module -Name $Module -Force

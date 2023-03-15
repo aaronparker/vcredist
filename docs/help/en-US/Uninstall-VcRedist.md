@@ -14,14 +14,12 @@ Uninstall the installed Visual C++ Redistributables on the local system.
 ## SYNTAX
 
 ### Manual (Default)
-
 ```
 Uninstall-VcRedist [[-Release] <String[]>] [[-Architecture] <String[]>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### Pipeline
-
 ```
 Uninstall-VcRedist [-VcList] <PSObject> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -144,7 +142,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

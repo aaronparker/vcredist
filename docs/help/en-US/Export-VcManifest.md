@@ -27,11 +27,11 @@ This enables editing of the JSON manifest for custom scenarios.
 ### EXAMPLE 1
 
 ```powershell
-Export-VcManifest -Path "C:\Temp\VisualCRedistributablesSupported.json"
+Export-VcManifest -Path "C:\Temp"
 ```
 
 Description:
-Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.json.
+Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributables.json.
 
 ## PARAMETERS
 

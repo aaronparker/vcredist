@@ -2,8 +2,7 @@ function Uninstall-VcRedist {
     <#
         .EXTERNALHELP VcRedist-help.xml
     #>
-    [CmdletBinding(DefaultParameterSetName = "Manual", SupportsShouldProcess = $true, ConfirmImpact = "High",
-        HelpURI = "https://vcredist.com/uninstall-vcredist/")]
+    [CmdletBinding(DefaultParameterSetName = "Manual", SupportsShouldProcess = $true, ConfirmImpact = "High", HelpURI = "https://vcredist.com/uninstall-vcredist/")]
     [OutputType([System.Management.Automation.PSObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     param (

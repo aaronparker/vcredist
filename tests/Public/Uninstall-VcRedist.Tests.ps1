@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-    $TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+    $SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Uninstall-VcRedist" -ForEach $TestReleases {
+Describe -Name "Uninstall-VcRedist" -ForEach $SupportedReleases {
     BeforeAll {
         $Release = $_
 
@@ -27,8 +27,8 @@ Describe -Name "Uninstall-VcRedist" -ForEach $TestReleases {
         }
         New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-        Get-VcList -Release $Release | Save-VcRedist -Path $Path | Out-Null
-        Install-VcRedist -VcList (Get-VcList -Release $Release) -Path $Path -Silent | Out-Null
+        $VcList = Get-VcList -Release $Release | Save-VcRedist -Path $Path
+        Install-VcRedist -VcList $VcList -Silent | Out-Null
     }
 
     Context "Uninstall VcRedist <Release>" {

@@ -8,13 +8,13 @@ function Update-VcMdtApplication {
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            ValueFromPipeline,
-            HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+            ValueFromPipeline = $true,
+            HelpMessage = "Pass a VcList object from Save-VcRedist.")]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
-        [Parameter(Mandatory = $true, Position = 1)]
-        [ValidateScript( { if (Test-Path -Path $_ -PathType 'Container') { $true } else { throw "Cannot find path $_" } })]
+        [Parameter(Mandatory = $false)]
+        [System.ObsoleteAttribute("This parameter is not longer supported. The Path property must be on the object passed to -VcList.")]
         [System.String] $Path,
 
         [Parameter(Mandatory = $true)]
@@ -47,7 +47,7 @@ function Update-VcMdtApplication {
 
         # Import the MDT module and create a PS drive to MdtPath
         if (Import-MdtModule) {
-            if ($PSCmdlet.ShouldProcess($Path, "Mapping")) {
+            if ($PSCmdlet.ShouldProcess($MdtPath, "Mapping")) {
                 try {
                     $params = @{
                         Drive       = $MdtDrive
@@ -73,6 +73,13 @@ function Update-VcMdtApplication {
     }
 
     process {
+
+        # Make sure that $VcList has the required properties
+        if ((Test-VcListObject -VcList $VcList) -ne $true) {
+            $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+        }
+
         if (Test-Path -Path $MdtTargetFolder) {
             foreach ($VcRedist in $VcList) {
 
@@ -97,7 +104,8 @@ function Update-VcMdtApplication {
                             # Copy the updated executable
                             try {
                                 Write-Verbose -Message "Copy VcRedist installer."
-                                $SourceFolder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                #$SourceFolder = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
+                                $SourceFolder = $(Split-Path -Path $VcRedist.Path -Parent)
                                 $ContentLocation = [System.IO.Path]::Combine((Resolve-Path -Path $MdtPath), "Applications", "$Publisher VcRedist", $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
                                 $params = @{
                                     FilePath     = "$env:SystemRoot\System32\robocopy.exe"

@@ -53,7 +53,7 @@ Get-VcList
 ```
 
 Description:
-Returns the supported 2010, 2012, 2013 and 2019, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.
+Returns the supported 2012, 2013 and 2022, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.
 
 ### EXAMPLE 3
 
@@ -114,7 +114,7 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: @("2010", "2012", "2013", "2019")
+Default value: @("2012", "2013", "2022")
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

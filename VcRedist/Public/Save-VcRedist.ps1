@@ -9,9 +9,9 @@ function Save-VcRedist {
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            ValueFromPipeline,
+            ValueFromPipeline = $true,
             HelpMessage = "Pass a VcList object from Get-VcList.")]
-            [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList,
 
         [Parameter(Mandatory = $false, Position = 1)]
@@ -62,7 +62,7 @@ function Save-VcRedist {
 
             # Build the path to save the VcRedist into; Create the folder to store the downloaded file. Skip if it exists
             $TargetDirectory = [System.IO.Path]::Combine((Resolve-Path -Path $Path), $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
-            Write-Verbose -Message "Test directory: $TargetDirectory."
+            Write-Verbose -Message "Test directory exists: $TargetDirectory."
             if (Test-Path -Path $TargetDirectory) {
                 Write-Verbose -Message "Directory exists: $TargetDirectory. Skipping."
             }
@@ -90,24 +90,24 @@ function Save-VcRedist {
 
                     # Download the newer version
                     Write-Verbose -Message "Manifest version: '$($VcRedist.Version)' > file version: '$ProductVersion'."
-                    $download = $true
+                    $DownloadRequired = $true
                 }
                 else {
                     Write-Verbose -Message "Manifest version: '$($VcRedist.Version)' matches file version: '$ProductVersion'."
-                    $download = $false
+                    $DownloadRequired = $false
                 }
             }
             else {
-                $download = $true
+                $DownloadRequired = $true
             }
 
             # The VcRedist needs to be downloaded
-            if ($download -eq $true) {
+            if ($DownloadRequired -eq $true) {
                 if ($PSCmdlet.ShouldProcess($VcRedist.URI, "Invoke-WebRequest")) {
 
                     try {
                         # Download the file
-                        Write-Verbose -Message "Download VcRedist: $($VcRedist.Release), $($VcRedist.Architecture), $($VcRedist.Version)"
+                        Write-Verbose -Message "Download VcRedist: '$($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)'"
                         $iwrParams = @{
                             Uri             = $VcRedist.URI
                             OutFile         = $TargetVcRedist
@@ -131,7 +131,8 @@ function Save-VcRedist {
 
                     # Return the $VcList array on the pipeline so that we can act on what was downloaded
                     # Add the Path property pointing to the downloaded file
-                    if ($Downloaded) {
+                    if ($Downloaded -eq $true) {
+                        Write-Verbose -Message "Add Path property: $TargetVcRedist"
                         $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $TargetVcRedist
                         Write-Output -InputObject $VcRedist
                     }
@@ -141,6 +142,7 @@ function Save-VcRedist {
                 # Return the $VcList array on the pipeline so that we can act on what was downloaded
                 # Add the Path property pointing to the downloaded file
                 Write-Verbose -Message "VcRedist exists: $TargetVcRedist."
+                Write-Verbose -Message "Add Path property: $TargetVcRedist"
                 $VcRedist | Add-Member -MemberType "NoteProperty" -Name "Path" -Value $TargetVcRedist
                 Write-Output -InputObject $VcRedist
             }

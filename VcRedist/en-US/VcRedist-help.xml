@@ -62,9 +62,9 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Export-VcManifest -Path "C:\Temp\VisualCRedistributablesSupported.json"</dev:code>
+        <dev:code>Export-VcManifest -Path "C:\Temp"</dev:code>
         <dev:remarks>
-          <maml:para>Description: Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributablesSupported.json.</maml:para>
+          <maml:para>Description: Export the list of supported Visual C++ Redistributables to C:\Temp\VisualCRedistributables.json.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -183,7 +183,7 @@
             <maml:name>String[]</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>@("2010", "2012", "2013", "2019")</dev:defaultValue>
+          <dev:defaultValue>@("2012", "2013", "2022")</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Architecture</maml:name>
@@ -237,7 +237,7 @@
           <maml:name>String[]</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>@("2010", "2012", "2013", "2019")</dev:defaultValue>
+        <dev:defaultValue>@("2012", "2013", "2022")</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Architecture</maml:name>
@@ -304,7 +304,7 @@
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Get-VcList</dev:code>
         <dev:remarks>
-          <maml:para>Description: Returns the supported 2010, 2012, 2013 and 2019, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.</maml:para>
+          <maml:para>Description: Returns the supported 2012, 2013 and 2022, x86 and x64 versions of the supported Visual C++ Redistributables from the embedded manifest.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -372,23 +372,11 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>VcList</maml:name>
           <maml:description>
-            <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+            <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
           <dev:type>
             <maml:name>PSObject</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>Path</maml:name>
-          <maml:description>
-            <maml:para>A folder containing the downloaded Visual C++ Redistributables.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -503,23 +491,11 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>VcList</maml:name>
         <maml:description>
-          <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+          <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
         <dev:type>
           <maml:name>PSObject</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>Path</maml:name>
-        <maml:description>
-          <maml:para>A folder containing the downloaded Visual C++ Redistributables.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -652,9 +628,8 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$VcList = Get-VcList
-Save-VcRedist -VcList $VcList -Path "C:\Temp\VcRedist"
-Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB</dev:code>
+        <dev:code>$VcList = Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist"
+Import-VcConfigMgrApplication -VcList $VcList -CMPath "\\server\share\VcRedist" -SMSSiteCode LAB</dev:code>
         <dev:remarks>
           <maml:para>Description: Download the supported Visual C++ Redistributables to "C:\Temp\VcRedist", copy them to "\server\share\VcRedist" and import as applications into the ConfigMgr site LAB.</maml:para>
         </dev:remarks>
@@ -733,8 +708,7 @@ Import-VcConfigMgrApplication -VcList $VcList -Path "C:\Temp\VcRedist" -CMPath "
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com
-$Vc = Get-VcList -Release "2022"
-$VcList = Save-VcRedist -VcList $Vc -Path C:\Temp\VcRedist
+$VcList = Get-VcList -Release "2022" | Save-VcRedist -Path "C:\Temp\VcRedist"
 Import-VcIntuneApplication -VcList $VcList</dev:code>
         <dev:remarks>
           <maml:para>Description: Authenticates to the specified tenant, retrieves the list of Visual C++ Redistributables 2022 version, downloads them to C:\Temp\VcRedist and imports each Redistributable into the target Intune tenant as separate application.</maml:para>
@@ -743,7 +717,7 @@ Import-VcIntuneApplication -VcList $VcList</dev:code>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com -ClientId "f99877d5-f757-438e-b12b-d905b00ea6f3" -ClientSecret &lt;secret&gt;
-Get-VcList | Save-VcRedist | Import-VcIntuneApplication</dev:code>
+Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist" | Import-VcIntuneApplication</dev:code>
         <dev:remarks>
           <maml:para>Description: Authenticates to the specified tenant using an Azure AD app registration for non-interactive authentication, retrieves the supported list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the target Intune tenant as separate application.</maml:para>
         </dev:remarks>
@@ -781,23 +755,11 @@ Get-VcList | Save-VcRedist | Import-VcIntuneApplication</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>VcList</maml:name>
           <maml:description>
-            <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+            <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
           <dev:type>
             <maml:name>PSObject</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>Path</maml:name>
-          <maml:description>
-            <maml:para>A folder containing the downloaded Visual C++ Redistributable binaries.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -923,23 +885,11 @@ Get-VcList | Save-VcRedist | Import-VcIntuneApplication</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>VcList</maml:name>
         <maml:description>
-          <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+          <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
         <dev:type>
           <maml:name>PSObject</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>Path</maml:name>
-        <maml:description>
-          <maml:para>A folder containing the downloaded Visual C++ Redistributable binaries.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1091,9 +1041,8 @@ Get-VcList | Save-VcRedist | Import-VcIntuneApplication</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>$VcList = Get-VcList -ExportAll
-Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
-Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle</dev:code>
+        <dev:code>$VcList = Get-VcList -ExportAll | Save-VcRedist -Path C:\Temp\VcRedist
+Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle</dev:code>
         <dev:remarks>
           <maml:para>Description: Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \server\deployment and creates an application bundle.</maml:para>
         </dev:remarks>
@@ -1124,7 +1073,7 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>VcList</maml:name>
           <maml:description>
-            <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+            <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
           <dev:type>
@@ -1132,18 +1081,6 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>Path</maml:name>
-          <maml:description>
-            <maml:para>A path to the folder containing the downloaded Visual C++ Redistributables.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>(Resolve-Path -Path $PWD)</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Silent</maml:name>
@@ -1195,7 +1132,7 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>VcList</maml:name>
         <maml:description>
-          <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+          <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
         <dev:type>
@@ -1203,18 +1140,6 @@ Import-VcMdtApplication -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>Path</maml:name>
-        <maml:description>
-          <maml:para>A path to the folder containing the downloaded Visual C++ Redistributables.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>(Resolve-Path -Path $PWD)</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Silent</maml:name>
@@ -1292,7 +1217,7 @@ Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>$VcRedists = Get-VcList -Release "2012","2013",2017" -Architecture x64
+        <dev:code>$VcRedists = Get-VcList -Release "2012","2013","2017" -Architecture x64
 Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists</dev:code>
         <dev:remarks>
           <maml:para>Description: Installs only the 64-bit 2012, 2013 and 2017 Visual C++ Redistributables listed in $VcRedists and downloaded to C:\Temp\VcRedists.</maml:para>
@@ -1300,8 +1225,8 @@ Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>$VcRedists = Get-VcList -Release "2012","2013",2017" -Architecture x64    
-Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent</dev:code>
+        <dev:code>$VcRedists = Get-VcList -Release "2012","2013","2017" -Architecture x64 | Save-VcRedist -Path C:\Temp\VcRedists
+Install-VcRedist -VcList $VcRedists -Silent</dev:code>
         <dev:remarks>
           <maml:para>Description: Installs all supported Visual C++ Redistributables using a completely silent install.</maml:para>
         </dev:remarks>
@@ -1568,16 +1493,15 @@ Install-VcRedist -VcList $VcRedists -Path C:\Temp\VcRedists -Silent</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApp -Path C:\Temp\VcRedist -MdtPath \\server\deployment</dev:code>
+        <dev:code>Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcMdtApplication -Path C:\Temp\VcRedist -MdtPath \\server\deployment</dev:code>
         <dev:remarks>
           <maml:para>Description: Retrieves the list of Visual C++ Redistributables, downloads them to C:\Temp\VcRedist and imports each Redistributable into the MDT deployment share at \server\deployment.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>$VcList = Get-VcList -ExportAll
-Save-VcRedist -VcList $VcList -Path C:\Temp\VcRedist
-Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deployment -Bundle</dev:code>
+        <dev:code>$VcList = Get-VcList -ExportAll | Save-VcRedist -Path C:\Temp\VcRedist
+Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle</dev:code>
         <dev:remarks>
           <maml:para>Description: Retrieves the list of supported and unsupported Visual C++ Redistributables in the variable $VcList, downloads them to C:\Temp\VcRedist, imports each Redistributable into the MDT deployment share at \server\deployment and creates an application bundle.</maml:para>
         </dev:remarks>
@@ -1600,7 +1524,7 @@ Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deploym
       <command:verb>Save</command:verb>
       <command:noun>VcRedist</command:noun>
       <maml:description>
-        <maml:para>Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList.</maml:para>
+        <maml:para>Downloads the Visual C++ Redistributables from an manifest returned by Get-VcList. The output from Get-VcList is modified by adding the path to the Redistributable installer in the Path property. This output can then be passed to other functions that require the downloaded installer.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1994,21 +1918,16 @@ Save-VcRedist -VcList $VcList -Path C:\Redist</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>UserAgent</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
           <maml:description>
-            <maml:para>Specifies a user agent string for the web request.</maml:para>
-            <maml:para>The default user agent is similar to the below with slight variations for each operating system and platform.</maml:para>
-            <maml:para>Mozilla/5.0 (Macintosh; Darwin 22.2.0 Darwin Kernel Version 22.2.0: Fri Nov 11 02:04:44 PST 2022; root:xnu-8792.61.2~4/RELEASE_ARM64_T8103; en-AU) AppleWebKit/534.6 (KHTML, like Gecko) Chrome/7.0.500.0 Safari/534.6</maml:para>
-            <maml:para>To test a website with the standard user agent string that's used by most internet browsers, use the properties of the PSUserAgent class, such as Chrome, FireFox, InternetExplorer, Opera, and Safari.</maml:para>
-            <maml:para>For example, the following command uses the user agent string for Internet Explorer: Save-EvergreenApp -UserAgent ([Microsoft.PowerShell.Commands.PSUserAgent]::InternetExplorer)</maml:para>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>SwitchParameter</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -2073,21 +1992,17 @@ Save-VcRedist -VcList $VcList -Path C:\Redist</dev:code>
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>UserAgent</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
         <maml:description>
-          <maml:para>Specifies a user agent string for the web request.</maml:para>
-          <maml:para>The default user agent is similar to the below with slight variations for each operating system and platform.</maml:para>
-          <maml:para>Mozilla/5.0 (Macintosh; Darwin 22.2.0 Darwin Kernel Version 22.2.0: Fri Nov 11 02:04:44 PST 2022; root:xnu-8792.61.2~4/RELEASE_ARM64_T8103; en-AU) AppleWebKit/534.6 (KHTML, like Gecko) Chrome/7.0.500.0 Safari/534.6</maml:para>
-          <maml:para>To test a website with the standard user agent string that's used by most internet browsers, use the properties of the PSUserAgent class, such as Chrome, FireFox, InternetExplorer, Opera, and Safari.</maml:para>
-          <maml:para>For example, the following command uses the user agent string for Internet Explorer: Save-EvergreenApp -UserAgent ([Microsoft.PowerShell.Commands.PSUserAgent]::InternetExplorer)</maml:para>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>SwitchParameter</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes />
@@ -2381,23 +2296,11 @@ Test-VcRedistUri -VcList $VcList</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>VcList</maml:name>
           <maml:description>
-            <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+            <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
           <dev:type>
             <maml:name>PSObject</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>Path</maml:name>
-          <maml:description>
-            <maml:para>A folder containing the downloaded Visual C++ Redistributables.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -2489,23 +2392,11 @@ Test-VcRedistUri -VcList $VcList</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>VcList</maml:name>
         <maml:description>
-          <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList.</maml:para>
+          <maml:para>An array containing details of the Visual C++ Redistributables from Save-VcRedist. Save-VcRedist adds the Path property, that points to the installer executable, to the array exported from Get-VcList.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
         <dev:type>
           <maml:name>PSObject</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>Path</maml:name>
-        <maml:description>
-          <maml:para>A folder containing the downloaded Visual C++ Redistributables.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

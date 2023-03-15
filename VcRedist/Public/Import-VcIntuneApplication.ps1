@@ -9,7 +9,7 @@ function Import-VcIntuneApplication {
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline,
-            HelpMessage = "Pass a VcList object from Save-VcList.")]
+            HelpMessage = "Pass a VcList object from Save-VcRedist.")]
             [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )

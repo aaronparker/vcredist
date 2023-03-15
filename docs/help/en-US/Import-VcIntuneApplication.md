@@ -33,8 +33,7 @@ This function requires the IntuneWin32App PowerShell module and supported Window
 
 ```powershell
 Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com
-$Vc = Get-VcList -Release "2022"
-$VcList = Save-VcRedist -VcList $Vc -Path C:\Temp\VcRedist
+$VcList = Get-VcList -Release "2022" | Save-VcRedist -Path "C:\Temp\VcRedist"
 Import-VcIntuneApplication -VcList $VcList
 ```
 
@@ -45,7 +44,7 @@ Authenticates to the specified tenant, retrieves the list of Visual C++ Redistri
 
 ```powershell
 Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com -ClientId "f99877d5-f757-438e-b12b-d905b00ea6f3" -ClientSecret <secret>
-Get-VcList | Save-VcRedist | Import-VcIntuneApplication
+Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist" | Import-VcIntuneApplication
 ```
 
 Description:

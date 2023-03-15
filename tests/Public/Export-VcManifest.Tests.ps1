@@ -19,8 +19,8 @@ Describe -Name "Export-VcManifest" {
 			$VcCount = @{
 				"Default"     = 6
 				"Supported"   = 12
-				"Unsupported" = 24
-				"All"         = 36
+				"Unsupported" = 14
+				"All"         = 26
 			}
 		}
 

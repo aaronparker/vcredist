@@ -8,10 +8,10 @@
 param ()
 
 BeforeDiscovery {
-	$TestReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Save-VcRedist" -ForEach $TestReleases {
+Describe -Name "Save-VcRedist" -ForEach $SupportedReleases {
 	BeforeAll {
         if ($env:Temp) {
             $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
@@ -77,7 +77,7 @@ Describe -Name "Save-VcRedist" -ForEach $TestReleases {
 	}
 }
 
-Describe -Name "Save-VcRedist pipeline" -ForEach $TestReleases {
+Describe -Name "Save-VcRedist pipeline" -ForEach $SupportedReleases {
 	BeforeAll {
         if ($env:Temp) {
             $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
