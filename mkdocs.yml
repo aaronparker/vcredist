@@ -156,10 +156,12 @@ nav:
       - Get-InstalledVcRedist: help/en-US/Get-InstalledVcRedist.md
       - Import-VcConfigMgrApplication: help/en-US/Import-VcConfigMgrApplication.md
       - Import-VcMdtApplication: help/en-US/Import-VcMdtApplication.md
+      - Import-VcIntuneApplication: help/en-US/Import-VcIntuneApplication.md
       - Install-VcRedist: help/en-US/Install-VcRedist.md
       - New-VcMdtBundle: help/en-US/New-VcMdtBundle.md
       - Uninstall-VcRedist: help/en-US/Uninstall-VcRedist.md
       - Update-VcMdtApplication: help/en-US/Update-VcMdtApplication.md
       - Update-VcMdtBundle: help/en-US/Update-VcMdtBundle.md
+      - Test-VcListUri: help/en-US/Test-VcListUri.md
   - stealthpuppy.com: https://stealthpuppy.com/
   - PSPackageFactory: https://stealthpuppy.com/packagefactory/
