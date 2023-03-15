@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.1.480
 
 * Updates `Install-VcRedist`, `Import-VcConfigMgrApplication`, `Import-VcMdtApplication`, and `Import-VcIntuneApplication` to use the output from `Save-VcRedist`, removing the need for the `-Path` parameter [#123](https://github.com/aaronparker/vcredist/discussions/123)
 * Removes the following Redistributables from the manifest as they are no longer available for download from Microsoft [#114](https://github.com/aaronparker/vcredist/issues/114):
