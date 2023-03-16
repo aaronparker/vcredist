@@ -53,13 +53,9 @@ if (($null -eq $installedModule) -or ([System.Version]$publishedModule.Version -
 Write-Host "Saving VcRedists to path: $Path."
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $null
 
-Write-Host "Downloading supported Microsoft Visual C++ Redistributables."
-$VcList = Get-VcList | Save-VcRedist -VcList -Path $Path
+Write-Host "Downloading and installing supported Microsoft Visual C++ Redistributables."
+$Redists = Get-VcList | Save-VcRedist -Path $Path | Install-VcRedist -Silent
 
-Write-Host "Installing supported Microsoft Visual C++ Redistributables."
-$Redists = Install-VcRedist -VcList $VcList
-
-Write-Host "Install complete."
 Write-Host "Installed Visual C++ Redistributables:"
 $Redists | Select-Object -Property "Name", "Release", "Architecture", "Version" -Unique
 #endregion
