@@ -1,8 +1,8 @@
 # Changelog
 
-## 4.1.462
+## 4.1.482
 
-* Change `MinimumRequiredOperatingSystem` default valut to `W10_1809` due to change in Intune expected valued [#132](https://github.com/aaronparker/vcredist/issues/132)
+* Change `MinimumRequiredOperatingSystem` default value to `W10_1809` due to change in Intune expected valued [#132](https://github.com/aaronparker/vcredist/issues/132)
 
 ## 4.1.480
 
