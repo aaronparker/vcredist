@@ -22,7 +22,7 @@
         "DeviceRestartBehavior": "basedOnReturnCode"
     },
     "RequirementRule": {
-        "MinimumRequiredOperatingSystem": "1809",
+        "MinimumRequiredOperatingSystem": "W10_1809",
         "Architecture": "x64",
         "SizeInMBValue": "100"
     },
