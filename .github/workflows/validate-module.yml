@@ -106,11 +106,18 @@ jobs:
           files: ./CodeCoverage-${{ matrix.os }}.xml
           verbose: true
 
+      - name: Install and cache PowerShell modules
+        id: psmodulecache
+        uses: potatoqualitee/psmodulecache@v5.2
+        with:
+          modules-to-cache: BuildHelpers
+          shell: powershell
+
       - name: Update module version
         shell: powershell
         working-directory: "${{ github.workspace }}"
         run: |
-          Install-Module -Name BuildHelpers
+          Import-Module -Name BuildHelpers
           Step-ModuleVersion -Path .\VcRedist\VcRedist.psd1 -By Build
 
       # Import GPG key so that we can sign the commit
