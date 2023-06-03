@@ -43,5 +43,5 @@ Redists.json
 VcDownloads
 codecov.exe
 .cache
-CodeCoverage-windows-2022.xml
-TestResults-windows-2022.xml
+CodeCoverage*.xml
+TestResults*.xml

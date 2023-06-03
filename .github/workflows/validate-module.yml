@@ -16,6 +16,7 @@ on:
       - 'main'
     paths:
       - 'VcRedist/**'
+      - '!VcRedist/VcRedist.psd1'
       - 'tests/**'
   workflow_dispatch:
 
@@ -104,3 +105,33 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./CodeCoverage-${{ matrix.os }}.xml
           verbose: true
+
+      - name: Update module version
+        shell: powershell
+        working-directory: "${{ github.workspace }}"
+        run: |
+          Install-Module -Name BuildHelpers
+          Step-ModuleVersion -Path .\VcRedist\VcRedist.psd1 -By Build
+
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      - name: Commit changes
+        id: commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update module version"
+          commit_user_name: ${{ secrets.COMMIT_NAME }}
+          commit_user_email: ${{ secrets.COMMIT_EMAIL }}
