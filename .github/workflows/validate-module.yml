@@ -29,7 +29,7 @@ jobs:
     name: Run PSScriptAnalyzer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run PSScriptAnalyzer (development push)
         uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f
@@ -53,7 +53,7 @@ jobs:
         os: [windows-2022]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Run Pester tests
       - name: Run Pester tests
