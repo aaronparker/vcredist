@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.1.493
 
 * Fixes an issue with `Import-VcConfigMgrApplication` [#142](https://github.com/aaronparker/vcredist/issues/142) [#96](https://github.com/aaronparker/vcredist/issues/96)
 
