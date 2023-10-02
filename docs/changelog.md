@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Fixes an issue with `Import-VcConfigMgrApplication` [#142](https://github.com/aaronparker/vcredist/issues/142) [#96](https://github.com/aaronparker/vcredist/issues/96)
+
 ## 4.1.482
 
 * Change `MinimumRequiredOperatingSystem` default value to `W10_1809` due to change in Intune expected valued [#132](https://github.com/aaronparker/vcredist/issues/132)

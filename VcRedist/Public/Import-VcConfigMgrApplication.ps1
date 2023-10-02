@@ -84,7 +84,7 @@ function Import-VcConfigMgrApplication {
                 $DestCmFolder = "$($SMSSiteCode):\Application\$($AppFolder)"
                 if ($PSCmdlet.ShouldProcess($DestCmFolder, "Creating")) {
                     Write-Verbose -Message "Creating: $DestCmFolder."
-                    New-Item -Path $DestCmFolder -ErrorAction "Continue" > $null
+                    New-Item -Path $DestCmFolder -ErrorAction "SilentlyContinue" | Out-Null
                 }
             }
             else {
@@ -122,18 +122,19 @@ function Import-VcConfigMgrApplication {
                         $ContentLocation = [System.IO.Path]::Combine($CMPath, $VcRedist.Release, $VcRedist.Version, $VcRedist.Architecture)
 
                         #region Copy VcRedists to the network location. Use robocopy for robustness
-                        if ($PSBoundParameters.Contains($NoCopy)) {
+                        if ($PSBoundParameters.ContainsKey($NoCopy)) {
                             Write-Warning -Message "NoCopy specified, skipping copy to $ContentLocation. Ensure VcRedists exist in the target."
                         }
                         else {
                             if ($PSCmdlet.ShouldProcess("'$($VcRedist.Path)' to '$($ContentLocation)'", "Copy")) {
                                 if (!(Test-Path -Path $ContentLocation)) {
-                                    New-Item -Path $ContentLocation -ItemType "Directory" -ErrorAction "Continue" > $null
+                                    New-Item -Path $ContentLocation -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
                                 }
+
                                 try {
                                     $invokeProcessParams = @{
                                         FilePath     = "$env:SystemRoot\System32\robocopy.exe"
-                                        ArgumentList = "$(Split-Path -Path $VcRedist.Path -Leaf) `"$SourceFolder`" `"$ContentLocation`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
+                                        ArgumentList = "`"$SourceFolder`" `"$ContentLocation`" `"$(Split-Path -Path $VcRedist.Path -Leaf)`" /S /XJ /R:1 /W:1 /NP /NJH /NJS /NFL /NDL"
                                     }
                                     Invoke-Process @invokeProcessParams | Out-Null
                                 }
@@ -145,7 +146,7 @@ function Import-VcConfigMgrApplication {
                                     }
                                     else {
                                         Write-Warning -Message "Failed to copy Redistributables from '$($VcRedist.Path)' to '$ContentLocation'."
-                                        throw $Err
+                                        Write-Warning -Message $Err.Exception.Message
                                     }
                                 }
                             }
@@ -155,11 +156,12 @@ function Import-VcConfigMgrApplication {
                         # Change to the SMS Application folder before importing the applications
                         try {
                             Write-Verbose -Message "Setting location to: $DestCmFolder"
-                            Set-Location -Path $DestCmFolder -ErrorAction "Continue"
+                            Push-Location -Path $DestCmFolder -ErrorAction "Continue"
                         }
                         catch [System.Exception] {
+                            Pop-Location
                             Write-Warning -Message "Failed to set location to: $DestCmFolder."
-                            throw $_
+                            Write-Warning -Message $_.Exception.Message
                         }
 
                         try {
@@ -178,12 +180,13 @@ function Import-VcConfigMgrApplication {
                             }
                             $app = New-CMApplication @cmAppParams
                             if ($AppFolder) {
-                                $app | Move-CMObject -FolderPath $DestCmFolder -ErrorAction "SilentlyContinue" > $null
+                                $app | Move-CMObject -FolderPath $DestCmFolder -ErrorAction "SilentlyContinue" | Out-Null
                             }
                         }
                         catch [System.Exception] {
+                            Pop-Location
                             Write-Warning -Message "Failed to create application $($VcRedist.Name) $($VcRedist.Architecture)."
-                            throw $_
+                            Write-Warning -Message $_.Exception.Message
                         }
                         # Write app detail to the pipeline
                         Write-Output -InputObject $app
@@ -195,11 +198,12 @@ function Import-VcConfigMgrApplication {
                         # Change to the SMS Application folder before importing the applications
                         try {
                             Write-Verbose -Message "Set location to: $DestCmFolder"
-                            Set-Location -Path $DestCmFolder -ErrorAction "Continue"
+                            Push-Location -Path $DestCmFolder -ErrorAction "Continue"
                         }
                         catch [System.Exception] {
+                            Pop-Location
                             Write-Warning -Message "Failed to set location to: $DestCmFolder."
-                            throw $_
+                            Write-Warning -Message $_.Exception.Message
                         }
 
                         try {
@@ -224,11 +228,12 @@ function Import-VcConfigMgrApplication {
                                 InstallationBehaviorType = "InstallForSystem"
                                 Comment                  = "Generated by $($MyInvocation.MyCommand). https://vcredist.com"
                             }
-                            Add-CMScriptDeploymentType @cmScriptParams > $null
+                            Add-CMScriptDeploymentType @cmScriptParams | Out-Null
                         }
                         catch [System.Exception] {
+                            Pop-Location
                             Write-Warning -Message "Failed to add script deployment type."
-                            throw $_
+                            Write-Warning -Message $_.Exception.Message
                         }
                     }
                 }
@@ -237,5 +242,6 @@ function Import-VcConfigMgrApplication {
     }
 
     end {
+        Pop-Location
     }
 }
