@@ -99,7 +99,7 @@ jobs:
       # Commit changes to the manifest
       - name: Commit changes
         id: commit
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update manifest ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
           commit_user_name: ${{ secrets.COMMIT_NAME }}
