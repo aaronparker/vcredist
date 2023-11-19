@@ -1,5 +1,12 @@
 # Changelog
 
+## VERSION
+
+* Fix an issue where Redistributables imported into MDT do not install #144 
+* Fix an issue when importing the Redistributables into an MDT deployment share 
+* Update Redistributables `2019` to `14.29.30153.0`
+* Update Redistributables `2022` to `14.38.33130.0`
+
 ## 4.1.493
 
 * Fixes an issue with `Import-VcConfigMgrApplication` [#142](https://github.com/aaronparker/vcredist/issues/142) [#96](https://github.com/aaronparker/vcredist/issues/96)
