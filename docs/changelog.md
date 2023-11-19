@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.1.494
 
 * Fix an issue where Redistributables imported into MDT do not install #144 
 * Fix an issue when importing the Redistributables into an MDT deployment share 
