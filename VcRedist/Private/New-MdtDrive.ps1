@@ -28,27 +28,19 @@ function New-MdtDrive {
     # Set a description to be applied to the new MDT drive
     $Description = "MDT drive created by $($MyInvocation.MyCommand)"
 
-    if ($mdtDrives = Get-MdtPersistentDrive | Where-Object { ($_.Path -eq $Path) -and ($_.Description -eq $Description) }) {
-        Write-Verbose -Message "Found MDT drive: $($mdtDrives[0].Name)"
-        $output = $mdtDrives[0].Name
-    }
-    else {
-        if ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
-            $params = @{
-                Name        = $Drive
-                PSProvider  = "MDTProvider"
-                Root        = $Path
-                #NetworkPath = $Path
-                Description = $Description
-                ErrorAction = "Stop"
-            }
-            New-PSDrive @params | Add-MDTPersistentDrive
-
-            # Return the MDT drive name
-            $psDrive = Get-MdtPersistentDrive | Where-Object { $_.Path -eq $Path -and $_.Name -eq $Drive }
-            Write-Verbose -Message "Found: $($psDrive.Name)"
-            $output = $psDrive.Name
+    if ($PSCmdlet.ShouldProcess("$($Drive): to $($Path)", "Mapping")) {
+        $params = @{
+            Name        = $Drive
+            PSProvider  = "MDTProvider"
+            Root        = $Path
+            Description = $Description
+            ErrorAction = "Stop"
         }
+        New-PSDrive @params | Add-MDTPersistentDrive
+
+        # Return the MDT drive name
+        $psDrive = Get-MdtPersistentDrive | Where-Object { $_.Path -eq $Path -and $_.Name -eq $Drive }
+        Write-Verbose -Message "Found: $($psDrive.Name)"
+        Write-Output -InputObject $psDrive.Name
     }
-    Write-Output -InputObject $output
 }

@@ -118,10 +118,10 @@ function Import-VcMdtApplication {
             # Set variables
             Write-Verbose -Message "processing: '$($VcRedist.Name) $($VcRedist.Architecture)'."
             $supportedPlatform = if ($VcRedist.Architecture -eq "x86") {
-                @("All x86 Windows 7 and Newer", "All x64 Windows 7 and Newer")
+                $null
             }
             else {
-                @("All x64 Windows 7 and Newer")
+                @("All x64 Windows 10 Client", "All x64 Windows Server 10")
             }
 
             # Check for existing application by matching current VcRedist

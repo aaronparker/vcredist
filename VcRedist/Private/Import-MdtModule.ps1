@@ -32,14 +32,19 @@ function Import-MdtModule {
     $MdtInstallDir = Resolve-Path -Path $MdtReg.Install_Dir
     $MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1")
     if (Test-Path -Path $mdtModule -ErrorAction "SilentlyContinue") {
-        Write-Verbose -Message "Loading MDT module from: $MdtInstallDir."
-        $params = @{
-            Name        = $MdtModule
-            ErrorAction = "Stop"
-            Force       = if ($Force) { $true } else { $false }
+        try {
+            Write-Verbose -Message "Loading MDT module from: $MdtInstallDir."
+            $params = @{
+                Name        = $MdtModule
+                ErrorAction = "Stop"
+                Force       = if ($Force) { $true } else { $false }
+            }
+            Import-Module @params
+            Write-Output -InputObject $true
         }
-        Import-Module @params
-        Write-Output -InputObject $true
+        catch {
+            throw $_
+        }
     }
     else {
         $Msg = "Unable to find the MDT PowerShell module at $MdtModule. Ensure the Microsoft Deployment Toolkit is installed and try again."
