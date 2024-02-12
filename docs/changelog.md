@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Update Redistributables `2022` to `14.38.33135.0`
+
 ## 4.1.494
 
 * Fix an issue where Redistributables imported into MDT do not install #144 
