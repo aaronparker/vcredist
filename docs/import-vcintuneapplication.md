@@ -21,7 +21,7 @@ Install-Module -Name VcRedist, IntuneWin32App
 
 ### Required parameters
 
-* `VcList` - An array containing details of the Visual C++ Redistributables from `Save-VcRedist`
+- `VcList` - An array containing details of the Visual C++ Redistributables from `Save-VcRedist`
 
 ## Examples
 
@@ -51,7 +51,7 @@ In the example below, the Redistributables imported into Intune will be assigned
 
 ```powershell
 $Apps = Get-VcList | Save-VcRedist | Import-VcIntuneApplication
-ForEach ($App in $Apps) {
+foreach ($App in $Apps) {
     $params = @{
         Id                           = $App.Id
         Intent                       = "required"

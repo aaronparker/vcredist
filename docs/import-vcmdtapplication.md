@@ -41,5 +41,5 @@ The install command line arguments used by default are passive. Fully silent ins
 
 ```powershell
 $VcList = Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist
-Import-VcMdtApp -VcList $VcList -MdtPath \\server\deployment -Silent
+Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Silent
 ```

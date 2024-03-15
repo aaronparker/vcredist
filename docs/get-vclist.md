@@ -82,7 +82,13 @@ SilentUninstall : "%ProgramData%\Package Cache\{b7a2b241-3f54-4d7d-94d1-8ce0146e
 UninstallKey    : 32
 ```
 
-Output from `Get-VcList` can be piped to `Save-VcRedist`, `Install-VcRedist`, `Import-VcMdtApplication`, `Update-VcMdtApplication`, `Import-VcConfigMgrApplication` and `Update-VcConfigMgrApplication`. Additionally, output from `Get-VcList` can be filtered using `Where-Object`. This approach is useful where you want to export the full list of Redistributables but filter for specific processor architectures.
+Output from `Get-VcList` can be filtered using `Where-Object`. This approach is useful where you want to export the full list of Redistributables but filter for specific processor architectures.
+
+```powershell
+Get-VcList -Export All | Where-Object { $_.Architecture -eq "x64" }
+```
+
+To pass the list of redistributables to `Install-VcRedist`, `Import-VcMdtApplication`, `Update-VcMdtApplication`, `Import-VcConfigMgrApplication` and `Update-VcConfigMgrApplication`, it must first be passed through `Save-VcRedist`, which will then add a Path property to the object required by the other functions.
 
 ## Parameters
 
@@ -103,7 +109,7 @@ To return Redistributables from the list of unsupported Redistributables or the 
 
 ## Filtering Output
 
-The output from `Get-VcList` can be filtered before sending to other functions. `Get-VcList` has the `-Release` parameter for filtering on the `2012`, `2013`, `2015`, `2017`, `2019` and `2022` releases of the Redistributables. Additionally, the `-Architecture` parameter can filter on `x86` and `x64` processor architectures.
+The output from `Get-VcList` can be filtered before sending to `Save-VcRedist`. `Get-VcList` has the `-Release` parameter for filtering on the `2012`, `2013`, `2015`, `2017`, `2019` and `2022` releases of the Redistributables. Additionally, the `-Architecture` parameter can filter on `x86` and `x64` processor architectures.
 
 These parameters cannot be used with the `-Export` parameter. If you require filtering when exporting All, Supported or Unsupported Redistributables, pipe the output to the `Where-Object` function. This approach is required where you want to export a list of the unsupported Redistributables.
 

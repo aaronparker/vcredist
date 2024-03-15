@@ -2,7 +2,11 @@
 
 To download the Visual C++ Redistributables to a local folder, use `Save-VcRedist`. This will read the array of Visual C++ Redistributables returned from `Get-VcList` and download each one to a local folder specified in `-Path`. Use the `-Release` or `-Architecture` parameters in `Get-VcList` to filter for specific Visual C++ Redistributables.
 
-Save-VcRedist downloads the Redistributables and returns the array passed from Get-VcList to the pipeline so that it can be passed to other functions `Install-VcRedist`.
+Save-VcRedist downloads the Redistributables and returns the array passed from Get-VcList to the pipeline so that it can be passed to `Install-VcRedist`, `Import-VcMdtApplication`, `Update-VcMdtApplication`, `Import-VcConfigMgrApplication` and `Update-VcConfigMgrApplication`.
+
+!!! info
+
+    Save-VcRedist will download the Visual C++ Redistributables the first time it runs against a specified path. Subsequent runs using the same path will use the existing downloaded Redistributables - the installers will not be re-downloaded.
 
 ## Parameters
 
