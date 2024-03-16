@@ -10,16 +10,11 @@ function Import-VcIntuneApplication {
             Position = 0,
             ValueFromPipeline,
             HelpMessage = "Pass a VcList object from Save-VcRedist.")]
-            [ValidateNotNullOrEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSObject] $VcList
     )
 
     begin {
-        if ([System.Boolean]$VcList.Path -eq $false) {
-            $Msg = "Object does not have valid Path property. Please ensure that output from Save-VcRedist is passed to this function."
-            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
-        }
-
         # IntuneWin32App currently supports Windows PowerShell only
         if (Test-PSCore) {
             $Msg = "We can't load the IntuneWin32App module on PowerShell Core. Please use PowerShell 5.1."
@@ -58,6 +53,12 @@ function Import-VcIntuneApplication {
     }
 
     process {
+        # Make sure that $VcList has the required properties
+        if ((Test-VcListObject -VcList $VcList) -ne $true) {
+            $Msg = "Required properties not found. Please ensure the output from Save-VcRedist is sent to this function. "
+            throw [System.Management.Automation.PropertyNotFoundException]::New($Msg)
+        }
+
         foreach ($VcRedist in $VcList) {
 
             # Package MSI as .intunewin file
