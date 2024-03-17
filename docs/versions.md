@@ -1,6 +1,6 @@
 ﻿# Included Redistributables
 
-VcRedist `4.1.495` includes the following Redistributables (supported and unsupported):
+VcRedist `4.1.496` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
