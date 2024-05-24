@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Update Redistributables `2022` to `14.40.33810.0`
+
 ## 4.1.496
 
 * Fix an issue with `Import-VcIntuneApplication` where it would not accept output from `Save-VcRedist` [#149](https://github.com/aaronparker/vcredist/issues/149)
