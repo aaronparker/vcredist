@@ -2,6 +2,11 @@
 
 ## VERSION
 
+* Moves the `2012` and `2013` releases to the Unsupported Redistributables list
+* Adds the `ARM64` architecture to the `2022` release
+
+## 4.1.497
+
 * Update Redistributables `2022` to `14.40.33810.0`
 
 ## 4.1.496

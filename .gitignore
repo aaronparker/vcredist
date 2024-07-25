@@ -45,3 +45,4 @@ codecov.exe
 .cache
 CodeCoverage*.xml
 TestResults*.xml
+enricomi-publish-action-venv

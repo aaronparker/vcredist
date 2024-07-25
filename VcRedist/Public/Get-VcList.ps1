@@ -11,7 +11,7 @@ function Get-VcList {
         [System.String[]] $Release = @("2012", "2013", "2022"),
 
         [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "Manifest")]
-        [ValidateSet("x86", "x64")]
+        [ValidateSet("x86", "x64", "ARM64")]
         [System.String[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $false, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
@@ -70,7 +70,7 @@ function Get-VcList {
                 # if ($Release -match $JsonManifest.Unsupported.Release) {
                 #     Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
                 # }
-                [System.Management.Automation.PSObject] $Output = $JsonManifest.Supported | Where-Object { $Release -contains $_.Release } | `
+                [System.Management.Automation.PSObject]$Output = $JsonManifest.Supported | Where-Object { $Release -contains $_.Release } | `
                     Where-Object { $Architecture -contains $_.Architecture }
             }
 

@@ -11,7 +11,7 @@ function Uninstall-VcRedist {
         [System.String[]] $Release = @("2005", "2008", "2010", "2012", "2013", "2015", "2017", "2019", "2022"),
 
         [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "Manual")]
-        [ValidateSet("x86", "x64")]
+        [ValidateSet("x86", "x64", "ARM64")]
         [System.String[]] $Architecture = @("x86", "x64"),
 
         [Parameter(

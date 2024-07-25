@@ -36,7 +36,7 @@ function New-MdtDrive {
             Description = $Description
             ErrorAction = "Stop"
         }
-        New-PSDrive @params | Add-MDTPersistentDrive
+        New-PSDrive @params | Add-MDTPersistentDrive | Out-Null
 
         # Return the MDT drive name
         $psDrive = Get-MdtPersistentDrive | Where-Object { $_.Path -eq $Path -and $_.Name -eq $Drive }

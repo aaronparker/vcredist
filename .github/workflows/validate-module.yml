@@ -92,7 +92,7 @@ jobs:
 
       # Publish Pester test results
       - name: Publish Pester test results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
           nunit_files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"

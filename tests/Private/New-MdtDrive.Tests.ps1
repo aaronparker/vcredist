@@ -25,6 +25,7 @@ InModuleScope -ModuleName "VcRedist" {
             }
 
             It "Returns the expected MDT drive name" {
+                Remove-PSDrive -Name "DS020" -ErrorAction "SilentlyContinue"
                 $Path = "$Env:RUNNER_TEMP\Deployment"
                 New-MdtDrive -Drive "DS020" -Path $Path | Should -Be "DS020"
             }
