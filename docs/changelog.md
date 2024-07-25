@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.1.498
 
 * Moves the `2012` and `2013` releases to the Unsupported Redistributables list
 * Adds the `ARM64` architecture to the `2022` release
