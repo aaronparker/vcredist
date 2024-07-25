@@ -72,7 +72,7 @@ Describe -Name "Get-VcRedist parameters" {
             (Get-VcList -Release "2022")[0].Name | Should -BeExactly "Visual C++ Redistributable for Visual Studio 2022"
         }
 
-        It "Returns 3 items for x64" {
+        It "Returns 1 item for x64" {
             (Get-VcList -Architecture "x64").Count | Should -BeExactly 1
         }
     }
