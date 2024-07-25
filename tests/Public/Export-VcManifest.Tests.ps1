@@ -17,10 +17,10 @@ Describe -Name "Export-VcManifest" {
 			$VcList = Get-VcList -Path $Json
 
 			$VcCount = @{
-				"Default"     = 6
-				"Supported"   = 12
-				"Unsupported" = 14
-				"All"         = 26
+				"Default"     = 2
+				"Supported"   = 9
+				"Unsupported" = 18
+				"All"         = 27
 			}
 		}
 

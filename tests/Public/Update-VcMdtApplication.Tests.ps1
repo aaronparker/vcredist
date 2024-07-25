@@ -8,7 +8,7 @@
 param ()
 
 BeforeDiscovery {
-	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedReleases = @("2015", "2017", "2019", "2022")
 }
 
 Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedReleases {
