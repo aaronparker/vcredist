@@ -2,7 +2,7 @@
 
 ## 4.1.498
 
-* Moves the `2012` and `2013` releases to the Unsupported Redistributables list
+* Moves the `2012` and `2013` releases to the Unsupported Redistributables list, see [Microsoft Visual C++ Redistributable latest supported downloads](https://learn.microsoft.com/en-au/cpp/windows/latest-supported-vc-redist?view=msvc-170) for information on supported releases
 * Adds the `ARM64` architecture to the `2022` release
 * Fixes an issue with the output from internal function `New-MdtDrive`
 
