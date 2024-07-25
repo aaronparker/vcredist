@@ -8,7 +8,7 @@
 param ()
 
 BeforeDiscovery {
-	$SupportedReleases = @("2012", "2013", "2015", "2017", "2019", "2022")
+	$SupportedReleases = @("2015", "2017", "2019", "2022")
 	$SupportedVcRedists = Get-VcList -Release $SupportedReleases
 }
 
@@ -81,10 +81,10 @@ Describe -Name "Get-VcRedist parameters" {
 Describe -Name "Validate manifest counts from Get-VcList" {
 	BeforeAll {
 		$VcCount = @{
-			"Default"     = 6
-			"Supported"   = 12
-			"Unsupported" = 14
-			"All"         = 26
+			"Default"     = 2
+			"Supported"   = 9
+			"Unsupported" = 18
+			"All"         = 27
 		}
 	}
 
@@ -110,10 +110,10 @@ Describe -Name "Validate manifest scenarios with Get-VcList" {
 			$Json = Export-VcManifest -Path $env:RUNNER_TEMP
 			$VcList = Get-VcList -Path $Json
 			$VcCount = @{
-				"Default"     = 6
-				"Supported"   = 12
-				"Unsupported" = 14
-				"All"         = 26
+				"Default"     = 2
+				"Supported"   = 9
+				"Unsupported" = 18
+				"All"         = 27
 			}
 		}
 

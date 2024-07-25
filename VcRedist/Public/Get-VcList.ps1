@@ -11,7 +11,7 @@ function Get-VcList {
         [System.String[]] $Release = @("2012", "2013", "2022"),
 
         [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "Manifest")]
-        [ValidateSet("x86", "x64")]
+        [ValidateSet("x86", "x64", "ARM64")]
         [System.String[]] $Architecture = @("x86", "x64"),
 
         [Parameter(Mandatory = $false, Position = 2, ValueFromPipeline, ParameterSetName = "Manifest")]
