@@ -4,6 +4,7 @@
 
 * Moves the `2012` and `2013` releases to the Unsupported Redistributables list
 * Adds the `ARM64` architecture to the `2022` release
+* Fixes an issue with the output from internal function `New-MdtDrive`
 
 ## 4.1.497
 
