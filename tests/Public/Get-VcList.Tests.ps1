@@ -73,7 +73,7 @@ Describe -Name "Get-VcRedist parameters" {
         }
 
         It "Returns 1 item for x64" {
-            (Get-VcList -Architecture "x64").Count | Should -BeExactly 1
+            (Get-VcList -Architecture "x64").Release | Should -BeExactly "2022"
         }
     }
 }
