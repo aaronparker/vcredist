@@ -70,8 +70,9 @@ function Get-VcList {
                 # if ($Release -match $JsonManifest.Unsupported.Release) {
                 #     Write-Warning -Message "This list includes unsupported Visual C++ Redistributables."
                 # }
-                [System.Management.Automation.PSObject[]] $Output = $JsonManifest.Supported | Where-Object { $Release -contains $_.Release } | `
-                    Where-Object { $Architecture -contains $_.Architecture }
+                $Output = New-Object -TypeName "System.Collections.ArrayList"
+                $Output.Add([System.Management.Automation.PSObject]($JsonManifest.Supported | Where-Object { $Release -contains $_.Release } | `
+                    Where-Object { $Architecture -contains $_.Architecture }))
             }
 
             try {
