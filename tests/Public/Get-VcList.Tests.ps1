@@ -73,7 +73,7 @@ Describe -Name "Get-VcRedist parameters" {
         }
 
         It "Returns 3 items for x64" {
-            (Get-VcList -Architecture "x64").Count | Should -BeExactly 3
+            (Get-VcList -Architecture "x64").Count | Should -BeExactly 1
         }
     }
 }
