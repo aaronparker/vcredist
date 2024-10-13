@@ -1,5 +1,11 @@
 # Changelog
 
+## Version
+
+* Update VcRedist `2022` to `14.40.33816.0`
+* Update VcRedist `2019` to `14.29.30156.0`
+* Update VcRedist `2017` to `14.16.27052.0`
+
 ## 4.1.498
 
 * Moves the `2012` and `2013` releases to the Unsupported Redistributables list, see [Microsoft Visual C++ Redistributable latest supported downloads](https://learn.microsoft.com/en-au/cpp/windows/latest-supported-vc-redist?view=msvc-170) for information on supported releases
