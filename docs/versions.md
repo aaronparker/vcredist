@@ -1,16 +1,16 @@
 ﻿# Included Redistributables
 
-VcRedist `4.1.498` includes the following Redistributables (supported and unsupported):
+VcRedist `4.1.499` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
-| 14.40.33810.0  | x86          | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.40.33816.0  | x86          | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.40.33816.0  | x64          | Visual C++ Redistributable for Visual Studio 2022                          |
 | 14.40.33810.0  | ARM64        | Visual C++ Redistributable for Visual Studio 2022                          |
-| 14.40.33810.0  | x64          | Visual C++ Redistributable for Visual Studio 2022                          |
-| 14.29.30153.0  | x64          | Visual C++ Redistributable for Visual Studio 2019                          |
-| 14.29.30153.0  | x86          | Visual C++ Redistributable for Visual Studio 2019                          |
-| 14.16.27033.0  | x86          | Visual C++ Redistributable for Visual Studio 2017                          |
-| 14.16.27033.0  | x64          | Visual C++ Redistributable for Visual Studio 2017                          |
+| 14.29.30156.0  | x64          | Visual C++ Redistributable for Visual Studio 2019                          |
+| 14.29.30156.0  | x86          | Visual C++ Redistributable for Visual Studio 2019                          |
+| 14.16.27052.0  | x86          | Visual C++ Redistributable for Visual Studio 2017                          |
+| 14.16.27052.0  | x64          | Visual C++ Redistributable for Visual Studio 2017                          |
 | 14.0.24215.1   | x86          | Visual C++ 2015 Redistributable Update 3                                   |
 | 14.0.24215.1   | x64          | Visual C++ 2015 Redistributable Update 3                                   |
 | 12.0.40664.0   | x86          | Visual C++ 2013 Update 5 Redistributable Package                           |
