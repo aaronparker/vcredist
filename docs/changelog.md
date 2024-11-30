@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Update VcRedist `2022` to `14.42.34433.0`
+
 ## 4.1.499
 
 * Update VcRedist `2022` to `14.40.33816.0`
