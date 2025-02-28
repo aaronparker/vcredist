@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Update VcRedist `2022` to `14.42.34438.0`
+
 ## 4.1.501
 
 * Fixes the product code for VcRedist `2013` x86
