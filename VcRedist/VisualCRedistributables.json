@@ -106,8 +106,8 @@
                       },
                       {
                           "Name":  "Visual C++ Redistributable for Visual Studio 2022",
-                          "ProductCode":  "{0c3ad21c-55f8-4336-ae89-eba14b42795f}",
-                          "Version":  "14.42.34433.0",
+                          "ProductCode":  "{f4fca927-ceb7-4549-8782-5835bd91078c}",
+                          "Version":  "14.42.34438.0",
                           "URL":  "https://www.visualstudio.com/downloads/",
                           "URI":  "https://aka.ms/vs/17/release/VC_redist.arm64.exe",
                           "Release":  "2022",
