@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.1.505
 
 * Fix ARM64 properties for VcRedist `2022` to `14.44.35208.0`
 
