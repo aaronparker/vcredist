@@ -112,3 +112,76 @@ jobs:
       - name: "Run if no changes have been detected"
         if: steps.commit.outputs.changes_detected == 'false'
         run: echo "No changes detected."
+
+  validate-arm64:
+    runs-on: windows-11-arm
+    needs: validate-versions
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: development
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Import GPG key so that we can sign the commit
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_NAME }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      # Uninstall existing VcRedists
+      - name: Uninstall VcRedists
+        shell: powershell
+        run: |
+          Import-Module ${{ github.workspace }}\VcRedist -Force
+          Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -Verbose
+
+      # Validate VcRedist 2022 and update the manifest
+      - name: Validate VcRedist 2022
+        shell: powershell
+        run: |
+          $Release = "2022"
+          $Architecture = "arm64"
+          Import-Module "${{ github.workspace }}\VcRedist" -Force
+          New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+          Get-VcList -Release $Release -Architecture $Architecture | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
+          $params = @{
+              Release       = $Release
+              $Architecture = $Architecture
+              Path          = "$env:RUNNER_TEMP\VcRedist"
+              VcManifest    = "${{ env.MANIFEST_FILE }}"
+          }
+          . ${{ github.workspace }}\ci\Update-Manifest.ps1 @params
+
+      # Format the date number for the commit message
+      - name: Get date
+        id: get-date
+        shell: powershell
+        run: |
+          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
+
+      # Commit changes to the manifest
+      - name: Commit changes
+        id: commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update manifest ARM64 ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
+          commit_user_name: ${{ secrets.COMMIT_NAME }}
+          commit_user_email: ${{ secrets.COMMIT_EMAIL }}
+
+      - name: "Run if changes have been detected"
+        if: steps.commit.outputs.changes_detected == 'true'
+        run: echo "Changes committed."
+
+      - name: "Run if no changes have been detected"
+        if: steps.commit.outputs.changes_detected == 'false'
+        run: echo "No changes detected."
