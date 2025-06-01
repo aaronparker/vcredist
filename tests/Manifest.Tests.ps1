@@ -10,21 +10,27 @@ param ()
 BeforeDiscovery {
     $ValidateReleasesAmd64 = @("2017", "2019", "2022")
     $ValidateReleasesArm64 = @("2022")
+
+    if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+        $SkipAmd = $false
+    }
+    else {
+        $SkipAmd = $true
+    }
+    if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+        $SkipArm = $false
+    }
+    else {
+        $SkipArm = $true
+    }
 }
 
-Describe -Name "VcRedist manifest tests AMD64" -ForEach $ValidateReleasesAmd64 {
+Describe -Name "VcRedist manifest tests AMD64" -ForEach $ValidateReleasesAmd64 -Skip:$SkipAmd {
     BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            $Skip = $false
-        }
-        else {
-            $Skip = $true
-        }
-
         Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$false
     }
 
-    Context "Validate manifest" -Skip:$Skip {
+    Context "Validate manifest" {
         BeforeAll {
             $VcManifest = "$env:GITHUB_WORKSPACE\VcRedist\VisualCRedistributables.json"
             Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."
@@ -56,19 +62,12 @@ Describe -Name "VcRedist manifest tests AMD64" -ForEach $ValidateReleasesAmd64 {
     }
 }
 
-Describe -Name "VcRedist manifest tests ARM64" -ForEach $ValidateReleasesArm64 {
+Describe -Name "VcRedist manifest tests ARM64" -ForEach $ValidateReleasesArm64 -Skip:$SkipArm {
     BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-            $Skip = $false
-        }
-        else {
-            $Skip = $true
-        }
-
         Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$false
     }
 
-    Context "Validate manifest" -Skip:$Skip {
+    Context "Validate manifest" {
         BeforeAll {
             $VcManifest = "$env:GITHUB_WORKSPACE\VcRedist\VisualCRedistributables.json"
             Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."

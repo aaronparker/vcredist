@@ -13,18 +13,23 @@ BeforeDiscovery {
 	$UnsupportedReleases = Get-VcList -Export "Unsupported"
 
 	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-		$Skip = $false
-	}
-	elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-		$Skip = $false
+		$SkipAmd = $false
 	}
 	else {
-		$Skip = $true
+		$SkipAmd = $true
+	}
+	if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+		$SkipArm = $false
+	}
+	else {
+		$SkipArm = $true
 	}
 }
 
-Describe -Name "Install-VcRedist with unsupported Redistributables" -ForEach $UnsupportedReleases -Skip:$Skip {
+Describe -Name "Install-VcRedist with unsupported Redistributables AMD64" -ForEach $UnsupportedReleases -Skip:$SkipAmd {
 	BeforeAll {
+		$Release = $_
+
 		# Create download path
 		if ($env:Temp) {
 			$Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
@@ -49,7 +54,7 @@ Describe -Name "Install-VcRedist with unsupported Redistributables" -ForEach $Un
 	}
 }
 
-Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach $SupportedReleasesAmd64 -Skip:$Skip {
+Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach $SupportedReleasesAmd64 -Skip:$SkipAmd {
 	BeforeAll {
 		$Release = $_
 
@@ -107,7 +112,7 @@ Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach
 	}
 }
 
-Describe -Name "Install-VcRedist with supported Redistributables ARM64" -ForEach $SupportedReleasesArm64 -Skip:$Skip {
+Describe -Name "Install-VcRedist with supported Redistributables ARM64" -ForEach $SupportedReleasesArm64 -Skip:$SkipArm {
 	BeforeAll {
 		$Release = $_
 

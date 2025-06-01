@@ -9,18 +9,22 @@ param ()
 
 BeforeDiscovery {
     $SupportedReleases = @("2015", "2017", "2019", "2022")
+
     if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-        $Skip = $false
-    }
-    elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-        $Skip = $false
+        $SkipAmd = $false
     }
     else {
-        $Skip = $true
+        $SkipAmd = $true
+    }
+    if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+        $SkipArm = $false
+    }
+    else {
+        $SkipArm = $true
     }
 }
 
-Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases -Skip:$Skip {
+Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases -Skip:$SkipAmd {
     BeforeAll {
         $Release = $_
 
@@ -51,7 +55,7 @@ Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases -Skip:$Ski
     }
 }
 
-Describe -Name "Uninstall-VcRedist ARM64" -ForEach $SupportedReleases -Skip:$Skip {
+Describe -Name "Uninstall-VcRedist ARM64" -ForEach $SupportedReleases -Skip:$SkipArm {
     BeforeAll {
         $Release = $_
 
