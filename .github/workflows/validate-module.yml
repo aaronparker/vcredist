@@ -50,7 +50,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2025]
+        os: [windows-11-arm]
         # os: [windows-2022, windows-2025, windows-11-arm]
 
     steps:
@@ -106,6 +106,14 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./CodeCoverage-${{ matrix.os }}.xml
           verbose: true
+
+  update-module-version:
+    name: Update module version
+    needs: [psscriptanalyzer, run-pester]
+    runs-on: 'windows-latest'
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Install and cache PowerShell modules
         id: psmodulecache
