@@ -46,3 +46,4 @@ codecov.exe
 CodeCoverage*.xml
 TestResults*.xml
 enricomi-publish-action-venv
+.enricomi-publish-action-pip
