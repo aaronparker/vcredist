@@ -12,14 +12,15 @@ BeforeDiscovery {
 
 InModuleScope -ModuleName "VcRedist" {
 	BeforeAll {
-		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
-		if (-not $isAmd64) {
-			Write-Host "Skipping tests: Not running on AMD64 architecture."
-			Skip "Not running on ARM64 architecture."
-		}
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            $Skip = $false
+        }
+        else {
+            $Skip = $true
+        }
 	}
 
-    Describe -Name "New-MdtDrive" {
+    Describe -Name "New-MdtDrive" -Skip:$Skip {
         BeforeAll {
             # Install the MDT Workbench
             & "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"

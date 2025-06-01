@@ -13,19 +13,20 @@ BeforeDiscovery {
 
 Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedReleases {
 	BeforeAll {
-		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
-		if (-not $isAmd64) {
-			Write-Host "Skipping tests: Not running on AMD64 architecture."
-			Skip "Not running on AMD64 architecture."
-		}
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
 
-		$Release = $_
-		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
-		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
-		$VcList = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
+			$Release = $_
+			$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
+			New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+			$VcList = Save-VcRedist -Path $Path -VcList (Get-VcList -Release $Release)
+		}
+		else {
+			$Skip = $true
+		}
 	}
 
-	Context "ConfigMgr is not installed" {
+	Context "ConfigMgr is not installed" -Skip:$Skip {
 		It "Should throw when the ConfigMgr module is not installed" {
 			$params = @{
 				VcList      = $VcList
@@ -41,7 +42,7 @@ Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedRelea
 		}
 	}
 
-	Context "ConfigMgr is not installed but env:SMS_ADMIN_UI_PATH set to a valid path" {
+	Context "ConfigMgr is not installed but env:SMS_ADMIN_UI_PATH set to a valid path" -Skip:$Skip {
 		BeforeAll {
 			[Environment]::SetEnvironmentVariable("SMS_ADMIN_UI_PATH", "$env:RUNNER_TEMP")
 		}
@@ -61,7 +62,7 @@ Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedRelea
 		}
 	}
 
-	Context "ConfigMgr is not installed but env:SMS_ADMIN_UI_PATH set to an invalid path" {
+	Context "ConfigMgr is not installed but env:SMS_ADMIN_UI_PATH set to an invalid path" -Skip:$Skip {
 		BeforeAll {
 			[Environment]::SetEnvironmentVariable("SMS_ADMIN_UI_PATH", "$env:RUNNER_TEMP\Test")
 		}

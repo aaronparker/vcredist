@@ -14,16 +14,17 @@ BeforeDiscovery {
 
 Describe -Name "VcRedist manifest tests AMD64" -ForEach $ValidateReleasesAmd64 {
     BeforeAll {
-        $isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
-        if (-not $isAmd64) {
-            Write-Host "Skipping tests: Not running on AMD64 architecture."
-            Skip "Not running on ARM64 architecture."
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            $Skip = $false
+        }
+        else {
+            $Skip = $true
         }
 
         Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$false
     }
 
-    Context "Validate manifest" {
+    Context "Validate manifest" -Skip:$Skip {
         BeforeAll {
             $VcManifest = "$env:GITHUB_WORKSPACE\VcRedist\VisualCRedistributables.json"
             Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."
@@ -57,16 +58,17 @@ Describe -Name "VcRedist manifest tests AMD64" -ForEach $ValidateReleasesAmd64 {
 
 Describe -Name "VcRedist manifest tests ARM64" -ForEach $ValidateReleasesArm64 {
     BeforeAll {
-        $isArm64 = $env:PROCESSOR_ARCHITECTURE -eq "ARM64"
-        if (-not $isArm64) {
-            Write-Host "Skipping tests: Not running on ARM64 architecture."
-            Skip "Not running on ARM64 architecture."
+        if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+            $Skip = $false
+        }
+        else {
+            $Skip = $true
         }
 
         Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$false
     }
 
-    Context "Validate manifest" {
+    Context "Validate manifest" -Skip:$Skip {
         BeforeAll {
             $VcManifest = "$env:GITHUB_WORKSPACE\VcRedist\VisualCRedistributables.json"
             Write-Host -ForegroundColor "Cyan" "`tGetting manifest from: $VcManifest."

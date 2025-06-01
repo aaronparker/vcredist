@@ -13,31 +13,32 @@ BeforeDiscovery {
 
 Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases {
     BeforeAll {
-        $isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
-        if (-not $isAmd64) {
-            Write-Host "Skipping tests: Not running on AMD64 architecture."
-            Skip "Not running on AMD64 architecture."
-        }
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            $Skip = $false
 
-        $Release = $_
+            $Release = $_
 
-        # Create download path
-        if ($env:Temp) {
-            $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
-        }
-        elseif ($env:TMPDIR) {
-            $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
-        }
-        elseif ($env:RUNNER_TEMP) {
-            $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
-        }
-        New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+            # Create download path
+            if ($env:Temp) {
+                $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
+            }
+            elseif ($env:TMPDIR) {
+                $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
+            }
+            elseif ($env:RUNNER_TEMP) {
+                $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
+            }
+            New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-        $VcList = Get-VcList -Release $Release | Save-VcRedist -Path $Path
-        Install-VcRedist -VcList $VcList -Silent | Out-Null
+            $VcList = Get-VcList -Release $Release | Save-VcRedist -Path $Path
+            Install-VcRedist -VcList $VcList -Silent | Out-Null
+        }
+        else {
+            $Skip = $true
+        }
     }
 
-    Context "Uninstall VcRedist <Release>" {
+    Context "Uninstall VcRedist <Release>" -Skip:$Skip {
         It "Uninstalls the VcRedist <Release> x64" {
             { Uninstall-VcRedist -Release $Release -Architecture "x64" -Confirm:$false } | Should -Not -Throw
         }

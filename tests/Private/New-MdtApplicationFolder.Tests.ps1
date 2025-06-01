@@ -12,18 +12,19 @@ BeforeDiscovery {
 
 InModuleScope VcRedist {
 	BeforeAll {
-		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
-		if (-not $isAmd64) {
-			Write-Host "Skipping tests: Not running on AMD64 architecture."
-			Skip "Not running on ARM64 architecture."
-		}
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
 
-		# Install the MDT Workbench
-		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
-		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
+			# Install the MDT Workbench
+			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+			Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
+		}
+		else {
+			$Skip = $true
+		}
 	}
 
-	Describe 'New-MdtApplicationFolder' {
+	Describe 'New-MdtApplicationFolder' -Skip:$Skip {
 		BeforeAll {
 			New-MdtDrive -Drive "DS020" -Path "$Env:RUNNER_TEMP\Deployment"
 			Restore-MDTPersistentDrive -Force > $null

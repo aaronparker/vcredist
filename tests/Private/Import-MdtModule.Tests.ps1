@@ -12,14 +12,15 @@ BeforeDiscovery {
 
 InModuleScope VcRedist {
 	BeforeAll {
-		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
-		if (-not $isAmd64) {
-			Write-Host "Skipping tests: Not running on AMD64 architecture."
-			Skip "Not running on ARM64 architecture."
-		}
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            $Skip = $false
+        }
+        else {
+            $Skip = $true
+        }
 	}
 
-	Describe -Name "Import-MdtModule without MDT installed" {
+	Describe -Name "Import-MdtModule without MDT installed" -Skip:$Skip {
 		Context "Import-MdtModule without MDT installed" {
 			It "Should throw when MDT is not installed" {
 				{ Import-MdtModule } | Should -Throw
@@ -27,7 +28,7 @@ InModuleScope VcRedist {
 		}
 	}
 
-	Describe -Name "Import-MdtModule with MDT installed OK" {
+	Describe -Name "Import-MdtModule with MDT installed OK" -Skip:$Skip {
 		BeforeAll {
 			# Install the MDT Workbench
 			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
@@ -40,7 +41,7 @@ InModuleScope VcRedist {
 		}
 	}
 
-	Describe -Name "Import-MdtModule fails with MDT installed but module missing" {
+	Describe -Name "Import-MdtModule fails with MDT installed but module missing" -Skip:$Skip {
 		BeforeAll {
 			$RegPath = "HKLM:SOFTWARE\Microsoft\Deployment 4"
 			$MdtReg = Get-ItemProperty -Path $RegPath -ErrorAction "SilentlyContinue"
@@ -49,15 +50,17 @@ InModuleScope VcRedist {
 			Rename-Item -Path $MdtModule -NewName "MicrosoftDeploymentToolkit.psd1.rename"
 		}
 
-		Context "Import-MdtModule with MDT module file missing" {
+		Context "Import-MdtModule with MDT module file missing" -Skip:$Skip {
 			It "Should throw when MDT module file is missing" {
 				{ Import-MdtModule } | Should -Throw
 			}
 		}
 
 		AfterAll {
-			$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1.rename")
-			Rename-Item -Path $MdtModule -NewName "MicrosoftDeploymentToolkit.psd1"
+			if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+				$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1.rename")
+				Rename-Item -Path $MdtModule -NewName "MicrosoftDeploymentToolkit.psd1"
+			}
 		}
 	}
 }
