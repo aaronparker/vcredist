@@ -26,7 +26,7 @@ BeforeDiscovery {
 	}
 }
 
-Describe -Name "Install-VcRedist with unsupported Redistributables AMD64" -ForEach $UnsupportedReleases -Skip:$SkipAmd {
+Describe -Name "Install-VcRedist with unsupported Redistributables AMD64" -ForEach $UnsupportedReleases {
 	BeforeAll {
 		$Release = $_
 
@@ -43,7 +43,7 @@ Describe -Name "Install-VcRedist with unsupported Redistributables AMD64" -ForEa
 		New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $null
 	}
 
-	Context "Install <Release[0].Name> Redistributable" {
+	Context "Install <Release[0].Name> Redistributable" -Skip:$SkipAmd {
 		BeforeAll {
 			$VcRedist = $Release | Save-VcRedist -Path $Path
 		}
