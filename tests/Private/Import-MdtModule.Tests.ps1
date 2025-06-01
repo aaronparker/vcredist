@@ -7,16 +7,16 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
-BeforeDiscovery {
-	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-		$Skip = $false
-	}
-	else {
-		$Skip = $true
-	}
-}
-
 InModuleScope VcRedist {
+	BeforeDiscovery {
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
+		}
+		else {
+			$Skip = $true
+		}
+	}
+
 	BeforeAll {
 	}
 
@@ -50,7 +50,7 @@ InModuleScope VcRedist {
 			Rename-Item -Path $MdtModule -NewName "MicrosoftDeploymentToolkit.psd1.rename"
 		}
 
-		Context "Import-MdtModule with MDT module file missing" -Skip:$Skip {
+		Context "Import-MdtModule with MDT module file missing" {
 			It "Should throw when MDT module file is missing" {
 				{ Import-MdtModule } | Should -Throw
 			}

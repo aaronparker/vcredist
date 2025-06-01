@@ -7,16 +7,16 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
-BeforeDiscovery {
-    if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-        $Skip = $false
-    }
-    else {
-        $Skip = $true
-    }
-}
-
 InModuleScope -ModuleName "VcRedist" {
+    BeforeDiscovery {
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            $Skip = $false
+        }
+        else {
+            $Skip = $true
+        }
+    }
+
     BeforeAll {
     }
 
