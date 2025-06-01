@@ -8,19 +8,18 @@
 param ()
 
 BeforeDiscovery {
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Update-VcMdtBundle" {
+Describe -Name "Update-VcMdtBundle" -Skip:$Skip {
 	BeforeAll {
-		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-			$Skip = $false
-
-			# Install the MDT Workbench
-			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
-		}
-		else {
-			$Skip = $true
-		}
+		# Install the MDT Workbench
+		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 	}
 
 	Context "Update-VcMdtBundle updates the bundle in the MDT deployment share" {

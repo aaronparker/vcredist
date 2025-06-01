@@ -8,20 +8,19 @@
 param ()
 
 BeforeDiscovery {
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
 InModuleScope VcRedist {
 	BeforeAll {
-		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-			$Skip = $false
-
-			# Install the MDT Workbench
-			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
-			Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
-		}
-		else {
-			$Skip = $true
-		}
+		# Install the MDT Workbench
+		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
 	}
 
 	Describe 'New-MdtApplicationFolder' -Skip:$Skip {

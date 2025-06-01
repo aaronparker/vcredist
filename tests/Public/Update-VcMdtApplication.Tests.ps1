@@ -9,17 +9,16 @@ param ()
 
 BeforeDiscovery {
 	$SupportedReleases = @("2015", "2017", "2019", "2022")
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedReleases {
+Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedReleases -Skip:$Skip {
 	BeforeAll {
-		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-			$Skip = $false
-		}
-		else {
-			$Skip = $true
-		}
-
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 
@@ -31,7 +30,7 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedRelea
 		$VcListX86 = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
 	}
 
-	Context "Update-VcMdtApplication updates OK with existing Redistributables in the MDT share" -Skip:$Skip {
+	Context "Update-VcMdtApplication updates OK with existing Redistributables in the MDT share" {
 		It "Does not throw when updating the existing <Release> x64 Redistributables" {
 			$params = @{
 				VcList    = $VcListX64
@@ -58,7 +57,7 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedRelea
 	}
 }
 
-Describe -Name "Update-VcMdtApplication updates an existing application" {
+Describe -Name "Update-VcMdtApplication updates an existing application" -Skip:$Skip {
 	BeforeAll {
 		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
 			$Skip = $false
@@ -103,7 +102,7 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 		}
 	}
 
-	Context "Update-VcMdtApplication updates Redistributables in the MDT share" -Skip:$Skip {
+	Context "Update-VcMdtApplication updates Redistributables in the MDT share" {
 		It "Updates the 2022 x64 Redistributables in MDT OK" {
 			$params = @{
 				VcList    = $(Get-VcList -Release "2022" -Architecture "x64" | Save-VcRedist -Path $Path)

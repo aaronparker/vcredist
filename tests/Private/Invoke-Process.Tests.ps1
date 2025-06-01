@@ -8,16 +8,16 @@
 param ()
 
 BeforeDiscovery {
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
 InModuleScope VcRedist {
 	BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            $Skip = $false
-        }
-        else {
-            $Skip = $true
-        }
 	}
 
 	Describe -Name "Invoke-Process" -Skip:$Skip {

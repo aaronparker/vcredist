@@ -8,17 +8,17 @@
 param ()
 
 BeforeDiscovery {
+    if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+        $Skip = $false
+    }
+    else {
+        $Skip = $true
+    }
 }
 
 InModuleScope -ModuleName "VcRedist" {
-	BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            $Skip = $false
-        }
-        else {
-            $Skip = $true
-        }
-	}
+    BeforeAll {
+    }
 
     Describe -Name "New-MdtDrive" -Skip:$Skip {
         BeforeAll {

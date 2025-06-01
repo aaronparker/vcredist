@@ -11,32 +11,34 @@ BeforeDiscovery {
 	$SupportedReleasesAmd64 = @("2015", "2017", "2019", "2022")
 	$SupportedReleasesArm64 = @("2022")
 	$UnsupportedReleases = Get-VcList -Export "Unsupported"
+
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Install-VcRedist with unsupported Redistributables" -ForEach $UnsupportedReleases {
+Describe -Name "Install-VcRedist with unsupported Redistributables" -ForEach $UnsupportedReleases -Skip:$Skip {
 	BeforeAll {
-		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-			$Skip = $false
-			$Release = $_
-
-			# Create download path
-			if ($env:Temp) {
-				$Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
-			}
-			elseif ($env:TMPDIR) {
-				$Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
-			}
-			elseif ($env:RUNNER_TEMP) {
-				$Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
-			}
-			New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $null
+		# Create download path
+		if ($env:Temp) {
+			$Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
 		}
-		else {
-			$Skip = $true
+		elseif ($env:TMPDIR) {
+			$Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
 		}
+		elseif ($env:RUNNER_TEMP) {
+			$Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
+		}
+		New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $null
 	}
 
-	Context "Install <Release[0].Name> Redistributable" -Skip:$Skip {
+	Context "Install <Release[0].Name> Redistributable" {
 		BeforeAll {
 			$VcRedist = $Release | Save-VcRedist -Path $Path
 		}
@@ -47,15 +49,8 @@ Describe -Name "Install-VcRedist with unsupported Redistributables" -ForEach $Un
 	}
 }
 
-Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach $SupportedReleasesAmd64 {
+Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach $SupportedReleasesAmd64 -Skip:$Skip {
 	BeforeAll {
-		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-			$Skip = $false
-		}
-		else {
-			$Skip = $true
-		}
-
 		$Release = $_
 
 		# Create download path
@@ -71,7 +66,7 @@ Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach
 		New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 	}
 
-	Context "Install <Release> x64 Redistributable" -Skip:$Skip {
+	Context "Install <Release> x64 Redistributable" {
 		BeforeAll {
 			$VcRedist = Get-VcList -Release $Release -Architecture "x64" | Save-VcRedist -Path $Path
 		}
@@ -91,7 +86,7 @@ Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach
 		}
 	}
 
-	Context "Install <Release> x86 Redistributable" -Skip:$Skip {
+	Context "Install <Release> x86 Redistributable" {
 		BeforeAll {
 			$VcRedist = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
 		}
@@ -112,15 +107,8 @@ Describe -Name "Install-VcRedist with supported Redistributables AMD64" -ForEach
 	}
 }
 
-Describe -Name "Install-VcRedist with supported Redistributables ARM64" -ForEach $SupportedReleasesArm64 {
+Describe -Name "Install-VcRedist with supported Redistributables ARM64" -ForEach $SupportedReleasesArm64 -Skip:$Skip {
 	BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-            $Skip = $false
-        }
-        else {
-            $Skip = $true
-        }
-
 		$Release = $_
 
 		# Create download path
@@ -136,7 +124,7 @@ Describe -Name "Install-VcRedist with supported Redistributables ARM64" -ForEach
 		New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 	}
 
-	Context "Install <Release> arm64 Redistributable" -Skip:$Skip {
+	Context "Install <Release> arm64 Redistributable" {
 		BeforeAll {
 			$VcRedist = Get-VcList -Release $Release -Architecture "arm64" | Save-VcRedist -Path $Path
 		}

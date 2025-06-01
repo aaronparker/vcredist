@@ -8,16 +8,16 @@
 param ()
 
 BeforeDiscovery {
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
 InModuleScope VcRedist {
 	BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            $Skip = $false
-        }
-        else {
-            $Skip = $true
-        }
 	}
 
 	Describe -Name "Import-MdtModule without MDT installed" -Skip:$Skip {
@@ -57,10 +57,8 @@ InModuleScope VcRedist {
 		}
 
 		AfterAll {
-			if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-				$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1.rename")
-				Rename-Item -Path $MdtModule -NewName "MicrosoftDeploymentToolkit.psd1"
-			}
+			$MdtModule = [System.IO.Path]::Combine($MdtInstallDir, "bin", "MicrosoftDeploymentToolkit.psd1.rename")
+			Rename-Item -Path $MdtModule -NewName "MicrosoftDeploymentToolkit.psd1"
 		}
 	}
 }

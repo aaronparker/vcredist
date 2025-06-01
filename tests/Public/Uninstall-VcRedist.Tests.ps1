@@ -9,42 +9,71 @@ param ()
 
 BeforeDiscovery {
     $SupportedReleases = @("2015", "2017", "2019", "2022")
+    if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+        $Skip = $false
+    }
+    elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+        $Skip = $false
+    }
+    else {
+        $Skip = $true
+    }
 }
 
-Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases {
+Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases -Skip:$Skip {
     BeforeAll {
-        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            $Skip = $false
+        $Release = $_
 
-            $Release = $_
-
-            # Create download path
-            if ($env:Temp) {
-                $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
-            }
-            elseif ($env:TMPDIR) {
-                $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
-            }
-            elseif ($env:RUNNER_TEMP) {
-                $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
-            }
-            New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-
-            $VcList = Get-VcList -Release $Release | Save-VcRedist -Path $Path
-            Install-VcRedist -VcList $VcList -Silent | Out-Null
+        # Create download path
+        if ($env:Temp) {
+            $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
         }
-        else {
-            $Skip = $true
+        elseif ($env:TMPDIR) {
+            $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
         }
+        elseif ($env:RUNNER_TEMP) {
+            $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
+        }
+        New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+
+        $VcList = Get-VcList -Release $Release | Save-VcRedist -Path $Path
+        Install-VcRedist -VcList $VcList -Silent | Out-Null
     }
 
-    Context "Uninstall VcRedist <Release>" -Skip:$Skip {
+    Context "Uninstall VcRedist <Release>" {
         It "Uninstalls the VcRedist <Release> x64" {
             { Uninstall-VcRedist -Release $Release -Architecture "x64" -Confirm:$false } | Should -Not -Throw
         }
 
         It "Uninstalls the VcRedist <Release> x86" {
             { Uninstall-VcRedist -Release $Release -Architecture "x86" -Confirm:$false } | Should -Not -Throw
+        }
+    }
+}
+
+Describe -Name "Uninstall-VcRedist ARM64" -ForEach $SupportedReleases -Skip:$Skip {
+    BeforeAll {
+        $Release = $_
+
+        # Create download path
+        if ($env:Temp) {
+            $Path = Join-Path -Path $env:Temp -ChildPath "Downloads"
+        }
+        elseif ($env:TMPDIR) {
+            $Path = Join-Path -Path $env:TMPDIR -ChildPath "Downloads"
+        }
+        elseif ($env:RUNNER_TEMP) {
+            $Path = Join-Path -Path $env:RUNNER_TEMP -ChildPath "Downloads"
+        }
+        New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+
+        $VcList = Get-VcList -Release $Release | Save-VcRedist -Path $Path
+        Install-VcRedist -VcList $VcList -Silent | Out-Null
+    }
+
+    Context "Uninstall VcRedist <Release>" {
+        It "Uninstalls the VcRedist <Release> arm64" {
+            { Uninstall-VcRedist -Release $Release -Architecture "arm64" -Confirm:$false } | Should -Not -Throw
         }
     }
 }
