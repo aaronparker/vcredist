@@ -13,6 +13,12 @@ BeforeDiscovery {
 
 Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedReleases {
 	BeforeAll {
+		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+		if (-not $isAmd64) {
+			Write-Host "Skipping tests: Not running on AMD64 architecture."
+			Skip "Not running on ARM64 architecture."
+		}
+
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 
@@ -53,6 +59,11 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedRelea
 
 Describe -Name "Update-VcMdtApplication updates an existing application" {
 	BeforeAll {
+		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+		if (-not $isAmd64) {
+			Write-Host "Skipping tests: Not running on AMD64 architecture."
+			Skip "Not running on AMD64 architecture."
+		}
 
 		# Setup existing 2022 VcRedist applications with details that need to be updated
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
@@ -66,9 +77,9 @@ Describe -Name "Update-VcMdtApplication updates an existing application" {
 		}
 		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\bin\MicrosoftDeploymentToolkit.psd1"
 		$params = @{
-			Name        = "DS020"
-			PSProvider  = "MDTProvider"
-			Root        = "$env:RUNNER_TEMP\Deployment"
+			Name       = "DS020"
+			PSProvider = "MDTProvider"
+			Root       = "$env:RUNNER_TEMP\Deployment"
 		}
 		New-PSDrive @params | Add-MDTPersistentDrive
 		Restore-MDTPersistentDrive | Out-Null

@@ -11,10 +11,15 @@ BeforeDiscovery {
 	$SupportedReleases = @("2022")
 }
 
-Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $SupportedReleases {
 	BeforeAll {
+		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+		if (-not $isAmd64) {
+			Write-Host "Skipping tests: Not running on AMD64 architecture."
+			Skip "Not running on AMD64 architecture."
+		}
 	}
 
+Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $SupportedReleases {
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without IntuneWin32App" {
 			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Throw

@@ -13,6 +13,12 @@ BeforeDiscovery {
 
 Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedReleases {
 	BeforeAll {
+		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+		if (-not $isAmd64) {
+			Write-Host "Skipping tests: Not running on AMD64 architecture."
+			Skip "Not running on AMD64 architecture."
+		}
+
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
 		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null

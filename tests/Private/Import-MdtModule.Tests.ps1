@@ -11,6 +11,14 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
+	BeforeAll {
+		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+		if (-not $isAmd64) {
+			Write-Host "Skipping tests: Not running on AMD64 architecture."
+			Skip "Not running on ARM64 architecture."
+		}
+	}
+
 	Describe -Name "Import-MdtModule without MDT installed" {
 		Context "Import-MdtModule without MDT installed" {
 			It "Should throw when MDT is not installed" {

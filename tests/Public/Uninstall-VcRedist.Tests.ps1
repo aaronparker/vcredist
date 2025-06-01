@@ -11,8 +11,14 @@ BeforeDiscovery {
     $SupportedReleases = @("2015", "2017", "2019", "2022")
 }
 
-Describe -Name "Uninstall-VcRedist" -ForEach $SupportedReleases {
+Describe -Name "Uninstall-VcRedist AMD64" -ForEach $SupportedReleases {
     BeforeAll {
+        $isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+        if (-not $isAmd64) {
+            Write-Host "Skipping tests: Not running on AMD64 architecture."
+            Skip "Not running on AMD64 architecture."
+        }
+
         $Release = $_
 
         # Create download path

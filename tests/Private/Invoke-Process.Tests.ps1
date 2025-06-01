@@ -11,6 +11,14 @@ BeforeDiscovery {
 }
 
 InModuleScope VcRedist {
+	BeforeAll {
+		$isAmd64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
+		if (-not $isAmd64) {
+			Write-Host "Skipping tests: Not running on AMD64 architecture."
+			Skip "Not running on ARM64 architecture."
+		}
+	}
+
 	Describe -Name "Invoke-Process" {
 		Context "Invoke-Process works as expected" {
 			It "Should run the command without throwing an exception" {
