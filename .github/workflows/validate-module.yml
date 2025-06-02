@@ -86,7 +86,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pester-test-results
+          name: 'pester-test-results-${{ matrix.os }}''
           path: |
             ${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml
 
@@ -95,7 +95,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
-          nunit_files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"
+          files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"
 
       - name: Upload to Codecov
         id: codecov
