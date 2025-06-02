@@ -13,7 +13,7 @@ env:
   MANIFEST_FILE: ${{ github.workspace }}\VcRedist\VisualCRedistributables.json
 
 jobs:
-  validate-versions:
+  validate-amd64:
     runs-on: windows-latest
 
     steps:
@@ -94,7 +94,7 @@ jobs:
         id: get-date
         shell: powershell
         run: |
-          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
+          echo "date=$(Get-Date -Format "yyyy-MM-dd")" >> $GITHUB_STATE
 
       # Commit changes to the manifest
       - name: Commit changes
@@ -115,7 +115,7 @@ jobs:
 
   validate-arm64:
     runs-on: windows-11-arm
-    needs: validate-versions
+    needs: validate-amd64
 
     steps:
       - uses: actions/checkout@v4
@@ -167,7 +167,7 @@ jobs:
         id: get-date
         shell: powershell
         run: |
-          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
+          echo "date=$(Get-Date -Format "yyyy-MM-dd")" >> $GITHUB_STATE
 
       # Commit changes to the manifest
       - name: Commit changes
