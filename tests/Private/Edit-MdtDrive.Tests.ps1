@@ -7,11 +7,20 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
-BeforeDiscovery {
-}
-
 InModuleScope VcRedist {
-	Describe -Name "Edit-MdtDrive" {
+	BeforeDiscovery {
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
+		}
+		else {
+			$Skip = $true
+		}
+	}
+
+	BeforeAll {
+	}
+
+	Describe -Name "Edit-MdtDrive" -Skip:$Skip {
 		Context "Validate Edit-MdtDrive" {
 			It "Should not throw when sent a valid string" {
 				{ Edit-MdtDrive -Drive "DS009" } | Should -Not -Throw

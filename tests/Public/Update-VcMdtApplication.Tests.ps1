@@ -9,9 +9,15 @@ param ()
 
 BeforeDiscovery {
 	$SupportedReleases = @("2015", "2017", "2019", "2022")
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedReleases {
+Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedReleases -Skip:$Skip {
 	BeforeAll {
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
@@ -51,42 +57,48 @@ Describe -Name "Update-VcMdtApplication with <Release>" -ForEach $SupportedRelea
 	}
 }
 
-Describe -Name "Update-VcMdtApplication updates an existing application" {
+Describe -Name "Update-VcMdtApplication updates an existing application" -Skip:$Skip {
 	BeforeAll {
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
 
-		# Setup existing 2022 VcRedist applications with details that need to be updated
-		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
-		$SaveVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release "2019")
-		$Version = (Get-VcList -Release "2022" -Architecture "x64").Version
-		$VcPath = "$env:RUNNER_TEMP\Deployment\Applications\Microsoft VcRedist\2022\$Version"
-		foreach ($Item in $SaveVcRedist) {
-			foreach ($Arch in @("x64", "x86")) {
-				Copy-Item -Path $Item.Path -Destination "$VcPath\$Arch" -Force
+			# Setup existing 2022 VcRedist applications with details that need to be updated
+			$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
+			$SaveVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release "2019")
+			$Version = (Get-VcList -Release "2022" -Architecture "x64").Version
+			$VcPath = "$env:RUNNER_TEMP\Deployment\Applications\Microsoft VcRedist\2022\$Version"
+			foreach ($Item in $SaveVcRedist) {
+				foreach ($Arch in @("x64", "x86")) {
+					Copy-Item -Path $Item.Path -Destination "$VcPath\$Arch" -Force
+				}
 			}
-		}
-		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\bin\MicrosoftDeploymentToolkit.psd1"
-		$params = @{
-			Name        = "DS020"
-			PSProvider  = "MDTProvider"
-			Root        = "$env:RUNNER_TEMP\Deployment"
-		}
-		New-PSDrive @params | Add-MDTPersistentDrive
-		Restore-MDTPersistentDrive | Out-Null
-		$MdtDrive = "DS020"
-		$MdtTargetFolder = "$($MdtDrive):\Applications\VcRedists"
-		$gciParams = @{
-			Path        = $MdtTargetFolder
-			Recurse     = $true
-			ErrorAction = "Continue"
-		}
-		foreach ($Architecture in @("x86", "x64")) {
-			$ExistingVcRedist = Get-ChildItem @gciParams | Where-Object { $_.ShortName -match "2022 $Architecture" }
+			Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\bin\MicrosoftDeploymentToolkit.psd1"
 			$params = @{
-				Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
-				Name  = "UninstallKey"
-				Value = $((New-Guid).Guid)
+				Name       = "DS020"
+				PSProvider = "MDTProvider"
+				Root       = "$env:RUNNER_TEMP\Deployment"
 			}
-			Set-ItemProperty @params
+			New-PSDrive @params | Add-MDTPersistentDrive
+			Restore-MDTPersistentDrive | Out-Null
+			$MdtDrive = "DS020"
+			$MdtTargetFolder = "$($MdtDrive):\Applications\VcRedists"
+			$gciParams = @{
+				Path        = $MdtTargetFolder
+				Recurse     = $true
+				ErrorAction = "Continue"
+			}
+			foreach ($Architecture in @("x86", "x64")) {
+				$ExistingVcRedist = Get-ChildItem @gciParams | Where-Object { $_.ShortName -match "2022 $Architecture" }
+				$params = @{
+					Path  = (Join-Path -Path $MdtTargetFolder -ChildPath $ExistingVcRedist.Name)
+					Name  = "UninstallKey"
+					Value = $((New-Guid).Guid)
+				}
+				Set-ItemProperty @params
+			}
+		}
+		else {
+			$Skip = $true
 		}
 	}
 

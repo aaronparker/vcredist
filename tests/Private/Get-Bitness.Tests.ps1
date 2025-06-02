@@ -8,10 +8,19 @@
 param ()
 
 BeforeDiscovery {
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
 InModuleScope VcRedist {
-	Describe -Name "Get-Bitness" {
+	BeforeAll {
+	}
+
+	Describe -Name "Get-Bitness" -Skip:$Skip {
 		Context "Get-Bitness returns the architecture" {
 			It "Returns x64 when run on a 64-bit machine" {
 				Get-Bitness | Should -BeExactly "x64"

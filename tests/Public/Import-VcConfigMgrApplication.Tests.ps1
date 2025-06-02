@@ -9,9 +9,15 @@ param ()
 
 BeforeDiscovery {
 	$SupportedReleases = @("2022")
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedReleases {
+Describe -Name "Validate Import-VcConfigMgrApplication" -ForEach $SupportedReleases -Skip:$Skip {
 	BeforeAll {
 		$Release = $_
 		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))

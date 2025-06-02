@@ -50,7 +50,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2022]
+        os: [windows-2025, windows-11-arm]
 
     steps:
       - uses: actions/checkout@v4
@@ -86,7 +86,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pester-test-results
+          name: 'pester-test-results-${{ matrix.os }}''
           path: |
             ${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml
 
@@ -95,7 +95,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
-          nunit_files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"
+          files: "${{ github.workspace }}//tests//TestResults-${{ matrix.os }}.xml"
 
       - name: Upload to Codecov
         id: codecov
@@ -105,6 +105,14 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./CodeCoverage-${{ matrix.os }}.xml
           verbose: true
+
+  update-module-version:
+    name: Update module version
+    needs: [psscriptanalyzer, run-pester]
+    runs-on: 'windows-latest'
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Install and cache PowerShell modules
         id: psmodulecache

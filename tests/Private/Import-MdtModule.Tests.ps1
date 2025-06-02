@@ -7,11 +7,20 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
-BeforeDiscovery {
-}
-
 InModuleScope VcRedist {
-	Describe -Name "Import-MdtModule without MDT installed" {
+	BeforeDiscovery {
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
+		}
+		else {
+			$Skip = $true
+		}
+	}
+
+	BeforeAll {
+	}
+
+	Describe -Name "Import-MdtModule without MDT installed" -Skip:$Skip {
 		Context "Import-MdtModule without MDT installed" {
 			It "Should throw when MDT is not installed" {
 				{ Import-MdtModule } | Should -Throw
@@ -19,7 +28,7 @@ InModuleScope VcRedist {
 		}
 	}
 
-	Describe -Name "Import-MdtModule with MDT installed OK" {
+	Describe -Name "Import-MdtModule with MDT installed OK" -Skip:$Skip {
 		BeforeAll {
 			# Install the MDT Workbench
 			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
@@ -32,7 +41,7 @@ InModuleScope VcRedist {
 		}
 	}
 
-	Describe -Name "Import-MdtModule fails with MDT installed but module missing" {
+	Describe -Name "Import-MdtModule fails with MDT installed but module missing" -Skip:$Skip {
 		BeforeAll {
 			$RegPath = "HKLM:SOFTWARE\Microsoft\Deployment 4"
 			$MdtReg = Get-ItemProperty -Path $RegPath -ErrorAction "SilentlyContinue"

@@ -7,17 +7,23 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
-BeforeDiscovery {
-}
-
 InModuleScope VcRedist {
+	BeforeDiscovery {
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
+		}
+		else {
+			$Skip = $true
+		}
+	}
+
 	BeforeAll {
 		# Install the MDT Workbench
 		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 		Import-Module -Name "$Env:ProgramFiles\Microsoft Deployment Toolkit\Bin\MicrosoftDeploymentToolkit.psd1"
 	}
 
-	Describe 'New-MdtApplicationFolder' {
+	Describe 'New-MdtApplicationFolder' -Skip:$Skip {
 		BeforeAll {
 			New-MdtDrive -Drive "DS020" -Path "$Env:RUNNER_TEMP\Deployment"
 			Restore-MDTPersistentDrive -Force > $null

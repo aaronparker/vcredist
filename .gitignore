@@ -46,3 +46,6 @@ codecov.exe
 CodeCoverage*.xml
 TestResults*.xml
 enricomi-publish-action-venv
+.enricomi-publish-action-pip
+codecov.exe.SHA256SUM
+codecov.exe.SHA256SUM.sig

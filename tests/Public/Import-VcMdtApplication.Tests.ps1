@@ -9,19 +9,32 @@ param ()
 
 BeforeDiscovery {
 	$SupportedReleases = @("2015", "2017", "2019", "2022")
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $SupportedReleases {
+Describe -Name "Import-VcMdtApplication with <Release>" -ForEach $SupportedReleases -Skip:$Skip {
 	BeforeAll {
-		# Install the MDT Workbench
-		& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
+		if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+			$Skip = $false
 
-		$Release = $_
-		$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
-		New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+			# Install the MDT Workbench
+			& "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
 
-		$VcListX64 = Get-VcList -Release $Release -Architecture "x64" | Save-VcRedist -Path $Path
-		$VcListX86 = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
+			$Release = $_
+			$Path = $([System.IO.Path]::Combine($env:RUNNER_TEMP, "Downloads"))
+			New-Item -Path $Path -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+
+			$VcListX64 = Get-VcList -Release $Release -Architecture "x64" | Save-VcRedist -Path $Path
+			$VcListX86 = Get-VcList -Release $Release -Architecture "x86" | Save-VcRedist -Path $Path
+		}
+		else {
+			$Skip = $true
+		}
 	}
 
 	Context "Import-VcMdtApplication imports Redistributables into the MDT share" {

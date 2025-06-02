@@ -9,12 +9,18 @@ param ()
 
 BeforeDiscovery {
 	$SupportedReleases = @("2022")
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
-Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $SupportedReleases {
 	BeforeAll {
 	}
 
+Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $SupportedReleases -Skip:$Skip {
 	Context "Validate Import-VcIntuneApplication fail scenarios" {
 		It "Should fail without IntuneWin32App" {
 			{ Import-VcIntuneApplication -VcList (Get-VcList -Release $_) } | Should -Throw
@@ -22,7 +28,7 @@ Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $Sup
 	}
 }
 
-Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $SupportedReleases {
+Describe -Name "Import-VcIntuneApplication imports VcRedists" -ForEach $SupportedReleases -Skip:$Skip {
 	BeforeAll {
 		foreach ($Module in @("MSAL.PS", "IntuneWin32App")) {
 			Install-Module -Name $Module -Force

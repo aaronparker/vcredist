@@ -8,10 +8,19 @@
 param ()
 
 BeforeDiscovery {
+	if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+		$Skip = $false
+	}
+	else {
+		$Skip = $true
+	}
 }
 
 InModuleScope VcRedist {
-	Describe -Name "Invoke-Process" {
+	BeforeAll {
+	}
+
+	Describe -Name "Invoke-Process" -Skip:$Skip {
 		Context "Invoke-Process works as expected" {
 			It "Should run the command without throwing an exception" {
 				$params = @{

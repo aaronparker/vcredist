@@ -7,11 +7,20 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Outputs to log host.")]
 param ()
 
-BeforeDiscovery {
-}
-
 InModuleScope -ModuleName "VcRedist" {
-    Describe -Name "New-MdtDrive" {
+    BeforeDiscovery {
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            $Skip = $false
+        }
+        else {
+            $Skip = $true
+        }
+    }
+
+    BeforeAll {
+    }
+
+    Describe -Name "New-MdtDrive" -Skip:$Skip {
         BeforeAll {
             # Install the MDT Workbench
             & "$env:GITHUB_WORKSPACE\tests\Install-Mdt.ps1"
