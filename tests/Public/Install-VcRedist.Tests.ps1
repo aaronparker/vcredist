@@ -151,6 +151,7 @@ Describe -Name "ARM64 specific tests" -Skip:$SkipArm {
 		Context "Install <Release> arm64 Redistributable" {
 			BeforeAll {
 				$VcRedist = Get-VcList -Release $Release -Architecture "arm64" | Save-VcRedist -Path $Path
+				$VcRedist | Uninstall-VcRedist -Confirm:$false -ErrorAction "SilentlyContinue"
 			}
 
 			It "Installs the VcRedist: <VcRedist.Name> <VcRedist.Architecture> via parameters" {
