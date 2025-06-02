@@ -155,10 +155,10 @@ jobs:
           New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
           Get-VcList -Release $Release -Architecture $Architecture | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
           $params = @{
-              Release       = $Release
-              $Architecture = $Architecture
-              Path          = "$env:RUNNER_TEMP\VcRedist"
-              VcManifest    = "${{ env.MANIFEST_FILE }}"
+              Release      = $Release
+              Architecture = $Architecture
+              Path         = "$env:RUNNER_TEMP\VcRedist"
+              VcManifest   = "${{ env.MANIFEST_FILE }}"
           }
           . ${{ github.workspace }}\ci\Update-Manifest.ps1 @params
 
