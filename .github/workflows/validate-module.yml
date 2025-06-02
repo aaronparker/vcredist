@@ -86,7 +86,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: 'pester-test-results-${{ matrix.os }}''
+          name: 'pester-test-results-${{ matrix.os }}'
           path: |
             ${{ github.workspace }}\tests\TestResults-${{ matrix.os }}.xml
 
