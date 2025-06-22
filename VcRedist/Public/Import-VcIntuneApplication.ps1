@@ -114,7 +114,8 @@ function Import-VcIntuneApplication {
             }
             $Application = Add-IntuneWin32App @Win32AppArgs
             if ($null -ne $Application) {
-                Write-Output -InputObject $Application
+                # Exclude the largeIcon property from the output
+                $Application | Select-Object -ExcludeProperty "largeIcon" | Write-Output
             }
 
             # Clean up the temporary intunewin package
