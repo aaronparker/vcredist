@@ -138,15 +138,15 @@ nav:
     - Install the Redistributables: install-vcredist.md
     - Get the Installed Redistributables: get-installedvcredist.md
     - Uninstall the Redistributables: uninstall-vcredist.md
+  - Intune:
+    - Import Redistributables into Intune: import-vcintuneapplication.md
+  - ConfigMgr:
+    - Import Redistributables into ConfigMgr: import-vcconfigmgrapplication.md
   - Microsoft Deployment Toolkit:
     - Import Redistributables into MDT: import-vcmdtapplication.md
     - Create a Redistributables bundle in MDT: new-vcmdtbundle.md
     - Update Redistributables in MDT: update-vcmdtapplication.md
     - Update the Redistributables bundle in MDT: update-vcmdtbundle.md
-  - ConfigMgr:
-    - Import Redistributables into ConfigMgr: import-vcconfigmgrapplication.md
-  - Intune:
-    - Import Redistributables into Intune: import-vcintuneapplication.md
   - Module help:
     - en-US:
       - about_VcRedist: help/en-US/about_VcRedist.md
