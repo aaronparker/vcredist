@@ -91,12 +91,20 @@ function Import-VcIntuneApplication {
 
             # Construct a table of default parameters for Win32 app
             $DisplayName = "$($IntuneManifest.Information.Publisher) $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
+
+            # Create a Notes property with identifying information
+            $Notes = [PSCustomObject] @{
+                "CreatedBy" = "VcRedist"
+                "Guid"      = $VcRedist.PackageId
+                "Date"      = $(Get-Date -Format "yyyy-MM-dd")
+            } | ConvertTo-Json -Compress
+
             $Win32AppArgs = @{
                 "FilePath"                 = $Package.Path
                 "DisplayName"              = $DisplayName
                 "Description"              = "$($IntuneManifest.Information.Description). $DisplayName"
                 "AppVersion"               = $VcRedist.Version
-                "Notes"                    = "Package created with VcRedist on $(Get-Date -Format "yyyy-MM-dd"); https://vcredist.com"
+                "Notes"                    = $Notes
                 "Publisher"                = $IntuneManifest.Information.Publisher
                 "InformationURL"           = $IntuneManifest.Information.InformationURL
                 "PrivacyURL"               = $IntuneManifest.Information.PrivacyURL
