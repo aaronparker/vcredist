@@ -34,7 +34,7 @@ function Get-VcRedistAppsFromIntune {
 
     begin {
         $DisplayNamePattern = "^Microsoft Visual C*"
-        $NotesPattern = '{"CreatedBy":"VcRedist","Guid":.*}$'
+        $NotesPattern = '^{"CreatedBy":"VcRedist","Guid":.*}$'
 
         # Get the existing Win32 applications from Intune
         Write-Verbose -Message "Retrieving existing Win32 applications from Intune."
