@@ -64,7 +64,7 @@ function Import-VcIntuneApplication {
         foreach ($VcRedist in $VcList) {
 
             # Check if the package already exists in Intune
-            $AppDetails = Get-VcRedistFromIntune -VcList $VcRedist
+            $AppDetails = Get-RequiredVcRedistUpdatesFromIntune -VcList $VcRedist
             if ($null -eq $AppDetails -or $AppDetails.UpdateRequired -eq $true) {
 
                 # Package MSI as .intunewin file
