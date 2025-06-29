@@ -1,5 +1,12 @@
 # Changelog
 
+## VERSION
+
+* Updates `Import-VcIntuneApplication` to add file detection information on imported Intune packages.
+* Updates `Import-VcIntuneApplication` to check Intune for a matching Visual C++ Redistributable packages before attempting to import. If a matching package does not exist or requires a version update, `Import-VcIntuneApplication` will then import a Visual C++ Redistributable package
+* Adds new function - `Get-VcIntuneApplication` to return the list of Visual C++ Redistributable packages imported by `Import-VcIntuneApplication`
+* Adds new function - `Remove-VcIntuneApplication` to remove Visual C++ Redistributable packages imported by `Import-VcIntuneApplication`
+
 ## 4.1.505
 
 * Fix ARM64 properties for VcRedist `2022` to `14.44.35208.0`
