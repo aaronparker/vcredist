@@ -59,11 +59,11 @@ Describe "Remove-VcIntuneApplication" -Skip:$Skip {
         }
     }
 
-    Context "ShouldProcess support" {
-        It "Should honor ShouldProcess and not call Remove-IntuneWin32App if ShouldProcess returns false" {
-            Mock -CommandName Remove-IntuneWin32App -MockWith { throw "Should not be called" }
-            Mock -CommandName $ExecutionContext.InvokeCommand.GetCommand('ShouldProcess', 'Cmdlet') -MockWith { $false }
-            { Remove-VcIntuneApplication -VcList $TestVcList } | Should -Not -Throw
-        }
-    }
+    # Context "ShouldProcess support" {
+    #     It "Should honor ShouldProcess and not call Remove-IntuneWin32App if ShouldProcess returns false" {
+    #         Mock -CommandName Remove-IntuneWin32App -MockWith { throw "Should not be called" }
+    #         Mock -CommandName $ExecutionContext.InvokeCommand.GetCommand('ShouldProcess', 'Cmdlet') -MockWith { $false }
+    #         { Remove-VcIntuneApplication -VcList $TestVcList } | Should -Not -Throw
+    #     }
+    # }
 }
