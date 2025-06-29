@@ -27,7 +27,7 @@ function Test-VcListObject {
         [Parameter(Position = 1)]
         [System.String[]] $RequiredProperties = @("Architecture", "Install", "Name", "ProductCode",
             "Release", "SilentInstall", "SilentUninstall", "UninstallKey", "URI", "URL", "Version",
-            "Path", "PackageId")
+            "Path", "PackageId", "DetectionFile")
     )
 
     process {

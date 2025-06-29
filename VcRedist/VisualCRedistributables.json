@@ -13,7 +13,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "b1e3c2a7-8f2d-4c3a-9e2a-7c4b1e2d3f4a",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ 2015 Redistributable Update 3",
@@ -28,7 +28,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "e7c2f1b4-9a6d-4e2b-8c3f-2b1e4a5d6c7f",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2017",
@@ -43,7 +43,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "08c95074-e8c0-48c8-9e1b-c932b6de1c80",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2017",
@@ -58,7 +58,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "c1e3d7f2-1f2e-4c7d-8e2a-2c2e2a7d9f38",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2019",
@@ -73,7 +73,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "baf64fad-1b81-4e92-b6ab-d226d04e86d4",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2019",
@@ -88,7 +88,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "bd3db0ed-80e7-47ea-b961-9776c4e88e15",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2022",
@@ -103,7 +103,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "43677731-4118-4a83-b5eb-d984ad22aa67",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2022",
@@ -118,7 +118,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "5eb1197c-0c50-4a1b-9f88-87309b79ff3b",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2022",
@@ -133,7 +133,7 @@
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
             "PackageId": "886a645e-57f4-4dba-89c8-ba0d1d0ef30c",
-            "FileDetection": "%SystemRoot%\\System32\\vcruntime140.dll"
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         }
     ],
     "Unsupported": [

@@ -93,15 +93,8 @@ function Import-VcIntuneApplication {
                 }
                 $RequirementRule = New-IntuneWin32AppRequirementRule @params
 
-                # Detection rule
-                if ($VcRedist.UninstallKey -eq "32") { $Check32BitOn64System = $true } else { $Check32BitOn64System = $false }
-                $DetectionRuleArgs = @{
-                    "Existence"            = $true
-                    "KeyPath"              = $IntuneManifest.DetectionRule.KeyPath -replace "{guid}", $VcRedist.ProductCode
-                    "DetectionType"        = $IntuneManifest.DetectionRule.DetectionType
-                    "Check32BitOn64System" = $Check32BitOn64System
-                }
-                $DetectionRule = New-IntuneWin32AppDetectionRuleRegistry @DetectionRuleArgs
+                # Create the detection rules for the Win32 app
+                $DetectionRules = New-IntuneWin32AppDetectionRule -VcList $VcRedist -IntuneManifest $IntuneManifest
 
                 # Construct a table of default parameters for Win32 app
                 $DisplayName = "$($IntuneManifest.Information.Publisher) $($VcRedist.Name) $($VcRedist.Version) $($VcRedist.Architecture)"
@@ -126,7 +119,7 @@ function Import-VcIntuneApplication {
                     "CompanyPortalFeaturedApp" = $false
                     "InstallExperience"        = $IntuneManifest.Program.InstallExperience
                     "RestartBehavior"          = $IntuneManifest.Program.DeviceRestartBehavior
-                    "DetectionRule"            = $DetectionRule
+                    "DetectionRule"            = $DetectionRules
                     "RequirementRule"          = $RequirementRule
                     "InstallCommandLine"       = "$(Split-Path -Path $VcRedist.URI -Leaf) $($VcRedist.SilentInstall)"
                     "UninstallCommandLine"     = $VcRedist.SilentUninstall
