@@ -33,6 +33,6 @@ Describe "Get-VcIntuneApplication" {
 
     It "Should return the list of Intune apps" {
         $result = Get-VcIntuneApplication
-        $result | Should -BeOfType System.Object[]
+        $result | Should -BeOfType [System.Management.Automation.PSCustomObject]
     }
 }
