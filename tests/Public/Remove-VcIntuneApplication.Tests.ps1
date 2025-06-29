@@ -15,7 +15,7 @@ BeforeDiscovery {
     }
 }
 
-InModuleScope VcRedist {
+InModuleScope VcRedist -Skip:$Skip {
     Describe "Remove-VcIntuneApplication" {
         BeforeAll {
         }
@@ -28,6 +28,10 @@ InModuleScope VcRedist {
 
         Context "Import-VcIntuneApplication imports VcRedists into a target tenant" {
             BeforeAll {
+                foreach ($Module in @("MSAL.PS", "IntuneWin32App")) {
+                    Install-Module -Name $Module -Force
+                }
+
                 try {
                     # Authenticate to the Graph API
                     # Expects secrets to be passed into environment variables
