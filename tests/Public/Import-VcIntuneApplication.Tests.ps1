@@ -17,8 +17,8 @@ BeforeDiscovery {
 	}
 }
 
-	BeforeAll {
-	}
+BeforeAll {
+}
 
 Describe -Name "Import-VcIntuneApplication without IntuneWin32App" -ForEach $SupportedReleases -Skip:$Skip {
 	Context "Validate Import-VcIntuneApplication fail scenarios" {

@@ -34,6 +34,15 @@
             "ValueName": "",
             "DetectionType": "exists",
             "Check32BitOn64System": "false"
+        },
+        {
+            "Type": "File",
+            "DetectionMethod": "Version",
+            "Path": "%SystemRoot%\\System32",
+            "FileOrFolder": "vcruntime140.dll",
+            "Operator": "greaterThanOrEqual",
+            "VersionValue": "#version",
+            "Check32BitOn64System": "#architecture"
         }
     ]
 }
