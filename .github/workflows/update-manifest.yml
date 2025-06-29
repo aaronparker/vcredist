@@ -13,7 +13,7 @@ env:
   MANIFEST_FILE: ${{ github.workspace }}\VcRedist\VisualCRedistributables.json
 
 jobs:
-  validate-versions:
+  validate-amd64:
     runs-on: windows-latest
 
     steps:
@@ -94,12 +94,12 @@ jobs:
         id: get-date
         shell: powershell
         run: |
-          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
+          echo "date=$(Get-Date -Format "yyyy-MM-dd")" >> $GITHUB_STATE
 
       # Commit changes to the manifest
       - name: Commit changes
         id: commit
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Update manifest ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
           commit_user_name: ${{ secrets.COMMIT_NAME }}
@@ -115,7 +115,7 @@ jobs:
 
   validate-arm64:
     runs-on: windows-11-arm
-    needs: validate-versions
+    needs: validate-amd64
 
     steps:
       - uses: actions/checkout@v4
@@ -167,12 +167,12 @@ jobs:
         id: get-date
         shell: powershell
         run: |
-          echo "::set-output name=date::$(Get-Date -Format "yyyy-MM-dd")"
+          echo "date=$(Get-Date -Format "yyyy-MM-dd")" >> $GITHUB_STATE
 
       # Commit changes to the manifest
       - name: Commit changes
         id: commit
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Update manifest ARM64 ${{ steps.get-date.outputs.date }}.${{ github.run_number }}"
           commit_user_name: ${{ secrets.COMMIT_NAME }}
