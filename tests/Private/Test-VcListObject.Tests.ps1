@@ -26,6 +26,7 @@ InModuleScope VcRedist {
 			UninstallKey    = "32"
 			Path            = "C:\Temp\VcRedist.exe"
 			PackageId       = "b1e3c2a7-8f2d-4c3a-9e2a-7c4b1e2d3f4a"
+			DetectionFile   = "%SystemRoot%\\System32\\vcruntime140.dll"
 		}
 
 		$InvalidObject = [PSCustomObject]@{
