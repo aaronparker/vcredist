@@ -72,7 +72,7 @@ PowerShellVersion = '3.0'
 FunctionsToExport = @('Export-VcManifest', 'Get-InstalledVcRedist', 'Get-VcList', 
                'Import-VcConfigMgrApplication', 'Import-VcIntuneApplication', 
                'Import-VcMdtApplication', 'Install-VcRedist', 'New-VcMdtBundle', 
-               'Save-VcRedist', 'Test-VcRedistUri', 'Uninstall-VcRedist', 
+               'Save-VcRedist', 'Test-VcRedistUri', 'Uninstall-VcRedist', 'Get-VcIntuneApplication',
                'Update-VcMdtApplication', 'Update-VcMdtBundle', 'Remove-VcIntuneApplication')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
