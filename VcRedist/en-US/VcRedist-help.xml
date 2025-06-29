@@ -56,7 +56,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -130,7 +130,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -153,6 +153,56 @@
       <maml:navigationLink>
         <maml:linkText>Get the locally installed Redistributables:</maml:linkText>
         <maml:uri>https://vcredist.com/get-installedvcredist/</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-VcIntuneApplication</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>VcIntuneApplication</command:noun>
+      <maml:description>
+        <maml:para>Queries Microsoft Intune for the list Microsoft Visual C++ Redistributables imported by VcRedist.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Queries Microsoft Intune for the list Microsoft Visual C++ Redistributables imported by VcRedist and returns the list to the pipeline. This function will only return those Visual C++ Redistributable packages in Intune imported by VcRedist.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-VcIntuneApplication</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: Aaron Parker</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-VcIntuneApplication</dev:code>
+        <dev:remarks>
+          <maml:para>Description: Queries Microsoft Intune for the Microsoft Visual C++ Redistributables packages and returns them to the pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Query Intune for Redistributables:</maml:linkText>
+        <maml:uri>https://vcredist.com/Get-VcIntuneApplication/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -289,7 +339,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -622,7 +672,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -701,7 +751,7 @@ Import-VcConfigMgrApplication -VcList $VcList -CMPath "\\server\share\VcRedist" 
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1028,7 +1078,7 @@ Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist" | Import-VcIntuneApplication
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1203,7 +1253,7 @@ Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle</de
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1487,7 +1537,7 @@ Install-VcRedist -VcList $VcRedists -Silent</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1515,6 +1565,128 @@ Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle</de
       <maml:navigationLink>
         <maml:linkText>Create a Redistributables bundle in MDT:</maml:linkText>
         <maml:uri>https://vcredist.com/new-vcmdtbundle/</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-VcIntuneApplication</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>VcIntuneApplication</command:noun>
+      <maml:description>
+        <maml:para>Removes Microsoft Visual C++ Redistributables imported into Microsoft Intune via Import-VcIntuneApplication. Accepts a list of Visual C++ Redistributables from Get-VcList, queries Intune for matching Visual C++ Redistributables, and removes them from Intune.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Removes Microsoft Visual C++ Redistributables imported into Microsoft Intune via Import-VcIntuneApplication. Accepts a list of Visual C++ Redistributables from Get-VcList, queries Intune for matching Visual C++ Redistributables, and removes them from Intune.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-VcIntuneApplication</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>VcList</maml:name>
+          <maml:description>
+            <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList or Save-VcRedist.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
+          <dev:type>
+            <maml:name>PSObject</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <maml:name>VcList</maml:name>
+        <maml:description>
+          <maml:para>An array containing details of the Visual C++ Redistributables from Get-VcList or Save-VcRedist.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
+        <dev:type>
+          <maml:name>PSObject</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: Aaron Parker</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$VcList = Get-VcList -Release "2017"
+Remove-VcIntuneApplication -VcList $VcList -Confirm:$false</dev:code>
+        <dev:remarks>
+          <maml:para>Description: Queries Microsoft Intune for the Microsoft Visual C++ Redistributables 2017 packages and removes them.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Remove the Redistributables:</maml:linkText>
+        <maml:uri>https://vcredist.com/remove-vcintuneapplication/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1796,7 +1968,7 @@ Import-VcMdtApplication -VcList $VcList -MdtPath \\server\deployment -Bundle</de
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2018,7 +2190,7 @@ Save-VcRedist -VcList $VcList -Path C:\Redist</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2238,7 +2410,7 @@ Test-VcRedistUri -VcList $VcList</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2499,7 +2671,7 @@ Test-VcRedistUri -VcList $VcList</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2727,7 +2899,7 @@ Import-VcMdtApp -VcList $VcList -Path C:\Temp\VcRedist -MdtPath \\server\deploym
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Author: Aaron Parker Twitter: @stealthpuppy</maml:para>
+        <maml:para>Author: Aaron Parker</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
