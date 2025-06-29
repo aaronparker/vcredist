@@ -1,4 +1,6 @@
 function New-IntuneWin32AppDetectionRule {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Justification = "Accepted for Intune detection objects.")]
+    [OutputType([System.Collections.ArrayList])]
     [CmdletBinding(SupportsShouldProcess = $false)]
     param (
         [Parameter(
@@ -22,8 +24,6 @@ function New-IntuneWin32AppDetectionRule {
 
     process {
         foreach ($VcRedist in $VcList) {
-            
-
             foreach ($DetectionRuleItem in $IntuneManifest.DetectionRule) {
                 switch ($DetectionRuleItem.Type) {
                     "MSI" {

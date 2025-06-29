@@ -50,7 +50,7 @@ function Get-VcRedistAppsFromIntune {
         Write-Verbose -Message "Filtering existing applications to match VcList PackageId."
         foreach ($Application in $ExistingIntuneApps) {
             if (($Application.notes | ConvertFrom-Json -ErrorAction "Stop").Guid -in $VcList.PackageId) {
-             
+
                 # Add the packageId to the application object for easier reference
                 $Application | Add-Member -MemberType "NoteProperty" -Name "packageId" -Value $($Application.notes | ConvertFrom-Json -ErrorAction "Stop").Guid -Force
                 Write-Output -InputObject $Application
