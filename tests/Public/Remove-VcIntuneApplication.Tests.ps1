@@ -52,10 +52,11 @@ Describe "Remove-VcIntuneApplication" -Skip:$Skip {
             $Path = "$env:RUNNER_TEMP\Deployment"
             $SavedVcRedist = Save-VcRedist -Path $Path -VcList (Get-VcList -Release "2017" )
             Import-VcIntuneApplication -VcList $SavedVcRedist | Out-Null
+            Start-Sleep -Seconds 5 # Wait for Intune to process the import
         }
 
         It "Removes VcRedist from Intune OK" {
-            { Remove-VcIntuneApplication -VcList $SavedVcRedist } | Should -Not -Throw
+            { Remove-VcIntuneApplication -VcList $SavedVcRedist -Confirm:$false } | Should -Not -Throw
         }
     }
 
