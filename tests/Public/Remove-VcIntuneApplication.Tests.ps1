@@ -15,8 +15,8 @@ BeforeDiscovery {
     }
 }
 
-InModuleScope VcRedist -Skip:$Skip {
-    Describe "Remove-VcIntuneApplication" {
+InModuleScope VcRedist {
+    Describe "Remove-VcIntuneApplication" -Skip:$Skip {
         BeforeAll {
         }
 
