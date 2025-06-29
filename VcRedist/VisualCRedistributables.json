@@ -149,7 +149,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "64",
-            "PackageId": "3061fb3c-7757-4c45-839f-792db187cee6"
+            "PackageId": "3061fb3c-7757-4c45-839f-792db187cee6",
+            "DetectionFile": "%SystemRoot%\\System32\\mfc90u.dll"
         },
         {
             "Name": "Visual C++ 2008 Service Pack 1 Redistributable Package MFC Security Update",
@@ -163,7 +164,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "4402bbbf-4e77-4eab-9f61-87d7ab119681"
+            "PackageId": "4402bbbf-4e77-4eab-9f61-87d7ab119681",
+            "DetectionFile": "%SystemRoot%\\System32\\mfc90u.dll"
         },
         {
             "Name": "Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update",
@@ -177,7 +179,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "64",
-            "PackageId": "81d312d3-4378-4fa9-9db6-6f85c17c4dc2"
+            "PackageId": "81d312d3-4378-4fa9-9db6-6f85c17c4dc2",
+            "DetectionFile": "%SystemRoot%\\System32\\mfc80u.dll"
         },
         {
             "Name": "Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update",
@@ -191,7 +194,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "2517df15-3c78-4630-9719-81f7f71c16a9"
+            "PackageId": "2517df15-3c78-4630-9719-81f7f71c16a9",
+            "DetectionFile": "%SystemRoot%\\System32\\atl80.dll"
         },
         {
             "Name": "Visual C++ 2005 Service Pack 1 Redistributable Package MFC Security Update",
@@ -205,7 +209,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "28ce7255-1c42-46d8-afe4-eeab49283b0c"
+            "PackageId": "28ce7255-1c42-46d8-afe4-eeab49283b0c",
+            "DetectionFile": "%SystemRoot%\\System32\\mfc80u.dll"
         },
         {
             "Name": "Visual C++ 2005 Service Pack 1 Redistributable Package ATL Security Update",
@@ -219,7 +224,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "e1a5105f-5e7c-4ad2-8b02-57b44601e073"
+            "PackageId": "e1a5105f-5e7c-4ad2-8b02-57b44601e073",
+            "DetectionFile": "%SystemRoot%\\System32\\atl80.dll"
         },
         {
             "Name": "Visual C++ 2008 Redistributable Package ATL Security Update",
@@ -233,7 +239,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "64",
-            "PackageId": "29620619-b942-4a49-843f-e979bc4a7c42"
+            "PackageId": "29620619-b942-4a49-843f-e979bc4a7c42",
+            "DetectionFile": "%SystemRoot%\\System32\\atl90.dll"
         },
         {
             "Name": "Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update",
@@ -247,7 +254,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "64",
-            "PackageId": "9bae48d0-b2ec-4878-a8c9-fc0b5d67c996"
+            "PackageId": "9bae48d0-b2ec-4878-a8c9-fc0b5d67c996",
+            "DetectionFile": "%SystemRoot%\\System32\\atl90.dll"
         },
         {
             "Name": "Visual C++ 2008 Redistributable Package ATL Security Update",
@@ -261,7 +269,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "2ddc213a-15cd-49c5-93a0-872aacd2bf15"
+            "PackageId": "2ddc213a-15cd-49c5-93a0-872aacd2bf15",
+            "DetectionFile": "%SystemRoot%\\System32\\atl90.dll"
         },
         {
             "Name": "Visual C++ 2008 Service Pack 1 Redistributable Package ATL Security Update",
@@ -275,7 +284,8 @@
             "SilentInstall": "/Q",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "97c23df0-29f3-4fe8-a8e5-9fd4c9444295"
+            "PackageId": "97c23df0-29f3-4fe8-a8e5-9fd4c9444295",
+            "DetectionFile": "%SystemRoot%\\System32\\atl90.dll"
         },
         {
             "Name": "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
@@ -289,7 +299,8 @@
             "SilentInstall": "/quiet /norestart",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "64",
-            "PackageId": "f76ce5c8-16f3-4102-818c-8effbf2a9e69"
+            "PackageId": "f76ce5c8-16f3-4102-818c-8effbf2a9e69",
+            "DetectionFile": "%SystemRoot%\\System32\\mfc100u.dll"
         },
         {
             "Name": "Visual C++ 2010 Service Pack 1 Redistributable Package MFC Security Update",
@@ -303,7 +314,8 @@
             "SilentInstall": "/quiet /norestart",
             "SilentUninstall": "MsiExec.exe /X#ProductCode /QB-",
             "UninstallKey": "32",
-            "PackageId": "99d7c71c-d12d-466b-9d36-35d874d1d98c"
+            "PackageId": "99d7c71c-d12d-466b-9d36-35d874d1d98c",
+            "DetectionFile": "%SystemRoot%\\System32\\mfc100u.dll"
         },
         {
             "Name": "Visual C++ Redistributable Packages for Visual Studio 2013",
@@ -317,7 +329,8 @@
             "SilentInstall": "/install /quiet /norestart",
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
-            "PackageId": "c68a99dc-004c-49ad-99e4-5b267070fa03"
+            "PackageId": "c68a99dc-004c-49ad-99e4-5b267070fa03",
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable Packages for Visual Studio 2013",
@@ -331,7 +344,8 @@
             "SilentInstall": "/install /quiet /norestart",
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
-            "PackageId": "d52dccb3-ac9d-4e5a-a924-1c5b640d3c28"
+            "PackageId": "d52dccb3-ac9d-4e5a-a924-1c5b640d3c28",
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2012 Update 4",
@@ -345,7 +359,8 @@
             "SilentInstall": "/quiet /norestart",
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
-            "PackageId": "7979c838-d45e-4bd3-a3b5-02379021f594"
+            "PackageId": "7979c838-d45e-4bd3-a3b5-02379021f594",
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime110.dll"
         },
         {
             "Name": "Visual C++ Redistributable for Visual Studio 2012 Update 4",
@@ -359,7 +374,8 @@
             "SilentInstall": "/install /quiet /norestart",
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
-            "PackageId": "450e2589-17df-4cd3-881d-5a033014180c"
+            "PackageId": "450e2589-17df-4cd3-881d-5a033014180c",
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime110.dll"
         },
         {
             "Name": "Visual C++ 2013 Update 5 Redistributable Package",
@@ -373,7 +389,8 @@
             "SilentInstall": "/install /quiet /norestart",
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
-            "PackageId": "7c440ba0-f23d-4e36-a037-85115cba9fa9"
+            "PackageId": "7c440ba0-f23d-4e36-a037-85115cba9fa9",
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         },
         {
             "Name": "Visual C++ 2013 Update 5 Redistributable Package",
@@ -387,7 +404,8 @@
             "SilentInstall": "/install /quiet /norestart",
             "SilentUninstall": "\"%ProgramData%\\Package Cache\\#ProductCode\\#Installer\" /uninstall /quiet /norestart",
             "UninstallKey": "32",
-            "PackageId": "62119009-c911-4854-81c1-0815749af061"
+            "PackageId": "62119009-c911-4854-81c1-0815749af061",
+            "DetectionFile": "%SystemRoot%\\System32\\vcruntime140.dll"
         }
     ]
 }
