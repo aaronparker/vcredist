@@ -268,7 +268,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 Author: Aaron Parker
-Twitter: @stealthpuppy
+
 
 ## RELATED LINKS
 
