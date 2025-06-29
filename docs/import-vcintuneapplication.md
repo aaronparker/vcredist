@@ -1,10 +1,19 @@
+
 # Import Redistributables into Microsoft Intune
 
-To install the Visual C++ Redistributables with Microsoft Intune, use `Import-VcIntuneApplication` to package each of the Visual C++ Redistributables and import them as a separate application into a target tenant.
+`Import-VcIntuneApplication` automates packaging and importing Visual C++ Redistributables as Win32 applications into Microsoft Intune. Each redistributable is packaged, assigned detection and requirement rules, and imported as a separate application.
 
-An application package will be created for each Visual C++ Redistributable with properties including Name, Description, Publisher, App Version, Information URL, Privacy URL, Notes, Logo, Install command, Uninstall command, Install behavior, Operating system architecture, Minimum operating system, and Detection rules.
+**Key features:**
+- Packages each Visual C++ Redistributable as a .intunewin file
+- Sets application properties: Name, Description, Publisher, Version, URLs, Notes, Logo, Install/Uninstall commands, Install behavior, OS architecture, minimum OS, detection and requirement rules
+- Skips import if the app already exists and is up-to-date in Intune
+- Cleans up temporary files after import
 
-This function requires the [IntuneWin32App](https://github.com/MSEndpointMgr/IntuneWin32App) PowerShell module and supported Windows PowerShell only. Before using this function to import the Redistributables into an Intune tenant, authenticate first with Connect-MSIntuneGraph.
+> **Note:**
+> - Requires the [IntuneWin32App](https://github.com/MSEndpointMgr/IntuneWin32App) PowerShell module
+> - Supported only on Windows PowerShell (not PowerShell Core)
+> - Authenticate to Intune with `Connect-MSIntuneGraph` before use
+> - Requires a valid Microsoft Graph API access token
 
 ## Initial Setup
 
@@ -12,24 +21,45 @@ To import the Visual C++ Redistributables into Microsoft Intune, some initial se
 
 ```powershell
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-Install-Module -Name VcRedist, IntuneWin32App
+Install-Module -Name VcRedist, IntuneWin32App, MSAL.PS
 ```
 
-## Required parameters
+## Parameters
 
-- `VcList` - An array containing details of the Visual C++ Redistributables from `Save-VcRedist`
+- `VcList` (**required**): An array of Visual C++ Redistributable objects, typically from `Save-VcRedist`. Each object must have required properties (see below).
+
+## Prerequisites
+
+1. **Install required modules:**
+
+   ```powershell
+   Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+   Install-Module -Name VcRedist, IntuneWin32App, MSAL.PS
+   ```
+
+2. **Authenticate to Intune:**
+
+   ```powershell
+   Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com
+   ```
+
+   For non-interactive authentication, use an Entra ID app registration with `DeviceManagementApps.ReadWrite.All` permission:
+
+   ```powershell
+   Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com -ClientId "<appId>" -ClientSecret <secret>
+   ```
+
+3. **Ensure the IntuneWin32App module is available and a valid Microsoft Graph API access token is present.**
+
+## Required VcList Properties
+
+Each object in `VcList` must include:
+
+- `Name`, `Version`, `Path`, `Architecture`, `SilentInstall`, `SilentUninstall`, `PackageId`, `URI`, and other properties as produced by `Save-VcRedist`.
+
+The function will validate these properties and throw if any are missing.
 
 ## Authentication
-
-### Interactive Authentication
-
-Before using `Import-VcIntuneApplication`, you need to authenticate to the Microsoft Intune tenant with `Connect-MSIntuneGraph`. This function is part of the `IntuneWin32App` module, so any supported authentication method can be used.
-
-For an interactive sign-in that will require credentials for an account with the Intune Administrator role, use this example:
-
-```powershell
-Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com
-```
 
 ### Non-interactive Authentication
 
@@ -43,9 +73,9 @@ For a non-interactive sign-in that uses the app registration and a client secret
 Connect-MSIntuneGraph -TenantID contoso.onmicrosoft.com -ClientId "f99877d5-f757-438e-b12b-d905b00ea6f3" -ClientSecret <secret>
 ```
 
-## Import the Redistributables
+## Example: Import Redistributables
 
-The example listing below retrieves the list of Visual C++ Redistributables for the 2022 version, download the installers to `C:\Temp\VcRedist` and imports each Redistributable into the target Intune tenant as separate application.
+The following example retrieves the list of Visual C++ Redistributables for the 2022 release, downloads the installers, and imports each as a Win32 app into Intune:
 
 ```powershell
 $VcList = Get-VcList -Release "2022" | Save-VcRedist -Path C:\Temp\VcRedist
@@ -54,11 +84,10 @@ Import-VcIntuneApplication -VcList $VcList
 
 ![Microsoft Visual C++ Redistributables applications imported into Intune](assets/images/intuneapp.jpeg)
 
-## Create application assignments
 
-With the application packages imported, configure assignments with `Add-IntuneWin32AppAssignmentAllDevices`. `Import-VcIntuneApplication` will return details of the applications imported into Intune, including the `Id` property required for adding assignments.
+## Assign Applications
 
-In the example below, the Redistributables imported into Intune will be assigned to all devices.
+After import, assign the applications using `Add-IntuneWin32AppAssignmentAllDevices`. The function returns application objects with an `Id` property:
 
 ```powershell
 $Apps = Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcIntuneApplication
@@ -73,3 +102,30 @@ foreach ($App in $Apps) {
     Add-IntuneWin32AppAssignmentAllDevices @params
 }
 ```
+
+## How It Works
+
+1. **Validates prerequisites:**
+   - Ensures running on Windows PowerShell (not Core)
+   - Checks for IntuneWin32App module
+   - Checks for Microsoft Graph API access token
+2. **Loads the Intune app manifest** from `Intune.json` in the module directory
+3. **Creates an icon object** if the icon file exists
+4. **Validates each VcList object** for required properties
+5. **Checks for existing Intune apps** and skips import if up-to-date
+6. **Packages the installer** as a .intunewin file
+7. **Creates requirement and detection rules** from the manifest and VcList
+8. **Imports the app** using `Add-IntuneWin32App`
+9. **Cleans up** temporary files
+
+## Troubleshooting
+
+- **PowerShell Core not supported:** The function will throw if run on PowerShell Core. Use Windows PowerShell 5.1.
+- **Missing modules:** Ensure `IntuneWin32App` is installed and available in your session.
+- **Authentication errors:** Authenticate with `Connect-MSIntuneGraph` and ensure `$Global:AccessToken` is set.
+- **Missing required properties:** Use `Save-VcRedist` to generate a valid `VcList`.
+
+## See Also
+
+- [IntuneWin32App PowerShell Module](https://github.com/MSEndpointMgr/IntuneWin32App)
+- [VcRedist Documentation](https://vcredist.com/)
