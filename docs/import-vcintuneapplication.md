@@ -84,22 +84,43 @@ Import-VcIntuneApplication -VcList $VcList
 
 ![Microsoft Visual C++ Redistributables applications imported into Intune](assets/images/intuneapp.jpeg)
 
-
-## Assign Applications
+## Application Assignments and Supersedence
 
 After import, assign the applications using `Add-IntuneWin32AppAssignmentAllDevices`. The function returns application objects with an `Id` property:
 
 ```powershell
-$Apps = Get-VcList | Save-VcRedist -Path C:\Temp\VcRedist | Import-VcIntuneApplication
-foreach ($App in $Apps) {
+# Retrieve existing Visual C++ Redistributable applications in Intune (that have been imported by VcRedist)
+$ExistingApps = Get-VcIntuneApplication
+
+# Import the new Visual C++ Redistributable versions
+$NewApps = Get-VcList | Save-VcRedist -Path "C:\Temp\VcRedist" | Import-VcIntuneApplication
+
+# Create an All Devices assignment and add supersedence rules for existing versions
+foreach ($App in $NewApps) {
     $params = @{
-        Id                           = $App.Id
+        Id                           = $App.id
         Intent                       = "required"
-        Notification                  = "hideAll"
-        DeliveryOptimizationPriority = "foreground"
-        Verbose                      = $true
+        Notification                 = "showReboot"
+        DeliveryOptimizationPriority = "notConfigured"
+        UseLocalTime                 = $true
+        AvailableTime                = $(Get-Date -Hour 18 -Minute 0 -Second 0)
+        DeadlineTime                 = $(Get-Date -Hour 18 -Minute 0 -Second 0).AddDays(1)
+        EnableRestartGracePeriod     = $true
+        RestartGracePeriod           = 1440
+        RestartNotificationSnooze    = 240
+        RestartCountDownDisplay      = 15
     }
     Add-IntuneWin32AppAssignmentAllDevices @params
+
+    # Match existing app packages with the same identifier and add supersedence rules
+    $MatchingApp = $ExistingApps | Where-Object { $_.PackageId -eq $($App.notes | ConvertFrom-Json -ErrorAction "Stop").Guid }
+    if ($null -ne $MatchingApp) {
+        foreach ($Item in $MatchingApp) {
+            Write-Host "Adding supersedence rule for $($Item.id) to $($App.id)"
+            $SupersedenceRule = New-IntuneWin32AppSupersedence -ID $Item.id -SupersedenceType 'Update'
+            Add-IntuneWin32AppSupersedence -ID $App.id -Supersedence $SupersedenceRule
+        }
+    }
 }
 ```
 
