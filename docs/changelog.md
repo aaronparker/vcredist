@@ -1,6 +1,6 @@
 # Changelog
 
-## VERSION
+## 4.1.517
 
 * Updates `Import-VcIntuneApplication` to add file detection information on imported Intune packages.
 * Updates `Import-VcIntuneApplication` to check Intune for a matching Visual C++ Redistributable packages before attempting to import. If a matching package does not exist or requires a version update, `Import-VcIntuneApplication` will then import a Visual C++ Redistributable package
