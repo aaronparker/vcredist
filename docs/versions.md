@@ -1,12 +1,12 @@
 ﻿# Included Redistributables
 
-VcRedist `4.1.505` includes the following Redistributables (supported and unsupported):
+VcRedist `4.1.506` includes the following Redistributables (supported and unsupported):
 
 | Version        | Architecture | Name                                                                       |
 | -------------- | ------------ | -------------------------------------------------------------------------- |
-| 14.44.35208.0  | x86          | Visual C++ Redistributable for Visual Studio 2022                          |
-| 14.44.35208.0  | ARM64        | Visual C++ Redistributable for Visual Studio 2022                          |
-| 14.44.35208.0  | x64          | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.44.35211.0  | x86          | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.44.35211.0  | ARM64        | Visual C++ Redistributable for Visual Studio 2022                          |
+| 14.44.35211.0  | x64          | Visual C++ Redistributable for Visual Studio 2022                          |
 | 14.29.30156.0  | x64          | Visual C++ Redistributable for Visual Studio 2019                          |
 | 14.29.30156.0  | x86          | Visual C++ Redistributable for Visual Studio 2019                          |
 | 14.16.27052.0  | x86          | Visual C++ Redistributable for Visual Studio 2017                          |
