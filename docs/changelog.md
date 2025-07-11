@@ -1,5 +1,9 @@
 # Changelog
 
+## VERSION
+
+* Update VcRedist `2022` to `14.44.35211.0`
+
 ## 4.1.517
 
 * Updates `Import-VcIntuneApplication` to add file detection information on imported Intune packages.
