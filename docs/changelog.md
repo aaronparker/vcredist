@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.1.506
+## 4.1.522
 
 * Update VcRedist `2022` to `14.44.35211.0`
 
