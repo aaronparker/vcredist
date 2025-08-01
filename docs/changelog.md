@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.523
+
+* Fixes x64 Redistributable Architecture detection fallback
+* Adds ARM64 Redistributable Architecture detection fallback
+  
 ## 4.1.522
 
 * Update VcRedist `2022` to `14.44.35211.0`
