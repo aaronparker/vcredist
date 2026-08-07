@@ -3,7 +3,7 @@ name: Update module manifest
 on:
   workflow_dispatch:
   push:
-    branches: [ development ]
+#    branches: [ manifest-update ] 
     paths:
       - ci/Update-Manifest.ps1
   schedule:
@@ -25,14 +25,30 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: development
+          ref: main
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Pull latest changes from development branch
+      # Ensure we can work on manifest-update whether or not it already exists
+      - name: Ensure manifest-update branch exists
+        shell: pwsh
+        run: |
+          git fetch origin
+
+          if (git ls-remote --heads origin manifest-update) {
+            git switch manifest-update
+            git pull origin manifest-update
+          }
+          else {
+            git switch -c manifest-update
+            git push --set-upstream origin manifest-update
+          }
+
+      # Pull latest changes from manifest-update branch
       - name: Pull latest changes
         shell: pwsh
         run: |
-          git pull origin development
+          git pull origin manifest-update
 
       # Import GPG key so that we can sign the commit
       - name: Import GPG key
@@ -130,7 +146,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: development
+          ref: manifest-update
           fetch-depth: 0
 
       - name: Generate pull request body
@@ -148,7 +164,7 @@ jobs:
             echo
             echo "This PR was created by workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             echo
-            echo "### Commits in development not in main"
+            echo "### Commits in manifest-update not in main"
             if git log --oneline origin/main..HEAD | grep -q .; then
               git log --oneline origin/main..HEAD
             else
@@ -170,13 +186,13 @@ jobs:
         shell: bash
         run: |
           TITLE="Automated manifest update (${GITHUB_RUN_NUMBER})"
-          EXISTING_PR_NUMBER=$(gh pr list --base main --head development --state open --json number --jq '.[0].number')
+          EXISTING_PR_NUMBER=$(gh pr list --base main --head manifest-update --state open --json number --jq '.[0].number')
 
           if [[ -n "$EXISTING_PR_NUMBER" ]]; then
             gh pr edit "$EXISTING_PR_NUMBER" --title "$TITLE" --body-file pr-body.md
             echo "Updated PR #$EXISTING_PR_NUMBER"
           elif [[ -n "$PR_CREATE_TOKEN" ]]; then
-            GH_TOKEN="$PR_CREATE_TOKEN" gh pr create --base main --head development --title "$TITLE" --body-file pr-body.md
+            GH_TOKEN="$PR_CREATE_TOKEN" gh pr create --base main --head manifest-update --title "$TITLE" --body-file pr-body.md
           else
-            echo "::warning::No open pull request exists from development to main, and repository secret PAT is not configured. GitHub Actions is not permitted to create pull requests with GITHUB_TOKEN in this repository. To enable automatic PR creation, configure a PAT secret named PAT with repository contents and pull request write access."
+            echo "::warning::No open pull request exists from manifest-update to main, and repository secret PAT is not configured. GitHub Actions is not permitted to create pull requests with GITHUB_TOKEN in this repository. To enable automatic PR creation, configure a PAT secret named PAT with repository contents and pull request write access."
           fi
