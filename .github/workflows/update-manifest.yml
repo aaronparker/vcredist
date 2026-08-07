@@ -17,8 +17,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  validate-arm64:
+  update-manifest:
     runs-on: windows-11-arm
+    name: 'Update manifest'
     outputs:
       changes_detected: ${{ steps.commit.outputs.changes_detected }}
 
@@ -139,9 +140,10 @@ jobs:
 
   create-pull-request:
     runs-on: ubuntu-latest
+    name: 'Create pull request'
     needs:
-      - validate-arm64
-    if: needs.validate-arm64.outputs.changes_detected == 'true'
+      - update-manifest
+    if: needs.update-manifest.outputs.changes_detected == 'true'
 
     steps:
       - uses: actions/checkout@v7
@@ -180,6 +182,7 @@ jobs:
           } > pr-body.md
 
       - name: Create or update pull request to main
+        id: manage_pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_CREATE_TOKEN: ${{ secrets.PAT }}
@@ -187,12 +190,22 @@ jobs:
         run: |
           TITLE="Automated manifest update (${GITHUB_RUN_NUMBER})"
           EXISTING_PR_NUMBER=$(gh pr list --base main --head manifest-update --state open --json number --jq '.[0].number')
+          CREATED_PR_URL=""
 
           if [[ -n "$EXISTING_PR_NUMBER" ]]; then
             gh pr edit "$EXISTING_PR_NUMBER" --title "$TITLE" --body-file pr-body.md
             echo "Updated PR #$EXISTING_PR_NUMBER"
           elif [[ -n "$PR_CREATE_TOKEN" ]]; then
-            GH_TOKEN="$PR_CREATE_TOKEN" gh pr create --base main --head manifest-update --title "$TITLE" --body-file pr-body.md
+            CREATED_PR_URL=$(GH_TOKEN="$PR_CREATE_TOKEN" gh pr create --base main --head manifest-update --title "$TITLE" --body-file pr-body.md)
+            echo "created_pr=true" >> "$GITHUB_OUTPUT"
+            echo "created_pr_url=$CREATED_PR_URL" >> "$GITHUB_OUTPUT"
           else
+            echo "created_pr=false" >> "$GITHUB_OUTPUT"
             echo "::warning::No open pull request exists from manifest-update to main, and repository secret PAT is not configured. GitHub Actions is not permitted to create pull requests with GITHUB_TOKEN in this repository. To enable automatic PR creation, configure a PAT secret named PAT with repository contents and pull request write access."
           fi
+
+      - name: Notify when PR is created
+        if: steps.manage_pr.outputs.created_pr == 'true'
+        shell: bash
+        run: |
+          echo "::notice title=Pull request created::Created pull request: ${{ steps.manage_pr.outputs.created_pr_url }}"
