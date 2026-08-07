@@ -57,11 +57,35 @@ jobs:
           Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -Verbose
 
       # Validate VcRedist 14 and update the manifest
-      - name: Validate VcRedist 14
+      - name: Validate VcRedist 14 x86, x64
         shell: pwsh
         run: |
           $Release = "14"
-          $Architecture = "x86", "x64","arm64"
+          $Architecture = "x86", "x64"
+          Import-Module "${{ github.workspace }}\VcRedist" -Force
+          New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
+          Get-VcList -Release $Release -Architecture $Architecture | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
+          $params = @{
+              Release      = $Release
+              Architecture = $Architecture
+              Path         = "$env:RUNNER_TEMP\VcRedist"
+              VcManifest   = "${{ env.MANIFEST_FILE }}"
+          }
+          . ${{ github.workspace }}\ci\Update-Manifest.ps1 @params
+
+      # Uninstall existing VcRedists
+      - name: Uninstall VcRedists
+        shell: pwsh
+        run: |
+          Import-Module ${{ github.workspace }}\VcRedist -Force
+          Get-InstalledVcRedist | Uninstall-VcRedist -Confirm:$False -Verbose
+
+      # Validate VcRedist 14 and update the manifest
+      - name: Validate VcRedist 14 arm64
+        shell: pwsh
+        run: |
+          $Release = "14"
+          $Architecture = "arm64"
           Import-Module "${{ github.workspace }}\VcRedist" -Force
           New-Item -Path "$env:RUNNER_TEMP\VcRedist" -ItemType "Directory" -ErrorAction "SilentlyContinue" | Out-Null
           Get-VcList -Release $Release -Architecture $Architecture | Save-VcRedist -Path "$env:RUNNER_TEMP\VcRedist" | Install-VcRedist
